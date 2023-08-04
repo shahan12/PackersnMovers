@@ -1,0 +1,55 @@
+.relocate-wrapper {
+    width: 20rem;
+    border: 1px solid lightblue;
+    border-radius: 0.5rem;
+    box-shadow: inset;
+    padding: 1rem;
+    border: 1px solid rgba(209,213,219)
+}
+.relocate-tabs-container {
+    background: lightgray;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+.relocate-tabs-container{
+    gap: 0.5rem;
+    background-color: lightgray;
+    color: lightblue;
+    padding: 0.5rem;
+}
+.relocate-tab{
+    border: none;
+    padding: 0.5rem;
+    color: darkblue;
+    background-color: lightgray;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+.active{
+    background-color: darkblue;
+    color: white;
+    border-radius: 0.5rem;
+}
+.description{
+    font-size: 1rem;
+    font-weight: bold;
+}
+.small-desc{
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #9196b3;
+    padding: 0.5rem 0;
+}
+.relocate-drop-down-container{
+    width: 15rem;
+}
+.relocate-input{
+    border:1px solid rgba(209,213,219) ;
+    margin-bottom: 1rem;
+    width: 15rem;
+    border-radius: 0.3rem;
+    border: 1px solid rgba(209,213,219);
+}
+.relocate-input-box{
+    padding: 0.3rem; 
+}
