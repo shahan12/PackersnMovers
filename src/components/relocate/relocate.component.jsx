@@ -15,7 +15,6 @@ function Relocate(props) {
   ];
   return (
     <article className="relocate-wrapper">
-      <p className="description">Where are you goining to relocate</p>
       <div className="flex relocate-tabs-container">
         <button
           onClick={() => setActiveTab("Within City")}
@@ -56,7 +55,7 @@ function Relocate(props) {
       )}
       <div className="relocate-search-locality">
         <p className="small-desc">Search your locatlity</p>
-        <div className="relocate-input">
+        <div className="relocate-input margin-bottom-40">
           <input
             placeholder="Shifting From"
             id="shifting-from"

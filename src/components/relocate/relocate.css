@@ -1,55 +1,87 @@
 .relocate-wrapper {
-    width: 20rem;
     border: 1px solid lightblue;
-    border-radius: 0.5rem;
+    border-radius: 0.625rem;
     box-shadow: inset;
-    padding: 1rem;
-    border: 1px solid rgba(209,213,219)
+    padding: 1.125rem;
+    border: 1px solid rgba(209,213,219);
+    background-color: #550EC5;
 }
 .relocate-tabs-container {
-    background: lightgray;
     gap: 0.5rem;
-    margin: 1rem 0;
+    margin-bottom: 2.5rem;
+    padding: 0.5rem;
+    border-radius: 0.625rem;
+    background-color: white;
+
+}
+.relocate-select-city{
+    margin-bottom: 2.5rem;
 }
 .relocate-tabs-container{
     gap: 0.5rem;
-    background-color: lightgray;
     color: lightblue;
     padding: 0.5rem;
 }
 .relocate-tab{
     border: none;
-    padding: 0.5rem;
-    color: darkblue;
+    padding: 0.5rem 2.625rem;
     background-color: lightgray;
     font-size: 0.75rem;
     font-weight: bold;
-}
-.active{
-    background-color: darkblue;
-    color: white;
     border-radius: 0.5rem;
+    background-color: white;
 }
+@keyframes slide-down {
+    0% {
+     background-color: white;
+     opacity: 0;
+    }
+    50% {
+    background: linear-gradient(to left, white 50%, #BAB1E9 50%) righ
+    }
+    100% {
+    background-color:#BAB1E9;
+     opacity: 1;
+    }
+   }
+.active{
+    background-color:#BAB1E9;
+    color: white;
+}
+.active:focus {
+    animation-duration: 0.3s;
+ animation-name: slide-down;
+ animation-timing-function: ease-in-out;
+ animation-iteration-count: 1;
+ animation-fill-mode: forwards;
+  }
 .description{
     font-size: 1rem;
     font-weight: bold;
 }
 .small-desc{
     font-size: 0.75rem;
-    font-weight: bold;
-    color: #9196b3;
+    font-weight: 500;
+    color: white;
     padding: 0.5rem 0;
 }
 .relocate-drop-down-container{
-    width: 15rem;
+    height: 3.125rem;
 }
 .relocate-input{
     border:1px solid rgba(209,213,219) ;
     margin-bottom: 1rem;
-    width: 15rem;
-    border-radius: 0.3rem;
     border: 1px solid rgba(209,213,219);
+    border-radius: 0.625rem;
 }
 .relocate-input-box{
-    padding: 0.3rem; 
+    padding: 1rem 0.5rem;
+    width: 100%; 
+    border-radius: 0.625rem;
+}
+.margin-bottom-40{
+    margin-bottom: 2.5rem;
+}
+.cta-container{
+    margin-top: 2rem;
 }

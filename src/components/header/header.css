@@ -4,3 +4,20 @@
 .header-cta-container{
     gap: 2rem;
 }
+.header-company-logo-container{
+    width: 4.5rem;
+}
+.header-logo-img{
+    width: 4.5rem;
+}
+.header-CTA-item{
+    text-decoration: none;
+    color: #4B5563;
+    font-weight: 900;
+}
+.header-user-wrapper{
+    background-color: #111827;
+    color: white;
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+}

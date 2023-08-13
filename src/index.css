@@ -13,8 +13,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  color: #111827;
+  font-size: 0.875rem;
 }
-
 input{
   border: none;
 }
@@ -48,7 +50,11 @@ code {
   justify-content: space-between;
 }
 .cta-button {
-  background-color: red;
+  background-color: #FF7800;
   color: white;
-  border-radius: 0.3rem;
+  
+}
+
+.grey-600{
+  color: #4B5563;
 }
