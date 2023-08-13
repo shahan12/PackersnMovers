@@ -5,7 +5,7 @@ import "./header.css";
 function Header(props) {
   return (
     <article className="header-container space-between">
-      <div>COMPANY NAME</div>
+      <div className="header-company-logo-container"></div>
       <div className="header-cta-container space-between">
         <div className="header-sign-in-btn">
           <Link to="/login-in">Login</Link>
