@@ -1,0 +1,31 @@
+
+.insideBlogCard {
+    font-size: 1.1rem;
+    background-image: url('../../images/blogcard.png');
+    height: 13rem;
+    width:34rem;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 2rem 0 6rem;
+    justify-content: space-between;
+}
+.insideBlogCard2 {
+    margin-left: auto;
+}
+.insideBlogCard-top p {
+    text-align: justify;
+}
+
+.textHolder {
+    display: flex;
+    justify-content: flex-end;
+}
+.insideBlogCard-bottom-p {
+    margin-left: 3rem;
+    font-weight: 600;
+}
+
+.insideBlogCard-bottom {
+    margin-bottom: 2rem;
+}
