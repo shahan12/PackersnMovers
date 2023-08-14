@@ -15,3 +15,12 @@
     top: 6rem;
     right: 10rem;
 }
+
+.home-our-services-container {
+    padding: 5.6rem 10rem;
+    max-width: 50%;
+}
+.services-row-one{
+    gap: 10rem;
+    margin-bottom: 3.75rem;
+}
