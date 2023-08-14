@@ -3,6 +3,7 @@ import "./blogCard.css";
 import blogCardImg from "../../images/blogcard.png";
 import stars from "../../images/stars.png";
 import BlogCardIndiv from "./BlogCardIndiv.component";
+import blog from './blog.json';
 
 
 function BlogCard(props) {

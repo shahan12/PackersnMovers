@@ -1,9 +1,9 @@
 
 .insideBlogCard {
-    font-size: 1.1rem;
+    font-size: 1rem;
     background-image: url('../../images/blogcard.png');
-    height: 13rem;
-    width:34rem;
+    height: 11rem;
+    width:31rem;
     background-size: cover;
     display: flex;
     flex-direction: column;
