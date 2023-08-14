@@ -1,5 +1,6 @@
 .header-container{
-    padding: 1rem 0;
+    padding: 1rem 10rem;
+    background: rgba(239, 243, 253, 1)
 }
 .header-cta-container{
     gap: 2rem;
@@ -13,10 +14,11 @@
 .header-CTA-item{
     text-decoration: none;
     color: #4B5563;
-    font-weight: 900;
+    font-weight: 600;
 }
 .header-user-wrapper{
-    background-color: #111827;
+    border-radius: 0.3rem;
+    background: var(--gray-900, #111827);
     color: white;
     font-weight: 600;
     padding: 0.625rem 1.25rem;
