@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Relocate from "../../components/relocate/relocate.component";
 import "./home.css";
 import BlogCard from "../../components/BlogCard/BlogCard.component";
@@ -13,6 +13,30 @@ import processMove from "../../images/process_move.png";
 import processText from "../../images/process_text.png";
 
 function Home(props) {
+  const [visible, setVisible] = useState(true);
+  const [height, setHeight] = useState(0);
+
+  /**
+   * Use Effect and function to hide Relocate component on scroll to 1800 px
+   */
+  useEffect(() => {
+    window.addEventListener("scroll", listenToScroll);
+    return () => window.removeEventListener("scroll", listenToScroll);
+  }, []);
+
+  const listenToScroll = () => {
+    let heightToHideFrom = 1800;
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop;
+    setHeight(winScroll);
+
+    if (winScroll > heightToHideFrom) {
+      visible && setVisible(false);
+    } else {
+      setVisible(true);
+    }
+  };
+
   return (
     <>
       <div className="home-landing-container">
@@ -23,9 +47,11 @@ function Home(props) {
             alt="home-overlay"
           ></img>
         </div>
-        <div className="home-relocate-wrapper">
-          <Relocate />
-        </div>
+        {visible && (
+          <div className="home-relocate-wrapper">
+            <Relocate />
+          </div>
+        )}
         <div className="home-components">
           <div className="home-our-services-container">
             <h2>Our Services</h2>
