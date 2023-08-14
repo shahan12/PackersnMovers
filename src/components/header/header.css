@@ -1,6 +1,9 @@
 .header-container{
     padding: 1rem 10rem;
-    background: rgba(239, 243, 253, 1)
+    background: rgba(239, 243, 253, 1);
+    position: sticky;
+    top: 0rem;
+    z-index: 1;
 }
 .header-cta-container{
     gap: 2rem;

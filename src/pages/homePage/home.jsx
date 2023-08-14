@@ -28,7 +28,7 @@ function Home(props) {
         </div>
         <div className="home-components">
           <div className="home-our-services-container">
-            <h2>Out Services</h2>
+            <h2>Our Services</h2>
             <div className="flex services-row-one">
               <Services img={houseShift} text={"House Shifting"} />
               <Services img={commercialSetting} text={"Commercial Shifting"} />
