@@ -16,14 +16,6 @@
     right: 10rem;
 }
 
-.home-our-services-container {
-    padding: 5.6rem 10rem;
-    max-width: 50%;
-}
-.services-row-one{
-    gap: 10rem;
-    margin-bottom: 3.75rem;
-}
 /* ** home components ** */
 
 .home-components {
@@ -32,13 +24,25 @@
     flex-direction: column;
     margin-bottom: 10rem;
 }
+
+.home-our-services-container {
+    padding: 5.6rem;
+    max-width: 50%;
+}
+.services-row-one{
+    gap: 10rem;
+    margin-bottom: 3.75rem;
+    margin-top: 2rem;
+}
+
 .home-components h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
+    text-align: center;
 }
 .home-cards {
     margin-top: 2rem;
-    width: 64rem;
+    max-width: 50%;
     height: auto;
     justify-content: center;
     align-items: center;
