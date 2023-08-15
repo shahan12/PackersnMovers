@@ -1,0 +1,72 @@
+.footer-wrapper {
+    height: 23rem;
+    width: 100%;
+    background-color: #121212;
+}
+
+.footer-upper-section-container{
+    padding: 4.5rem 10rem;
+    height: calc(100% - 4.5rem);
+}
+
+.footer-list-wrapper a{
+    text-decoration: none;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.footer-subsribe-action-container a {
+    text-decoration: none;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.footer-subsribe-action-container {
+    width: 22.15rem;
+}
+.footer-lower-section-container {
+    padding: 1rem 10rem;
+    border-top: 1px solid #3F3B3B;
+}
+.footer-subscriber{
+    width: 100%;
+    margin-top: 1.5rem;
+    height: 2.8rem;
+}
+.footer-input-box{
+    width: calc(100% - 3.9rem);
+    color: #807E7E ;
+    padding: 0.45rem 0rem 0.45rem 1rem;
+    background-color: #212121;
+    height: 100%;
+}
+.footer-subsribe-CTA{
+    background-color: #550EC5;
+    cursor: pointer;
+    width: 3.9rem;
+    height: 100%;
+}
+.footer-action-img{
+    transform: rotate(270deg);
+    width: 1.5rem;
+}
+.footer-company-logo{
+    width: 4rem;
+}
+
+.footer-comapny-copywrite {
+    color: #807E7E;
+    font-size: 0.875rem;
+}
+
+.footer-company-socials-container{
+    gap: 2.5rem;
+}
+
+.footer-company-socials-container img {
+    cursor: pointer;
+}
+

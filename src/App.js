@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/homePage/home";
 import Login from "./pages/login/login.component";
 import SignUp from "./pages/signUp/signup.component";
+import Footer from "./components/footer/footer.component";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/login-in" element={<Login />} />
         <Route exact path="/sign-up" element={<SignUp />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
