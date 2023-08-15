@@ -4,6 +4,7 @@ import "./home.css";
 import BlogCard from "../../components/BlogCard/BlogCard.component";
 import overLay from "../../images/overlay.png";
 import Services from "../../components/services/services.component";
+import RetractableTable from "../../components/Faq/Faq.component";
 import houseShift from "../../images/_Group_.svg";
 import commercialSetting from "../../images/_Group_ (1).svg";
 import officeShift from "../../images/_Group_ (2).svg";
@@ -72,6 +73,9 @@ function Home(props) {
           </div>
           <div className="home-blog home-cards">
             <BlogCard />
+          </div>
+          <div className="home-faq home-cards">
+            <RetractableTable />
           </div>
         </div>
       </div>
