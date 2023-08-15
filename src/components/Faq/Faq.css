@@ -1,0 +1,20 @@
+.retractable-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .header-row th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+  }
+  
+  .data-row {
+    display: block;
+  }
+  
+  .data-row td {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+  }
