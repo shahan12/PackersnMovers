@@ -15,7 +15,6 @@ import processText from "../../images/process_text.png";
 
 function Home(props) {
   const [visible, setVisible] = useState(true);
-  const [height, setHeight] = useState(0);
 
   /**
    * Use Effect and function to hide Relocate component on scroll to 1800 px
@@ -29,7 +28,6 @@ function Home(props) {
     let heightToHideFrom = 1800;
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop;
-    setHeight(winScroll);
 
     if (winScroll > heightToHideFrom) {
       visible && setVisible(false);
