@@ -4,14 +4,6 @@ import "./header.css";
 import logo from "../../images/SHIFTKART-LOGO.png";
 
 function Header(props) {
-  const headerItems = [
-    "Home",
-    "About Us",
-    "Pricing",
-    "Features",
-    "Contact",
-    "Login",
-  ];
   let logedIn = true;
   return (
     <article className="header-container space-between">
