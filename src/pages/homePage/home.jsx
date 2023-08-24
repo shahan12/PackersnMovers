@@ -73,6 +73,7 @@ function Home(props) {
             <BlogCard />
           </div>
           <div className="home-faq home-cards">
+            <h2>FAQs</h2>
             <RetractableTable />
           </div>
         </div>

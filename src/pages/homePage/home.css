@@ -48,3 +48,6 @@
     align-items: center;
     padding-bottom: 3rem;
 }
+.home-faq {
+    max-width: 65% !important;
+}
