@@ -18,7 +18,7 @@ function Header(props) {
           </Link>
         </div>
         <div className="header-sign-in-btn">
-          <Link to="/login-in" className="header-CTA-item">
+          <Link to="/about-us" className="header-CTA-item">
             About Us
           </Link>
         </div>
