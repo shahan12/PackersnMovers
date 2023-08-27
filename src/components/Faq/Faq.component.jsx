@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import './Faq.css';
-import data from './faq.json';
+import React, { useState } from "react";
+import "./Faq.css";
+import data from "./faq.json";
+import arrow from "../../images/arrow-right.png";
 
 const RetractableTable = () => {
   const [expandedRows, setExpandedRows] = useState([]);
@@ -18,9 +19,20 @@ const RetractableTable = () => {
       <tbody>
         {data.data.map((row, index) => (
           <React.Fragment key={index}>
-            <tr className="header-row" onClick={() => toggleRow(index)}>
+            <tr
+              className={`header-row ${
+                expandedRows.includes(index) && "hide-border"
+              }`}
+              onClick={() => toggleRow(index)}
+            >
               <td>{row.header1}</td>
-              <img className="stars" alt="stars"></img>
+              <img
+                className={`${
+                  expandedRows.includes(index) && "rotate-down"
+                } stars`}
+                src={arrow}
+                alt="stars"
+              ></img>
             </tr>
             {expandedRows.includes(index) && (
               <tr className="data-row">

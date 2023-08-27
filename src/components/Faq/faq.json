@@ -1,6 +1,24 @@
 {
-  "data" : [
-    { "header1": "Is there any warranty exclusions?", "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa." },
-    { "header1": "Header 1-2", "data": "Data 2" }
+  "data": [
+    {
+      "header1": "How soon will my order ship??",
+      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+    },
+    {
+      "header1": "Is there any warranty exclusions?",
+      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+    },
+    {
+      "header1": "Are there any return exclusions?",
+      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+    },
+    {
+      "header1": "Will I be charged for a replacement item?",
+      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+    },
+    {
+      "header1": "How can I track my orders & payment?",
+      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+    }
   ]
 }

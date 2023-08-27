@@ -3,18 +3,49 @@
     width: 100%;
   }
   
+  .header-row {
+    border-bottom: 1px solid #ccc;;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.93rem 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
   .header-row th {
     background-color: #f2f2f2;
     padding: 10px;
     text-align: left;
     cursor: pointer;
   }
+
+  .header-row td {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
   
   .data-row {
+    padding: 0.93rem 0.5rem;
     display: block;
+    color: #757575;
+    font-size: 1rem;
+    border-bottom: 1px solid #ccc;
   }
   
   .data-row td {
+    width: 100%;
     padding: 10px;
-    border-top: 1px solid #ccc;
+    
+  }
+
+  .stars {
+    cursor: pointer;
+  }
+
+  .hide-border {
+    border-bottom: none !important;
+  }
+
+  .rotate-down {
+    transform: rotate(270deg);
   }

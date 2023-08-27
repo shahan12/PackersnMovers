@@ -1,0 +1,19 @@
+.about-usWrapper {
+    padding: 3.85rem 16rem;
+}
+.about-us-heading {
+    font-weight: 500;
+    font-size: 1.25rem;
+}
+
+.about-us-para-text{
+    margin: 2.5rem 0;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: #757575;
+}
+.about-us-para-heading{
+    font-weight: 500;
+    font-size: 1.125rem;
+    color: black;
+}
