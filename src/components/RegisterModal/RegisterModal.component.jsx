@@ -26,7 +26,7 @@ const RegisterModal = ({ isOpen, onClose, postData }) => {
     const data = { ...postData, mobile: phoneNumber };
     const payload = {data};
     setXData({data});
-    saveData(payload);
+    // saveData(payload);
     setThankYou(true);
   };
   if (!isOpen) return null;

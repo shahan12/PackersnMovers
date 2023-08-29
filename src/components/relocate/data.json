@@ -1,0 +1,160 @@
+{
+    "IndianCities": [
+      "Bangalore",
+      "Mumbai",
+      "Delhi",
+      "Hyderabad",
+      "Chennai",
+      "Kolkata",
+      "Ahmedabad",
+      "Pune",
+      "Jaipur",
+      "Surat",
+      "Lucknow",
+      "Kanpur",
+      "Nagpur",
+      "Indore",
+      "Thane",
+      "Bhopal",
+      "Visakhapatnam",
+      "Pimpri-Chinchwad",
+      "Patna",
+      "Vadodara"
+    ],
+    "IndianCitiesPinCode": [
+      {
+        "name": "Bangalore",
+        "minPincode": 560001,
+        "maxPincode": 560119
+      },
+      {
+        "name": "Mumbai",
+        "minPincode": 400001,
+        "maxPincode": 400104
+      },
+      {
+        "name": "Delhi",
+        "minPincode": 110001,
+        "maxPincode": 110097
+      },
+      {
+        "name": "Hyderabad",
+        "minPincode": 500001,
+        "maxPincode": 500098
+      },
+      {
+        "name": "Chennai",
+        "minPincode": 600001,
+        "maxPincode": 600129
+      },
+      {
+        "name": "Kolkata",
+        "minPincode": 700001,
+        "maxPincode": 700099
+      },
+      {
+        "name": "Ahmedabad",
+        "minPincode": 380001,
+        "maxPincode": 380028
+      },
+      {
+        "name": "Pune",
+        "minPincode": 411001,
+        "maxPincode": 411062
+      },
+      {
+        "name": "Jaipur",
+        "minPincode": 302001,
+        "maxPincode": 302055
+      },
+      {
+        "name": "Surat",
+        "minPincode": 395001,
+        "maxPincode": 395009
+      },
+      {
+        "name": "Lucknow",
+        "minPincode": 226001,
+        "maxPincode": 226028
+      },
+      {
+        "name": "Kanpur",
+        "minPincode": 208001,
+        "maxPincode": 208027
+      },
+      {
+        "name": "Nagpur",
+        "minPincode": 440001,
+        "maxPincode": 440037
+      },
+      {
+        "name": "Indore",
+        "minPincode": 452001,
+        "maxPincode": 452020
+      },
+      {
+        "name": "Thane",
+        "minPincode": 400601,
+        "maxPincode": 400612
+      },
+      {
+        "name": "Bhopal",
+        "minPincode": 462001,
+        "maxPincode": 462030
+      },
+      {
+        "name": "Visakhapatnam",
+        "minPincode": 530001,
+        "maxPincode": 530061
+      },
+      {
+        "name": "Pimpri-Chinchwad",
+        "minPincode": 411017,
+        "maxPincode": 411019
+      },
+      {
+        "name": "Patna",
+        "minPincode": 800001,
+        "maxPincode": 800028
+      },
+      {
+        "name": "Vadodara",
+        "minPincode": 390001,
+        "maxPincode": 390024
+      }
+    ],
+    "International": [
+      {
+        "name": "United States"
+      },
+      {
+        "name": "China"
+      },
+      {
+        "name": "Russia"
+      },
+      {
+        "name": "India"
+      },
+      {
+        "name": "Brazil"
+      },
+      {
+        "name": "United Kingdom"
+      },
+      {
+        "name": "France"
+      },
+      {
+        "name": "Germany"
+      },
+      {
+        "name": "Japan"
+      },
+      {
+        "name": "Canada"
+      }
+    ]
+    
+  }
+    

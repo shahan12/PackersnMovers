@@ -25,4 +25,11 @@
     color: white;
     font-weight: 600;
     padding: 0.625rem 1.25rem;
+    cursor: pointer;
+}
+.header-user-wrapper-btn {
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    margin: 0 auto;
 }
