@@ -1,0 +1,29 @@
+diff a/src/components/dropDown/dropDown.component.jsx b/src/components/dropDown/dropDown.component.jsx	(rejected hunks)
+@@ -1,21 +1,21 @@
+ import React from "react";
+ import "./dropDown.css";
+-function DropDown({ value, setVaue, option }) {
++function DropDown({ value, setValue, option }) {
+   return (
+     <>
+       <select
+-        onChange={(e) => setVaue(e.target.value)}
+-        value={"Select City"}
++        onChange={(e) => setValue(e.target.value)}
++        value={value}
+         className="dropDown-container"
+       >
+         {option.map((item, index) => {
+           return (
+             <option
+-              key={`${item}_${index}`}
+-              value={item}
++              key={`${item.name}_${index}`}
++              value={item.name}
+               className="drop-down-options"
+             >
+-              {item}
++              {item.name}
+             </option>
+           );
+         })}
