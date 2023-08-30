@@ -6,10 +6,11 @@ import Login from "./pages/login/login.component";
 import SignUp from "./pages/signUp/signup.component";
 import Footer from "./components/footer/footer.component";
 import AboutUs from "./pages/aboutUs/aboutUs.component";
+import { AppProvider } from "./context/context";
 
 function App() {
   return (
-    <div className="App">
+    <AppProvider>
       <Header />
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -18,7 +19,7 @@ function App() {
         <Route exact path="/about-us" element={<AboutUs />} />
       </Routes>
       <Footer />
-    </div>
+      </AppProvider>
   );
 }
 
