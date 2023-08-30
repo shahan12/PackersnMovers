@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState }  from "react";
 import { Link } from "react-router-dom";
 import "./header.css";
 import logo from "../../images/SHIFTKART-LOGO.png";
+import RegisterModal from "../RegisterModal/RegisterModal.component";
 
 function Header(props) {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   let logedIn = true;
   return (
     <article className="header-container space-between">
@@ -22,20 +33,9 @@ function Header(props) {
             About Us
           </Link>
         </div>
-        <div className="header-sign-in-btn">
-          <Link to="/login-in" className="header-CTA-item">
-            Pricing
-          </Link>
-        </div>
-        <div className="header-sign-in-btn">
-          <Link to="/login-in" className="header-CTA-item">
-            Features
-          </Link>
-        </div>
-        <div className="header-sign-in-btn">
-          <Link to="/login-in" className="header-CTA-item">
-            Contact
-          </Link>
+        <div className="header-user-wrapper">
+          <button className="header-user-wrapper-btn" onClick={openModal}>Get in touch with us!</button>
+          <RegisterModal isOpen={modalOpen} onClose={closeModal} />
         </div>
         {!logedIn ? (
           <div className="header-sign-in-btn">
@@ -45,7 +45,7 @@ function Header(props) {
           </div>
         ) : (
           <div className="header-user-wrapper">
-            <span>+91 8722111882</span>
+            <span>Call us on +91 8722 111 882</span>
           </div>
         )}
       </div>
