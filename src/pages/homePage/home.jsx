@@ -25,7 +25,7 @@ function Home(props) {
   }, []);
 
   const listenToScroll = () => {
-    let heightToHideFrom = 1800;
+    let heightToHideFrom = 2100;
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop;
 
