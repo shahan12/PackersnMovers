@@ -14,6 +14,7 @@
     position: fixed;
     top: 10rem;
     right: 10rem;
+    max-width: 27rem;
 }
 
 /* ** home components ** */
@@ -26,13 +27,13 @@
 }
 
 .home-our-services-container {
-    padding: 5.6rem;
-    max-width: 50%;
+    padding: 5.6rem 0;
+    max-width: 60%;
 }
 .services-row-one{
-    gap: 10rem;
-    margin-bottom: 3.75rem;
-    margin-top: 2rem;
+    gap: 8rem;
+    margin-bottom: 4rem;
+    margin-top: 4rem;
 }
 
 .home-components h2 {
@@ -42,12 +43,17 @@
 }
 .home-cards {
     margin-top: 2rem;
-    max-width: 50%;
+    max-width: 60%;
     height: auto;
     justify-content: center;
     align-items: center;
     padding-bottom: 3rem;
 }
+
+.home-cards img {
+    max-width: 100%;
+}
+
 .home-faq {
     max-width: 65% !important;
 }
