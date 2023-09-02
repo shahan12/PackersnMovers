@@ -1,14 +1,21 @@
 .home-landing-container{
     position: relative;
+    margin: 0;
+    padding: 0;
     width: 100%;
+}
+
+.home-landing-backgrounds{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Send the background images to the back */
 }
 .home-overlay-img{
     width: 100%;
-    height: 100%;
-}
-.home-landing-overlay-container{
-    width: 100%;
-    height: 45.5rem;
+    height: 45rem;
 }
 .home-relocate-wrapper{
     position: fixed;
@@ -19,19 +26,57 @@
 
 /* ** home components ** */
 
-.home-components {
-    padding: 1rem 10rem;
+.home-elements-container {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    margin-bottom: 10rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
-.home-our-services-container {
-    padding: 5.6rem 0;
-    max-width: 60%;
+
+.home-components {
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.leftDiv {
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: flex-end; /* Align content to the bottom */
+    align-items: flex-end; /* Align content to the right */
+    height: 100%;
+    width: 50%; /* Adjust the width as needed */
+}
+.process-img {
+    width: 100%;
+}
+.man {
+    height: 20rem;
+    width: 20rem;
+    border-radius: 50%;
+    margin-top: -8rem;
+    margin-right: -40rem;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.services-container {
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Align content to the right */
+    min-width: 50%;
+    width: 80%;
+
 }
 .services-row-one{
     gap: 8rem;
+    margin-bottom: 4rem;
+    margin-top: 4rem;
+}
+.services-row-two{
+    gap: 3rem;
     margin-bottom: 4rem;
     margin-top: 4rem;
 }
@@ -40,20 +85,4 @@
     font-size: 2rem;
     margin-bottom: 1rem;
     text-align: center;
-}
-.home-cards {
-    margin-top: 2rem;
-    max-width: 60%;
-    height: auto;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 3rem;
-}
-
-.home-cards img {
-    max-width: 100%;
-}
-
-.home-faq {
-    max-width: 65% !important;
 }

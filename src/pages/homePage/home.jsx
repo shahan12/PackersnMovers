@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Relocate from "../../components/relocate/relocate.component";
 import "./home.css";
 import BlogCard from "../../components/BlogCard/BlogCard.component";
@@ -12,69 +12,58 @@ import storageShift from "../../images/_Group_ (3).svg";
 import industrialShift from "../../images/Group (1).svg";
 import processMove from "../../images/process_move.png";
 import processText from "../../images/process_text.png";
+import landingHome from "../../images/landingHome.png";
+import aadmi from "../../images/aadmi.png";
+import NumberInc from "../../components/NumberInc/NumberInc.component";
 
-function Home(props) {
-  const [visible, setVisible] = useState(true);
 
-  /**
-   * Use Effect and function to hide Relocate component on scroll to 1800 px
-   */
-  useEffect(() => {
-    window.addEventListener("scroll", listenToScroll);
-    return () => window.removeEventListener("scroll", listenToScroll);
-  }, []);
-
-  const listenToScroll = () => {
-    let heightToHideFrom = 2100;
-    const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop;
-
-    if (winScroll > heightToHideFrom) {
-      visible && setVisible(false);
-    } else {
-      setVisible(true);
-    }
-  };
+function Home(props) { 
 
   return (
     <>
       <div className="home-landing-container">
-        <div className="home-landing-overlay-container">
-          <img
-            className="home-overlay-img"
-            src={overLay}
-            alt="home-overlay"
-          ></img>
+        <div className="home-landing-backgrounds">
+          <img className="home-overlay-img" src={overLay} alt="home-overlay"/>
         </div>
-        {visible && (
-          <div className="home-relocate-wrapper">
-            <Relocate />
-          </div>
-        )}
-        <div className="home-components">
-          <div className="home-our-services-container">
-            <h2>Our Services</h2>
-            <div className="flex services-row-one">
-              <Services img={houseShift} text={"House Shifting"} />
-              <Services img={commercialSetting} text={"Commercial Shifting"} />
-              <Services img={officeShift} text={"Office Shifting"} />
+        <div className="home-elements-container">
+          <div className="home-components leftDiv">
+            <div style={{marginTop: "2rem", height: "38rem"}} className="services-container">
+              <img className="process-img" src={landingHome} alt="process-icon" />
+              <img className="process-img man" src={aadmi} alt="process-icon" />
             </div>
-            <div className="flex services-row-one">
-              <Services img={storageShift} text={"Storage Shifting"} />
-              <Services img={industrialShift} text={"Industrial Shifting"} />
+            <div style={{marginTop: "7rem", height: "33rem"}} className="services-container">
+              <h2>Our Services</h2>
+              <div className="flex services-row-one">
+                <Services img={houseShift} text={"House Shifting"} />
+                <Services img={commercialSetting} text={"Commercial Shifting"} />
+                <Services img={officeShift} text={"Office Shifting"} />
+              </div>
+              <div className="flex services-row-one">
+                <Services img={storageShift} text={"Storage Shifting"} />
+                <Services img={industrialShift} text={"Industrial Shifting"} />
+              </div>
+            </div>
+            <div className="services-container" style={{marginTop: "0rem", height: "70rem"}}>
+              <h2>Our Process</h2>
+              <img className="process-img" src={processMove} alt="process-icon" />
+              <div className="flex services-row-two">
+                <NumberInc value={20} text={'Lakh+'} subtext={'Relocations Done'} color={'#5c7ca4'}/>
+                <NumberInc value={20} text={'K+'} subtext={'Customers Served Monthly'}  color={'#4d9cbc'}/>
+                <NumberInc value={20} text={'Lakh+'} subtext={'Happy Faces'} color={'#5ccc9c'}/>
+              </div>
+            </div>
+            <div className="services-container">
+              <BlogCard />
+            </div>
+            <div className="services-container">
+              <h2>FAQs</h2>
+              <RetractableTable />
             </div>
           </div>
-          <div className="home-process home-cards">
-            <h2>Our Process</h2>
-            <img src={processMove} alt="process-icon" />
-            <img src={processText} alt="processT-icon" />
-          </div>
-          <div className="home-blog home-cards">
-            <BlogCard />
-          </div>
-          <div className="home-faq home-cards">
-            <h2>FAQs</h2>
-            <RetractableTable />
+          <div className="home-components rightDiv">
+            <div className="home-relocate-wrapper">
+              <Relocate />
+            </div>
           </div>
         </div>
       </div>
