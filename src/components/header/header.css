@@ -1,6 +1,6 @@
 .header-container{
     padding: 1rem 10rem;
-    background: rgba(239, 243, 253, 1);
+    background: transparent;
     position: sticky;
     top: 0rem;
     z-index: 1;
@@ -16,16 +16,18 @@
 }
 .header-CTA-item{
     text-decoration: none;
-    color: #4B5563;
+    color: #363636;
     font-weight: 600;
 }
 .header-user-wrapper{
-    border-radius: 0.3rem;
-    background: var(--gray-900, #111827);
-    color: white;
-    font-weight: 600;
-    padding: 0.625rem 1.25rem;
+    display: flex;
+    padding: 0.5rem 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;border-radius: 24px;
+    background: var(--Primary, #550EC5);
     cursor: pointer;
+    color: #FDFDFD;
 }
 .header-user-wrapper-btn {
     background-color: transparent;

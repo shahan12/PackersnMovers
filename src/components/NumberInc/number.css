@@ -21,3 +21,17 @@
     margin-top: 0.6rem;
     color: #9aa1ab; 
   }
+  .container-process {
+    margin-top: 0rem;
+    height: 47rem;
+  }
+  
+  @media (max-width: 1440px) {
+    .top-text {
+      font-size: 1.5rem; /* Adjust the font size for Mac screens */
+    }
+    .container-process {
+      margin-top: 0rem;
+      height: 35rem;
+    }
+  }

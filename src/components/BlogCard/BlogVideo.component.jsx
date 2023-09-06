@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 import "./blogCard.css";
-import blogCardImg from "../../images/blogcard.png";
-import stars from "../../images/stars.png";
-import BlogCardIndiv from "./BlogCardIndiv.component";
-import blogs from "./blog.json";
+import BlogVideoIndiv from "./BlogVideoIndiv.component";
+import blogs from "./videoBlog.json";
 
 const data = Array.from({ length: 20 }, (_, index) => ({
   id: index + 1,
   name: `Item ${index + 1}`,
 }));
 
-function BlogCard(props) {
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(blogs.blogs.length / itemsPerPage);
-  const autoChangeInterval = 5000; // 5 seconds
+function BlogVideo(props) {
+  const itemsPerPage = 2;
+  const totalPages = Math.ceil(blogs.vlogs.length / itemsPerPage);
+  const autoChangeInterval = 2000000; // 5 seconds
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -35,14 +33,14 @@ function BlogCard(props) {
   const renderItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const itemsToDisplay = blogs.blogs.slice(startIndex, endIndex);
+    const itemsToDisplay = blogs.vlogs.slice(startIndex, endIndex);
     return itemsToDisplay.map((blog, index) => (
       <div key={index} className="item">
-        <BlogCardIndiv
-          para={blog.para}
+        <BlogVideoIndiv
+          title={blog.title}
+          thumb={blog.thumbnail}
+          video={blog.videolink}
           className={index % 2 == 0 ? "" : "insideBlogCard2"}
-          name={blog.name}
-          desc={blog.desc}
         />
       </div>
     ));
@@ -65,4 +63,4 @@ function BlogCard(props) {
     </div>
   );
 }
-export default BlogCard;
+export default BlogVideo;

@@ -4,11 +4,10 @@ import { useInView } from 'react-intersection-observer';
 import "./number.css";
 const NumberInc = ({ value, text, subtext, color }) => {
   const [isVisible, setIsVisible] = useState(false);
-  console.log(isVisible, "isVisible");
 
   const { ref, inView } = useInView({
-    triggerOnce: true, // Ensure the animation only triggers once
-    threshold: 1, // Trigger when at least 50% of the component is in view
+    triggerOnce: true, 
+    threshold: 1, 
   });
   useEffect(() => {
     if (inView && !isVisible) {
@@ -26,8 +25,8 @@ const NumberInc = ({ value, text, subtext, color }) => {
 
   return (
     <div  ref={ref}>
-      <div class="flex-container">
-        <div class="top-text" style={{color: color }}>
+      <div className="flex-container">
+        <div className="top-text" style={{color: color }}>
         {isVisible && (
           <CountUp start={0} end={value} duration={duration} {...options}>
             {({ countUpRef }) => (
@@ -36,7 +35,7 @@ const NumberInc = ({ value, text, subtext, color }) => {
           </CountUp>
         )} {text}
         </div>
-        <div class="bottom-subtext">{subtext}</div>
+        <div className="bottom-subtext">{subtext}</div>
       </div>
     </div>
   );
