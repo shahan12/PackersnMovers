@@ -50,38 +50,44 @@ const data = [
 const CompareTable = () => {
   const [renderedRows, setRenderedRows] = useState(0);
 
-  useEffect(() => {
-    const delay = 200; // Adjust the delay time in milliseconds
-
-    const interval = setInterval(() => {
-      if (renderedRows < data.length) {
-        setRenderedRows((prevRenderedRows) => prevRenderedRows + 1);
-      } else {
-        clearInterval(interval);
-      }
-    }, delay);
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, [renderedRows]);
   const [isVisible, setIsVisible] = useState(false);
 
   const { ref, inView } = useInView({
     triggerOnce: true, 
-    threshold: 1, 
+    threshold: 0.25, 
   });
   useEffect(() => {
     if (inView && !isVisible) {
       setIsVisible(true);
     }
   }, [inView, isVisible]);
+  
+  useEffect(() => {
+    const delay = 200; // Adjust the delay time in milliseconds
+  
+    const interval = setInterval(() => {
+      if (inView && isVisible && renderedRows < data.length) {
+        setRenderedRows((prevRenderedRows) => prevRenderedRows + 1);
+      } else {
+        clearInterval(interval);
+      }
+    }, delay);
+  
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, [renderedRows, isVisible, inView]);
+
+  console.log("inview", inView);
+  console.log("isVisible", isVisible);
   return (
-    <table  ref={ref} className="custom-table">
+    <div ref={ref}>
+      {isVisible && (
+    <table   className="custom-table">
       <thead>
         <tr>
-          <th className='tableFirst'>Services</th>
-          <th className='tableMid'>Shiftkart</th>
-          <th  className='tableLast'>Local</th>
+          <th className='tableFirst thCustom'>Services</th>
+          <th className='tableMid thCustom'>Shiftkart</th>
+          <th className='tableLast thCustom'>Local</th>
         </tr>
       </thead>
       <tbody>
@@ -111,6 +117,8 @@ const CompareTable = () => {
         ))}
       </tbody>
     </table>
+    )}
+  </div>
   );
 };
 

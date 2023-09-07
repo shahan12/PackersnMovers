@@ -1,14 +1,13 @@
 @keyframes scrollAnimation {
-    0% {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  0% {
+    transform: translateY(4rem); /* Start from translateY(2rem) */
+    opacity: 0;
   }
-
+  100% {
+    transform: translateY(0); /* End at translateY(0) */
+    opacity: 1;
+  }
+}
 .insideBlogCard2 {
     margin-left: auto;
     margin-top: -7rem;
@@ -26,11 +25,16 @@
     width: 34rem;
 }
   
-
-.item{
-    margin-bottom: 1rem;
-    animation: scrollAnimation 1s ease-in-out;
+.itemBlog {
+  margin-bottom: 1rem;
+  display: none; /* Initially hidden */
 }
+
+.item-animate {
+  display: block;
+  animation: scrollAnimation 1s ease-in-out;
+}
+
 
 .blog-pagination {
     display: flex;

@@ -19,24 +19,25 @@ td {
 
 .tableMid {
     background: rgba(85, 14, 197, 0.90);
-box-shadow: -4px 0px 2px 0px rgba(54, 54, 54, 0.24) inset;
+  box-shadow: -4px 0px 2px 0px rgba(54, 54, 54, 0.24) inset;
 }
 
 .tableLast {border-radius: 0px 23.7px 0px 0px;
     background: rgba(85, 14, 197, 0.90);
 }
-th, td {
+.thCustom {
+  
   text-align: center;
   padding: 0.8rem;
-  width: 10rem;
 }
-.serviceTH {
-    width: 30rem;
-}
+
 .checkmarkTH {
+  text-align: center;
     width: 10rem;
+    padding: 0.8rem;
 }
-th.serviceTH, td.serviceTH {
+
+ td.serviceTH {
   text-align: left; 
   padding-left: 1rem;
 }
@@ -54,4 +55,11 @@ th.serviceTH, td.serviceTH {
   .fade-in.activeTableCell {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (max-width: 1440px) {
+    .checkmarkTH {
+      text-align: center;
+        padding: 0.7rem;
+    }
   }

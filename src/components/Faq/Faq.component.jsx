@@ -4,14 +4,14 @@ import data from "./faq.json";
 import arrow from "../../images/arrow-right.png";
 
 const RetractableTable = () => {
-  const [expandedRows, setExpandedRows] = useState([]);
+  const [expandedRow, setExpandedRow] = useState(null);
 
   const toggleRow = (index) => {
-    setExpandedRows((prevState) =>
-      prevState.includes(index)
-        ? prevState.filter((rowIndex) => rowIndex !== index)
-        : [...prevState, index]
-    );
+    if (expandedRow === index) {
+      setExpandedRow(null);
+    } else {
+      setExpandedRow(index);
+    }
   };
 
   return (
@@ -21,20 +21,20 @@ const RetractableTable = () => {
           <React.Fragment key={index}>
             <tr
               className={`header-row ${
-                expandedRows.includes(index) && "hide-border"
+                expandedRow === index ? "hide-border" : ""
               }`}
               onClick={() => toggleRow(index)}
             >
               <td>{row.header1}</td>
               <img
                 className={`${
-                  expandedRows.includes(index) && "rotate-down"
+                  expandedRow === index ? "rotate-down" : ""
                 } stars`}
                 src={arrow}
                 alt="stars"
               ></img>
             </tr>
-            {expandedRows.includes(index) && (
+            {expandedRow === index && (
               <tr className="data-row">
                 <td colSpan="1">
                   <div>{row.data}</div>

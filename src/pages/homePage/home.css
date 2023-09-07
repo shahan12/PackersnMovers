@@ -60,7 +60,7 @@
     position: absolute;
     top: 0; 
     left: 0;
-    z-index: 0;
+    z-index: 1;
 }
 .img-right-sticky {
     position: absolute;
@@ -71,7 +71,7 @@
 .landing-img {
     width: 50rem;
     margin-top: 10rem;
-    z-index: 1;
+    z-index: 3;
 }
 
 
@@ -87,7 +87,7 @@
 .container-process {
     background-size: cover;
     height: 40rem;
-    padding-top: 5rem;
+    padding-top: 3rem;
     position: relative;
     background-image: url('../../images/1bg.svg');
 }
@@ -109,10 +109,43 @@
 }
 
 
+
+
 /* process Container home */ 
 .container-blogs {
     background-size: cover;
     height: 40rem;
-    padding-top: 5rem;
+    padding-top: 4rem;
     position: relative;
 }
+
+.container-faq {
+    padding-top: 4rem;
+    height: 35rem;
+    padding-right: 0rem;
+
+}
+
+.container-item-full {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+}
+.container-table-faq {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+ @media (max-width: 1440px) {
+    .landing-img {
+        width: 45rem;
+        margin-top: 13rem;
+        z-index: 1;
+    }
+  }
+

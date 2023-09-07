@@ -16,10 +16,15 @@ import orangeCircle1 from "../../images/1orangecircle.svg";
 import orangeCircle2 from "../../images/2orangecircle.svg";
 import purpleCircle3 from "../../images/3purplecircle.svg";
 import NumberInc from "../../components/NumberInc/NumberInc.component";
-import CompareTable from "../../components/CompareTable/CompareTable.component"
+import CompareTable from "../../components/CompareTable/CompareTable.component";
+import { useInView } from 'react-intersection-observer';
+import data from "../../components/Faq/faq.json";
 
 function Home(props) { 
-
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    threshold: 0.1, // Adjust the threshold as needed
+  });
   return (
     <>
       <div className="home-landing-container">
@@ -29,7 +34,9 @@ function Home(props) {
             <img className="img-left-sticky" src={purpleCircle} alt="process-icon" />
             <img className="img-right-sticky" src={orangeCircle1} alt="process-icon" />
             <div className="container-item">
-              <img className="landing-img" src={landingHome} alt="process-icon" />
+              <div ref={ref}>
+                <img className={`landing-img ${inView ? 'item-animate' : ''}`} src={landingHome} alt="process-icon" />
+              </div>
             </div>
           </div>
 
@@ -78,16 +85,19 @@ function Home(props) {
             </div>
           </div>
 
-
-
-
-          <div className="section-container" style={{marginTop: "0rem", height: "38rem"}}>
-            <h2  style={{marginBottom: "3rem"}}>Blogs</h2>
+          <div className="section-container container-faq" id="process">
+            <img className="img-left-sticky" src={orangeCircle2} alt="process-icon" />
+            <div className="container-item-full">
+              <h2>FAQs</h2>
+              <div className="container-table-faq">
+                <RetractableTable data={data}/>
+                <RetractableTable data={data} />
+              </div>
+            </div>      
           </div>
-          <div className="section-container" style={{marginTop: "0rem", height: "38rem"}}>
-            <h2>FAQs</h2>
-            <RetractableTable />
-          </div>
+
+
+
         </div>
       </div>
     </>

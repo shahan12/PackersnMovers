@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./blogCard.css";
 import BlogVideoIndiv from "./BlogVideoIndiv.component";
 import blogs from "./videoBlog.json";
+import { useInView } from 'react-intersection-observer';
 
 const data = Array.from({ length: 20 }, (_, index) => ({
   id: index + 1,
@@ -16,6 +17,10 @@ function BlogVideo(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    threshold: 0.1, // Adjust the threshold as needed
+  });
   useEffect(() => {
     const autoChangeTimer = setInterval(() => {
       setCurrentPage((prevPage) => (prevPage % totalPages) + 1);
@@ -35,13 +40,15 @@ function BlogVideo(props) {
     const endIndex = startIndex + itemsPerPage;
     const itemsToDisplay = blogs.vlogs.slice(startIndex, endIndex);
     return itemsToDisplay.map((blog, index) => (
-      <div key={index} className="item">
+      <div ref={ref}>
+      <div  className={`itemBlog ${inView ? 'item-animate' : ''}`}>
         <BlogVideoIndiv
           title={blog.title}
           thumb={blog.thumbnail}
           video={blog.videolink}
           className={index % 2 == 0 ? "" : "insideBlogCard2"}
         />
+      </div>
       </div>
     ));
   };
