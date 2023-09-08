@@ -1,0 +1,39 @@
+{
+  "vlogs": [
+    {
+      "title": "My First Vlog",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_1",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    },
+    {
+      "title": "Exploring Delhi's Street Food",
+      "videolink": "https://www.youtube.com/embed/VIDEO_ID_2",
+      "thumbnail": "https://cdn.nerdschalk.com/wp-content/uploads/2022/12/smaller-icon-size-windows-11-759x427.png"
+    }
+  ]
+}

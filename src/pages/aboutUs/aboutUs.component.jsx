@@ -5,9 +5,7 @@ function AboutUs(props) {
   return (
     <div className="about-usWrapper">
       <div className="about-us-section-1">
-        <h2 className="about-us-heading">
-          Best Packers and Movers in Bangalore
-        </h2>
+        <h2 className="about-us-heading" style={{paddingTop: '0rem'}}>Best Packers and Movers in Bangalore</h2>
         <p className="about-us-para-text">{data1.para1}</p>
         <p className="about-us-para-text">{data1.para2}</p>
         <p className="about-us-para-text">{data1.para3}</p>
