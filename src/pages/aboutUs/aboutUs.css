@@ -1,12 +1,11 @@
-.about-usWrapper {
-    padding: 3.85rem 16rem;
-}
+
 .about-us-heading {
-    font-weight: 500;
-    font-size: 1.25rem;
+ text-align: center;
+ padding: 3rem 0rem;
 }
 
 .about-us-para-text{
+    text-align: justify;
     margin: 2.5rem 0;
     font-weight: 400;
     font-size: 1.125rem;
@@ -16,4 +15,8 @@
     font-weight: 500;
     font-size: 1.125rem;
     color: black;
+}
+
+.aboutUs {
+    padding: 0rem 15rem 20rem 15rem;
 }

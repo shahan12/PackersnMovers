@@ -18,6 +18,7 @@ import purpleCircle3 from "../../images/3purplecircle.svg";
 import NumberInc from "../../components/NumberInc/NumberInc.component";
 import CompareTable from "../../components/CompareTable/CompareTable.component";
 import { useInView } from 'react-intersection-observer';
+import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 
 function Home(props) { 
@@ -96,7 +97,13 @@ function Home(props) {
             </div>      
           </div>
 
-
+          <div className="section-container aboutUs" id="process">
+            <img className="img-left-sticky" src={orangeCircle2} alt="process-icon" />
+            <img className="img-right-sticky-process" src={purpleCircle3} alt="process-icon" />
+            <div className="container-item-full">
+              <AboutUs/>
+            </div>
+          </div>
 
         </div>
       </div>
