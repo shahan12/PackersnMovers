@@ -149,3 +149,50 @@
     }
   }
 
+  @media (max-width: 600px) {
+    .home-landing-container{
+        margin-top: -13rem;
+    }
+    .section-container {
+        padding: 0;
+    }
+    img {
+        width: 10rem;
+    }
+    .container-process {
+        height: 100%;
+    }
+    .container-service {
+        height: 20rem;
+    }
+    .container-item{
+        width: 100%;
+        margin-left: 0;
+    }
+    .landing-img {
+        width: 19rem;
+        margin-top: 20rem;
+    }
+    .services-row-one{
+        gap: 2rem;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+    }
+    .process-img {
+        width: 22rem;
+    }
+    .process-row-one {
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+    .container-blogs {
+        height: 20rem;
+    }
+    .container-faq {
+        height: 100%;
+    }
+    .container-table-faq{
+        flex-direction: column;
+    }
+    
+  }
