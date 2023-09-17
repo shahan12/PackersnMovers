@@ -27,3 +27,12 @@
       font-size: 1.5rem;
     }
   }
+
+  @media (max-width: 600px) {
+    .top-text {
+      font-size: 1rem;
+    }
+    .bottom-subtext{
+      font-size: 0.75rem;
+    }
+  }

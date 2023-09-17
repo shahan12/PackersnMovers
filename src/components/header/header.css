@@ -5,11 +5,18 @@
     top: 0rem;
     z-index: 1;
 }
+@media (max-width: 600px) {
+    .header-container {
+      flex-direction: column;
+      padding: 0;
+    }
+    .header-cta-container{
+        gap: 0;
+        flex-direction: column;
+    }
+  }
 .header-cta-container{
-    gap: 2rem;
-}
-.header-company-logo-container{
-    width: 4.5rem;
+    gap: 1rem;
 }
 .header-logo-img{
     width: 4.5rem;
