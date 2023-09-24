@@ -1,0 +1,27 @@
+.options-option-wrapper{
+    border-radius: 0.5rem;
+    border: 1.27px solid #BABABA;
+    padding: 0.875rem 2.31rem;
+    flex-direction: column;
+    margin-bottom: 1.875rem;
+    cursor: pointer;
+}
+.selected{
+    border: 1.27px solid #550EC5;
+    background: rgba(238, 236, 251, 0.80);
+}
+.option-icon{
+    width: 2.25rem;
+}
+.options-option-value{
+    color: rgba(19, 19, 19, 0.80);
+    font-size: .8125rem;
+    font-weight: 500;
+    letter-spacing: -0.26px;
+}
+.selected-text{
+    color: #550EC5;
+}
+.fixed-width{
+    width: 9.125rem;
+}

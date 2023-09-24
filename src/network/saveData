@@ -1,26 +1,23 @@
 // import { AppContext } from "../context/context";
 
-
 export const saveData = (data) => {
+  // const [payloadData, setData] = useContext(AppContext);
 
-    // const [payloadData, setData] = useContext(AppContext);
-
-    fetch('https://jsonplaceholder.typicode.com/posts', {
-    method: 'POST',
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
     headers: {
-        'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      // enter you logic when the fetch is successful
+      console.log(data);
+      // setData({...payloadData,isSaved: true})
     })
-    .then(res => res.json())
-    .then(data => {
-    // enter you logic when the fetch is successful
-        console.log(data);
-        // setData({...payloadData,isSaved: true})
-    })
-    .catch(error => {
-    // enter your logic for when there is an error (ex. error toast)
-    console.log(error)
-    }) 
+    .catch((error) => {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    });
 };
-

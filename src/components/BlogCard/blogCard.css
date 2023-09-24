@@ -119,4 +119,21 @@
     height: 80%;
   }
   
-  
+  @media (max-width: 600px) {
+    .blog-page-items-container {
+      width: 21rem;
+    }
+    .blog-video-indiv {
+      width: 10rem;
+      height: 10rem;
+    }
+    .thumbnail-container {
+      width: 10rem;
+      height: 10rem;
+    }
+    .thumbnail {
+      width: 10rem;
+      height: 10rem;
+    }
+    
+  }
