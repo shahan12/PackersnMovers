@@ -1,0 +1,78 @@
+.fillReq-requirements-wrapper{
+    gap: 3.5rem;
+
+}
+.extra-margin{
+    margin: 0 -2.256rem;
+}
+.requirements-section-1 {
+    width: 60%;
+    border-radius: 12px;
+    background: #FFF;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.08), 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
+    padding: 0 2.56rem 2.5rem;
+}
+.requirements-section-2 {
+    flex-direction: column;
+    gap: 1.875rem;
+    width: 38%;
+}
+.requirements-your-details-wrapper{
+    height: 30%;
+    border-radius: 12px;
+    background: #FFF;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.08), 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
+    padding: 0 2.56rem 2.5rem;
+}
+h2 {
+    color: #363636;
+    font-family: Inter;
+    font-size: 1.375rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.family-type-wrapper{
+    margin-top: 2.5rem;
+}
+h3{
+    color: #58595B;
+    font-family: Inter;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.36px;
+    text-align: left;
+    margin-bottom: 0.875rem;
+}
+.family-type-options-wrapper{
+    gap: 0.875rem;
+}
+.house-type-row-one {
+   gap: 0.77rem;
+}
+.more-house-info{
+    margin-bottom: 1.875rem;
+}
+.more-option-floor-input{
+    width: 48%;
+}
+.fill-req-CTA-container{
+    justify-content: flex-end;
+}
+.requirement-sub-header{
+    margin-top: 1.187rem;
+    color: #363636;
+    font-weight: 600;
+}
+.edit-icon{
+    cursor: pointer;
+    width: 1.5rem;
+}
+.margin-bottom-10{
+    margin-bottom: 1rem;
+}
