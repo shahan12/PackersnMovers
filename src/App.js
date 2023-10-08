@@ -8,6 +8,7 @@ import Footer from "./components/footer/footer.component";
 import AboutUs from "./pages/aboutUs/aboutUs.component";
 import { AppProvider } from "./context/context";
 import Order from "./pages/order/orders.component";
+import EditProfile from "./pages/editProfile/edit-profile.component";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/sign-up" element={<SignUp />} />
         <Route exact path="/about-us" element={<AboutUs />} />
         <Route exact path="/fill-details" element={<Order />} />
+        <Route exact path="/edit-profile" element={<EditProfile />} />
       </Routes>
       <Footer />
     </AppProvider>

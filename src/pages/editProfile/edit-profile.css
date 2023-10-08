@@ -1,0 +1,70 @@
+.edit-profile-wrapper h2 {
+    color: #363636;
+    font-weight: 600;
+    font-size: 1.375rem;
+}
+
+.edit-profile-img-wrapper {
+    margin: 2.5rem 0;
+    position: relative;
+
+}
+
+.edit-profile-img {
+    display: flex;
+    width: 9.5rem;
+    height: 9.5rem;
+    border-radius: 50%;
+}
+
+.edit-profile-upload-btn {
+    position: absolute;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    background-color: #550EC5;
+    border: 0.548px solid #FFF;
+    box-shadow: 0px 7.63905px 15.2781px 0px rgba(0, 0, 0, 0.06), 0px 0px 7.63905px 0px rgba(0, 0, 0, 0.04);
+    color: #FFF;
+    font-weight: 600;
+    top: 7rem;
+    margin-left: -7rem;
+    cursor: pointer;
+}
+.edit-profile-form{
+    padding: 0 8.125rem 7.3rem;
+}
+
+.edit-profile-row-one{
+    display: flex;
+    width: 100%;
+    gap: 7.5rem;
+    margin-bottom: 2.6rem;
+}
+
+.edit-profile-input-wrapper{
+    width: 45%;
+}
+
+.edit-profile-form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #363636;
+}
+
+.edit-profile-form-input {
+    height: 3.125rem;
+    border-radius: 0.5rem;
+    border: 1.27px solid #BABABA;
+    background: rgba(253, 253, 253, 0.90);
+    box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
+    width: 100%;
+    color: #363636;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 1rem;
+}
+.edit-profile-CTA-container{
+    padding: 0 8.15rem 2.5rem;
+    justify-content: flex-end;
+    gap: 1.25rem;
+}

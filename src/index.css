@@ -16,6 +16,11 @@ html, body{
 *:focus {
   outline: none;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -59,12 +64,22 @@ code {
 }
 .cta-button {
   border-radius: 0.5rem;
-  background: rgba(255, 120, 0, 0.60);
+  background: #FF7800;
   box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
   color: white;
   padding: 0.9rem 4.3rem;
 }
-
+.disabled {
+  opacity: 0.5rem;
+  pointer-events: none;
+}
+.secondary-cta {
+  border-radius: 0.5rem;
+  background: rgba(117, 117, 117, 0.90);
+  box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 0.9rem 4.3rem;
+}
 .grey-600{
   color: #4B5563;
 }
