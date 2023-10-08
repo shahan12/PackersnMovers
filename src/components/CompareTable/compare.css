@@ -65,7 +65,7 @@ td {
   }
 
   @media (max-width: 1440px) {
-    img {
+    .propertiesShiftkart {
       width: 2rem;
     }
   }

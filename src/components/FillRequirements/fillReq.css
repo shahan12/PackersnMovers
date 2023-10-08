@@ -76,3 +76,11 @@ h3{
 .margin-bottom-10{
     margin-bottom: 1rem;
 }
+
+.familyNumber {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 5.5rem;
+}

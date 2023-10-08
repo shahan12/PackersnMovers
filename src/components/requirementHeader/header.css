@@ -1,0 +1,19 @@
+.header-component-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    margin: 0rem 0rem 2rem;
+    color: rgba(54, 54, 54, 0.80);
+
+    font-family: Inter;
+    font-size: 1rem;
+}
+
+.header-active-span {
+    color:#550EC5;
+}
+
+.imgTruck {
+    position: relative;
+    top: -10px;
+}
