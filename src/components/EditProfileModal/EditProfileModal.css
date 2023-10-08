@@ -1,0 +1,84 @@
+.Modal {
+    background-color: white;
+    opacity: 1;
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: unset;
+
+  }
+
+  .edit-profile-modal-wrapper{
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    right: "auto";
+    bottom: "auto";
+    transform: "translate(-50%, -50%)";
+    padding: 1.25rem;
+    background-color: white;
+    opacity: 1;
+    z-index: 100;
+    border-radius: 0.5rem;
+    box-shadow: 1px 2px 3px 4px rgba(20,20,20,0.4);
+  }
+  .edit-profile-modal-wrapper h2{
+    font-size: 1.5rem;
+    color: #4B4D61;
+    font-weight: 500;
+  }
+  .edit-close-icon{
+    display: flex;
+    width: 0.85rem;
+  }
+.edit-profile-upload-wrapper{
+    border-radius: .375rem;
+    border: 2px dashed var(--Primary, #550EC5);
+    padding: 2.5rem 5.76rem 4.75rem;
+}
+.edit-profile-image-wrapper{
+    justify-content: flex-end;
+    cursor: pointer;
+
+}
+.upload-img{
+    display: flex;
+    width: 4.625rem;
+}
+.text-h3{
+    color: #757575;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+.edit-profile-upload-wrapper p {
+    text-align: center;
+    font-size: 1.25rem;
+}
+.click-upload{
+    color: #FF7800;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.or-upload{
+    color: #757575;
+    font-weight: 400;
+}
+.drag-drop{
+    color: #4B4D61;
+    font-weight: 500;
+}
+
+.supported-files{
+    color: #757575;
+    font-size: 1rem;
+}
+.edit-profile-upload-wrapper input{
+    border: none !important;
+}
