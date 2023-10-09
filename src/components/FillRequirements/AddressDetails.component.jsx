@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import DropDown from "../dropDown/dropDown.component";
 
 import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
 
-function AddressDetails({ disabled, setDisabled, fromCity, setFromCity, toCity, setToCity  }) {
-  return (
 
+
+function AddressDetails() {
+
+  
+  const [fromCity, setFromCity] = useState("Bangalore");
+  const [toCity, setToCity] = useState("Bangalore");
+  const [disabled, setDisabled] = useState(true);
+
+  return (
     <div className="requirements-section-2 flex">
     <div className="requirements-your-details-wrapper">
       <div className="border-bottom extra-margin">
