@@ -99,16 +99,16 @@ const CompareTable = () => {
                 <td className="serviceTH">{item.service}</td>
                 <td className="checkmarkTH">
                   {item.shiftkart === "checkmark" ? (
-                    <img src={check} alt="Checkmark" />
+                    <img className="propertiesShiftkart" src={check} alt="Checkmark" />
                   ) : (
-                    <img src={uncheck} alt="Uncheckmark" />
+                    <img className="propertiesShiftkart" src={uncheck} alt="Uncheckmark" />
                   )}
                 </td>
                 <td className="checkmarkTH">
                   {item.local === "checkmark" ? (
-                    <img src={check} alt="Checkmark" />
+                    <img className="propertiesShiftkart" src={check} alt="Checkmark" />
                   ) : (
-                    <img src={uncheck} alt="Uncheckmark" />
+                    <img className="propertiesShiftkart" src={uncheck} alt="Uncheckmark" />
                   )}
                 </td>
               </tr>

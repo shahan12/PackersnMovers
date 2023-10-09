@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import DropDown from "../dropDown/dropDown.component";
 import "./fillReq.css";
 import "../../images/bachelor.svg";
 import "../../images/family.svg";
@@ -8,12 +7,15 @@ import BachelorImg from "../../images/bachelor.svg";
 import BachelorImgSelected from "../../images/bachelor-slected.svg";
 import FamilyImg from "../../images/family.svg";
 import FamilyImgSelected from "../../images/family-selected.svg";
-import Edit from "../../images/location-edit.svg";
-import Data from "../relocate/data.json";
 import MultiDropDown from "../muiDropDown/dropDown.component";
+import Header from "../requirementHeader/requirementHeader.compoennt";
+import upArrow from '../../images/uparrow.png';
+import downArray from '../../images/downarrow.png';
+import AddressDetails from "./AddressDetails.component";
 
 function FillRequrements(props) {
   const [familyType, setfamilyType] = useState("");
+  const [progress, setProgress] = useState("requirement");
   const [houseType, setHouseType] = useState("");
   const houseTypes = [
     "1 RK",
@@ -27,13 +29,44 @@ function FillRequrements(props) {
   ];
   const [fromCity, setFromCity] = useState("Bangalore");
   const [toCity, setToCity] = useState("Bangalore");
-  const [floorValue, setFloorValue] = useState("");
-  const [movingFloorValue, setMovingFloorValue] = useState("");
+  const [floorNumber, setFloorNumber] = useState("");
+  const [movingFloorNumber, setMovingFloorNumber] = useState("");
   const [liftValue, setLiftValue] = useState("");
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [familyNumber, setFamilyNumber] = useState(2);
 
+  const FlatrequireMents = () => {
+    if (progress === 'requirement') {
+      setProgress('inventory');
+    }
+    const requirementData = {
+        "familytype": familyType,
+        "houseType": houseType,
+        "familyNumber": familyNumber,
+        "current": {
+            "floorNumber": floorNumber,
+            "liftValue": liftValue
+        },
+        "moving": {
+            "movingFloorNumber": movingFloorNumber,
+            "movingToLiftValue": movingToLiftValue
+        }
+    }
+    const API_Req_Data = JSON.stringify(requirementData);
+    //carton//cft//price
+  };
+  
+  const handleArrowClick = (action) => {
+    if (action === 'increment' && familyNumber < 10) {
+      setFamilyNumber(familyNumber + 1);
+    } else if (action === 'decrement' && familyNumber > 2) {
+      setFamilyNumber(familyNumber - 1);
+    }
+  };
   return (
+    <div className="orders-compoennt-wrapper">
+    <Header progress={progress} />
     <div className="fillReq-requirements-wrapper flex">
       <div className="requirements-section-1">
         <div className="border-bottom extra-margin">
@@ -56,6 +89,11 @@ function FillRequrements(props) {
               selected={familyType}
               setOnClick={setfamilyType}
             />
+            <div className="familyNumber">
+              <img src={upArrow} onClick={() => handleArrowClick('increment')}/>
+              <span className="arrowCount">{familyNumber}</span>
+              <img src={downArray} onClick={() => handleArrowClick('decrement')}/>
+            </div>
           </div>
         </div>
         <div className="house-type-wrapper">
@@ -129,8 +167,8 @@ function FillRequrements(props) {
                   "4th Floor",
                   "5th Floor ",
                 ]}
-                selectedValue={floorValue}
-                setSelectedValue={setFloorValue}
+                selectedValue={floorNumber}
+                setSelectedValue={setFloorNumber}
               />
             </div>
             <div className="more-option-floor-input">
@@ -157,8 +195,8 @@ function FillRequrements(props) {
                   "4th Floor",
                   "5th Floor ",
                 ]}
-                selectedValue={movingFloorValue}
-                setSelectedValue={setMovingFloorValue}
+                selectedValue={movingFloorNumber}
+                setSelectedValue={setMovingFloorNumber}
               />
             </div>
             <div className="more-option-floor-input">
@@ -172,48 +210,18 @@ function FillRequrements(props) {
           </div>
         </div>
         <div className="fill-req-CTA-container flex">
-          <button className="cta-button">NEXT</button>
+          <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
         </div>
       </div>
-      <div className="requirements-section-2 flex">
-        <div className="requirements-your-details-wrapper">
-          <div className="border-bottom extra-margin">
-            <h2>Your Details</h2>
-          </div>
-          <div className="flex space-between requirement-sub-header">
-            <span>Address</span>
-            <img
-              src={Edit}
-              alt={"Edit-Icon"}
-              className="edit-icon"
-              onClick={() => {
-                setDisabled(!disabled);
-              }}
-            ></img>
-          </div>
-          <div className="relocate-drop-down-container margin-bottom-10">
-            <DropDown
-              value={fromCity}
-              setValue={setFromCity}
-              option={Data.IndianCitiesPinCode}
-              disabled={disabled}
-            />
-          </div>
-          <div className="relocate-drop-down-container">
-            <DropDown
-              value={toCity}
-              setValue={setToCity}
-              option={Data.IndianCitiesPinCode}
-              disabled={disabled}
-            />
-          </div>
-        </div>
-        <div className="requirements-your-details-wrapper">
-          <div className="border-bottom extra-margin">
-            <h2>Cost Of Moving</h2>
-          </div>
-        </div>
-      </div>
+      <AddressDetails 
+        disabled={disabled}
+        setDisabled={setDisabled}
+        fromCity={fromCity}
+        setFromCity={setFromCity}
+        toCity={toCity}
+        setToCity={setToCity}
+      />
+    </div>
     </div>
   );
 }
