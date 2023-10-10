@@ -28,7 +28,6 @@ function Home({ setShowPopUp }) {
   });
 
   useEffect(() => {
-    console.log(window.location.search);
     if (window.location.search.includes("login-redirect=true")) {
       setShowPopUp(true);
     }
