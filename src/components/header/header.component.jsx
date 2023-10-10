@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./header.css";
 import logo from "../../images/SHIFTKART-LOGO.png";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 
-function Header(props) {
+function Header({ showPopUp, isAuthenticated }) {
   const [modalOpen, setModalOpen] = useState(false);
-
-  const openModal = () => {
-    setModalOpen(true);
-  };
+  const [loginModal, setLoginModal] = useState(false);
 
   const closeModal = () => {
     setModalOpen(false);
+    setLoginModal(false);
   };
 
-  let logedIn = true;
+  useEffect(() => {
+    if (showPopUp) {
+      setLoginModal(true);
+    }
+  }, [showPopUp]);
+  let logedIn = false;
+
+  const hanleLogOut = () => {
+    sessionStorage.removeItem("loggedIn");
+    window.open("/", "_self");
+  };
   return (
     <article className="header-container space-between">
+      {loginModal && (
+        <RegisterModal
+          isOpen={loginModal}
+          onClose={closeModal}
+          flow={"login"}
+        />
+      )}
       <div className="align-center">
         <img src={logo} alt="logo" className="header-logo-img"></img>
       </div>
@@ -33,20 +48,33 @@ function Header(props) {
           </Link>
         </div>
         <div className="header-user-wrapper">
-          <button className="header-user-wrapper-btn" onClick={openModal}>
+          <button
+            className="header-user-wrapper-btn"
+            onClick={() => setModalOpen(true)}
+          >
             Get in touch with us!
           </button>
-          <RegisterModal isOpen={modalOpen} onClose={closeModal} />
+          {modalOpen && (
+            <RegisterModal
+              isOpen={modalOpen}
+              onClose={closeModal}
+              flow={"register"}
+            />
+          )}
         </div>
-        {!logedIn ? (
-          <div className="header-sign-in-btn">
-            <Link to="/login-in" className="header-CTA-item">
-              Login
-            </Link>
+        {!isAuthenticated ? (
+          <div
+            className="header-sign-in-btn"
+            onClick={() => {
+              setLoginModal(true);
+              console.log("click", loginModal);
+            }}
+          >
+            Login
           </div>
         ) : (
-          <div className="header-user-wrapper">
-            <span>Call us on +91 8722 111 882</span>
+          <div className="header-user-wrapper" onClick={hanleLogOut}>
+            <span>Log Out</span>
           </div>
         )}
       </div>

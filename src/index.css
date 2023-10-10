@@ -68,10 +68,12 @@ code {
   box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.25);
   color: white;
   padding: 0.9rem 4.3rem;
+  cursor: pointer;
+  text-align: center;
 }
 .disabled {
-  opacity: 0.5rem;
-  pointer-events: none;
+  opacity: 0.5 !important;
+  pointer-events: none !important;
 }
 .secondary-cta {
   border-radius: 0.5rem;

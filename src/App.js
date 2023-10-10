@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./components/header/header.component";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/homePage/home";
 import Login from "./pages/login/login.component";
 import SignUp from "./pages/signUp/signup.component";
@@ -9,17 +9,39 @@ import AboutUs from "./pages/aboutUs/aboutUs.component";
 import { AppProvider } from "./context/context";
 import Order from "./pages/order/orders.component";
 import EditProfile from "./pages/editProfile/edit-profile.component";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
+  );
+  const [showPopUp, setShowPopUp] = useState(false);
+  useEffect(() => {
+    sessionStorage.setItem("auth", JSON.stringify(isAuthenticated));
+  }, [isAuthenticated]);
   return (
     <AppProvider>
-      <Header />
+      <Header showPopUp={showPopUp} isAuthenticated={isAuthenticated} />
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route
+          exact
+          path="/"
+          element={<Home showPopUp={showPopUp} setShowPopUp={setShowPopUp} />}
+        />
         <Route exact path="/login-in" element={<Login />} />
         <Route exact path="/sign-up" element={<SignUp />} />
         <Route exact path="/about-us" element={<AboutUs />} />
-        <Route exact path="/fill-details" element={<Order />} />
+        <Route
+          exact
+          path="/fill-details"
+          element={
+            isAuthenticated ? (
+              <Order />
+            ) : (
+              <Navigate to="/?login-redirect=true" replace />
+            )
+          }
+        />
         <Route exact path="/edit-profile" element={<EditProfile />} />
       </Routes>
       <Footer />

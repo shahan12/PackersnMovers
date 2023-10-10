@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Relocate from "../../components/relocate/relocate.component";
 import "./home.css";
 import BlogVideo from "../../components/BlogCard/BlogVideo.component";
@@ -21,11 +21,18 @@ import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 
-function Home(props) {
+function Home({ setShowPopUp }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1, // Adjust the threshold as needed
   });
+
+  useEffect(() => {
+    console.log(window.location.search);
+    if (window.location.search.includes("login-redirect=true")) {
+      setShowPopUp(true);
+    }
+  }, []);
   return (
     <>
       <div className="home-landing-container">
