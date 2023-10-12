@@ -74,15 +74,26 @@
     border-radius: 3px;
   }
   
-  .login-modal-form button {
+  /* .login-modal-form button {
     padding: 1rem;
     background-color: #cac4e7;
     color: white;
     border: none;
     cursor: pointer;
     align-items: center;
-  }
+  } */
   
-  .login-modal-form button:hover {
+  /* .login-modal-form button:hover {
     background-color: #BAB1E9;
+  } */
+
+  .continue-OTP-enter{
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .error-msg{
+    color: red;
+    font-size: 0.75rem;
+    font-weight: 500;
   }
