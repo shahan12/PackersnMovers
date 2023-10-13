@@ -10,6 +10,7 @@ import { AppProvider } from "./context/context";
 import Order from "./pages/order/orders.component";
 import EditProfile from "./pages/editProfile/edit-profile.component";
 import { useEffect, useState } from "react";
+import Bookings from "./pages/bookings/Bookings.component";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -43,6 +44,7 @@ function App() {
           }
         />
         <Route exact path="/edit-profile" element={<EditProfile />} />
+        <Route exact path="/bookings" element={<Bookings />} />
       </Routes>
       <Footer />
     </AppProvider>
