@@ -67,7 +67,6 @@ function Header({ showPopUp, isAuthenticated }) {
             className="header-sign-in-btn"
             onClick={() => {
               setLoginModal(true);
-              console.log("click", loginModal);
             }}
           >
             Login
