@@ -7,9 +7,12 @@ import itembox from '../../images/itembox.png';
 import Uparrow from '../../images/upArrowinventory.png';
 import downarrow from '../../images/downArrowinventory.png';
 import "./Inventory.css";
+import { useDispatch } from 'react-redux';
+import { updateSelectedItems } from '../../redux/actions';
 
 const Inventory = ({progress, setProgress}) => {
 
+  const dispatch = useDispatch();
   const [itemCount, setItemCount] = useState(0);
   const [inventoryData, setInventoryData] = useState(FURNITURE);
   const [expandedItem, setExpandedItem] = useState(null);
@@ -25,19 +28,22 @@ const Inventory = ({progress, setProgress}) => {
     if (progress === 'inventory') {
       setProgress('dateselection');
     }}
+
+
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
-    let duplicatedName = `${name} variation ${variationCount}`;
+    let duplicatedName = `${name} - variation ${variationCount}`;
     while (inventoryData[category][subItem][duplicatedName]) {
       variationCount++;
-      duplicatedName = `${name} - Variation ${variationCount}`;
+      duplicatedName = `${name} - variation ${variationCount}`;
     }
     inventoryData[category][subItem][duplicatedName] = { ...itemToDuplicate };
     setInventoryData({ ...inventoryData });  
   };
 
   const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
+    console.log("name, typeMap, materialMap, category, subItem", name, typeMap, materialMap, category, subItem);
     if (!typeMap & !materialMap) {
       return;
     }
@@ -45,22 +51,14 @@ const Inventory = ({progress, setProgress}) => {
     const count = selectedItems[category][subItem][name].count;
     selectedItems[category][subItem][name].count = count + 1;
     setSelectedItems({ ...selectedItems });
+    dispatch(updateSelectedItems(selectedItems));
   };
-  console.log("v", selectedItems);
-  function generateUniqueId() {
-    const timestamp = new Date().getTime();
-    const random = Math.random().toString(36).substr(2, 5); // Random alphanumeric string
-    return `${timestamp}-${random}`;
-  }
-
+  
   const handleTypeChange = (name, category, subItem, type, material) => {
     setSelectedTypeMap(prevTypeMap => ({
       ...prevTypeMap,
       [name]: type
     }));
-    if (material === undefined) {
-      return;
-    }
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -85,9 +83,6 @@ const Inventory = ({progress, setProgress}) => {
       ...prevMaterialMap,
       [name]: material
     }));
-    if (type === undefined) {
-      return;
-    }
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -155,10 +150,10 @@ const Inventory = ({progress, setProgress}) => {
           <span>{name}</span>
           <select
             className='custom-select'
-            onChange={(e) => handleMaterialChange(name, category, subItem, e.target.value, selectedTypeMap[name])}
+            onChange={(e) => handleMaterialChange(name, category, subItem, e.target.value, selectedTypeMap[name] || Object.keys(data[name].type)[0])}
             value={selectedMaterialMap[name] || selectedMaterialMap[Object.keys(data[name].material)[0]]} // Set the initial value to the first material option
           >
-            <option value=''>Select Material</option>
+            <option value=''>Select Attribute</option>
             {Object.keys(data[name].material).map((material, materialIndex) => (
               <option key={materialIndex} value={material}>
                 {material}
@@ -167,7 +162,7 @@ const Inventory = ({progress, setProgress}) => {
           </select>
           <select
             className='custom-select'
-            onChange={(e) => handleTypeChange(name, category, subItem, e.target.value, selectedMaterialMap[name])}
+            onChange={(e) => handleTypeChange(name, category, subItem, e.target.value, selectedMaterialMap[name] || Object.keys(data[name].material)[0])}
             value={selectedTypeMap[name] || selectedTypeMap[Object.keys(data[name].type)[0]]}
           >
             <option value=''>Select Type</option>
