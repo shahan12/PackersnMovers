@@ -10,9 +10,11 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
+import { sendRequestToBackend } from '../../API/apicalls';
 
 function Requirement({progress, setProgress}) {
   const [familyType, setfamilyType] = useState("");
+  const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
   const houseTypes = [
     "1 RK",
@@ -47,10 +49,22 @@ function Requirement({progress, setProgress}) {
             "movingToLiftValue": movingToLiftValue
         }
     }
-    const API_Req_Data = JSON.stringify(requirementData);
-    //carton//price-floor//address base price
+    sendRequestReq(requirementData);
   };
-  
+
+  const sendRequestReq = async (API_Req_Data) => {
+    const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
+    try {
+      const response = await sendRequestToBackend(API_Req_Data_JSON);
+      setResponseRequirementAPIData(response);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
+  console.log(responseRequirementAPIData, "responseRequirementAPIData");
+
   const handleArrowClick = (action) => {
     if (action === 'increment' && familyNumber < 10) {
       setFamilyNumber(familyNumber + 1);
