@@ -1,6 +1,6 @@
 {
 	"FURNITURE": 
-	{
+		{
 		"sofa":{
 			"1 seater": {
 				"base": 20,
@@ -283,34 +283,33 @@
 		},
 		"cupboard": {
 			"base": 2,
-				"type": {
-					"wooden": {
-						"height less than 2 feet and width less than 2 feet": 6,
-						"height less than 2 feet and width less than 2 to 4 feet": 15,
-						"height less than 2 feet and width less than 4 to 6 feet": 20,
-						"height less than 2 feet and width greater than 6 feet": 28,
+			"type": {
+				"wooden": {
+					"height less than 2 feet and width less than 2 feet": 6,
+					"height less than 2 feet and width less than 2 to 4 feet": 15,
+					"height less than 2 feet and width less than 4 to 6 feet": 20,
+					"height less than 2 feet and width greater than 6 feet": 28,
 
-						"height less than 2 to 4 feet and width less than 2 feet": 13,
-						"height less than 2 to 4 feet and width less than 2 to 4 feet": 32,
-						"height less than 2 to 4 feet and width less than 4 to 6 feet": 38,
-						"height less than 2 to 4 feet and width greater than 6 feet": 58,
+					"height less than 2 to 4 feet and width less than 2 feet": 13,
+					"height less than 2 to 4 feet and width less than 2 to 4 feet": 32,
+					"height less than 2 to 4 feet and width less than 4 to 6 feet": 38,
+					"height less than 2 to 4 feet and width greater than 6 feet": 58,
 
-						"height less than 4 to 6 feet and width less than 2": 20,
-						"height less than 4 to 6 feet and width less than 2 to 4 feet": 38,
-						"height less than 4 to 6 feet and width less than 4 to 6 feet": 66,
-						"height less than 4 to 6 feet and width greater than 6 feet": 88,
+					"height less than 4 to 6 feet and width less than 2": 20,
+					"height less than 4 to 6 feet and width less than 2 to 4 feet": 38,
+					"height less than 4 to 6 feet and width less than 4 to 6 feet": 66,
+					"height less than 4 to 6 feet and width greater than 6 feet": 88,
 
-						"height greater than 6 feet and width less than 2 feet": 20,
-						"height greater than 6 feet and width less than 2 to 4 feet": 50,
-						"height greater than 6 feet and width less than 4 to 6 feet": 80,
-						"height greater than 6 feet and width greater than 6": 110
-							},
-					"steel": {
-						"height less than 5 feet": 30,
-						"height greater than 5 feet": 50
+					"height greater than 6 feet and width less than 2 feet": 20,
+					"height greater than 6 feet and width less than 2 to 4 feet": 50,
+					"height greater than 6 feet and width less than 4 to 6 feet": 80,
+					"height greater than 6 feet and width greater than 6": 110
 						},
-					"plastic": 0
-					}
+				"steel": {
+					"height less than 5 feet": 30,
+					"height greater than 5 feet": 50
+					},
+				"plastic": 0
 				},
 				"material": {
 					"wooden dismental": 43,
@@ -319,7 +318,58 @@
 					"metal no-foldable": 43,
 					"glass top": 55
 				}
+			}
 		},
+	"FURNITURE1": 
+		{
+		"sofa":{
+			"1 seater": {
+				"base": 20,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				},
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 0
+				}
+			},
+			"2 seater": {
+				"base": 35,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				}, 
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 5,
+					"non-storage": 5
+				}
+			},
+			"3 seater": {
+				"base": 45,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 5
+				},
+				"type": {
+					"recliner": 15,
+					"non-recliner": 15,
+					"storage": 5,
+					"non-storage": 5
+				}
+			}
+		}
+	},
 		"tv_cabinet": {
 			"type": {
 				"With Glass": 8,

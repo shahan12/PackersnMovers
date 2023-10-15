@@ -48,7 +48,7 @@ function Requirement({progress, setProgress}) {
         }
     }
     const API_Req_Data = JSON.stringify(requirementData);
-    //carton//cft//price
+    //carton//price-floor//address base price
   };
   
   const handleArrowClick = (action) => {

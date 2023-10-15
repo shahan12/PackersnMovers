@@ -8,7 +8,7 @@ import Uparrow from '../../images/upArrowinventory.png';
 import downarrow from '../../images/downArrowinventory.png';
 import "./Inventory.css";
 
-const Inventory = () => {
+const Inventory = ({progress, setProgress}) => {
 
   const [itemCount, setItemCount] = useState(0);
   const [inventoryData, setInventoryData] = useState(FURNITURE);
@@ -20,6 +20,11 @@ const Inventory = () => {
   const handleItemClick = (item) => {
     setExpandedItem(item);
   };
+
+  const FlatrequireMents = () => {
+    if (progress === 'inventory') {
+      setProgress('dateselection');
+    }}
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
@@ -33,7 +38,6 @@ const Inventory = () => {
   };
 
   const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
-    console.log(name, typeMap, materialMap, category, subItem);
     if (!typeMap & !materialMap) {
       return;
     }
@@ -42,7 +46,7 @@ const Inventory = () => {
     selectedItems[category][subItem][name].count = count + 1;
     setSelectedItems({ ...selectedItems });
   };
-
+  console.log("v", selectedItems);
   function generateUniqueId() {
     const timestamp = new Date().getTime();
     const random = Math.random().toString(36).substr(2, 5); // Random alphanumeric string
@@ -57,7 +61,6 @@ const Inventory = () => {
     if (material === undefined) {
       return;
     }
-    console.log(name, category, subItem, material, type);
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -85,7 +88,6 @@ const Inventory = () => {
     if (type === undefined) {
       return;
     }
-    console.log(name, category, subItem, material, type);
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -96,12 +98,10 @@ const Inventory = () => {
     if (!updatedItems[category][subItem][name]) {
       updatedItems[category][subItem][name] = {};
     }
-  
     updatedItems[category][subItem][name].material = material;
     updatedItems[category][subItem][name].type = selectedTypeMap[name] || Object.keys(inventoryData[category][subItem][name].type)[0]; updatedItems[category][subItem][name].cost = calculateCost(name, category, subItem, type, updatedItems[category][subItem][name].material);
     updatedItems[category][subItem][name].count = updatedItems[category][subItem][name].count || 0;
 
-  
     setSelectedItems(updatedItems);
   };
 
@@ -111,7 +111,6 @@ const Inventory = () => {
     const typeValue = inventoryData[category][subItem][name].type[type];
     return base + materialValue + typeValue;
   };
-  console.log("selectedItems", selectedItems);
 
   const handleMinusClick = (name, category, subItem) => {
     setSelectedItems((prevSelectedItems) => {
@@ -148,8 +147,7 @@ const Inventory = () => {
     ));
   };
 
-  const renderItemDetails = (data, subItem, category) => {                              // item box\
-    
+  const renderItemDetails = (data, subItem, category) => { // item box\
     return (
       <div className='itemDetails-parent'>
       {Object.keys(data).map((name, index) => (
@@ -197,7 +195,7 @@ const Inventory = () => {
               ) : (
                 <span onClick={() => handleAddVariation(category, subItem, name)}>Add Variation</span>
               )}
-            </div>
+          </div>
         </div>
       ))}
     </div>
@@ -230,14 +228,16 @@ const Inventory = () => {
         </div>
       </div>
       <div>
-      {Object.keys(inventoryData).map((category) => (
-        <div key={category}>
+        <div key={selectedCategory}>
           <div className="category-content">
             {renderSubItems(inventoryData[selectedCategory], selectedCategory)}
           </div>
         </div>
-      ))}
     </div>
+    
+      < div className="fill-req-CTA-container flex">
+        <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+      </div>
     </div>
   );
 };

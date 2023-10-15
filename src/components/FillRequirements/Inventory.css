@@ -140,3 +140,15 @@
 .custom-select {
     margin-top: 0.5rem;
 }
+.cost-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.cost-details-child {
+    display: flex;
+    padding: 1rem 0rem;
+    flex-direction: row;
+    justify-content: space-between;
+}

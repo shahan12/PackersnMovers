@@ -51,6 +51,28 @@ function AddressDetails() {
       <div className="border-bottom extra-margin">
         <h2>Cost Of Moving</h2>
       </div>
+      <div className="cost-details">
+          <div className="cost-details-child"> 
+            <span>Base Price</span>
+            <span></span>
+          </div>
+          <div className="cost-details-child"> 
+            <span>Floor Charges</span>
+            <span></span>
+          </div>
+          <div className="cost-details-child"> 
+            <span>Total Items Added</span>
+            <span></span>
+          </div>
+          <div className="cost-details-child"> 
+            <span>CFT</span>
+            <span></span>
+          </div>
+          <div className="cost-details-child"> 
+            <span>Add Ons</span>
+            <span></span>
+          </div>
+      </div>
     </div>
   </div>
   );
