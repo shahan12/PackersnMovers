@@ -1,0 +1,9 @@
+{
+    "fans":{
+        "tower cooler":14,
+        "ceeling fan":3,
+        "table fan":2,
+        "pedstal fan":10,
+        "wall mounted fan":2
+    }
+}

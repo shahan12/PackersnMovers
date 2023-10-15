@@ -1,27 +1,245 @@
-import React, { useState } from "react";
-import "./fillReq.css";
-import "../DATA/CFTData.json";
+import React, { useState } from 'react';
+import InventoryItem from './InventoryItem.component';
+import FURNITURE from '../DATA/FinalCFT.json';
+import minus from '../../images/minus.png';
+import plus from '../../images/plus.png';
+import itembox from '../../images/itembox.png';
+import Uparrow from '../../images/upArrowinventory.png';
+import downarrow from '../../images/downArrowinventory.png';
+import "./Inventory.css";
 
-function Inventory({progress, setProgress}) {
+const Inventory = () => {
 
+  const [itemCount, setItemCount] = useState(0);
+  const [inventoryData, setInventoryData] = useState(FURNITURE);
+  const [expandedItem, setExpandedItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedMaterialMap, setSelectedMaterialMap] = useState({});
+  const [selectedTypeMap, setSelectedTypeMap] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
+  const handleItemClick = (item) => {
+    setExpandedItem(item);
+  };
+  const handleAddVariation = (category, subItem, name) => {
+    const itemToDuplicate = inventoryData[category][subItem][name];
+    let variationCount = 1;
+    let duplicatedName = `${name} variation ${variationCount}`;
+    while (inventoryData[category][subItem][duplicatedName]) {
+      variationCount++;
+      duplicatedName = `${name} - Variation ${variationCount}`;
+    }
+    inventoryData[category][subItem][duplicatedName] = { ...itemToDuplicate };
+    setInventoryData({ ...inventoryData });  
+  };
 
+  const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
+    console.log(name, typeMap, materialMap, category, subItem);
+    if (!typeMap & !materialMap) {
+      return;
+    }
+  
+    const count = selectedItems[category][subItem][name].count;
+    selectedItems[category][subItem][name].count = count + 1;
+    setSelectedItems({ ...selectedItems });
+  };
+
+  function generateUniqueId() {
+    const timestamp = new Date().getTime();
+    const random = Math.random().toString(36).substr(2, 5); // Random alphanumeric string
+    return `${timestamp}-${random}`;
+  }
+
+  const handleTypeChange = (name, category, subItem, type, material) => {
+    setSelectedTypeMap(prevTypeMap => ({
+      ...prevTypeMap,
+      [name]: type
+    }));
+    if (material === undefined) {
+      return;
+    }
+    console.log(name, category, subItem, material, type);
+    const updatedItems = { ...selectedItems };
+    if (!updatedItems[category]) {
+      updatedItems[category] = {};
+    }
+    if (!updatedItems[category][subItem]) {
+      updatedItems[category][subItem] = {};
+    }
+    if (!updatedItems[category][subItem][name]) {
+      updatedItems[category][subItem][name] = {};
+    }
+  
+    updatedItems[category][subItem][name].type = type;
+    updatedItems[category][subItem][name].material = selectedMaterialMap[name] || Object.keys(inventoryData[category][subItem][name].material)[0]; updatedItems[category][subItem][name].cost = calculateCost(name, category, subItem, type, updatedItems[category][subItem][name].material);
+    updatedItems[category][subItem][name].count = updatedItems[category][subItem][name].count || 0;
 
   
-  return (    
-      <div className="requirements-section-1">
-        <div className="border-bottom extra-margin">
-          <h2>Inventory</h2>
+    setSelectedItems(updatedItems);
+  };
+  
+  const handleMaterialChange = (name, category, subItem, material, type) => {
+    setSelectedMaterialMap(prevMaterialMap => ({
+      ...prevMaterialMap,
+      [name]: material
+    }));
+    if (type === undefined) {
+      return;
+    }
+    console.log(name, category, subItem, material, type);
+    const updatedItems = { ...selectedItems };
+    if (!updatedItems[category]) {
+      updatedItems[category] = {};
+    }
+    if (!updatedItems[category][subItem]) {
+      updatedItems[category][subItem] = {};
+    }
+    if (!updatedItems[category][subItem][name]) {
+      updatedItems[category][subItem][name] = {};
+    }
+  
+    updatedItems[category][subItem][name].material = material;
+    updatedItems[category][subItem][name].type = selectedTypeMap[name] || Object.keys(inventoryData[category][subItem][name].type)[0]; updatedItems[category][subItem][name].cost = calculateCost(name, category, subItem, type, updatedItems[category][subItem][name].material);
+    updatedItems[category][subItem][name].count = updatedItems[category][subItem][name].count || 0;
+
+  
+    setSelectedItems(updatedItems);
+  };
+
+  const calculateCost = (name, category, subItem, type, material) => {
+    const base = inventoryData[category][subItem][name].base;
+    const materialValue = inventoryData[category][subItem][name].material[material];
+    const typeValue = inventoryData[category][subItem][name].type[type];
+    return base + materialValue + typeValue;
+  };
+  console.log("selectedItems", selectedItems);
+
+  const handleMinusClick = (name, category, subItem) => {
+    setSelectedItems((prevSelectedItems) => {
+      const updatedSelectedItems = { ...prevSelectedItems };
+      const currentCount = updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
+      if (currentCount > 0) {
+        if (!updatedSelectedItems[category]) {
+          updatedSelectedItems[category] = {};
+        }
+        if (!updatedSelectedItems[category][subItem]) {
+          updatedSelectedItems[category][subItem] = {};
+        }
+        if (!updatedSelectedItems[category][subItem][name]) {
+          updatedSelectedItems[category][subItem][name] = {};
+        }
+        updatedSelectedItems[category][subItem][name].count = currentCount - 1;
+      }
+      return updatedSelectedItems;
+    });
+  };
+  const renderSubItems = (subItems, category) => {
+    return Object.keys(subItems).map((subItem) => (
+      <div className="category-content-p" onClick={() => handleItemClick(subItem)} key={subItem}>
+        <div className="category-content-p-holder">
+          {subItem}
+          <img style={{marginRight: '0.5rem'}} src={expandedItem === subItem ? Uparrow :downarrow} />
         </div>
-        <div className="family-type-wrapper">
-          <h3>Choose Your Family Type</h3>
-          <div className="flex align-centre family-type-options-wrapper">
+        {expandedItem === subItem && (
+          <div>
+            {renderItemDetails(subItems[subItem], subItem, category)}
           </div>
+        )}
+      </div>
+    ));
+  };
+
+  const renderItemDetails = (data, subItem, category) => {                              // item box\
+    
+    return (
+      <div className='itemDetails-parent'>
+      {Object.keys(data).map((name, index) => (
+        <div className='itemDetails' key={index}>
+          <span>{name}</span>
+          <select
+            className='custom-select'
+            onChange={(e) => handleMaterialChange(name, category, subItem, e.target.value, selectedTypeMap[name])}
+            value={selectedMaterialMap[name] || selectedMaterialMap[Object.keys(data[name].material)[0]]} // Set the initial value to the first material option
+          >
+            <option value=''>Select Material</option>
+            {Object.keys(data[name].material).map((material, materialIndex) => (
+              <option key={materialIndex} value={material}>
+                {material}
+              </option>
+            ))}
+          </select>
+          <select
+            className='custom-select'
+            onChange={(e) => handleTypeChange(name, category, subItem, e.target.value, selectedMaterialMap[name])}
+            value={selectedTypeMap[name] || selectedTypeMap[Object.keys(data[name].type)[0]]}
+          >
+            <option value=''>Select Type</option>
+            {Object.keys(data[name].type).map((type, typeIndex) => (
+              <option key={typeIndex} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          <div className='itemDetails-child'>
+              <div className='itemDetails-child-inc'>
+                <img src={minus} onClick={() => handleMinusClick(name, category, subItem)} />
+                <span>{selectedItems[category]?.[subItem]?.[name]?.count || 0}</span>
+                <button
+                  onClick={() =>
+                    handlePlusClick(name, selectedTypeMap[name], selectedMaterialMap[name], category, subItem)
+                  }
+                  disabled={!selectedTypeMap || !selectedMaterialMap}
+                >
+                  <img src={plus} alt="Add" />
+                </button>
+              </div>
+              {name.includes('variation') ? (
+                ''
+              ) : (
+                <span onClick={() => handleAddVariation(category, subItem, name)}>Add Variation</span>
+              )}
+            </div>
         </div>
-        <div className="fill-req-CTA-container flex">
-          <button className="cta-button" >NEXT</button>
+      ))}
+    </div>
+    );
+  };
+  return (
+    <div className="requirements-section-1">
+      <div className="border-bottom extra-margin">
+        <h2>Fill Requirements</h2>
+      </div>
+      <div className='ItemAdded'>
+        <div className='ItemAddedChild'>
+          <img style={{marginRight: '0.5rem'}} src={itembox} />
+          <span>Total Items Added</span>
+        </div>
+        {itemCount}
+      </div>
+      <div className='Inventory-container'>
+        <span>Add Items from Inventory</span>
+        <div className='inventory-selection-parent'>
+          {Object.keys(inventoryData).map((category) => (
+            <span
+              key={category}
+              className={category === selectedCategory ? 'selected-inventory' : 'non-selected-inventory'}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </span>
+          ))}
         </div>
       </div>
+      <div>
+      {Object.keys(inventoryData).map((category) => (
+        <div key={category}>
+          <div className="category-content">
+            {renderSubItems(inventoryData[selectedCategory], selectedCategory)}
+          </div>
+        </div>
+      ))}
+    </div>
+    </div>
   );
-}
+};
 
 export default Inventory;

@@ -59,7 +59,7 @@ function Requirement({progress, setProgress}) {
     }
   };
 
-  return (    
+  return (
       <div className="requirements-section-1">
         <div className="border-bottom extra-margin">
           <h2>Fill Requirments</h2>
