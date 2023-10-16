@@ -68,3 +68,9 @@
     justify-content: flex-end;
     gap: 1.25rem;
 }
+
+.orange-button {
+    background-color: orange;
+    color: orange; 
+    border-color: orange; 
+  }
