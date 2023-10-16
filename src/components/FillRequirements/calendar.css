@@ -1,0 +1,42 @@
+/* Add CSS classes to your styles.css or use a CSS-in-JS solution like styled-components */
+.calendar-container {
+    display: flex;
+  }
+  
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    width: 300px;
+  }
+  
+  .calendar-day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .calendar-day.weekday {
+    background-color: #f0f0f0;
+  }
+  
+  .calendar-day.weekend {
+    background-color: #e0e0e0;
+  }
+  
+  .calendar-day.other-month {
+    color: #ccc;
+  }
+  
+  .price {
+    font-size: 12px;
+  }
+  
+  .selected-date {
+    margin-left: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 200px;
+  }
+  

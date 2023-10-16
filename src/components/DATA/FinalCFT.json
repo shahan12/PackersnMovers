@@ -1,0 +1,471 @@
+{
+	"FURNITURE": 
+		{
+		"sofa":{
+			"1 seater": {
+				"base": 20,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				},
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 0
+				}
+			},
+			"2 seater": {
+				"base": 35,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				}, 
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 5,
+					"non-storage": 5
+				}
+			},
+			"3 seater": {
+				"base": 45,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 5
+				},
+				"type": {
+					"recliner": 15,
+					"non-recliner": 15,
+					"storage": 5,
+					"non-storage": 5
+				}
+			}
+		},
+		"tables": {
+			"coffee table": {
+				"base": 5,
+				"material": {
+					"glass top": 5,
+					"wooden top": 7
+				},
+				"type": {
+					"recliner": 15,
+					"non-recliner": 15,
+					"storage": 5,
+					"non-storage": 5
+				}
+			},
+			"Center table": {
+				"base": 5,
+				"material": {
+					"glass top": 5,
+					"wooden top": 7
+				}
+			},
+			"2 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 5,
+					"wooden non-dismental": 5,
+					"metal foldable": 5,
+					"metal no-foldable": 7,
+					"glass top": 7
+				}
+			},
+			"3 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 10,
+					"wooden non-dismental": 12,
+					"metal foldable": 10,
+					"metal no-foldable": 12,
+					"glass top": 12
+				}
+			},
+			"4 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 15,
+					"wooden non-dismental": 20,
+					"metal foldable": 15,
+					"metal no-foldable": 20,
+					"glass top": 20
+				}
+			},
+			"5 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 25,
+					"wooden non-dismental": 29,
+					"metal foldable": 25,
+					"metal no-foldable": 29,
+					"glass top": 29
+				}
+			},
+			"6 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 31,
+					"wooden non-dismental": 35,
+					"metal foldable": 31,
+					"metal no-foldable": 35,
+					"glass top": 35
+				}
+			},
+			"7 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			},
+			"side table": {
+				"base": 5,
+				"material": {
+					"glass top": 2,
+					"wooden": 1
+				}
+			},
+			"plastic table": {
+				"base": 15,
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			},
+			"computer table": {
+				"base": 5,
+				"type": {
+					"with storage": 25,
+					"without storage": 20
+				},
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			},
+			"dressing table": {
+				"base": 5,
+				"type": {
+					"dismental": 25,
+					"non-dismental": 35
+				},
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			},
+			"iron table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			}
+		
+		},
+		"chairs": {
+			"base": 4,
+			"type": {
+				"office chair": 4,
+				"kids chair": 0,
+				"dining chair": 4,
+				"executive chair": {
+					"rolling": 6,
+					"no-rolling": 4
+				},
+				"rocking chair": {
+					"wooden": 11,
+					"steel": 11
+				},
+				"plastic chair": 4
+			},
+			"material": {
+				"wooden dismental": 43,
+				"wooden non-dismental": 43,
+				"metal foldable": 43,
+				"metal no-foldable": 43,
+				"glass top": 55
+			}
+		},
+		"cots": {
+			"base": 35,
+			"type": {
+				"king size": {
+					"dismental": {
+						"storage": 36,
+						"without storage": 36
+					},
+					"foldable": 36,
+					"neither": 36
+				},
+				"queen": {
+					"dismental": {
+						"storage": 31,
+						"without storage": 31
+					},
+					"foldable": 31,
+					"neither": 31
+				},
+				"double": {
+					"dismental": {
+						"storage": 20,
+						"without storage": 20
+					},
+					"foldable": 20,
+					"neither": 20
+				},
+				"single": {
+					"dismental": {
+						"storage": 20,
+						"without storage": 1
+					},
+					"foldable": 1,
+					"neither": 1
+				},
+				"bunk bed": 37,
+				"diwan": {
+					"storage": 0,
+					"without storage": 0
+				}
+			},
+			"material": {
+				"wooden dismental": 43,
+				"wooden non-dismental": 43,
+				"metal foldable": 43,
+				"metal no-foldable": 43,
+				"glass top": 55
+			}
+		},
+		"mattress": {
+			"base": 10,
+			"type": {
+				"double": {
+					"less than 4 inch":0,
+					"4 to 8 inch": 10,
+					"greater than 8 inch": 20
+				},
+				"single": {
+					"less than 4 inch": 0,
+					"4 to 8 inch": 5,
+					"greater than 4 inch": 10
+				}
+			},
+			"material": {
+				"wooden dismental": 43,
+				"wooden non-dismental": 43,
+				"metal foldable": 43,
+				"metal no-foldable": 43,
+				"glass top": 55
+			}
+		},
+		"cupboard": {
+			"base": 2,
+			"type": {
+				"wooden": {
+					"height less than 2 feet and width less than 2 feet": 6,
+					"height less than 2 feet and width less than 2 to 4 feet": 15,
+					"height less than 2 feet and width less than 4 to 6 feet": 20,
+					"height less than 2 feet and width greater than 6 feet": 28,
+
+					"height less than 2 to 4 feet and width less than 2 feet": 13,
+					"height less than 2 to 4 feet and width less than 2 to 4 feet": 32,
+					"height less than 2 to 4 feet and width less than 4 to 6 feet": 38,
+					"height less than 2 to 4 feet and width greater than 6 feet": 58,
+
+					"height less than 4 to 6 feet and width less than 2": 20,
+					"height less than 4 to 6 feet and width less than 2 to 4 feet": 38,
+					"height less than 4 to 6 feet and width less than 4 to 6 feet": 66,
+					"height less than 4 to 6 feet and width greater than 6 feet": 88,
+
+					"height greater than 6 feet and width less than 2 feet": 20,
+					"height greater than 6 feet and width less than 2 to 4 feet": 50,
+					"height greater than 6 feet and width less than 4 to 6 feet": 80,
+					"height greater than 6 feet and width greater than 6": 110
+						},
+				"steel": {
+					"height less than 5 feet": 30,
+					"height greater than 5 feet": 50
+					},
+				"plastic": 0
+				},
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			}
+		},
+	"FURNITURE1": 
+		{
+		"sofa":{
+			"1 seater": {
+				"base": 20,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				},
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 0
+				}
+			},
+			"2 seater": {
+				"base": 35,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				}, 
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 5,
+					"non-storage": 5
+				}
+			},
+			"3 seater": {
+				"base": 45,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 5
+				},
+				"type": {
+					"recliner": 15,
+					"non-recliner": 15,
+					"storage": 5,
+					"non-storage": 5
+				}
+			}
+		}
+	},
+		"tv_cabinet": {
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"material": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 22,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,
+				"2ft ≤ height < 4ft and width > 6ft": 44,         
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+
+			}
+		},
+		"showcase": {
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"material": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 24,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,       
+				"2ft ≤ height < 4ft and width > 6ft": 44,
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+			}
+		},
+		"showcase1": {
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"material": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 24,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,       
+				"2ft ≤ height < 4ft and width > 6ft": 44,
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+			}
+		},
+		"showcase2": {
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"material": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 24,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,       
+				"2ft ≤ height < 4ft and width > 6ft": 44,
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+			}
+		}
+	}
+	

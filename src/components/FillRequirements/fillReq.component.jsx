@@ -6,26 +6,23 @@ import Header from "../requirementHeader/requirementHeader.compoennt";
 import AddressDetails from "./AddressDetails.component";
 import Requirement from "./Requirement.component";
 import Inventory from "./Inventory.component";
+import Dateselection from "./DateSelection.component";
 
 function FillRequrements(props) {
   const [progress, setProgress] = useState("requirement");
-
+  console.log("progress", progress);
   return (
     <div className="orders-compoennt-wrapper">
       <Header progress={progress} />
       <div className="fillReq-requirements-wrapper flex">
-        {progress === 'requirement' ? (
-          <Requirement
-          progress={progress}
-          setProgress={setProgress}
-        />
-        ) : (
-          <Inventory
-            progress={progress}
-            setProgress={setProgress}
-          />
-        )}
-        <AddressDetails   />
+      {progress === 'requirement' ? (
+        <Requirement progress={progress} setProgress={setProgress} />
+      ) : progress === 'inventory' ? (
+        <Inventory progress={progress} setProgress={setProgress} />
+      ) : progress === 'dateselection' ? (
+        <Dateselection />
+      ) : null}
+        <AddressDetails />
       </div>
     </div>
   );
