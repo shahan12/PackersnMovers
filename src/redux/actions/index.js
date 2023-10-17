@@ -5,9 +5,23 @@ export const updateSelectedItems = (items) => {
     };
   };
   
-  export const anotherAction = (data) => {
+  export const updateAddOnsItems = (items) => {
     return {
-      type: 'ANOTHER_ACTION',
-      payload: data,
+      type: 'UPDATE_ADDONS_ITEMS',
+      payload: items,
+    };
+  };
+
+  export const updateRequirements = (items) => {
+    return {
+      type: 'UPDATE_Requirements_ITEMS',
+      payload: items,
+    };
+  };  
+  
+  export const updateTotalCost = (items) => {
+    return {
+      type: 'UPDATE_TotalCost_ITEMS',
+      payload: items,
     };
   };

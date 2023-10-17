@@ -7,6 +7,7 @@ import AddressDetails from "./AddressDetails.component";
 import Requirement from "./Requirement.component";
 import Inventory from "./Inventory.component";
 import Dateselection from "./DateSelection.component";
+import Progress from "./Progress.component";
 
 function FillRequrements(props) {
   const [progress, setProgress] = useState("requirement");
@@ -20,9 +21,11 @@ function FillRequrements(props) {
       ) : progress === 'inventory' ? (
         <Inventory progress={progress} setProgress={setProgress} />
       ) : progress === 'dateselection' ? (
-        <Dateselection />
+        <Dateselection progress={progress} setProgress={setProgress}  />
+      ) : progress === 'progress' ? (
+        <Progress />
       ) : null}
-        <AddressDetails />
+        <AddressDetails progress={progress} />
       </div>
     </div>
   );

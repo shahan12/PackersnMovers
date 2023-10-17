@@ -43,7 +43,6 @@ const Inventory = ({progress, setProgress}) => {
   };
 
   const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
-    console.log("name, typeMap, materialMap, category, subItem", name, typeMap, materialMap, category, subItem);
     if (!typeMap & !materialMap) {
       return;
     }
@@ -123,8 +122,10 @@ const Inventory = ({progress, setProgress}) => {
         }
         updatedSelectedItems[category][subItem][name].count = currentCount - 1;
       }
+      dispatch(updateSelectedItems(selectedItems));
       return updatedSelectedItems;
     });
+    
   };
   const renderSubItems = (subItems, category) => {
     return Object.keys(subItems).map((subItem) => (
