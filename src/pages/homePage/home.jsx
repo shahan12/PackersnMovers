@@ -21,7 +21,7 @@ import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 
-function Home({ setShowPopUp }) {
+function Home({ setShowPopUp, loginModal }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1, // Adjust the threshold as needed
@@ -32,6 +32,38 @@ function Home({ setShowPopUp }) {
       setShowPopUp(true);
     }
   }, []);
+
+  const [visible, setVisible] = useState(true);
+  const [show, setShow] = useState(true);
+  const [height, setHeight] = useState(0);
+
+  /**
+   * Use Effect and function to hide Relocate component on scroll to 1800 px
+   */
+  useEffect(() => {
+    window.addEventListener("scroll", listenToScroll);
+    return () => window.removeEventListener("scroll", listenToScroll);
+  }, []);
+  console.log(loginModal);
+  useEffect(() => {
+    if (loginModal) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, [loginModal]);
+  const listenToScroll = () => {
+    let heightToHideFrom = 1920;
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop;
+    setHeight(winScroll);
+
+    if (winScroll > heightToHideFrom) {
+      visible && setVisible(false);
+    } else {
+      setVisible(true);
+    }
+  };
   return (
     <>
       <div className="home-landing-container">
@@ -57,7 +89,11 @@ function Home({ setShowPopUp }) {
               </div>
             </div>
           </div>
-
+          {visible && show && (
+            <div className="home-relocate-wrapper">
+              <Relocate />
+            </div>
+          )}
           <div className="section-container container-service" id="service">
             <img
               className="img-left-sticky"

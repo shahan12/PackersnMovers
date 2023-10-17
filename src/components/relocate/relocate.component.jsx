@@ -2,21 +2,28 @@ import React, { useState } from "react";
 import "../relocate/relocate.css";
 import DropDown from "../dropDown/dropDown.component";
 import Data from "./data.json";
-import InputLanding from '../InputLanding/InputLanding.component';
+import InputLanding from "../InputLanding/InputLanding.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 
 function Relocate(props) {
   const [activeTab, setActiveTab] = useState("Within City");
-  const [wCity, setWCity] = useState('Bangalore');
-  const [fromCity, setFromCity] = useState(activeTab === "Between City" ? 'Bangalore' : '');
-  const [toCity, setToCity] = useState(activeTab === "Between City" ? 'Bangalore' : '');
-  const [pinCodeS, setPinCodeS] = useState('');
-  const [pinCodeD, setPinCodeD] = useState('');
-  const [fromCoun, setFromCoun] = useState(activeTab === "International" ? 'India' : '');
-  const [toCoun, setToCoun] = useState(activeTab === "International" ? 'India' : '');
+  const [wCity, setWCity] = useState("Bangalore");
+  const [fromCity, setFromCity] = useState(
+    activeTab === "Between City" ? "Bangalore" : ""
+  );
+  const [toCity, setToCity] = useState(
+    activeTab === "Between City" ? "Bangalore" : ""
+  );
+  const [pinCodeS, setPinCodeS] = useState("");
+  const [pinCodeD, setPinCodeD] = useState("");
+  const [fromCoun, setFromCoun] = useState(
+    activeTab === "International" ? "India" : ""
+  );
+  const [toCoun, setToCoun] = useState(
+    activeTab === "International" ? "India" : ""
+  );
   const [postData, setPostData] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-
 
   const closeModal = () => {
     setModalOpen(false);
@@ -24,7 +31,16 @@ function Relocate(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPostData({ activeTab, wCity, fromCity, toCity, pinCodeS, pinCodeD, fromCoun, toCoun});
+    setPostData({
+      activeTab,
+      wCity,
+      fromCity,
+      toCity,
+      pinCodeS,
+      pinCodeD,
+      fromCoun,
+      toCoun,
+    });
     setModalOpen(true);
   };
 
@@ -92,7 +108,7 @@ function Relocate(props) {
       {activeTab === "Between City" && (
         <div className="relocate-select-city">
           <p className="small-desc">Which city you want to move from?</p>
-          
+
           <div className="relocate-drop-down-container margin-bottom-40">
             <DropDown
               value={fromCity}
@@ -106,14 +122,14 @@ function Relocate(props) {
               value={toCity}
               setValue={setToCity}
               option={Data.IndianCitiesPinCode}
-              />
+            />
           </div>
         </div>
       )}
       {activeTab === "International" && (
         <div className="relocate-select-city">
           <p className="small-desc">Source?</p>
-          
+
           <div className="relocate-drop-down-container margin-bottom-40">
             <DropDown
               value={fromCoun}
@@ -133,8 +149,10 @@ function Relocate(props) {
       )}
 
       <div className="cta-container">
-        <button onClick={handleSubmit} className="cta-button check-price">Check Prices</button>
-        <RegisterModal isOpen={modalOpen} onClose={closeModal} postData={postData}/>
+        <button onClick={handleSubmit} className="cta-button check-price">
+          Check Prices
+        </button>
+        {/* <RegisterModal isOpen={modalOpen} onClose={closeModal} postData={postData}/> */}
       </div>
     </article>
   );

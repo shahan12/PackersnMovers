@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import "./Modal.css";
-import loginModalImg from "../../images/loginModalImg.png";
+import loginModalImg from "../../images/price-start.png";
+import loginModalImg1 from "../../images/movers 2 1.png";
+import companyLogo from "../../images/SHIFTKART-LOGO.png";
 import { AppContext } from "../../context/context";
 import { saveData } from "../../network/saveData";
 import OTPInput from "react18-input-otp";
@@ -13,6 +15,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const [otpPage, setOtpPage] = useState(false);
   const [OTP, setOTP] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
+  const [isUserRegisterd, setIsUserRegisterd] = useState(true);
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
     // Remove any non-numeric characters
@@ -37,8 +40,8 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     }
   };
 
-  const handleOtpInput = (value) => {
-    setOTP(value);
+  const handleOtpInput = (e) => {
+    setOTP(e.target.value);
   };
 
   const validateOTP = () => {
@@ -58,10 +61,23 @@ const RegisterModal = ({ onClose, postData, flow }) => {
         </button>
         <div className="login-modal-content">
           <div className="login-modal-image">
+            <img
+              src={companyLogo}
+              alt="logo"
+              className="login-modal-company-logo"
+            ></img>
             {/* Replace with your image */}
+            <h4>Free Inspection Of Your Home Or Office</h4>
             <img src={loginModalImg} alt="Login" />
           </div>
           <div className="login-modal-form">
+            <div className="center-div">
+              <img
+                src={loginModalImg1}
+                alt={"man-with-box"}
+                className="login-modal-form-image"
+              ></img>
+            </div>
             {flow === "register" && <h2>Let us get in touch with you!</h2>}
             {flow === "login" && <h2>Enter Number to Continue</h2>}
             {!thankYou && !otpPage && (
@@ -70,7 +86,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                   type="text"
                   id="phoneNumber"
                   pattern="\d*"
-                  maxlength="10"
+                  maxLength="10"
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
                   placeholder="Enter your phone number"
@@ -95,7 +111,55 @@ const RegisterModal = ({ onClose, postData, flow }) => {
             )}
             {otpPage && flow === "login" && (
               <>
-                <OTPInput
+                {isUserRegisterd ? (
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="passowrd"
+                      id="phoneNumber"
+                      pattern="\d*"
+                      maxLength="10"
+                      value={OTP}
+                      onChange={handleOtpInput}
+                      placeholder="Enter password"
+                      onClick={() => setInvalidOTP(false)}
+                    />
+                    <button
+                      type="submit"
+                      disabled={OTP.length < 6}
+                      onClick={() => validateOTP()}
+                      className={`${
+                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
+                      } cta-button`}
+                    >
+                      Submit OTP
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="passowrd"
+                      id="phoneNumber"
+                      pattern="\d*"
+                      maxLength="10"
+                      value={OTP}
+                      onChange={handleOtpInput}
+                      placeholder="Enter New Password"
+                      onClick={() => setInvalidOTP(false)}
+                    />
+                    <button
+                      type="submit"
+                      disabled={OTP.length < 6}
+                      onClick={() => validateOTP()}
+                      className={`${
+                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
+                      } cta-button`}
+                    >
+                      Submit OTP
+                    </button>
+                  </form>
+                )}
+
+                {/* <OTPInput
                   onChange={handleOtpInput}
                   value={OTP}
                   numInputs={6}
@@ -108,8 +172,8 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     border: "1px solid #A2A6B8",
                   }}
                   containerStyle={{ gap: "0.375rem" }}
-                />
-                <button
+                /> 
+                 <button
                   className={`cta-button continue-OTP-enter ${
                     OTP.length < 6 ? "disabled" : ""
                   }`}
@@ -117,7 +181,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                   onClick={() => validateOTP()}
                 >
                   Continue
-                </button>
+                </button> */}
                 {invalidOTP && (
                   <span className="error-msg">
                     OTP is invalid! Please try again
