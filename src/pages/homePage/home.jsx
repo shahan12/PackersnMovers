@@ -20,6 +20,9 @@ import CompareTable from "../../components/CompareTable/CompareTable.component";
 import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Popper from 'popper.js';
+
 
 function Home({ setShowPopUp, loginModal }) {
   const { ref, inView } = useInView({
