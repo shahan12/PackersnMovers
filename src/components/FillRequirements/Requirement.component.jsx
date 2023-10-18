@@ -44,14 +44,10 @@ function Requirement({progress, setProgress}) {
         "familytype": familyType,
         "houseType": houseType,
         "familyNumber": familyNumber,
-        "current": {
-            "floorNumber": floorNumber,
-            "liftValue": liftValue
-        },
-        "moving": {
-            "movingFloorNumber": movingFloorNumber,
-            "movingToLiftValue": movingToLiftValue
-        }
+        "floorNumber": floorNumber,
+        "fromLift": liftValue,
+        "toFloor": movingFloorNumber,
+        "toLift": movingToLiftValue
     }
     
     dispatch(updateRequirements(requirementData));

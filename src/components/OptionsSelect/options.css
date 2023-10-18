@@ -76,7 +76,9 @@
     flex-direction: column;
     margin-right: 1rem;
 }
-
+.daybox-item p{
+    margin: 0;
+}
 .dayboxselected {
     color: #550EC5;
     border: 1.27px solid var(--Primary, #550EC5);

@@ -10,7 +10,7 @@ const instance = axios.create({
 
 export const sendRequestToBackend = async (data) => {
   try {
-    const response = await instance.post('/your-endpoint', data);
+    const response = await instance.post('/totalNoBoxes', data);
     return response.data;
   } catch (error) {
     throw error;
