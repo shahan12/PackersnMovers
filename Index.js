@@ -1,125 +1,442 @@
 const express = require('express');
 const con = require('./Connection');
 const multer = require('multer');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-
 var path = require('path');
 var app = express();                           //totalBoxes and basePrice api need to be work on
-var port = 3000;
+var port = 3001;
 
 
 var bodyParser = require('body-parser');
 const { userInfo } = require('os');
+const { Console } = require('console');
+const { existsSync } = require('fs');
+const { STATUS_CODES } = require('http');
 var totalBoxes = 1;
 var totalFloorCharges = 1;
 var mobileNo;
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser());
-app.use(session({
-    resave:true,
-    saveUninitialized:true,
-    secret:"secret"
-}));
 
-
-// This api insert user mobile no and create sesison of mobile no
-const userNo={
-    mobile:mobileNo
-}
-app.post('/login',(req,res)=>{
-    
-    // This code is for checking connection
-    con.connect((err) => {
-        if (err) throw err;
-    });
-
-    mobileNo = req.body.mobileNo;
-
-    var q7 = "INSERT INTO user_info (user_mobile) VALUES('"+mobileNo+"')";
-
-    con.query(q7, (error,result)=>{
-        if(error) throw error;
-        req.session.userNo = userNo.mobile;
-        req.session.save();
-        return res.send(req.session.user);
-    });
-
+// This code is for checking connection
+con.connect((err) => {
+    if (err) throw err;
 });
+
+// Demo Data for signup and login
+const userSignup = {
+    userMobile: "92326511777",
+    password: "12345678"
+}
+
+// This api signup the user and check password exist or not 
+app.post('/signup', (req, res) => {
+
+    var mobile = userSignup.userMobile;
+    var password = userSignup.password;
+    var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
+
+
+    con.query(q8, (error, result) => {
+        if (error) throw error;
+
+        if (result.rows.length > 0) {
+            res.send("User already exists");
+        }
+        else {
+            var q9 = "BEGIN;"+
+            "INSERT INTO userInfo(user_mobile, user_password) VALUES ('"+mobile+"', '"+password+"');"+
+            "INSERT INTO inventoryData(user_mobile) VALUES ('"+mobile+"');"+
+            "INSERT INTO userBooking(user_mobile) VALUES ('"+mobile+"');"+
+            "COMMIT;";
+            con.query(q9, (error, result) => {
+                if (error) throw error;
+                mobileNo = mobile;
+                res.send("User logged in.." + result.rows);
+
+            });
+
+        }
+    })
+});
+
+// This api is for check user mobile and password is exist in db or not
+app.get('/login', (req, res) => {
+
+    var mobile = userSignup.userMobile;
+    var password = userSignup.password;
+
+    q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + userSignup.userMobile + "' AND user_password = '" + userSignup.password + "'";
+
+    con.query(q6, (error, result) => {
+        if (error) throw error;
+        if (result.rows.length > 0) {
+            res.send("Login Sucessfull...");
+        }
+        else {
+            res.send("Mismatched data...");
+        }
+
+    });
+});
+
+//Demo data for updating the password
+const updatePassword = {
+    userMobile: "9232651130",
+    newPass: "singh",
+    cnfrmPass: "singh"
+}
+
+app.put('/updatePassword', (req, res) => {
+
+    var userNumber = updatePassword.userMobile;
+    var newPassword = updatePassword.newPass;
+    var cnfrmPassword = updatePassword.cnfrmPass;
+
+    if (newPassword === cnfrmPassword) {
+        q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + userNumber + "'";
+        con.query(q7, (error, result) => {
+            if (error) throw error;
+            res.send("Password updated..." + result.rows);
+        });
+    }
+    else {
+        res.send("Password Mismatched...");
+    }
+});
+
+app.get('/logout', (req, res) => {
+    if (error) throw error;
+    res.redirect('./homepage.html');
+})
+
+// Demo data for calculating total no of boxes
+const RequirementData = {
+    "familyType": "bachelor",
+    "houseType": "2bhk",
+    "familyNumber": 5,
+    "floorNumber": 3,
+    "fromLift": "no",
+    "toFloor": 3,
+    "toLift": "no"
+}
 
 // This api get total no. of boxes
-app.get('/totalNoBoxes', (req, res) => {
-    req.session.userNo = userNo;
-    req.session.save();
-    
-    var familyType = req.body.familyType;
-    var houseType = req.body.houseType;
+app.put('/totalNoBoxes', (req, res) => {
 
-    // To check if connection from database 
-    con.connect((error) => {
+    var houseType = RequirementData.houseType;
+    var familyType = RequirementData.familyType;
+    var members = RequirementData.familyNumber;
+    var mobile = userSignup.userMobile;
+    var totalCarton;
+
+    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
+    con.query(q13, (error, result) => {
         if (error) throw error;
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200);
+    })
+
+    var q10 = "SELECT boxes_qty FROM boxFixedPrice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
+
+
+    con.query(q10, (error, result) => {
+        if (error) throw error;
+
+        var flag = result.rows[0].boxes_qty;
+        if (familyType == 'bachelor' && members > 1) {
+            var check = (members - 1) * 4;
+            var totalBachelorBox = flag + check;
+            totalCarton = totalBachelorBox;
+            res.status(200).json(totalBachelorBox);
+        }
+        else if (members == 1) {
+            res.setHeader('Content-Type', 'application/json');
+            totalCarton = flag ;
+            res.status(200).json(flag);
+        }
+        if (familyType == 'family' && members > 1) {
+            var check = (members - 4) * 4;
+            var totalFamilyBox = flag + check;
+            res.setHeader('Content-Type', 'application/json');
+            totalCarton = totalFamilyBox;
+            res.status(200).json(totalFamilyBox);
+        }
+        else if (members == 4) {
+            res.setHeader('Content-Type', 'application/json');
+            totalCarton = flag;
+            res.status(200).json(flag);
+        }
+        
+        q19 = "UPDATE inventoryData SET carton='"+totalCarton+"' WHERE user_mobile = '"+mobile+"'";
+        con.query(q19,(error,result)=>{
+            if(error) throw error;
+            res.status(200);
+        });
     });
 
-    var q1 = "SELECT boxes_qty FROM boxFixedPrice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
-
-    con.query(q1, (error, result) => {
-        if (error) {
-            console.log("error");
-            throw error;
-
-        }
-        else {
-            res.send(result.rows);
-        }
-    });
 });
 
+const Address = {
+    from: "Mayur vihar phase-3",
+    to: "pitampura sector-18",
+    houseType: "1bhk",
+    distance: 45
+}
+app.put('/basePrice', (req, res) => {
+
+    var fromAdd = Address.from;
+    var toAdd = Address.to;
+    var totalDistance = Address.distance;
+    var houseType = RequirementData.houseType;
+
+    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
+    con.query(q11, (error, result) => {
+        if (error) throw error;
+
+
+        // var q12 = "SELECT * FROM userInfo WHERE house_type='"+houseType+"' AND user_mobile='"+userSignup.userMobile+"'";
+        // con.query(q12,(error,result)=>{
+        //     if(error) throw error;
+        // })
+
+        if (houseType == "1rk") {
+            if (totalDistance <= 5) {
+                basePrice = 2199;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 5 && totalDistance <= 10) {
+                basePrice = 2499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 10 && totalDistance <= 15) {
+                basePrice = 2799;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 15 && totalDistance <= 20) {
+                basePrice = 2999;
+                res.status(200).json(basePrice);
+            }
+
+            if (totalDistance >= 20 && totalDistance <= 25) {
+                basePrice = 3349;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 25 && totalDistance <= 30) {
+                basePrice = 3699;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 30 && totalDistance <= 35) {
+                basePrice = 4099;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 35 && totalDistance <= 40) {
+                basePrice = 4499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 40 && totalDistance <= 45) {
+                basePrice = 4849;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 50) {
+                basePrice = 5199;
+                res.status(200).json(basePrice);
+            }
+        }
+        if (houseType == "1bhk") {
+            if (totalDistance <= 5) {
+                basePrice = 3199;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 5 && totalDistance <= 10) {
+                basePrice = 4499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 10 && totalDistance <= 15) {
+                basePrice = 4999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 15 && totalDistance <= 20) {
+                basePrice = 5299;
+                res.status(200).json(basePrice);
+            }
+
+            if (totalDistance >= 20 && totalDistance <= 25) {
+                basePrice = 6499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 25 && totalDistance <= 30) {
+                basePrice = 6999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 30 && totalDistance <= 35) {
+                basePrice = 7499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 35 && totalDistance <= 40) {
+                basePrice = 7999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 40 && totalDistance <= 45) {
+                basePrice = 8499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 50) {
+                basePrice = 8999;
+                res.status(200).json(basePrice);
+            }
+        }
+        if (houseType == "1bhkHeavy") {
+            if (totalDistance <= 5) {
+                basePrice = 3899;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 5 && totalDistance <= 10) {
+                basePrice = 4499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 10 && totalDistance <= 15) {
+                basePrice = 5499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 15 && totalDistance <= 20) {
+                basePrice = 5999;
+                res.status(200).json(basePrice);
+            }
+
+            if (totalDistance >= 20 && totalDistance <= 25) {
+                basePrice = 6549;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 25 && totalDistance <= 30) {
+                basePrice = 7099;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 30 && totalDistance <= 35) {
+                basePrice = 7649;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 35 && totalDistance <= 40) {
+                basePrice = 8199;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 40 && totalDistance <= 45) {
+                basePrice = 8749;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 50) {
+                basePrice = 9299;
+                res.status(200).json(basePrice);
+            }
+        }
+        if (houseType == "2bhk") {
+            if (totalDistance <= 5) {
+                basePrice = 7999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 5 && totalDistance <= 10) {
+                basePrice = 12999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 10 && totalDistance <= 15) {
+                basePrice = 13999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 15 && totalDistance <= 20) {
+                basePrice = 13999;
+                res.status(200).json(basePrice);
+            }
+
+            if (totalDistance >= 20 && totalDistance <= 25) {
+                basePrice = 14899;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 25 && totalDistance <= 30) {
+                basePrice = 15799;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 30 && totalDistance <= 35) {
+                basePrice = 16699;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 35 && totalDistance <= 40) {
+                basePrice = 17599;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 40 && totalDistance <= 45) {
+                basePrice = 18499;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 50) {
+                basePrice = 19399;
+                res.status(200).json(basePrice);
+            }
+        }
+        if (houseType == "2bhkHeavy") {
+            if (totalDistance <= 5) {
+                basePrice = 8999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 5 && totalDistance <= 10) {
+                basePrice = 14999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 10 && totalDistance <= 15) {
+                basePrice = 16999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 15 && totalDistance <= 20) {
+                basePrice = 17999;
+                res.status(200).json(basePrice);
+            }
+
+            if (totalDistance >= 20 && totalDistance <= 25) {
+                basePrice = 18999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 25 && totalDistance <= 30) {
+                basePrice = 19999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 30 && totalDistance <= 35) {
+                basePrice = 20999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 35 && totalDistance <= 40) {
+                basePrice = 21999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 40 && totalDistance <= 45) {
+                basePrice = 22999;
+                res.status(200).json(basePrice);
+            }
+            if (totalDistance >= 50) {
+                basePrice = 23999;
+                res.status(200).json(basePrice);
+            }
+        }
+
+    })
+
+
+})
 
 // This api get total floor w/o lift charges
-app.post('/floorCharges', function (req, res) {
-    req.session.userNo = userNo;
-    req.session.save();
+app.put('/floorCharges', function (req, res) {
 
-    var familyType = req.body.familyType;
-    var houseType = req.body.houseType;
-    var members = req.body.members;
-    var fromFloor = req.body.fromFloor;
-    var fromLift = req.body.fromLift;
-    var toFloor = req.body.toFloor;
-    var toLift = req.body.toLift;
+    var floorNumber = RequirementData.floorNumber;
+    var fromLift = RequirementData.fromLift;
+    var toFloor = RequirementData.toFloor;
+    var toLift = RequirementData.toLift;
+    var userPhone = updatePassword.userMobile
+    var finalCharges, charges1, charges2;
 
-    // To check connection from database 
-    con.connect((error) => {
+    var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + userPhone + "'";
+    con.query(q14, (error, result) => {
         if (error) throw error;
+        res.status(200).json("Will reach you shortly");
     });
-
-    //  This query is for inserting data into pricing table 
-    var q2 = "INSERT INTO pricing(house_type, family_type, to_lift, to_floor, from_lift, from_floor, members )"
-        + "VALUES('" + houseType + "','" + familyType + "','" + toLift + "','" + toFloor + "','" + fromLift + "','" + fromFloor + "', '" + members + "')"
-
-    con.query(q2, (error, result) => {
-        if (error) throw error;
-
-    });
-    
-    // This logic will give the pricing of floor
-    if (fromFloor > 2 && fromLift == 'no') {
-            var fromFloorCharges = (fromFloor - 2) * 250;
-        }
-        else {
-            res.send("No Charges");
-        }
-    if(toFloor > 2 && toLift == 'no'){
-        var toFloorCharges = (toFloor-2) * 250;
-    }
-    else{
-        res.send("No Charges");
-    }
-    totalFloorCharges = fromFloorCharges + toFloorCharges;
-    return(totalFloorCharges);
 
 });
 
@@ -136,19 +453,15 @@ const storage = multer({
     })
 }).single("profile");
 
-app.post('/saveUserInfo', storage, (req, res) => {
 
-    req.session.userNo = userNo;
-    req.session.save();
-
+app.put('/saveUserInfo', storage, (req, res) => {
     var fName = req.body.fName;
     var lName = req.body.lName;
     var email = req.body.email;
-    var mobileNo = req.body.mobileNo;
+    var mobileNo = updatePassword.userMobile;
     var profile = req.file.path;
 
-    var q3 = "INSERT INTO user_info(user_f_name,user_l_name,user_email,user_mobile,user_profile)" +
-        "VALUES('" + fName + "','" + lName + "','" + email + "','" + mobileNo + "','" + profile + "')";
+    var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + mobileNo + "'";
 
     con.query(q3, (error, result) => {
         if (error) throw error;
@@ -157,27 +470,129 @@ app.post('/saveUserInfo', storage, (req, res) => {
     });
 });
 
-// This is for getting user info base on user's id
+// This is for getting user info base on user's mobile number
 app.get('/getUserInfo', (req, res) => {
 
-    var id = req.body.id;
+    var mobile = userSignup.userMobile;
 
-    // This code is for checking connection
-    con.connect((err) => {
-        if (err) throw err;
-    });
-
-    var q4 = "SELECT user_mobile FROM " +
-        "user_info WHERE user_id = '" + id + "'";
+    var q4 = "SELECT * FROM " +
+        "userInfo WHERE user_mobile = '" + mobile + "'";
 
     con.query(q4, (err, result) => {
         if (err) throw err;
-        req.session.userNo = userNo;
-        req.session.save();
         res.send(result.rows);
     });
 });
 
+var dateSelection = {
+    Date: "2023-10-18",
+    timeSlot: "6AM-8AM"
+}
+
+app.put('/dateTimeSelect', (req, res) => {
+
+    var finalDate = dateSelection.Date;
+    var finalTime = dateSelection.timeSlot;
+    var mobile = userSignup.userMobile;
+
+    var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '"+mobile+"'";
+    con.query(q15, (error, result) => {
+        if (error) throw error;
+        res.status(200).json("Date Selection Completed");
+    })
+});
+
+var addons={
+    carton:{
+        cost:250,
+        count:2,
+        totalPrice:500
+    },
+    labour:{
+        cost:200,
+        count:2,
+        totalPrice:500
+    },
+    splitACInstallation:{
+        cost:500,
+        count:1,
+        totalPrice:500
+    },
+    splitACUninstallation:{
+        cost:500,
+        count:2,
+        totalPrice:1000
+    },
+    windowACInstallation:{
+        cost:200,
+        count:1,
+        totalPrice:200
+    },
+    windowACUninstallation:{
+        cost:200,
+        count:1,
+        totalPrice:200
+    },
+    carpentry:{
+        cost:500,
+        count:1,
+        totalPrice:500
+    },
+    electrition:{
+        cost:100,
+        count:2,
+        totalPrice:200
+    },
+    painting:{
+        cost:800,
+        count:2,
+        totalPrice:1600
+    }
+}
+
+app.put('/addons',(req,res)=>{
+    const insertData = {
+        addons: addons,
+      };
+      var add_on = JSON.stringify(insertData);
+      var mobile = userSignup.userMobile;
+
+    var q16 = "UPDATE inventoryData SET addons='"+add_on+"'::jsonb WHERE user_mobile='"+mobile+"'";
+    con.query(q16,(error,result)=>{
+        if(error) throw error;
+        res.send("addons added..." + result.rows);
+    })
+});
+
+var booking = {
+    houseType:"1bhk",
+    carton:"28",
+    totalItemsAdded:"30",
+    distance:50,
+    date:"10-10-2023",
+    time:"6AM-8AM"
+}
+app.get('/myBooking',(req,res)=>{
+
+    var mobile = userSignup.userMobile;
+
+    var q17 = "BEGIN;"+ 
+    "SELECT house_type,total_distance FROM userInfo WHERE user_mobile='"+mobile+"';"+
+    "SELECT event_date,event_time,carton FROM inventoryData WHERE user_mobile='"+mobile+"';"+
+    "COMMIT;";
+
+
+
+con.query(q17,(error,result)=>{
+    if(error) throw error;
+    const userInfoResult = result[1].rows; // First query result
+    const inventoryDataResult = result[2].rows; // Second query result
+    const mergedResult = userInfoResult.concat(inventoryDataResult);
+    res.send(mergedResult);
+
+}); 
+
+})
 
 // This api is for update the user details   WORK IN PROGRESS, NEED TO CREATE SESSION 
 
@@ -191,49 +606,24 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put('/updateUser', updateProfile,(req, res) => {
-
-    req.session.userNo = userNo;
-    req.session.save();
-
+app.put('/updateUser', updateProfile, (req, res) => {
     var fName = req.body.fName;
     var lName = req.body.lName;
     var email = req.body.email;
     var profile = req.file.path;
     var mobile = req.session.userNo.mobile;
-    // This code is for checking connection
-    con.connect((err) => {
-        if (err) throw err;
-    });
 
-    var q6 = "UPDATE user_info SET user_f_name = '"+fName+"', user_l_name='"+lName+"', user_email='"+email+"'," +
-            "user_profile='"+profile+"' WHERE  user_mobile = '"+mobile+"'";
-    
-            con.query(q6, (err, result) => {
-                if (err) throw err;
-                console.log(mobile);
-                res.send("Rows updated"+result.rows);
-            });
+    var q5 = "UPDATE userInfo SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
+        "user_profile='" + profile + "' WHERE  user_mobile = '" + mobile + "'";
+
+    con.query(q5, (err, result) => {
+        if (err) throw err;
+        console.log(mobile);
+        res.send("Rows updated" + result.rows);
+    });
 
 });
 
-
-// This api destroy session and redirect to home page after click on logout 
-app.get('/logout',(req,res)=>{
-
-    // This code is for checking connection
-    con.connect((err) => {
-        if (err) throw err;
-    });
-
-    req.session.destroy();
-   // mobileNo = null;
-    res.send("Cookie destroy"+userNo);
-    //return res.redirect('/homePage.html');  // Need to change the homePage.html to actual home page path 
-
-})
-
-// This code is used for running a server to a spefic port number
 app.listen(port, () => {
-    console.log(`Server is running ${port}`);
-});
+    console.log("Server running on", port);
+})
