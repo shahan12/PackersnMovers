@@ -10,8 +10,8 @@ const Progress = ({progress, setProgress}) => {
       setProgress('dateselection');
   }};
 
-  let DateTime = useSelector((state) => state.addOnsItems);
-  console.log(DateTime);
+  let DateTime = useSelector((state) => state.DateTime);
+  
   const bookingConfirm = () => {
     if (progress === 'progress') {
       openModal();

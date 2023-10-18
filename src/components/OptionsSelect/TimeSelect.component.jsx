@@ -13,7 +13,7 @@ const TimeSelect = ({ onSelect }) => {
 
   const handleRangeClick = (range) => {
     setSelectedRange(range);
-    onSelect(range);
+    onSelect(range.label);
   };
 
   const firstRow = timeRanges.slice(0, 2);
