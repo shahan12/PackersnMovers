@@ -218,6 +218,7 @@ function Requirement({progress, setProgress}) {
           </div>
         </div>
         <div className="fill-req-CTA-container flex">
+        <div className='prevButton'></div>
           <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
         </div>
       </div>

@@ -27,8 +27,12 @@ const Inventory = ({progress, setProgress}) => {
   const FlatrequireMents = () => {
     if (progress === 'inventory') {
       setProgress('dateselection');
-    }}
-
+    }};
+    const prev = () => {
+      if (progress === 'inventory') {
+        setProgress('requirement');
+    }};
+  
 
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
@@ -264,7 +268,8 @@ const Inventory = ({progress, setProgress}) => {
         </div>
     </div>
     
-      < div className="fill-req-CTA-container flex">
+      <div className="fill-req-CTA-container flex">
+        <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
       </div>
     </div>

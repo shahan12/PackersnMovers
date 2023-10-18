@@ -1,40 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar'; 
-import './options.css'; 
-import './package.css';
+import React, { useState } from 'react';
+import './options.css';
 
-const PackageSelect = ({ isOpen, onRequestClose, }) => {
+const PackageSelect = ({onSelect}) => {
+  const [selectedRange, setSelectedRange] = useState({ packageName: 'Standard', price: 0 });
 
-  if (!isOpen) {
-      return null;
-    }
-    return (
-      <div className="modal-overlay">
-        <div className="modal2">
-          <button onClick={onRequestClose} className="modal-close-button">
-            x
-          </button>
-            <h2>Select an option:</h2>
-            <div class="packaging-options">
-            <h2>Packaging Options</h2>
-            <ul>
-              <li>
-                <h3>Standard</h3>
-                <p>Single Layer Packaging</p>
-                <p>Free</p>
-                <button type="button">Add</button>
-              </li>
-              <li>
-                <h3>Premium</h3>
-                <p>Three Layer Packaging</p>
-                <p>$1,000</p>
-                <button type="button">Add</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
+  const packageSelect = [
+    { packageName: 'Standard', price: 0 },
+    { packageName: 'Special', price: 1000 }
+  ];
+
+  const handleRangeClick = (range) => {
+    setSelectedRange(range);
+    onSelect(range);
   };
-    
+
+
+  return (
+    <div className="time-range-selector">
+      <div className="row-select-time">
+        {packageSelect.map((range) => (
+          <div
+            key={range.packageName}
+            className={`time-range package-range ${selectedRange.packageName === range.packageName ? 'selected' : ''}`}
+            onClick={() => handleRangeClick(range)}
+          >
+            <p>{range.packageName} </p>
+            <p>{range.price} </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default PackageSelect;
