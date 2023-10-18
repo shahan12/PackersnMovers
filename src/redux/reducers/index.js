@@ -36,13 +36,23 @@ const TotalCostItemsReducer = (state = initialState, action) => {
       return state;
   }
 };
+const TotalDTReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'UPDATE_DateTime_ITEMS':
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+};
+
 
 
 const rootReducer = combineReducers({
   selectedItems: selectedItemsReducer,
   addOnsItems: addOnsItemsReducer,
   RequirementsItems: RequirementsItemsReducer,
-  TotalCostItems: TotalCostItemsReducer
+  TotalCostItems: TotalCostItemsReducer,
+  DateTime: TotalDTReducer
   // more reducers 
 });
 

@@ -61,7 +61,13 @@ h3{
     width: 48%;
 }
 .fill-req-CTA-container{
-    justify-content: flex-end;
+    justify-content: space-between;
+}
+.prevButton {
+    margin-top: 0.75rem;
+    color: orange;
+    font-weight: 600;
+    cursor: pointer;
 }
 .requirement-sub-header{
     margin-top: 1.187rem;

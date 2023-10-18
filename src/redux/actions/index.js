@@ -24,4 +24,10 @@ export const updateSelectedItems = (items) => {
       type: 'UPDATE_TotalCost_ITEMS',
       payload: items,
     };
+  };  
+  export const updateDateTime = (items) => {
+    return {
+      type: 'UPDATE_DateTime_ITEMS',
+      payload: items,
+    };
   };

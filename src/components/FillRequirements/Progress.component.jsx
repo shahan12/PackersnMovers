@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import PackageSelect from '../OptionsSelect/PackageSelect.component';
 import "./calendar.css";
 
+import Modal from 'react-modal';
 const Progress = ({progress, setProgress}) => {
+
+  const prev = () => {
+    if (progress === 'progress') {
+      setProgress('dateselection');
+  }};
+
+  let DateTime = useSelector((state) => state.addOnsItems);
+  console.log(DateTime);
+  const bookingConfirm = () => {
+    if (progress === 'progress') {
+      openModal();
+    }};
 
   let totalCost = useSelector((state) => state.TotalCostItems);
 
@@ -17,8 +29,6 @@ const Progress = ({progress, setProgress}) => {
     setModalOpen(false);
   };
 
-  
-  console.log(totalCost);
   return (
     <div className="requirements-section-1">
       <div className="border-bottom extra-margin">
@@ -42,22 +52,38 @@ const Progress = ({progress, setProgress}) => {
           </div>
           <div className="cost-details-child"> 
             <span>CFT</span>
-            <span>{totalCost.basePrice}</span>
+            <span>{totalCost.cft}</span>
           </div>
           <div className="cost-details-child"> 
             <span>Add Ons</span>
             <span>{totalCost.addonsPrice}</span>
           </div>
           <div className="cost-details-child"> 
-            <span>Choose Packaging</span>
-            <span onClick={openModal}>Select</span>
+            <span>Packaging Selected: {totalCost.packaging}</span>
+            <span>{totalCost.packagingPrice}</span>
           </div>
-          <PackageSelect isOpen={isModalOpen} onRequestClose={closeModal} />
           <div className="cost-details-child cost-line"> 
             <span>Total Cost: </span>
             <span className="highlightcost">₹{totalCost.totalCost}</span>
           </div>
       </div>
+      
+      <div className="fill-req-CTA-container flex nextbuttonMove">
+        <div className='prevButton' onClick={prev}>&lt; Previous</div>
+        <button className="cta-button" onClick={bookingConfirm}>Confirm Booking</button>
+      </div>
+      <Modal
+        className="thankyou"
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Thank You Modal"
+      >
+        <h2>Thank You</h2>
+        <p>Your booking has been confirmed. We appreciate your business!</p>
+        <button className="cta-button" onClick={closeModal}>
+          Close
+        </button>
+      </Modal>
     </div>
   );
 };

@@ -9,7 +9,7 @@ import Progress from "./Progress.component";
 
 
 
-function AddressDetails({progress}) {
+function AddressDetails({progress, packageSel}) {
 
   const dispatch = useDispatch();
   let ITEMADDED = useSelector((state) => state.selectedItems);
@@ -24,11 +24,13 @@ function AddressDetails({progress}) {
   const [basePrice, setBasePrice] = useState(0);
   const [floorCharges, setFloorCharges] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
-  const [packaging, setPackaging] = useState(null);
+  const [packaging, setPackaging] = useState('Standard');
   const [packagingPrice, setPackagingPrice] = useState(0);
 
+
+  console.log(packageSel);
   useEffect(() => {
-  setTotalCost(addonsPrice + floorCharges +  basePrice + packagingPrice);
+  setTotalCost(addonsPrice + floorCharges +  basePrice + packageSel.price ? packageSel.price : 0);
 
   let totalcostData = {
     "BasePrice": basePrice,
@@ -36,14 +38,14 @@ function AddressDetails({progress}) {
     "totalItemCount": totalItemCount,
     "cft": cft,
     "addonsPrice": addonsPrice,
-    "packaging": packaging,
-    "packagingPrice": packagingPrice,
+    "packaging": packageSel.packageName,
+    "packagingPrice": packageSel.price,
     "totalCost": totalCost,
   }
   
   dispatch(updateTotalCost(totalcostData));
 
-  }, [floorCharges, addonsPrice, basePrice])
+  }, [floorCharges, addonsPrice, basePrice, packageSel, cft, totalCost])
 
 
   console.log("ITEMADDED", ITEMADDED);
@@ -51,16 +53,18 @@ function AddressDetails({progress}) {
 
     const calculateTotalAndCft = () => {
       let totalCount = 0;
-      let totalCft = 0;
+        let totalCft = 0;
 
-      for (const key in ITEMADDED) {
-        const furniture = ITEMADDED[key];
-        for (const itemType in furniture['sofa']) {
-          const item = furniture['sofa'][itemType];
-          totalCount += item.count;
-          totalCft += item.count * item.cost;
+        for (const category in ITEMADDED) {
+            for (const subCategory in ITEMADDED[category]) {
+                for (const item in ITEMADDED[category][subCategory]) {
+                    const { cost, count } = ITEMADDED[category][subCategory][item];
+                    totalCount += count;
+                    totalCft += count * cost;
+                }
+            }
         }
-      }
+
       setTotalItemCount(totalCount);
       setCft(totalCft);
     };
@@ -141,6 +145,10 @@ function AddressDetails({progress}) {
             <div className="cost-details-child"> 
               <span>Add Ons</span>
               <span>{addonsPrice}</span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>Packaging</span>
+              <span>{packageSel.price}</span>
             </div>
             <div className="cost-details-child cost-line"> 
               <span>Total Cost: </span>

@@ -159,8 +159,9 @@
   }
   
   .time-range.selected {
-    background-color: #007bff;
-    color: white;
+    background: rgba(238, 236, 251, 0.80);
+    color: #550EC5;
+    border: 1.27px solid var(--Primary, #550EC5);
   }
 
 .addonbox-counter{
@@ -217,3 +218,13 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     width: 50rem;
   }
+
+  .package-range {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .package-range p {
+    margin: 0;
+  }
+
