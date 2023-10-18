@@ -1,61 +1,59 @@
 import React, { useState } from 'react';
-
+import DateOption from '../OptionsSelect/dateOption.component';
+import AddOns from '../OptionsSelect/AddOns.component';
+import TimeSelect from '../OptionsSelect/TimeSelect.component';
 import { format, isWeekend } from 'date-fns';
 
 import "./calendar.css";
 
 const Dateselection = ({progress, setProgress}) => {
-  const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
+
+  const FlatrequireMents = () => {
+    if (progress === 'dateselection') {
+      setProgress('progress');
+    }}
+  const [selectedDay, setSelectedDay] = useState('null');
+  const [selectedTime, setSelectedTime] = useState('null');
+  const [addOnItems, setAddOnItems] = useState('null');
+
+  const handleDaySelect = (day) => {
+    setSelectedDay(day);
+  };
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+  const handleAddOnselect = (adds) => {
+    setAddOnItems(adds);
   };
 
-  const isWeekday = (date) => !isWeekend(date);
-
-  const renderCalendar = () => {
-    const currentDate = new Date();
-    const daysInMonth = [];
-    const monthStartDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const monthEndDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    // const firstDayOfWeek = monthStartDate.getDay();
-
-    for (let day = 1; day <= monthEndDate.getDate(); day++) {
-      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-      const isCurrentMonth = date >= monthStartDate && date <= monthEndDate;
-      daysInMonth.push(
-        <div
-          key={day}
-          className={`calendar-day ${isWeekday(date) ? 'weekday' : 'weekend'} ${!isCurrentMonth && 'other-month'}`}
-          onClick={() => handleDateClick(date)}
-        >
-          {day}
-          <div className="price">
-            {isWeekday(date) ? 'Weekday Price: $X' : 'Weekend Price: $Y'}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="calendar">
-        {daysInMonth.map((day) => day)}
-      </div>
-    );
-  };
-
+  console.log(selectedDay);
   return (
     <div className="requirements-section-1">
-      <div className="calendar-container">
-        {renderCalendar()}
-        <div className="selected-date">
-          {selectedDate && (
-            <>
-              <p>Selected Date: {format(selectedDate, 'MM/dd/yyyy')}</p>
-              <p>Price: {isWeekday(selectedDate) ? '$X' : '$Y'}</p>
-            </>
-          )}
-        </div>
+      <div className="border-bottom extra-margin">
+        <h2>Fill Requirments</h2>
+      </div>
+      <div className="date-type-wrapper">
+        <h3>Choose Date</h3>
+          <DateOption
+            onSelect={handleDaySelect}
+          />
+      </div>
+      
+      <div className="date-type-wrapper">
+        <h3>Select Pick-Up Time Slot</h3>
+          <TimeSelect
+            onSelect={handleTimeSelect}
+          />
+      </div>
+      <div className="date-type-wrapper">
+        <h3>Add Ons</h3>
+          <AddOns
+            onSelect={handleAddOnselect}
+          />
+      </div>
+      <div className="fill-req-CTA-container flex nextbuttonMove">
+        <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
       </div>
     </div>
   );

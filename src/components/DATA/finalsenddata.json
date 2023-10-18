@@ -41,15 +41,14 @@
         }
     },
     "Cost": {
-        Base Price:
-        Floor Charges
-        Total Items Added
-        CFT
-        Add Ons
-        total cost
+        'BasePrice':
+        'FloorCharges':
+        'TotalItemsAdded':
+        'CFT': 
+        'AddOns': 
+        'totalCost': 
     },
     "RequirementData": {
-
         "familytype": familyType,
         "houseType": houseType,
         "familyNumber": familyNumber,
@@ -63,25 +62,25 @@
         }
     },
     Address: {
-        from:
-        to:
-        distance:
+        From:
+        To:
+        Distance:
     },
-    dateselection: {
-        date:
-        timeslot:
+    dateSelection: {
+        Date:
+        timeSlot:
     },
-    addons: {
+    addOns: {
         "carton": {
             cost:
-            count
-            totalprice
+            count:
+            totalPrice:
 
         },
         "Window AC": {
             cost:
-            count
-            totalprice
+            count:
+            totalPrice:
             
         }
     }

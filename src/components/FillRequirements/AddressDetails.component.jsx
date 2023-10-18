@@ -1,31 +1,53 @@
 import React, { useState, useEffect } from "react";
 import DropDown from "../dropDown/dropDown.component";
-
 import { useSelector } from 'react-redux';
 import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
+import { useDispatch } from 'react-redux';
+import { updateTotalCost } from '../../redux/actions';
+import Progress from "./Progress.component";
 
 
 
-function AddressDetails() {
+function AddressDetails({progress}) {
 
+  const dispatch = useDispatch();
   let ITEMADDED = useSelector((state) => state.selectedItems);
-  const [inventory, setInventory] = useState(ITEMADDED);
-  console.log("inventory", ITEMADDED);
+  let AddOnsADDED = useSelector((state) => state.addOnsItems);
 
   const [fromCity, setFromCity] = useState("Bangalore");
   const [toCity, setToCity] = useState("Bangalore");
   const [disabled, setDisabled] = useState(true);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [cft, setCft] = useState(0);
+  const [addonsPrice, setAddonsPrice] = useState(0);
+  const [basePrice, setBasePrice] = useState(0);
+  const [floorCharges, setFloorCharges] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [packaging, setPackaging] = useState(null);
+  const [packagingPrice, setPackagingPrice] = useState(0);
 
   useEffect(() => {
-  //   const totalcost = {
-  //     "BasePrice": baseprice,
-  //     "FloorCharges": FloorCharges,
-  //     "totalItemCount": totalItemCount,
-  //     "cft": totalItemCount,
-  // }
+
+  setTotalCost(addonsPrice + floorCharges +  basePrice + packagingPrice);
+
+  let totalcostData = {
+    "BasePrice": basePrice,
+    "FloorCharges": floorCharges,
+    "totalItemCount": totalItemCount,
+    "cft": cft,
+    "addonsPrice": addonsPrice,
+    "packaging": packaging,
+    "packagingPrice": packagingPrice,
+    "totalCost": totalCost,
+  }
+  
+  dispatch(updateTotalCost(totalcostData));
+
+  }, [floorCharges, addonsPrice, basePrice])
+
+
+  useEffect(() => {
 
     const calculateTotalAndCft = () => {
       let totalCount = 0;
@@ -46,6 +68,17 @@ function AddressDetails() {
     // Call the calculation function
     calculateTotalAndCft();
   }, [ITEMADDED]);
+
+  useEffect(() => {
+    let calculatedTotalPrice = 0;
+
+    for (const itemName in AddOnsADDED) {
+      const item = AddOnsADDED[itemName];
+      calculatedTotalPrice += item.price * item.count;
+    }
+
+    setAddonsPrice(calculatedTotalPrice);
+  }, [AddOnsADDED]);
 
 
   return (
@@ -82,33 +115,40 @@ function AddressDetails() {
         />
       </div>
     </div>
-    <div className="requirements-your-details-wrapper">
-      <div className="border-bottom extra-margin">
-        <h2>Cost Of Moving</h2>
+    {progress === 'progress' ? ('') : (
+      
+      <div className="requirements-your-details-wrapper">
+        <div className="border-bottom extra-margin">
+          <h2>Cost Of Moving</h2>
+        </div>
+        <div className="cost-details">
+            <div className="cost-details-child"> 
+              <span>Base Price</span>
+              <span></span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>Floor Charges</span>
+              <span></span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>Total Items Added</span>
+              <span>{totalItemCount}</span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>CFT</span>
+              <span>{cft}</span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>Add Ons</span>
+              <span>{addonsPrice}</span>
+            </div>
+            <div className="cost-details-child cost-line"> 
+              <span>Total Cost: </span>
+              <span className="highlightcost">₹{totalCost}</span>
+            </div>
+        </div>
       </div>
-      <div className="cost-details">
-          <div className="cost-details-child"> 
-            <span>Base Price</span>
-            <span></span>
-          </div>
-          <div className="cost-details-child"> 
-            <span>Floor Charges</span>
-            <span></span>
-          </div>
-          <div className="cost-details-child"> 
-            <span>Total Items Added</span>
-            <span>{totalItemCount}</span>
-          </div>
-          <div className="cost-details-child"> 
-            <span>CFT</span>
-            <span>{cft}</span>
-          </div>
-          <div className="cost-details-child"> 
-            <span>Add Ons</span>
-            <span></span>
-          </div>
-      </div>
-    </div>
+    )}
   </div>
   );
 }

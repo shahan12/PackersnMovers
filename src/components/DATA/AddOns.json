@@ -1,0 +1,46 @@
+{
+  "AddOns": [
+    {
+      "name": "Carton",
+      "price": 2499,
+      "max item": 10,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Labor",
+      "price": 100,
+      "max item": 1,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Split AC",
+      "price": 200,
+      "max item": 5,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Carpentry",
+      "price": 200,
+      "max item": 1,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Window AC",
+      "price": 200,
+      "max item": 5,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Electrician",
+      "price": 150,
+      "max item": 1,
+      "desc": "This is the description for Carton addon."
+    },
+    {
+      "name": "Painting",
+      "price": 2499,
+      "max item": 1,
+      "desc": "This is the description for Carton addon."
+    }
+  ]
+}
