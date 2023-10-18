@@ -11,8 +11,12 @@ import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
 import { sendRequestToBackend } from '../../API/apicalls';
+import { useDispatch } from 'react-redux';
+import { updateRequirements } from '../../redux/actions';
 
 function Requirement({progress, setProgress}) {
+
+  const dispatch = useDispatch();
   const [familyType, setfamilyType] = useState("");
   const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
@@ -49,6 +53,8 @@ function Requirement({progress, setProgress}) {
             "movingToLiftValue": movingToLiftValue
         }
     }
+    
+    dispatch(updateRequirements(requirementData));
     sendRequestReq(requirementData);
   };
 

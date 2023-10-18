@@ -12,18 +12,37 @@ const selectedItemsReducer = (state = initialState, action) => {
   }
 };
 
-const anotherReducer = (state = initialState, action) => {
+const addOnsItemsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'ANOTHER_ACTION':
+    case 'UPDATE_ADDONS_ITEMS':
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+};
+const RequirementsItemsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'UPDATE_Requirements_ITEMS':
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+};
+const TotalCostItemsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'UPDATE_TotalCost_ITEMS':
       return { ...state, ...action.payload };
     default:
       return state;
   }
 };
 
+
 const rootReducer = combineReducers({
   selectedItems: selectedItemsReducer,
-  another: anotherReducer,
+  addOnsItems: addOnsItemsReducer,
+  RequirementsItems: RequirementsItemsReducer,
+  TotalCostItems: TotalCostItemsReducer
   // more reducers 
 });
 
