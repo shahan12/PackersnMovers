@@ -52,6 +52,35 @@ const Inventory = ({progress, setProgress}) => {
     setSelectedItems({ ...selectedItems });
     dispatch(updateSelectedItems(selectedItems));
   };
+  // const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
+  //   if (!typeMap || !materialMap) {
+  //     return;
+  //   }
+  
+  //   setSelectedItems((prevSelectedItems) => {
+  //     const updatedSelectedItems = { ...prevSelectedItems };
+  
+  //     if (!updatedSelectedItems[category]) {
+  //       updatedSelectedItems[category] = {};
+  //     }
+  //     if (!updatedSelectedItems[category][subItem]) {
+  //       updatedSelectedItems[category][subItem] = {};
+  //     }
+  //     if (!updatedSelectedItems[category][subItem][name]) {
+  //       updatedSelectedItems[category][subItem][name] = {};
+  //       updatedSelectedItems[category][subItem][name].type = typeMap;
+  //       updatedSelectedItems[category][subItem][name].material = materialMap;
+  //       updatedSelectedItems[category][subItem][name].count = 1;
+  //     } else {
+  //       const count = updatedSelectedItems[category][subItem][name].count || 0;
+  //       updatedSelectedItems[category][subItem][name].count = count + 1;
+  //     }
+  
+  //     dispatch(updateSelectedItems(updatedSelectedItems));
+  
+  //     return updatedSelectedItems;
+  //   });
+  // };
   
   const handleTypeChange = (name, category, subItem, type, material) => {
     setSelectedTypeMap(prevTypeMap => ({
@@ -181,7 +210,11 @@ const Inventory = ({progress, setProgress}) => {
                   onClick={() =>
                     handlePlusClick(name, selectedTypeMap[name], selectedMaterialMap[name], category, subItem)
                   }
-                  disabled={!selectedTypeMap || !selectedMaterialMap}
+                  disabled={
+                    !selectedTypeMap[name] ||
+                    !selectedMaterialMap[name] ||
+                    !selectedItems[category]?.[subItem]?.[name]?.count < 0 // Modify the disabled condition
+                  }
                 >
                   <img src={plus} alt="Add" />
                 </button>

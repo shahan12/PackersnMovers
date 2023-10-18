@@ -322,8 +322,8 @@
 		},
 	"FURNITURE1": 
 		{
-		"sofa":{
-			"1 seater": {
+		"sofa1":{
+			"1 seater 1": {
 				"base": 20,
 				"material": {
 					"leather": 5,
