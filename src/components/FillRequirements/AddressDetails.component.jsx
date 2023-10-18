@@ -28,7 +28,7 @@ function AddressDetails({progress}) {
   const [packagingPrice, setPackagingPrice] = useState(0);
 
   useEffect(() => {
-
+    console.log("ITEMADDED", ITEMADDED);
   setTotalCost(addonsPrice + floorCharges +  basePrice + packagingPrice);
 
   let totalcostData = {
