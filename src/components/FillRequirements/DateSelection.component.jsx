@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import React, { useState, useEffect} from 'react';
 import DateOption from '../OptionsSelect/dateOption.component';
 import AddOns from '../OptionsSelect/AddOns.component';
@@ -38,25 +38,6 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
     if (progress === 'dateselection') {
       setProgress('progress');
     }}
-=======
-import React, { useState } from "react";
-import DateOption from "../OptionsSelect/dateOption.component";
-import AddOns from "../OptionsSelect/AddOns.component";
-import TimeSelect from "../OptionsSelect/TimeSelect.component";
-import { format, isWeekend } from "date-fns";
-
-import "./calendar.css";
-
-const Dateselection = ({ progress, setProgress }) => {
-  const FlatrequireMents = () => {
-    if (progress === "dateselection") {
-      setProgress("progress");
-    }
-  };
-  const [selectedDay, setSelectedDay] = useState("null");
-  const [selectedTime, setSelectedTime] = useState("null");
-  const [addOnItems, setAddOnItems] = useState("null");
->>>>>>> 043e97f85fcbcd1025464377488e6bb169d0c1cd
 
   const handleDaySelect = (day) => {
     setSelectedDay(day);
@@ -102,14 +83,9 @@ const Dateselection = ({ progress, setProgress }) => {
           />
       </div>
       <div className="fill-req-CTA-container flex nextbuttonMove">
-<<<<<<< HEAD
         <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
-=======
-        <button className="cta-button" onClick={FlatrequireMents}>
-          NEXT
-        </button>
->>>>>>> 043e97f85fcbcd1025464377488e6bb169d0c1cd
+
       </div>
     </div>
   );

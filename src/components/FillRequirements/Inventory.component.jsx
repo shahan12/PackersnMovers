@@ -26,7 +26,6 @@ const Inventory = ({ progress, setProgress }) => {
   };
 
   const FlatrequireMents = () => {
-<<<<<<< HEAD
     if (progress === 'inventory') {
       setProgress('dateselection');
     }};
@@ -35,12 +34,6 @@ const Inventory = ({ progress, setProgress }) => {
         setProgress('requirement');
     }};
   
-=======
-    if (progress === "inventory") {
-      setProgress("dateselection");
-    }
-  };
->>>>>>> 043e97f85fcbcd1025464377488e6bb169d0c1cd
 
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
@@ -344,20 +337,11 @@ const Inventory = ({ progress, setProgress }) => {
             {renderSubItems(inventoryData[selectedCategory], selectedCategory)}
           </div>
         </div>
-<<<<<<< HEAD
     </div>
     
       <div className="fill-req-CTA-container flex">
         <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
-=======
-      </div>
-
-      <div className="fill-req-CTA-container flex">
-        <button className="cta-button" onClick={FlatrequireMents}>
-          NEXT
-        </button>
->>>>>>> 043e97f85fcbcd1025464377488e6bb169d0c1cd
       </div>
     </div>
   );
