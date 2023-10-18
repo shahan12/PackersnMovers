@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect} from 'react';
 import DateOption from '../OptionsSelect/dateOption.component';
 import AddOns from '../OptionsSelect/AddOns.component';
@@ -60,22 +61,20 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
       </div>
       <div className="date-type-wrapper">
         <h3>Choose Date</h3>
-          <DateOption
-            onSelect={handleDaySelect}
-          />
+        <DateOption onSelect={handleDaySelect} />
       </div>
-      
+
       <div className="date-type-wrapper">
         <h3>Select Pick-Up Time Slot</h3>
-          <TimeSelect
-            onSelect={handleTimeSelect}
-          />
+        <TimeSelect
+          onSelect={handleTimeSelect}
+          selectedTime={selectedTime}
+          setSelectedTime={setSelectedTime}
+        />
       </div>
       <div className="date-type-wrapper">
         <h3>Add Ons</h3>
-          <AddOns
-            onSelect={handleAddOnselect}
-          />
+        <AddOns onSelect={handleAddOnselect} />
       </div>
       <div className="date-type-wrapper">
         <h3>Select Packaging</h3>
@@ -86,6 +85,7 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
       <div className="fill-req-CTA-container flex nextbuttonMove">
         <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+
       </div>
     </div>
   );
