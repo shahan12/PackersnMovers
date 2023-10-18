@@ -5,7 +5,6 @@ import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
 import { useDispatch } from 'react-redux';
 import { updateTotalCost } from '../../redux/actions';
-import Progress from "./Progress.component";
 
 
 
@@ -13,6 +12,7 @@ function AddressDetails({progress, packageSel}) {
 
   const dispatch = useDispatch();
   let ITEMADDED = useSelector((state) => state.selectedItems);
+  let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
 
   const [fromCity, setFromCity] = useState("Bangalore");
@@ -24,11 +24,8 @@ function AddressDetails({progress, packageSel}) {
   const [basePrice, setBasePrice] = useState(0);
   const [floorCharges, setFloorCharges] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
-  const [packaging, setPackaging] = useState('Standard');
-  const [packagingPrice, setPackagingPrice] = useState(0);
 
-
-  console.log(packageSel);
+  console.log("ITEMADDED", ITEMADDED);
   useEffect(() => {
   setTotalCost(addonsPrice + floorCharges +  basePrice + packageSel.price ? packageSel.price : 0);
 
@@ -47,8 +44,6 @@ function AddressDetails({progress, packageSel}) {
 
   }, [floorCharges, addonsPrice, basePrice, packageSel, cft, totalCost])
 
-
-  console.log("ITEMADDED", ITEMADDED);
   useEffect(() => {
 
     const calculateTotalAndCft = () => {
