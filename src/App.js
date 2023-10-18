@@ -16,18 +16,30 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
   );
+  const [loginModal, setLoginModal] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   useEffect(() => {
     sessionStorage.setItem("auth", JSON.stringify(isAuthenticated));
   }, [isAuthenticated]);
   return (
     <AppProvider>
-      <Header showPopUp={showPopUp} isAuthenticated={isAuthenticated} />
+      <Header
+        showPopUp={showPopUp}
+        isAuthenticated={isAuthenticated}
+        loginModal={loginModal}
+        setLoginModal={setLoginModal}
+      />
       <Routes>
         <Route
           exact
           path="/"
-          element={<Home showPopUp={showPopUp} setShowPopUp={setShowPopUp} />}
+          element={
+            <Home
+              showPopUp={showPopUp}
+              setShowPopUp={setShowPopUp}
+              loginModal={loginModal}
+            />
+          }
         />
         <Route exact path="/login-in" element={<Login />} />
         <Route exact path="/sign-up" element={<SignUp />} />

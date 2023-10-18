@@ -12,11 +12,10 @@
   
   .login-modal {
     background-color: white;
-    padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;    display: flex;
     width: 50rem;
     position: relative;
-    background-image: url('../../images/loginbackground.png'); /* Set your image URL here */
+    /* background-image: url('../../images/loginbackground.png');  */
   }
   
   .login-modal-close {
@@ -34,21 +33,42 @@
     padding: 0.1rem; /* Add this line */
     display: flex;
     align-items: center;
+    gap: 5rem;
   }
   
   .login-modal-content {
     display: flex;
     align-items: center;
   }
-  
-  
+  .login-modal-company-logo{
+    display: flex;
+    width: 4.5rem;
+  }
+  .login-modal-form-image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 7rem;
+    border-radius: 50%;
+  }
+  .login-modal-image {
+    padding-left: 2rem;
+
+  }
   .login-modal-image img {
-    max-width: 30rem;
+    max-width: 20rem;
     height: auto;
   }
-  
+  .login-modal-image h4 {
+    text-align: left;
+    color: #212121;
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
   .login-modal-form {
+    background-color: #601ECA;
     padding: 1rem;
+    border: 1px solid #601ECA;
   }
   
   .login-modal-form h2 {

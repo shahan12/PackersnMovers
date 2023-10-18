@@ -29,6 +29,12 @@
     text-align: center;
 }
 
+.home-relocate-wrapper{
+    position: fixed;
+    top: 10rem;
+    right: 12rem;
+    z-index: 10;
+}
 /* service Containers */
 
 .section-container {

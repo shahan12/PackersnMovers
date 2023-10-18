@@ -4,9 +4,8 @@ import "./header.css";
 import logo from "../../images/SHIFTKART-LOGO.png";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 
-function Header({ showPopUp, isAuthenticated }) {
+function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [loginModal, setLoginModal] = useState(false);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -47,7 +46,7 @@ function Header({ showPopUp, isAuthenticated }) {
             About Us
           </Link>
         </div>
-        <div className="header-user-wrapper">
+        {/* <div className="header-user-wrapper">
           <button
             className="header-user-wrapper-btn"
             onClick={() => setModalOpen(true)}
@@ -61,7 +60,7 @@ function Header({ showPopUp, isAuthenticated }) {
               flow={"register"}
             />
           )}
-        </div>
+        </div> */}
         {!isAuthenticated ? (
           <div
             className="header-sign-in-btn"
