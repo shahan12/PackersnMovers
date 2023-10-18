@@ -1,7 +1,7 @@
 {
 	"Furniture": {
-		"sofa": {
-			"1 seater": {
+		"Sofa": {
+			"1 Seater Sofa": {
 				"base": 20,
 				"material": {
 					"leather": 5,
@@ -16,7 +16,7 @@
 					"non-storage": 0
 				}
 			},
-			"2 seater": {
+			"2 Seater Sofa": {
 				"base": 35,
 				"material": {
 					"leather": 5,
@@ -31,9 +31,9 @@
 					"non-storage": 5
 				}
 			},
-			"3 seater": {
+			"3 Seater Sofa": {
 				"base": 45,
-				"Material": {
+				"material": {
 					"leather": 5,
 					"wooden": 5,
 					"fabric": 5,
@@ -47,10 +47,10 @@
 				}
 			}
 		},
-		"Tables": {
+		"Tables & Chairs": {
 			"coffee_table": {
 				"base": 55,
-				"Material": {
+				"material": {
 					"glass_top": 5,
 					"wooden_top": 5
 				},
@@ -153,6 +153,7 @@
 					"glass top": 50
 				},
 				"type": {
+					"neither": 0,
 					"dismental": 5,
 					"non_dismental": 5,
 					"foldable": 5,
@@ -169,62 +170,60 @@
 					"neither": 0
 				}
 			},
-			"plastic table": {
-				"base": 15
-			},
-			"type": {
-				"neither": 0
+			"Other tables": {
+				"base": 15,
+				"type": {
+					"dismental": 25,
+					"non-dismental": 35
+				},
+				"material": {
+					"Plastic": 0,
+					"Iron": 0,
+					"dressing table": 0
+				}
 			},
 			"computer table": {
 				"base": 5,
 				"material": {
-					"neither": 0
+					"wooden": 0
 				},
 				"type": {
 					"with storage": 25,
 					"without storage": 20
 				}
 			},
-			"dressing table": {
-				"base": 5,
+			"chairs": {
+				"base": 4,
 				"type": {
-					"dismental": 25,
-					"non-dismental": 35
+					"neither": 0,
+					"office chair": 4,
+					"kids chair": 0,
+					"dining chair": 4,
+					"executive chair": 6,
+					"rocking chair": 6
 				},
 				"material": {
-					"neither": 0
-				}
-			},
-			"iron table": {
-				"base": 5,
-				"type": {
-					"neither": 0
-				},
-				"material": {
-					"netiher": 0
+					"wooden": 5,
+					"steel": 5,
+					"plastic chair": 4
 				}
 			}
 		},
-		"chairs": {
-			"base": 4,
-			"type": {
-				"office chair": 4,
-				"kids chair": 0,
-				"dining chair": 4,
-				"executive chair": 6,
-				"rocking chair": 6
+		"Beds & Mattress": {
+			"Mattress": {
+				"base": 10,
+				"type": {
+					"double": 36,
+					"single": 36
+				},
+				"material": {
+					"less than 4 inch": 0,
+					"4 to 8 inch": 10,
+					"greater than 8 inch": 20
+				}
 			},
-			"material": {
-				"wooden": 5,
-				"steel": 5,
-				"plastic chair": 4
-			}
-		}
-	},
-	"cots": {
-		"base": 35,
-		"type": {
-			"king size": {
+			"King size Bed": {
+				"base": 35,
 				"type": {
 					"dismental": 36,
 					"non-dismental": 36,
@@ -232,10 +231,12 @@
 					"non_foldable": 36
 				},
 				"material": {
-					"neither": 0
+					"Metal": 0,
+					"Wooden": 0
 				}
 			},
-			"queen": {
+			"Queen size Bed": {
+				"base": 35,
 				"type": {
 					"dismental": 31,
 					"non-dismental": 31,
@@ -243,10 +244,12 @@
 					"non_foldable": 31
 				},
 				"material": {
-					"neither": 0
+					"Metal": 0,
+					"Wooden": 0
 				}
 			},
-			"double": {
+			"Double Bed": {
+				"base": 35,
 				"type": {
 					"dismental": 20,
 					"non-dismental": 20,
@@ -254,10 +257,12 @@
 					"non_foldable": 20
 				},
 				"material": {
-					"neither": 0
+					"Metal": 0,
+					"Wooden": 0
 				}
 			},
-			"single": {
+			"Single Bed": {
+				"base": 35,
 				"type": {
 					"dismental": 20,
 					"non-dismental": 1,
@@ -265,211 +270,222 @@
 					"non_foldable": 1
 				},
 				"material": {
+					"Metal": 0,
+					"Wooden": 0
+				}
+			},
+			"Bunk bed": {
+				"base": 35,
+				"type": {
+					"normal": 72
+				},
+				"material": {
+					"Metal": 0,
+					"Wooden": 0
+				}
+			},
+			"Diwan": {
+				"base": 35,
+				"type": {
+					"storage": 0,
+					"without storage": 0
+				},
+				"material": {
+					"Metal": 0,
+					"Wooden": 0
+				}
+			}
+		},
+		"Other Furnitures": {
+			"TV Cabinet": {
+				"base": 6,
+				"material": {
+					"With Glass": 0,
+					"Without Glass": 0
+				},
+				"type": {
+					"height less than 2ft and width  2ft": 0,
+					"height less than 2ft and  width less than 2-4ft": 11,
+					"height less than 2ft and width less than 4-6ft": 12,
+					"height less than 2ft and width greater than 6ft": 24,
+					"height less than 2-4ft and width less than 2ft": 6,
+					"height less than 2-4ft and width 2-4ft": 19,
+					"height less than 2-4ft and width 4-6ft": 30,
+					"height less than 2-4ft width greater than 6ft": 44,
+					"height 4-6ft and width less than 2ft": 16,
+					"height 4-6ft and width 2-4ft": 30,
+					"height 4-6ft and width 4-6ft": 48,
+					"height 4-6ft and width greater than 6ft": 44,
+					"height greater than 6ft and width less than 2ft": 19,
+					"height greater than 6ft and width 2-4ft": 42,
+					"height greater than 6ft and width 4-6ft": 69,
+					"height greater than 6ft and width greater than 6ft": 94
+				}
+			},
+			"Showcase": {
+				"base": 8,
+				"material": {
+					"With Glass": 0,
+					"Without Glass": 0
+				},
+				"type": {
+					"height less than 2ft and width  2ft": 0,
+					"height less than 2ft and  width less than 2-4ft": 9,
+					"height less than 2ft and width less than 4-6ft": 14,
+					"height less than 2ft and width greater than 6ft": 22,
+					"height less than 2-4ft and width less than 2ft": 7,
+					"height less than 2-4ft and width 2-4ft": 26,
+					"height less than 2-4ft and width 4-6ft": 32,
+					"height less than 2-4ft width greater than 6ft": 52,
+					"height 4-6ft and width less than 2ft": 14,
+					"height 4-6ft and width 2-4ft": 32,
+					"height 4-6ft and width 4-6ft": 60,
+					"height 4-6ft and width greater than 6ft": 82,
+					"height greater than 6ft and width less than 2ft": 22,
+					"height greater than 6ft and width 2-4ft": 52,
+					"height greater than 6ft and width 4-6ft": 82,
+					"height greater than 6ft and width greater than 6ft": 112
+				}
+			},
+			"Cupboard": {
+				"base": 8,
+				"type": {
+					"height less than 2 feet and width less than 2 feet": 0,
+					"height less than 2 feet and width less than 2 to 4 feet": 9,
+					"height less than 2 feet and width less than 4 to 6 feet": 14,
+					"height less than 2 feet and width greater than 6 feet": 22,
+					"height less than 2 to 4 feet and width less than 2 feet": 7,
+					"height less than 2 to 4 feet and width less than 2 to 4 feet": 26,
+					"height less than 2 to 4 feet and width less than 4 to 6 feet": 32,
+					"height less than 2 to 4 feet and width greater than 6 feet": 52,
+					"height less than 4 to 6 feet and width less than 2": 14,
+					"height less than 4 to 6 feet and width less than 2 to 4 feet": 32,
+					"height less than 4 to 6 feet and width less than 4 to 6 feet": 60,
+					"height less than 4 to 6 feet and width greater than 6 feet": 82,
+					"height greater than 6 feet and width less than 2 feet": 22,
+					"height greater than 6 feet and width less than 2 to 4 feet": 52,
+					"height greater than 6 feet and width less than 4 to 6 feet": 82,
+					"height greater than 6 feet and width greater than 6": 112
+				},
+				"material": {
+					"neither": 0
+				}
+			}
+		}
+	},
+	"Electronics": {
+		"Small Electronics" : {
+			"TV": {
+				"base": 7,
+				"type": {
+					"LED": 0,
+					"LCD": 0,
+					"CRT": 10
+				},
+				"material": {
+					"less than 24 inch": 0,
+					"24 to 31 inch": 1,
+					"32 inch": 1,
+					"33 to 39 inch": 3,
+					"40 to 42 inch": 3,
+					"43 to 54 inch": 4,
+					"greater than 54": 5,
+					"less than 14 inch": 0,
+					"15 to 21 inch": 0,
+					"22 to 28 inch": 3,
+					"greater than 28 inch": 10
+				}
+			},
+			"Fans": {
+				"base": 2,
+				"type": {
+					"tower cooler": 12,
+					"ceeling fan": 1,
+					"table fan": 0,
+					"pedstal fan": 8,
+					"wall mounted fan": 0
+				},
+				"material": {
 					"neither": 0
 				}
 			},
-			"bunk bed": {
+			"Ovens": {
+				"base": 6,
 				"type": {
-					"normal": 72
+					"microwave": 0,
+					"org": 0,
+					"cooking range": 4
 				},
 				"material": {
 					"neither": 0
 				}
 			}
 		},
-		"diwan": {
+		"Large Electronics": {
+			"Fridge": {
+				"base": 18,
+				"type": {
+					"single door": 0,
+					"double door": 6,
+					"side by side": 27,
+					"triple door": 9
+				},
+				"material": {
+					"neither": 0
+				}
+			},
+			"washing_machine": {
+				"base": 11,
+				"type": {
+					"top loading and automatic": 4,
+					"top loading and semi automatic": 0,
+					"front loading": 4
+				},
+				"material": {
+					"neither": 0
+				}
+			},
+			"Air Conditioner": {
+				"base": 8,
+				"type": {
+					"1 ton and window": 0,
+					"1 ton and split": 2,
+					"1 to 1.5 ton and window": 0,
+					"1 to 1.5 ton and split": 2,
+					"1.5 to 2 ton and window": 0,
+					"1.5 to 2 ton and split": 2
+				},
+				"material": {
+					"neither": 0
+				}
+			}
+		}
+	},
+	"Vehicle": {
+		"Bikes": {
+			"base": 0,
 			"type": {
-				"storage": 0,
-				"without storage": 0
+				"under 150CC": 0,
+				"under 500CC": 0,
+				"under 800CC": 0,
+				"Superbike": 0
 			},
 			"material": {
 				"neither": 0
 			}
-		}
-	},
-	"mattress": {
-		"base": 10,
-		"size": {
-			"double": {
-				"less than 4 inch": 0,
-				"4 to 8 inch": 10,
-				"greater than 8 inch": 20
-			},
-			"single": {
-				"less than 4 inch": 0,
-				"4 to 8 inch": 5,
-				"greater than 8 inch": 10
-			}
-		}
-	},
-	"cupboard": {
-		"base": 8,
-		"type": {
-			"height less than 2 feet and width less than 2 feet": 0,
-			"height less than 2 feet and width less than 2 to 4 feet": 9,
-			"height less than 2 feet and width less than 4 to 6 feet": 14,
-			"height less than 2 feet and width greater than 6 feet": 22,
-			"height less than 2 to 4 feet and width less than 2 feet": 7,
-			"height less than 2 to 4 feet and width less than 2 to 4 feet": 26,
-			"height less than 2 to 4 feet and width less than 4 to 6 feet": 32,
-			"height less than 2 to 4 feet and width greater than 6 feet": 52,
-			"height less than 4 to 6 feet and width less than 2": 14,
-			"height less than 4 to 6 feet and width less than 2 to 4 feet": 32,
-			"height less than 4 to 6 feet and width less than 4 to 6 feet": 60,
-			"height less than 4 to 6 feet and width greater than 6 feet": 82,
-			"height greater than 6 feet and width less than 2 feet": 22,
-			"height greater than 6 feet and width less than 2 to 4 feet": 52,
-			"height greater than 6 feet and width less than 4 to 6 feet": 82,
-			"height greater than 6 feet and width greater than 6": 112
 		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"tv_cabinet": {
-		"base": 6,
-		"type": {
-			"With Glass": 0,
-			"Without Glass": 0
-		},
-		"Measurement": {
-			"height less than 2ft and width  2ft": 0,
-			"height less than 2ft and  width less than 2-4ft": 11,
-			"height less than 2ft and width less than 4-6ft": 12,
-			"height less than 2ft and width greater than 6ft": 24,
-			"height less than 2-4ft and width less than 2ft": 6,
-			"height less than 2-4ft and width 2-4ft": 19,
-			"height less than 2-4ft and width 4-6ft": 30,
-			"height less than 2-4ft width greater than 6ft": 44,
-			"height 4-6ft and width less than 2ft": 16,
-			"height 4-6ft and width 2-4ft": 30,
-			"height 4-6ft and width 4-6ft": 48,
-			"height 4-6ft and width greater than 6ft": 44,
-			"height greater than 6ft and width less than 2ft": 19,
-			"height greater than 6ft and width 2-4ft": 42,
-			"height greater than 6ft and width 4-6ft": 69,
-			"height greater than 6ft and width greater than 6ft": 94
-		}
-	},
-	"showcase": {
-		"base": 8,
-		"type": {
-			"With Glass": 0,
-			"Without Glass": 0
-		},
-		"Measurement": {
-			"height less than 2ft and width  2ft": 0,
-			"height less than 2ft and  width less than 2-4ft": 9,
-			"height less than 2ft and width less than 4-6ft": 14,
-			"height less than 2ft and width greater than 6ft": 22,
-			"height less than 2-4ft and width less than 2ft": 7,
-			"height less than 2-4ft and width 2-4ft": 26,
-			"height less than 2-4ft and width 4-6ft": 32,
-			"height less than 2-4ft width greater than 6ft": 52,
-			"height 4-6ft and width less than 2ft": 14,
-			"height 4-6ft and width 2-4ft": 32,
-			"height 4-6ft and width 4-6ft": 60,
-			"height 4-6ft and width greater than 6ft": 82,
-			"height greater than 6ft and width less than 2ft": 22,
-			"height greater than 6ft and width 2-4ft": 52,
-			"height greater than 6ft and width 4-6ft": 82,
-			"height greater than 6ft and width greater than 6ft": 112
-		}
-	},
-	"electronics": {
-		"base": 7,
-		"TV": {
-			"Type": {
-				"LED": 0,
-				"LCD": 0,
-				"CRT": 10
+		"Cars": {
+			"base": 0,
+			"type": {
+				"SUV": 0,
+				"Sedan": 0,
+				"Hatchback": 0,
+				"MPV": 0
 			},
 			"material": {
-				"less than 24 inch": 0,
-				"24 to 31 inch": 1,
-				"32 inch": 1,
-				"33 to 39 inch": 3,
-				"40 to 42 inch": 3,
-				"43 to 54 inch": 4,
-				"greater than 54": 5,
-				"less than 14 inch": 0,
-				"15 to 21 inch": 0,
-				"22 to 28 inch": 3,
-				"greater than 28 inch": 10
+				"Full size": 0,
+				"Compact": 0
 			}
-		}
-	},
-	"fridge": {
-		"base": 18,
-		"type": {
-			"single door": 0,
-			"double door": 6,
-			"side by side": 27,
-			"triple door": 9
-		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"washing_machine": {
-		"base": 11,
-		"type": {
-			"top loading and automatic": 4,
-			"top loading and semi automatic": 0,
-			"front loading": 4
-		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"ovens": {
-		"base": 6,
-		"type": {
-			"microwave": 0,
-			"org": 0,
-			"cooking range": 4
-		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"Air Conditioner": {
-		"base": 8,
-		"type": {
-			"1 ton and window": 0,
-			"1 ton and split": 2,
-			"1 to 1.5 ton and window": 0,
-			"1 to 1.5 ton and split": 2,
-			"1.5 to 2 ton and window": 0,
-			"1.5 to 2 ton and split": 2
-		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"fans": {
-		"base": 2,
-		"type": {
-			"tower cooler": 12,
-			"ceeling fan": 1,
-			"table fan": 0,
-			"pedstal fan": 8,
-			"wall mounted fan": 0
-		},
-		"material": {
-			"neither": 0
-		}
-	},
-	"vehicle": {
-		"base": 0,
-		"type": {
-			"bikes": 0,
-			"cars": 0,
-			"cycle": 0,
-			"others": 0
-		},
-		"material": {
-			"neither": 0
 		}
 	}
 }

@@ -64,6 +64,9 @@ function Requirement({progress, setProgress}) {
     }
   };
 
+
+  console.log(responseRequirementAPIData, "responseRequirementAPIData");
+
   const handleArrowClick = (action) => {
     if (action === 'increment' && familyNumber < 10) {
       setFamilyNumber(familyNumber + 1);
