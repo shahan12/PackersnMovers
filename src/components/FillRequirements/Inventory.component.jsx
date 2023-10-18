@@ -342,6 +342,7 @@ const Inventory = ({ progress, setProgress }) => {
       <div className="fill-req-CTA-container flex">
         <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+
       </div>
     </div>
   );
