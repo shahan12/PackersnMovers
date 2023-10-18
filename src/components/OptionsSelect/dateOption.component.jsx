@@ -72,11 +72,11 @@ function DateOption({ onSelect, value }) {
         <p className={day.isWeekend ? 'weekend-price' : 'weekday-price'}>₹{day.price.toFixed(0)}</p>
       </div>
     ))}
-
+{/* 
     <div onClick={openModal} className="daybox-item">
       <p>Calendar</p>
     </div>
-    <CalendarModal isOpen={isModalOpen} onRequestClose={closeModal} date={date1} onDateChange={onDateChange} />
+    <CalendarModal isOpen={isModalOpen} onRequestClose={closeModal} date={date1} onDateChange={onDateChange} /> */}
   </div>
 
   );
