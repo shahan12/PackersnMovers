@@ -89,3 +89,6 @@ code {
 .border-bottom {
   border-bottom: 1px solid rgba(54, 54, 54, 0.07);;
 }
+.width-100 {
+  width: 100%;
+}

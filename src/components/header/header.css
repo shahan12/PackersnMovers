@@ -42,3 +42,36 @@
     cursor: pointer;
     margin: 0 auto;
 }
+.header-item-phoneNumber-container{
+    color: #248B04;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-right: 2.6rem;
+}
+
+.header-item-phoneNumber-container span{
+    padding-left: 0.5rem;
+}
+
+.header-profile-picture-container{
+    border: 50%;
+    width: 3rem;
+}
+
+.header-more-option-container{
+    cursor: pointer;
+}
+.header-more-option-dropdown{
+    position: absolute;
+    background-color: white;
+    opacity: 1;
+    right: 9rem;
+    top: 4rem;
+    border-radius: 6px;
+    box-shadow: -4px 0px 11px 0px rgba(54, 54, 54, 0.24) inset;
+    padding: 1rem;
+    cursor: pointer;
+}
+.header-profile-img{
+    position: relative;
+}
