@@ -4,7 +4,6 @@ import "./options.css";
 const TimeSelect = ({ onSelect, selectedTime}) => {
   const [selectedRange, setSelectedRange] = useState(selectedTime);
   
-  console.log('value', selectedRange, selectedTime);
   const timeRanges = [
     { id: 1, label: "6-8 AM" },
     { id: 2, label: "8-10 AM" },

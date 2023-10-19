@@ -11,7 +11,7 @@ const Progress = ({ progress, setProgress }) => {
   let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
   let totalCost = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
-  console.log("ITEMADDED", ITEMADDED);
+
   const prev = () => {
     if (progress === "progress") {
       setProgress("dateselection");

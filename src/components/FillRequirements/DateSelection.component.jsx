@@ -17,7 +17,6 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
   const [addOnItems, setAddOnItems] = useState({});
   
   const dispatch = useDispatch();
-  console.log("DateTimeRedux", DateTimeRedux);
   useEffect(() => {
   
     let dayTimeSelection = {

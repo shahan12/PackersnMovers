@@ -55,8 +55,6 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
 
-  console.log("addonsPrice", totalCost);
-
   return (
     <div className="requirements-section-2 flex">
     <div className="requirements-your-details-wrapper">

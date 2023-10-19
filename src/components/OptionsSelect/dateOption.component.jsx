@@ -9,7 +9,6 @@ function DateOption({ onSelect, selectedDayValue }) {
   let totalCost = useSelector((state) => state.TotalCostItems);
   const [priceRed, setPriceRed] = useState(0);
 
-  console.log('totalCost', totalCost.totalCostBF);
   useEffect(() => {
       setPriceRed(totalCost.totalCostBF);
   }, [totalCost]);
