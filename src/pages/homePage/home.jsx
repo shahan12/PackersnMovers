@@ -47,7 +47,6 @@ function Home({ setShowPopUp, loginModal }) {
     window.addEventListener("scroll", listenToScroll);
     return () => window.removeEventListener("scroll", listenToScroll);
   }, []);
-  console.log(loginModal);
   useEffect(() => {
     if (loginModal) {
       setShow(false);

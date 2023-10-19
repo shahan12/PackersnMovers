@@ -52,8 +52,6 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
     setPackageSel(adds);
   };
 
-
-  console.log(selectedDay);
   return (
     <div className="requirements-section-1">
       <div className="border-bottom extra-margin">

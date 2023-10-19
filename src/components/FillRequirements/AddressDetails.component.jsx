@@ -23,7 +23,6 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [floorCharges, setFloorCharges] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
 
-  console.log("ITEMADDED", ITEMADDED);
   useEffect(() => {
   setTotalCost(addonsPrice + floorCharges +  basePrice + packageSel.price ? packageSel.price : 0);
 

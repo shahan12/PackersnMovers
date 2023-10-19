@@ -14,7 +14,6 @@ function FillRequrements(props) {
   const [packageSel, setPackageSel] = useState('null');
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [cft, setCft] = useState(0);
-  console.log("progress", progress);
   return (
     <div className="orders-compoennt-wrapper">
       <Header progress={progress} />
