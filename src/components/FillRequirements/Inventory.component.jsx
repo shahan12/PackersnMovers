@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InventoryItem from "./InventoryItem.component";
 import FURNITURE from "../DATA/FinalCFT.json";
 import minus from "../../images/minus.png";
@@ -7,11 +7,12 @@ import itembox from "../../images/itembox.png";
 import Uparrow from "../../images/upArrowinventory.png";
 import downarrow from "../../images/downArrowinventory.png";
 import "./Inventory.css";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
 const Inventory = ({ progress, setProgress }) => {
   const dispatch = useDispatch();
+  const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
   const [inventoryData, setInventoryData] = useState(FURNITURE);
   const [expandedItem, setExpandedItem] = useState(null);
@@ -24,6 +25,10 @@ const Inventory = ({ progress, setProgress }) => {
   const handleItemClick = (item) => {
     setExpandedItem(item);
   };
+
+  useEffect(() => {
+    setSelectedItems(selectedItemsRedux);
+  }, []);
 
   const FlatrequireMents = () => {
     if (progress === 'inventory') {
@@ -342,7 +347,6 @@ const Inventory = ({ progress, setProgress }) => {
       <div className="fill-req-CTA-container flex">
         <div className='prevButton' onClick={prev}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
-
       </div>
     </div>
   );

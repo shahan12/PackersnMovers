@@ -20,14 +20,14 @@ const addOnsItemsReducer = (state = initialState, action) => {
       return state;
   }
 };
-const RequirementsItemsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'UPDATE_Requirements_ITEMS':
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-};
+// const RequirementsItemsReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case 'UPDATE_Requirements_ITEMS':
+//       return { ...state, ...action.payload };
+//     default:
+//       return state;
+//   }
+// };
 const TotalCostItemsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_TotalCost_ITEMS':
@@ -45,6 +45,32 @@ const TotalDTReducer = (state = initialState, action) => {
   }
 };
 
+const initialState2 = {
+  requirements: {
+    familytype: '',
+    houseType: '',
+    familyNumber: 2,
+    floorNumber: '',
+    fromLift: '',
+    toFloor: '',
+    toLift: '',
+  },
+};
+
+const RequirementsItemsReducer = (state = initialState2, action) => {
+  switch (action.type) {
+    case 'UPDATE_Requirements_ITEMS':
+      return {
+        ...state,
+        requirements: {
+          ...state.requirements,
+          ...action.payload,
+        },
+      };
+    default:
+      return state;
+  }
+};
 
 
 const rootReducer = combineReducers({
