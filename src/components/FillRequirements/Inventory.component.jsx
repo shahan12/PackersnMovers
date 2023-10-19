@@ -84,6 +84,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     }
 
     const count = selectedItems[category][subItem][name].count;
+    console.log("count", count)
     selectedItems[category][subItem][name].count = count + 1;
     setSelectedItems({ ...selectedItems });
   };
@@ -254,10 +255,10 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
                 selectedMaterialMap[Object.keys(data[name]?.material)[0]]
               } // Set the initial value to the first material option
             >
-              <option value="">Select Attribute</option>
+            {/* <option value={selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : ''}>{selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : 'Select Attribute'}</option> */}
               {Object.keys(data[name].material).map(
                 (material, materialIndex) => (
-                  <option key={materialIndex} value={material}>
+                  <option key={materialIndex}  value={selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : material}>
                     {material}
                   </option>
                 )
@@ -280,9 +281,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
                 selectedTypeMap[Object.keys(data[name]?.type)[0]]
               }
             >
-              <option value="">Select Type</option>
+              {/* <option value={selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : ''}>{selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : 'Select type'}</option> */}
               {Object.keys(data[name].type).map((type, typeIndex) => (
-                <option key={typeIndex} value={type}>
+                <option key={typeIndex} value={selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : type}>
                   {type}
                 </option>
               ))}
