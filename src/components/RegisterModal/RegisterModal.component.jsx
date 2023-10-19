@@ -12,7 +12,6 @@ import {useNavigate} from 'react-router-dom';
 
 const RegisterModal = ({ onClose, postData, flow }) => {
   const navigate=useNavigate();
-  const [loginError,setLoginError]=useState('');
   const [phoneNumber, setPhoneNumber] = useState("");
   const [xData, setXData] = useContext(AppContext);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
@@ -52,33 +51,30 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
   const sendLoginRequest = async (loginData) => {
-    setLoginError('');
     // const API_Req_Data_JSON = JSON.stringify(loginData);
     try {
       console.log("sending : ",loginData);
-      // const response = await sendLoginRequestToBackend(loginData);
-      const response=await axios.get("http://localhost:3001/login",{params: loginData,});
+      const response = await sendLoginRequestToBackend(loginData);
       console.log(response);
-      if(response.data==='Login Sucessfull...'){
+      if(response==='Login Sucessfull...'){
         window.sessionStorage.setItem("loggedIn", "true");
         // navigate("/fill-details");
         window.open("/fill-details", "_self");
       }
-      else setLoginError(response.data);
+      if(response==='Mismatched data...'){
+        alert(response);
+      }
     } catch (error) {
-      setLoginError(error.message);
       console.error('Error:', error);
     }
   };
 
   const sendRegisterRequest = async (API_Req_Data) => {
-    setLoginError('');
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
       const response = await sendRegisterRequestToBackend(API_Req_Data_JSON);
       window.open("/fill-details", "_self");
     } catch (error) {
-      setLoginError(error.message);
       console.error('Error:', error);
     }
   };
@@ -177,7 +173,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                       } cta-button`}
                     >
                       Submit OTP
-                      {loginError.length>0 && <p>{loginError}</p>}
                     </button>
                   </form>
                 ) : (
@@ -201,7 +196,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                       } cta-button`}
                     >
                       Submit OTP
-                      {loginError.length>0 && <p>{loginError}</p>}
                     </button>
                   </form>
                 )}
