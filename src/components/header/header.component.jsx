@@ -35,7 +35,11 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     window.open("/", "_self");
   };
   return (
-    <article className="header-container space-between">
+    <article
+      className={`header-container space-between ${
+        showfillHeader && "add-box-shadow"
+      }`}
+    >
       {loginModal && (
         <RegisterModal
           isOpen={loginModal}
