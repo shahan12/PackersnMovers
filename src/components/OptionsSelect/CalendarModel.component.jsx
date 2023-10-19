@@ -6,7 +6,6 @@ const CalendarModal = ({ isOpen, onRequestClose, date, onDateChange }) => {
     if (!isOpen) {
         return null;
       }
-      console.log("date", date);
       return (
         <div className="modal-overlay">
           <div className="modal">

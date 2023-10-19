@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './options.css';
 
-const PackageSelect = ({onSelect}) => {
-  const [selectedRange, setSelectedRange] = useState({ packageName: 'Standard', price: 0 });
+const PackageSelect = ({onSelect, packageSel}) => {
+  const [selectedRange, setSelectedRange] = useState(packageSel ? packageSel : { packageName: 'Standard', price: 0 });
 
   const packageSelect = [
     { packageName: 'Standard', price: 0 },

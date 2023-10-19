@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./options.css";
 import CalendarModal from "./CalendarModel.component";
+import { useSelector } from 'react-redux';
 
-function DateOption({ onSelect, value }) {
-  const [selectedDay, setSelectedDay] = useState(null);
+function DateOption({ onSelect, selectedDayValue }) {
+  const [selectedDay, setSelectedDay] = useState(selectedDayValue);
+  
+  let totalCost = useSelector((state) => state.TotalCostItems);
+  const [priceRed, setPriceRed] = useState(0);
+
+  console.log('totalCost', totalCost.totalCostBF);
+  useEffect(() => {
+      setPriceRed(totalCost.totalCostBF);
+  }, [totalCost]);
 
   const weekdays = [
     "Sunday",
@@ -15,7 +24,9 @@ function DateOption({ onSelect, value }) {
     "Saturday",
   ];
 
+
   const generateDays = () => {
+    
     const today = new Date();
     const days = [];
 
@@ -26,15 +37,15 @@ function DateOption({ onSelect, value }) {
       const dayOfWeek = weekdays[currentDate.getDay()];
       const date = currentDate.getDate();
 
-      let price = 2499;
+      let price = Number(priceRed); // Ensure price is a number
       let isWeekend = false;
-
+      
       if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
         // Weekend (Sunday or Saturday)
-        price = price * 1.2;
+        price = price * 1.2; // Ensure price is a number for multiplication
         isWeekend = true;
       }
-
+      
       days.push({ dayOfWeek, date, price, isWeekend, currentDate });
     }
 

@@ -182,10 +182,22 @@
     height: 8rem;
 
 }
+.addonBox:hover{
+  border-radius: 8px;
+border: 1.27px solid var(--Primary, #550EC5);
+background: rgba(238, 236, 251, 0.80);
+}
+.addonBox-hover{
+  border-radius: 8px;
+border: 1.27px solid var(--Primary, #550EC5);
+background: rgba(238, 236, 251, 0.80);
+}
+
 .addonbox-counter button {
     margin: 0;
+
     padding: 0.1rem;
-    background-color: white;
+    background-color: transparent;
     align-items: center;
     display: flex;
     justify-content:center;

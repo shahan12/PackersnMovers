@@ -21,9 +21,9 @@ function FillRequrements(props) {
       {progress === 'requirement' ? (
         <Requirement progress={progress} setProgress={setProgress} />
       ) : progress === 'inventory' ? (
-        <Inventory progress={progress} setProgress={setProgress} setTotalItemCount={setTotalItemCount} setCft={setCft}/>
+        <Inventory progress={progress} setProgress={setProgress} setTotalItemCount={setTotalItemCount} totalItemCount={totalItemCount} setCft={setCft}/>
       ) : progress === 'dateselection' ? (
-        <Dateselection progress={progress} setProgress={setProgress} packageSel={packageSel} setPackageSel={setPackageSel}/>
+        <Dateselection setProgress={setProgress} packageSel={packageSel} setPackageSel={setPackageSel}/>
       ) : progress === 'progress' ? (
         <Progress progress={progress} setProgress={setProgress}/>
       ) : null}

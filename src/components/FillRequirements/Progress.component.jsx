@@ -13,8 +13,6 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  let DateTime = useSelector((state) => state.DateTime);
-
   const bookingConfirm = () => {
     if (progress === "progress") {
       openModal();
@@ -22,7 +20,6 @@ const Progress = ({ progress, setProgress }) => {
   };
 
   let totalCost = useSelector((state) => state.TotalCostItems);
-
   const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
