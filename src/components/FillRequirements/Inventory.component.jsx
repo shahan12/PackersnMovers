@@ -84,7 +84,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     }
 
     const count = selectedItems[category][subItem][name].count;
-    console.log("count", count)
     selectedItems[category][subItem][name].count = count + 1;
     setSelectedItems({ ...selectedItems });
   };
@@ -255,10 +254,10 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
                 selectedMaterialMap[Object.keys(data[name]?.material)[0]]
               } // Set the initial value to the first material option
             >
-            {/* <option value={selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : ''}>{selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : 'Select Attribute'}</option> */}
+              <option value="">Select Attribute</option>
               {Object.keys(data[name].material).map(
                 (material, materialIndex) => (
-                  <option key={materialIndex}  value={selectedItems[category]?.[subItem]?.[name]?.material ? selectedItems[category]?.[subItem]?.[name]?.material : material}>
+                  <option key={materialIndex} value={material}>
                     {material}
                   </option>
                 )
@@ -281,9 +280,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
                 selectedTypeMap[Object.keys(data[name]?.type)[0]]
               }
             >
-              {/* <option value={selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : ''}>{selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : 'Select type'}</option> */}
+              <option value="">Select Type</option>
               {Object.keys(data[name].type).map((type, typeIndex) => (
-                <option key={typeIndex} value={selectedItems[category]?.[subItem]?.[name]?.type ? selectedItems[category]?.[subItem]?.[name]?.type : type}>
+                <option key={typeIndex} value={type}>
                   {type}
                 </option>
               ))}
