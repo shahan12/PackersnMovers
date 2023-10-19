@@ -151,9 +151,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     }
 
     updatedItems[category][subItem][name].type = type;
-    updatedItems[category][subItem][name].material =
-      selectedItems[category]?.[subItem]?.[name]?.material  ||
-      Object.keys(inventoryData[category][subItem][name].material)[0];
+    updatedItems[category][subItem][name].material = material;
     updatedItems[category][subItem][name].cost = calculateCost(
       name,
       category,
@@ -179,9 +177,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
       updatedItems[category][subItem][name] = {};
     }
     updatedItems[category][subItem][name].material = material;
-    updatedItems[category][subItem][name].type =
-    selectedItems[category]?.[subItem]?.[name]?.type ||
-      Object.keys(inventoryData[category][subItem][name].type)[0];
+    updatedItems[category][subItem][name].type = type;
     updatedItems[category][subItem][name].cost = calculateCost(
       name,
       category,
