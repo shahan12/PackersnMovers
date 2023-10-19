@@ -62,8 +62,7 @@ function DateOption({ onSelect, value }) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  console.log(generatedData, "genData");
-  console.log(selectedDay, "selectedDat");
+  
   return (
     <div className="day-box">
       {generatedData.map((day, index) => (

@@ -25,14 +25,11 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   };
 
   useEffect(() => {
-    console.log("selectedItems", selectedItems);
-    if(selectedItems) {
-      setSelectedItems(selectedItemsRedux);
-    }
+    setSelectedItems(selectedItemsRedux);
   }, []);
 
   const FlatrequireMents = () => {
-    
+
     if (progress === 'inventory') {
       dispatch(updateSelectedItems(selectedItems));
       setProgress('dateselection');
@@ -62,10 +59,10 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
         setTotalItemCount(totalCount);
         setCft(totalCft);
       };
-      calculateTotalAndCft();
+        calculateTotalAndCft();
     }, [selectedItems]);
 
-    
+    console.log("selectedItems", selectedItems);
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
@@ -78,15 +75,39 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     setInventoryData({ ...inventoryData });
   };
 
-  const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
-    if (!typeMap & !materialMap) {
-      return;
+  const handlePlusClick = (name, category, subItem) => {
+    const updatedItems = { ...selectedItems };
+    if (!updatedItems[category]) {
+      updatedItems[category] = {};
     }
-
-    const count = selectedItems[category][subItem][name].count;
-    selectedItems[category][subItem][name].count = count + 1;
-    setSelectedItems({ ...selectedItems });
+    if (!updatedItems[category][subItem]) {
+      updatedItems[category][subItem] = {};
+    }
+    if (!updatedItems[category][subItem][name]) {
+      updatedItems[category][subItem][name] = {};
+      const materialOptions = Object.keys(inventoryData[category][subItem][name]?.material);
+      const typeOptions = Object.keys(inventoryData[category][subItem][name]?.type);
+      updatedItems[category][subItem][name].material = materialOptions[0];
+      updatedItems[category][subItem][name].type = typeOptions[0];
+    }
+    const count = updatedItems[category][subItem][name]?.count || 0;
+    updatedItems[category][subItem][name].count = count + 1;
+    updatedItems[category][subItem][name].cost = calculateCost(
+      name,
+      category,
+      subItem,
+      updatedItems[category][subItem][name].type,
+      updatedItems[category][subItem][name].material
+    );
+    setSelectedItems(updatedItems);
   };
+  
+  // const handlePlusClick = (name, category, subItem) => {
+
+  //   const count = selectedItems[category][subItem][name]?.count;
+  //   selectedItems[category][subItem][name].count = count + 1;
+  //   setSelectedItems({ ...selectedItems });
+  // };
   // const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
   //   if (!typeMap || !materialMap) {
   //     return;
@@ -118,10 +139,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   // };
 
   const handleTypeChange = (name, category, subItem, type, material) => {
-    setSelectedTypeMap((prevTypeMap) => ({
-      ...prevTypeMap,
-      [name]: type,
-    }));
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -135,7 +152,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
 
     updatedItems[category][subItem][name].type = type;
     updatedItems[category][subItem][name].material =
-      selectedMaterialMap[name] ||
+      selectedItems[category]?.[subItem]?.[name]?.material  ||
       Object.keys(inventoryData[category][subItem][name].material)[0];
     updatedItems[category][subItem][name].cost = calculateCost(
       name,
@@ -151,10 +168,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   };
 
   const handleMaterialChange = (name, category, subItem, material, type) => {
-    setSelectedMaterialMap((prevMaterialMap) => ({
-      ...prevMaterialMap,
-      [name]: material,
-    }));
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
       updatedItems[category] = {};
@@ -167,7 +180,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     }
     updatedItems[category][subItem][name].material = material;
     updatedItems[category][subItem][name].type =
-      selectedTypeMap[name] ||
+    selectedItems[category]?.[subItem]?.[name]?.type ||
       Object.keys(inventoryData[category][subItem][name].type)[0];
     updatedItems[category][subItem][name].cost = calculateCost(
       name,
@@ -187,6 +200,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     const materialValue =
       inventoryData[category][subItem][name].material[material];
     const typeValue = inventoryData[category][subItem][name].type[type];
+    console.log(base, materialValue,typeValue);
     return base + materialValue + typeValue;
   };
 
@@ -239,54 +253,27 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
           <div className="itemDetails" key={index}>
             <span>{name}</span>
             <select
-              className="custom-select"
-              onChange={(e) =>
-                handleMaterialChange(
-                  name,
-                  category,
-                  subItem,
-                  e.target.value,
-                  selectedTypeMap[name] || Object.keys(data[name]?.type)[0]
-                )
-              }
-              value={
-                selectedMaterialMap[name] ||
-                selectedMaterialMap[Object.keys(data[name]?.material)[0]]
-              } // Set the initial value to the first material option
-            >
-              <option value="">Select Attribute</option>
-              {Object.keys(data[name].material).map(
-                (material, materialIndex) => (
+                className="custom-select"
+                onChange={(e) => handleMaterialChange(name, category, subItem, e.target.value, selectedItems[category]?.[subItem]?.[name]?.type || Object.keys(data[name]?.type)[0])}
+                value={selectedItems[category]?.[subItem]?.[name]?.material || Object.keys(data[name]?.material)[0]}
+              >
+                {Object.keys(data[name]?.material).map((material, materialIndex) => (
                   <option key={materialIndex} value={material}>
                     {material}
                   </option>
-                )
-              )}
-            </select>
+                ))}
+              </select>
             <select
-              className="custom-select"
-              onChange={(e) =>
-                handleTypeChange(
-                  name,
-                  category,
-                  subItem,
-                  e.target.value,
-                  selectedMaterialMap[name] ||
-                    Object.keys(data[name]?.material)[0]
-                )
-              }
-              value={
-                selectedTypeMap[name] ||
-                selectedTypeMap[Object.keys(data[name]?.type)[0]]
-              }
-            >
-              <option value="">Select Type</option>
-              {Object.keys(data[name].type).map((type, typeIndex) => (
-                <option key={typeIndex} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+                className="custom-select"
+                onChange={(e) => handleTypeChange(name, category, subItem, e.target.value, selectedItems[category]?.[subItem]?.[name]?.material || Object.keys(data[name]?.material)[0])}
+                value={selectedItems[category]?.[subItem]?.[name]?.type || Object.keys(data[name]?.type)[0]}
+              >
+                {Object.keys(data[name]?.type).map((type, typeIndex) => (
+                  <option key={typeIndex} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
             <div className="itemDetails-child">
               <div className="itemDetails-child-inc">
                 <img
@@ -297,21 +284,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
                   {selectedItems[category]?.[subItem]?.[name]?.count || 0}
                 </span>
                 <button
-                  onClick={() =>
-                    handlePlusClick(
-                      name,
-                      selectedTypeMap[name],
-                      selectedMaterialMap[name],
-                      category,
-                      subItem
-                    )
-                  }
-                  disabled={
-                    !selectedTypeMap[name] ||
-                    !selectedMaterialMap[name] ||
-                    !selectedItems[category]?.[subItem]?.[name]?.count < 0 // Modify the disabled condition
-                  }
-                >
+                  onClick={() => handlePlusClick(name,category,subItem)}>
                   <img src={plus} alt="Add" />
                 </button>
               </div>
