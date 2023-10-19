@@ -13,56 +13,51 @@ import { updateSelectedItems } from "../../redux/actions";
 const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
+
   const [itemCount, setItemCount] = useState(0);
   const [inventoryData, setInventoryData] = useState(FURNITURE);
   const [expandedItem, setExpandedItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
-  const [selectedMaterialMap, setSelectedMaterialMap] = useState({});
-  const [selectedTypeMap, setSelectedTypeMap] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
+
   const handleItemClick = (item) => {
     setExpandedItem(item);
   };
 
   useEffect(() => {
     setSelectedItems(selectedItemsRedux);
-  }, []);
+  }, [setSelectedItems]);
 
-  const FlatrequireMents = () => {
+  const handleNext = () => {
+    dispatch(updateSelectedItems(selectedItems));
+    setProgress('dateselection');
+  };
 
-    if (progress === 'inventory') {
-      dispatch(updateSelectedItems(selectedItems));
-      setProgress('dateselection');
-    }};
-    const prev = () => {
-      if (progress === 'inventory') {
-        dispatch(updateSelectedItems(selectedItems));
-        setProgress('requirement');
-    }};
-  
+  const handlePrevious = () => {
+    dispatch(updateSelectedItems(selectedItems));
+    setProgress('requirement');
+  };
 
-    useEffect(() => {
-      const calculateTotalAndCft = () => {
-        let totalCount = 0;
-          let totalCft = 0;
-  
-          for (const category in selectedItems) {
-              for (const subCategory in selectedItems[category]) {
-                  for (const item in selectedItems[category][subCategory]) {
-                      const { cost, count } = selectedItems[category][subCategory][item];
-                      totalCount += count;
-                      totalCft += count * cost;
-                  }
+
+  const calculateTotalAndCft = () => {
+    let totalCount = 0;
+      let totalCft = 0;
+
+      for (const category in selectedItems) {
+          for (const subCategory in selectedItems[category]) {
+              for (const item in selectedItems[category][subCategory]) {
+                  const { cost, count } = selectedItems[category][subCategory][item];
+                  totalCount += count;
+                  totalCft += count * cost;
               }
           }
-  
-        setTotalItemCount(totalCount);
-        setCft(totalCft);
-      };
-        calculateTotalAndCft();
-    }, [selectedItems]);
+      }
 
-    console.log("selectedItems", selectedItems);
+    setTotalItemCount(totalCount);
+    setCft(totalCft);
+  };
+
+  console.log("selectedItems", selectedItems);
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
@@ -77,6 +72,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
 
   const handlePlusClick = (name, category, subItem) => {
     const updatedItems = { ...selectedItems };
+  
     if (!updatedItems[category]) {
       updatedItems[category] = {};
     }
@@ -87,57 +83,23 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
       updatedItems[category][subItem][name] = {};
       const materialOptions = Object.keys(inventoryData[category][subItem][name]?.material);
       const typeOptions = Object.keys(inventoryData[category][subItem][name]?.type);
+  
       updatedItems[category][subItem][name].material = materialOptions[0];
       updatedItems[category][subItem][name].type = typeOptions[0];
     }
+  
     const count = updatedItems[category][subItem][name]?.count || 0;
-    updatedItems[category][subItem][name].count = count + 1;
-    updatedItems[category][subItem][name].cost = calculateCost(
-      name,
-      category,
-      subItem,
-      updatedItems[category][subItem][name].type,
-      updatedItems[category][subItem][name].material
-    );
+    updatedItems[category][subItem][name] = {
+      ...updatedItems[category][subItem][name],
+      count: count + 1,
+      cost: calculateCost(name, category, subItem, updatedItems[category][subItem][name].type, updatedItems[category][subItem][name].material),
+    };
+  
+    calculateTotalAndCft();
     setSelectedItems(updatedItems);
   };
   
-  // const handlePlusClick = (name, category, subItem) => {
-
-  //   const count = selectedItems[category][subItem][name]?.count;
-  //   selectedItems[category][subItem][name].count = count + 1;
-  //   setSelectedItems({ ...selectedItems });
-  // };
-  // const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
-  //   if (!typeMap || !materialMap) {
-  //     return;
-  //   }
-
-  //   setSelectedItems((prevSelectedItems) => {
-  //     const updatedSelectedItems = { ...prevSelectedItems };
-
-  //     if (!updatedSelectedItems[category]) {
-  //       updatedSelectedItems[category] = {};
-  //     }
-  //     if (!updatedSelectedItems[category][subItem]) {
-  //       updatedSelectedItems[category][subItem] = {};
-  //     }
-  //     if (!updatedSelectedItems[category][subItem][name]) {
-  //       updatedSelectedItems[category][subItem][name] = {};
-  //       updatedSelectedItems[category][subItem][name].type = typeMap;
-  //       updatedSelectedItems[category][subItem][name].material = materialMap;
-  //       updatedSelectedItems[category][subItem][name].count = 1;
-  //     } else {
-  //       const count = updatedSelectedItems[category][subItem][name].count || 0;
-  //       updatedSelectedItems[category][subItem][name].count = count + 1;
-  //     }
-
-  //     dispatch(updateSelectedItems(updatedSelectedItems));
-
-  //     return updatedSelectedItems;
-  //   });
-  // };
-
+  
   const handleTypeChange = (name, category, subItem, type, material) => {
     const updatedItems = { ...selectedItems };
     if (!updatedItems[category]) {
@@ -162,6 +124,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
+      calculateTotalAndCft();
     setSelectedItems(updatedItems);
   };
 
@@ -188,6 +151,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
+      calculateTotalAndCft();
     setSelectedItems(updatedItems);
   };
 
@@ -203,23 +167,21 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   const handleMinusClick = (name, category, subItem) => {
     setSelectedItems((prevSelectedItems) => {
       const updatedSelectedItems = { ...prevSelectedItems };
-      const currentCount =
-        updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
+      const currentCount = updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
+  
       if (currentCount > 0) {
-        if (!updatedSelectedItems[category]) {
-          updatedSelectedItems[category] = {};
-        }
-        if (!updatedSelectedItems[category][subItem]) {
-          updatedSelectedItems[category][subItem] = {};
-        }
-        if (!updatedSelectedItems[category][subItem][name]) {
-          updatedSelectedItems[category][subItem][name] = {};
-        }
-        updatedSelectedItems[category][subItem][name].count = currentCount - 1;
+        updatedSelectedItems[category][subItem][name] = {
+          ...updatedSelectedItems[category][subItem][name],
+          count: currentCount - 1,
+        };
       }
+  
       return updatedSelectedItems;
     });
+  
+    calculateTotalAndCft();
   };
+  
   const renderSubItems = (subItems, category) => {
     return Object.keys(subItems).map((subItem) => (
       <div
@@ -338,8 +300,16 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     </div>
     
       <div className="fill-req-CTA-container flex">
-        <div className='prevButton' onClick={prev}>&lt; Previous</div>
-        <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+        <div className='prevButton' onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handlePrevious();
+          }}>&lt; Previous</div>
+        <button className="cta-button" onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleNext();
+          }}>NEXT</button>
       </div>
     </div>
   );
