@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useRef,useEffect  } from "react";
 import "../relocate/relocate.css";
 import DropDown from "../dropDown/dropDown.component";
 import Data from "./data.json";
 import InputLanding from "../InputLanding/InputLanding.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+import { useDispatch } from 'react-redux';
+import { updateAddress } from '../../redux/actions';
 
 function Relocate(props) {
+  
+  const dispatch = useDispatch();
+  const libraries = ['places'];
+  const inputRefFrom = React.useRef();
+  const inputRefTo = React.useRef();
+
+  const [distance, setDistance] = useState(null);
+  const [fromAddress, setFromAddress] = useState('');
+  const [toAddress, setToAddress] = useState('');
   const [activeTab, setActiveTab] = useState("Within City");
-  const [wCity, setWCity] = useState("Bangalore");
-  const [fromCity, setFromCity] = useState(
-    activeTab === "Between City" ? "Bangalore" : ""
-  );
-  const [toCity, setToCity] = useState(
-    activeTab === "Between City" ? "Bangalore" : ""
-  );
-  const [pinCodeS, setPinCodeS] = useState("");
-  const [pinCodeD, setPinCodeD] = useState("");
-  const [fromCoun, setFromCoun] = useState(
-    activeTab === "International" ? "India" : ""
-  );
-  const [toCoun, setToCoun] = useState(
-    activeTab === "International" ? "India" : ""
-  );
+  const [wCity, setWCity] = useState("Bengaluru");
+  const [fromCity, setFromCity] = useState(activeTab === "Between City" ? "Bengaluru" : "");
+  const [toCity, setToCity] = useState(activeTab === "Between City" ? "Bengaluru" : "");
+  const [fromCoun, setFromCoun] = useState(activeTab === "International" ? "India" : "");
+  const [toCoun, setToCoun] = useState(activeTab === "International" ? "India" : "");
   const [postData, setPostData] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -30,20 +32,78 @@ function Relocate(props) {
   };
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
-    setPostData({
-      activeTab,
-      wCity,
-      fromCity,
-      toCity,
-      pinCodeS,
-      pinCodeD,
-      fromCoun,
-      toCoun,
-    });
+
+    if(activeTab === "Within City" && fromAddress && toAddress) {
+      const requirementData = {
+        'fromAddress': fromAddress,
+        'toAddress': toAddress,
+        'distance': distance,
+      }
+      dispatch(updateAddress(requirementData));
+    }
+      else if (activeTab === "Between City" && fromCity && toCity) {
+      const requirementData = {
+        'fromAddress': fromCity,
+        'toAddress': toCity
+      }
+    } 
+      else if (activeTab === "International" && fromCoun && toCoun) {
+        const requirementData = {
+          'fromAddress': fromCoun,
+          'toAddress': toCoun
+        }
+    }
     setModalOpen(true);
   };
 
+
+
+  useEffect(() => {
+    calculateDistance();
+  }, [fromAddress, toAddress]);
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  const handleFromPlaceChanged = () => {
+    const [place] = inputRefFrom.current.getPlaces();
+    if (place) {
+      setFromAddress(place.formatted_address);
+    }
+  };
+
+  const handleToPlaceChanged = () => {
+    const [place] = inputRefTo.current.getPlaces();
+    if (place) {
+      setToAddress(place.formatted_address);
+    }
+  };
+  const calculateDistance = () => {
+    if (fromAddress && toAddress) {
+      const service = new window.google.maps.DistanceMatrixService();
+      service.getDistanceMatrix(
+        {
+          origins: [fromAddress],
+          destinations: [toAddress],
+          travelMode: 'DRIVING',
+        },
+        (response, status) => {
+          if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+            setDistance(response.rows[0].elements[0].distance.text);
+          } else {
+            setDistance(null); // Unable to calculate distance
+          }
+        }
+      );
+    }
+  }
+  const searchOptions = {
+    componentRestrictions: { locality: wCity },
+  };
   return (
     <article className="relocate-wrapper">
       <div className="flex relocate-tabs-container">
@@ -85,22 +145,28 @@ function Relocate(props) {
             </div>
           </div>
           <div className="relocate-search-locality">
-            <p className="small-desc">Enter Pincode</p>
+            <p className="small-desc">Enter Addresses</p>
             <div className="relocate-input margin-bottom-40">
-              <InputLanding
-                selectedCity={wCity}
-                pinCode={pinCodeS}
-                setPinCode={setPinCodeS}
-                option={Data.IndianCitiesPinCode}
-              ></InputLanding>
+                  {isLoaded && (
+                <StandaloneSearchBox 
+                onLoad={ref => (inputRefFrom.current = ref)} 
+                onPlacesChanged={handleFromPlaceChanged} 
+                options={searchOptions}
+                >
+                  <input type="text" className="form-control" placeholder="From Address" />
+                </StandaloneSearchBox>
+              )}
             </div>
             <div className="relocate-input">
-              <InputLanding
-                selectedCity={wCity}
-                pinCode={pinCodeD}
-                setPinCode={setPinCodeD}
-                option={Data.IndianCitiesPinCode}
-              ></InputLanding>
+            {isLoaded && (
+                <StandaloneSearchBox 
+                onLoad={ref => (inputRefTo.current = ref)} 
+                onPlacesChanged={handleToPlaceChanged} 
+                options={searchOptions}
+                >
+                  <input type="text" className="form-control" placeholder="From Address" />
+                </StandaloneSearchBox>
+              )}
             </div>
           </div>
         </div>
