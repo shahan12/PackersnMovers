@@ -5,6 +5,8 @@ import "./calendar.css";
 import Modal from 'react-modal';
 const Progress = ({progress, setProgress}) => {
 
+  let ITEMADDED = useSelector((state) => state.selectedItems);
+  console.log("ITEMADDED", ITEMADDED);
   const prev = () => {
     if (progress === 'progress') {
       setProgress('dateselection');

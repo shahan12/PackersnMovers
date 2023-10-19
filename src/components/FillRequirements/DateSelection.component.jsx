@@ -17,11 +17,6 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
   
   const dispatch = useDispatch();
 
-  const prev = () => {
-    if (progress === 'dateselection') {
-      setProgress('inventory');
-  }};
-
 
   useEffect(() => {
   
@@ -35,21 +30,23 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
     }, [selectedDay, selectedTime])
   
   const FlatrequireMents = () => {
-    if (progress === 'dateselection') {
-      setProgress('progress');
-    }}
+    setProgress('progress'); 
+  };
+    const handleDaySelect = (day) => {
+      setSelectedDay(day);
+    };
+    const handleTimeSelect = (time) => {
+      setSelectedTime(time);
+    };
+    const handleAddOnselect = (adds) => {
+      setAddOnItems(adds);
+    };
+    const handlePackageSelect = (adds) => {
+      setPackageSel(adds);
+    };
 
-  const handleDaySelect = (day) => {
-    setSelectedDay(day);
-  };
-  const handleTimeSelect = (time) => {
-    setSelectedTime(time);
-  };
-  const handleAddOnselect = (adds) => {
-    setAddOnItems(adds);
-  };
-  const handlePackageSelect = (adds) => {
-    setPackageSel(adds);
+  const handlePrevious = () => {
+    setProgress('inventory');
   };
 
   return (
@@ -81,7 +78,7 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
           />
       </div>
       <div className="fill-req-CTA-container flex nextbuttonMove">
-        <div className='prevButton' onClick={prev}>&lt; Previous</div>
+        <div className='prevButton' onClick={handlePrevious}>&lt; Previous</div>
         <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
 
       </div>
