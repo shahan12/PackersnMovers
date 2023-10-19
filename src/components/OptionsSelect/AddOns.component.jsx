@@ -12,23 +12,20 @@ const AddOns = ({onSelect}) => {
   const [selectedAddOns, setSelectedAddOns] = useState(AddOnsRedux);
 
   const handleAddOnClick = (addon, action) => {
-    const updatedAddOns = { ...selectedAddOns }; // Convert the array to an object
+    const updatedAddOns = { ...selectedAddOns }; 
   
     if (action === "add") {
       if (updatedAddOns[addon.name]) {
-        // If the add-on already exists, increase the count if it's within the limit
         if (updatedAddOns[addon.name].count < addon['max item']) {
           updatedAddOns[addon.name].count++;
         }
       } else {
-        // If the add-on doesn't exist, create a new entry
         updatedAddOns[addon.name] = {
           price: addon.price,
           count: 1,
         };
       }
     } else if (action === "subtract" && updatedAddOns[addon.name]) {
-      // If the action is subtract and the add-on exists, decrease the count
       if (updatedAddOns[addon.name].count > 0) {
         updatedAddOns[addon.name].count--;
       }
