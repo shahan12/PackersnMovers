@@ -31,3 +31,9 @@ export const updateSelectedItems = (items) => {
       payload: items,
     };
   };
+  export const updateAddress = (items) => {
+    return {
+      type: 'UPDATE_Address_ITEMS',
+      payload: items,
+    };
+  };

@@ -8,7 +8,7 @@ import { updateTotalCost } from '../../redux/actions';
 
 
 
-function AddressDetails({progress, packageSel}) {
+function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   const dispatch = useDispatch();
   let ITEMADDED = useSelector((state) => state.selectedItems);
@@ -18,8 +18,6 @@ function AddressDetails({progress, packageSel}) {
   const [fromCity, setFromCity] = useState("Bangalore");
   const [toCity, setToCity] = useState("Bangalore");
   const [disabled, setDisabled] = useState(true);
-  const [totalItemCount, setTotalItemCount] = useState(0);
-  const [cft, setCft] = useState(0);
   const [addonsPrice, setAddonsPrice] = useState(0);
   const [basePrice, setBasePrice] = useState(0);
   const [floorCharges, setFloorCharges] = useState(0);
@@ -43,30 +41,6 @@ function AddressDetails({progress, packageSel}) {
   dispatch(updateTotalCost(totalcostData));
 
   }, [floorCharges, addonsPrice, basePrice, packageSel, cft, totalCost])
-
-  useEffect(() => {
-
-    const calculateTotalAndCft = () => {
-      let totalCount = 0;
-        let totalCft = 0;
-
-        for (const category in ITEMADDED) {
-            for (const subCategory in ITEMADDED[category]) {
-                for (const item in ITEMADDED[category][subCategory]) {
-                    const { cost, count } = ITEMADDED[category][subCategory][item];
-                    totalCount += count;
-                    totalCft += count * cost;
-                }
-            }
-        }
-
-      setTotalItemCount(totalCount);
-      setCft(totalCft);
-    };
-
-    // Call the calculation function
-    calculateTotalAndCft();
-  }, [ITEMADDED]);
 
   useEffect(() => {
     let calculatedTotalPrice = 0;

@@ -10,7 +10,7 @@ import "./Inventory.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
-const Inventory = ({ progress, setProgress }) => {
+const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
@@ -19,27 +19,53 @@ const Inventory = ({ progress, setProgress }) => {
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedMaterialMap, setSelectedMaterialMap] = useState({});
   const [selectedTypeMap, setSelectedTypeMap] = useState({});
-  const [selectedCategory, setSelectedCategory] = useState(
-    Object.keys(inventoryData)[0]
-  );
+  const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
   const handleItemClick = (item) => {
     setExpandedItem(item);
   };
 
   useEffect(() => {
-    setSelectedItems(selectedItemsRedux);
+    console.log("selectedItems", selectedItems);
+    if(selectedItems) {
+      setSelectedItems(selectedItemsRedux);
+    }
   }, []);
 
   const FlatrequireMents = () => {
+    
     if (progress === 'inventory') {
+      dispatch(updateSelectedItems(selectedItems));
       setProgress('dateselection');
     }};
     const prev = () => {
       if (progress === 'inventory') {
+        dispatch(updateSelectedItems(selectedItems));
         setProgress('requirement');
     }};
   
 
+    useEffect(() => {
+      const calculateTotalAndCft = () => {
+        let totalCount = 0;
+          let totalCft = 0;
+  
+          for (const category in selectedItems) {
+              for (const subCategory in selectedItems[category]) {
+                  for (const item in selectedItems[category][subCategory]) {
+                      const { cost, count } = selectedItems[category][subCategory][item];
+                      totalCount += count;
+                      totalCft += count * cost;
+                  }
+              }
+          }
+  
+        setTotalItemCount(totalCount);
+        setCft(totalCft);
+      };
+      calculateTotalAndCft();
+    }, [selectedItems]);
+
+    
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
@@ -60,7 +86,6 @@ const Inventory = ({ progress, setProgress }) => {
     const count = selectedItems[category][subItem][name].count;
     selectedItems[category][subItem][name].count = count + 1;
     setSelectedItems({ ...selectedItems });
-    dispatch(updateSelectedItems(selectedItems));
   };
   // const handlePlusClick = (name, typeMap, materialMap, category, subItem) => {
   //   if (!typeMap || !materialMap) {
@@ -182,7 +207,6 @@ const Inventory = ({ progress, setProgress }) => {
         }
         updatedSelectedItems[category][subItem][name].count = currentCount - 1;
       }
-      dispatch(updateSelectedItems(selectedItems));
       return updatedSelectedItems;
     });
   };
