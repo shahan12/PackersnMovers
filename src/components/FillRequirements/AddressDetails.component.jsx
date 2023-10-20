@@ -9,6 +9,11 @@ import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 
 function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
+  let totalCostRedux = useSelector((state) => state.TotalCostItems);
+  const [basePrice, setBasePrice] = useState(0);
+  const [floorCharges, setFloorCharges] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [totalCostBF, setTotalCostBF] = useState(0);
   const libraries = ['places'];
   const inputRefFrom = React.useRef();
   const inputRefTo = React.useRef();
@@ -17,6 +22,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   // let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
   
+  console.log(totalCostRedux.basePrice, "totalCostRedux");
   useEffect(() => {
     let calculatedTotalPrice = 0;
 
@@ -26,41 +32,38 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     }
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
+  
+
+  useEffect(() => {
+    if (totalCostRedux) {
+      setTotalCostBF(totalCostRedux.totalCostBF || 0); 
+      setBasePrice(totalCostRedux.basePrice || 0);  
+      setFloorCharges(totalCostRedux.floorCharges || 0); 
+    }
+  }, [totalCostRedux]);
 
   const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
   const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
   const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
   const [disabled, setDisabled] = useState(true);
   const [addonsPrice, setAddonsPrice] = useState('');
-  const [basePrice, setBasePrice] = useState(0);
-  const [floorCharges, setFloorCharges] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
-  const [totalCostBF, setTotalCostBF] = useState(0);
 
-  console.log("in address component : ", fromAddress);
-  console.log("in address component : ", toAddress);
-
-  const newTotalCost = addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0);
-  const newTotalCostBF = floorCharges + basePrice;
+  const newTotalCost = addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0);
 
   useEffect(() => {
     let totalcostData = {
-      "BasePrice": basePrice,
-      "FloorCharges": floorCharges,
       "totalItemCount": totalItemCount,
       "cft": cft,
       "addonsPrice": addonsPrice,
       "packaging": packageSel.packageName,
       "packagingPrice": packageSel.price,
       "totalCost": newTotalCost,
-      "totalCostBF": newTotalCostBF,
     }
 
-    setTotalCost(addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0));
-    setTotalCostBF(floorCharges +  basePrice);
+    setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0));
     dispatch(updateTotalCost(totalcostData));
 
-  }, [floorCharges, addonsPrice, basePrice, packageSel, cft,newTotalCost , newTotalCostBF]);
+  }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost]);
 
   useEffect(() => {
     if(!disabled) {
@@ -128,11 +131,11 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
         <div className="cost-details">
             <div className="cost-details-child"> 
               <span>Base Price</span>
-              <span></span>
+              <span>₹{basePrice}</span>
             </div>
             <div className="cost-details-child"> 
               <span>Floor Charges</span>
-              <span></span>
+              <span>₹{totalCostBF}</span>
             </div>
             <div className="cost-details-child"> 
               <span>Total Items Added</span>
