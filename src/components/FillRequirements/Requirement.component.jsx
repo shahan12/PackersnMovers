@@ -10,10 +10,11 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements } from '../../redux/actions';
 import { useSelector } from 'react-redux';
+import { json } from "react-router-dom";
 
 function Requirement({progress, setProgress}) {
 
@@ -23,6 +24,10 @@ function Requirement({progress, setProgress}) {
   const [familyType, setfamilyType] = useState("");
   const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
+  const [fromAddress,setFromAddress]=useState((sessionStorage.getItem('fromAddress')) || '');
+  const [toAddress,setToAddress]=useState((sessionStorage.getItem('toAddress')) || '');
+  const [distance,setDistance]=useState((sessionStorage.getItem('distance')) || '');
+  const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const houseTypes = [
     "1 RK",
     "1 BHK",
@@ -53,7 +58,7 @@ function Requirement({progress, setProgress}) {
 
 
   const FlatrequireMents = () => {
-
+    console.log("clicked next");
     const newRequirementData  = {
         "familyType": familyType,
         "houseType": houseType,
@@ -61,11 +66,13 @@ function Requirement({progress, setProgress}) {
         "floorNumber": floorNumber,
         "fromLift": liftValue,
         "toFloor": movingFloorNumber,
-        "toLift": movingToLiftValue
+        "toLift": movingToLiftValue,
+        toAddress,fromAddress,distance,phoneNumber
     }
     
     if (!isEqual(newRequirementData, RequirementsRedux.requirements)) {
       dispatch(updateRequirements(newRequirementData));
+      console.log("sending to backend function 1 :",newRequirementData);
       sendRequestReq(newRequirementData);
     }
     setProgress('inventory');
@@ -87,8 +94,10 @@ function Requirement({progress, setProgress}) {
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      const response = await sendRequestToBackend(API_Req_Data_JSON);
+      console.log("finally sending backend  function 2:",API_Req_Data_JSON);
+      const response = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
       setResponseRequirementAPIData(response);
+      console.log("rcd from backend :", response);
     } catch (error) {
       console.error('Error:', error);
     }

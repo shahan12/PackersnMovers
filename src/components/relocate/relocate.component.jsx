@@ -8,7 +8,7 @@ import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 import { useDispatch } from 'react-redux';
 import { updateAddress } from '../../redux/actions';
 
-function Relocate(props) {
+function Relocate({setLoginModal}) {
   
   const dispatch = useDispatch();
   const libraries = ['places'];
@@ -55,10 +55,16 @@ function Relocate(props) {
           'toAddress': toCoun
         }
     }
+    if(sessionStorage.getItem('auth')==='false'){
+      setLoginModal(true);
+    }
+    else{
+      window.open("/fill-details", "_self");
+    }
     setModalOpen(true);
   };
 
-
+  console.log(distance);
 
   useEffect(() => {
     calculateDistance();
@@ -94,6 +100,9 @@ function Relocate(props) {
         (response, status) => {
           if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
             setDistance(response.rows[0].elements[0].distance.text);
+            sessionStorage.setItem('fromAddress',fromAddress);
+            sessionStorage.setItem('toAddress',toAddress);
+            sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);
           } else {
             setDistance(null); // Unable to calculate distance
           }

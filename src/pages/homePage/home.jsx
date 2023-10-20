@@ -24,7 +24,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Popper from 'popper.js';
 
 
-function Home({ setShowPopUp, loginModal }) {
+function Home({ setShowPopUp, loginModal, setLoginModal }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1, // Adjust the threshold as needed
@@ -93,7 +93,7 @@ function Home({ setShowPopUp, loginModal }) {
           </div>
           {visible && show && (
             <div className="home-relocate-wrapper">
-              <Relocate />
+              <Relocate setLoginModal={setLoginModal}/>
             </div>
           )}
           <div className="section-container container-service" id="service">

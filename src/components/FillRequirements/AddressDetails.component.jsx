@@ -24,6 +24,11 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [totalCost, setTotalCost] = useState(0);
   const [totalCostBF, setTotalCostBF] = useState(0);
 
+  useEffect(()=>{
+    setFromCity(sessionStorage.getItem('fromAddress'));
+    setToCity(sessionStorage.getItem('toAddress'));
+  },[])
+
   useEffect(() => {
     let calculatedTotalPrice = 0;
 
@@ -75,6 +80,9 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
         ></img>
       </div>
       <div className="relocate-drop-down-container margin-bottom-10">
+        <span>to address-&gt;{toCity}</span>
+        <br />
+        <span>from address-&gt;{fromCity}</span>
         <DropDown
           value={fromCity}
           setValue={setFromCity}
