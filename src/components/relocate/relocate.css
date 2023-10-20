@@ -83,3 +83,6 @@
 .cta-button {
     cursor: pointer;
 }
+.cta-button:disabled {
+    background-color: #ccc; 
+  }

@@ -9,7 +9,7 @@
     {
       "name": "Labor",
       "price": 100,
-      "max item": 1,
+      "max item": 5,
       "desc": "This is the description for Carton addon."
     },
     {

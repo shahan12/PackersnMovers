@@ -4,20 +4,19 @@ import DateOption from '../OptionsSelect/dateOption.component';
 import AddOns from '../OptionsSelect/AddOns.component';
 import TimeSelect from '../OptionsSelect/TimeSelect.component';
 import PackageSelect from '../OptionsSelect/PackageSelect.component';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateDateTime } from '../../redux/actions';
 
 import "./calendar.css";
 
-const Dateselection = ({progress, setProgress, setPackageSel}) => {
+const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
 
-  const [selectedDay, setSelectedDay] = useState('null');
-  const [selectedTime, setSelectedTime] = useState('null');
-  const [addOnItems, setAddOnItems] = useState('null');
+  let DateTimeRedux = useSelector((state) => state.DateTime);
+  const [selectedDay, setSelectedDay] = useState(DateTimeRedux.selectedDay || "");
+  const [selectedTime, setSelectedTime] = useState(DateTimeRedux.selectedTime || "");
+  const [addOnItems, setAddOnItems] = useState({});
   
   const dispatch = useDispatch();
-
-
   useEffect(() => {
   
     let dayTimeSelection = {
@@ -30,20 +29,23 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
     }, [selectedDay, selectedTime])
   
   const FlatrequireMents = () => {
-    setProgress('progress'); 
+   
+    setProgress('progress');
+  }
+
+  const handleDaySelect = (day) => {
+    setSelectedDay(day);
   };
-    const handleDaySelect = (day) => {
-      setSelectedDay(day);
-    };
-    const handleTimeSelect = (time) => {
-      setSelectedTime(time);
-    };
-    const handleAddOnselect = (adds) => {
-      setAddOnItems(adds);
-    };
-    const handlePackageSelect = (adds) => {
-      setPackageSel(adds);
-    };
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+  const handleAddOnselect = (adds) => {
+    setAddOnItems(adds);
+  };
+  const handlePackageSelect = (adds) => {
+    setPackageSel(adds);
+  };
+
 
   const handlePrevious = () => {
     setProgress('inventory');
@@ -56,7 +58,7 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
       </div>
       <div className="date-type-wrapper">
         <h3>Choose Date</h3>
-        <DateOption onSelect={handleDaySelect} />
+        <DateOption selectedDayValue={selectedDay} onSelect={handleDaySelect} />
       </div>
 
       <div className="date-type-wrapper">
@@ -74,12 +76,13 @@ const Dateselection = ({progress, setProgress, setPackageSel}) => {
       <div className="date-type-wrapper">
         <h3>Select Packaging</h3>
           <PackageSelect
+            packageSel={packageSel}
             onSelect={handlePackageSelect}
           />
       </div>
       <div className="fill-req-CTA-container flex nextbuttonMove">
         <div className='prevButton' onClick={handlePrevious}>&lt; Previous</div>
-        <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+        <button disabled={!selectedDay || !selectedDay || !packageSel} className="cta-button" onClick={FlatrequireMents}>NEXT</button>
 
       </div>
     </div>

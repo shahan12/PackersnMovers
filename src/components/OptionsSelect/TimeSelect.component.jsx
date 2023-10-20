@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./options.css";
 
-const TimeSelect = ({ onSelect }) => {
-  const [selectedRange, setSelectedRange] = useState(null);
-
+const TimeSelect = ({ onSelect, selectedTime}) => {
+  const [selectedRange, setSelectedRange] = useState(selectedTime);
+  
   const timeRanges = [
     { id: 1, label: "6-8 AM" },
     { id: 2, label: "8-10 AM" },
@@ -13,7 +13,7 @@ const TimeSelect = ({ onSelect }) => {
 
   const handleRangeClick = (range) => {
     setSelectedRange(range);
-    onSelect(range.label);
+    onSelect(range);
   };
 
   const firstRow = timeRanges.slice(0, 2);

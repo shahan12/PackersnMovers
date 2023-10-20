@@ -5,15 +5,19 @@ import "./calendar.css";
 import Modal from "react-modal";
 import ThankYouModal from "../ThankYouModal/thankYouModal.component";
 const Progress = ({ progress, setProgress }) => {
-  let ITEMADDED = useSelector((state) => state.selectedItems);
-  console.log("ITEMADDED", ITEMADDED);
+
+  let RequirementsRedux = useSelector((state) => state.RequirementsItems);        // all requirementData like floor, lift, family
+  let AddOnsADDED = useSelector((state) => state.addOnsItems);    // all add ons items
+  let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
+  let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
+  let totalCost = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
+
+  console.log("DateTimeRedux", DateTimeRedux, totalCost, ITEMADDED, RequirementsRedux, AddOnsADDED);
   const prev = () => {
     if (progress === "progress") {
       setProgress("dateselection");
     }
   };
-
-  let DateTime = useSelector((state) => state.DateTime);
 
   const bookingConfirm = () => {
     if (progress === "progress") {
@@ -21,7 +25,6 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  let totalCost = useSelector((state) => state.TotalCostItems);
 
   const [isModalOpen, setModalOpen] = useState(false);
 

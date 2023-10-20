@@ -10,7 +10,7 @@ import "./Inventory.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
-const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
+const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
 
@@ -57,7 +57,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     setCft(totalCft);
   };
 
-  console.log("selectedItems", selectedItems);
   const handleAddVariation = (category, subItem, name) => {
     const itemToDuplicate = inventoryData[category][subItem][name];
     let variationCount = 1;
@@ -160,7 +159,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
     const materialValue =
       inventoryData[category][subItem][name].material[material];
     const typeValue = inventoryData[category][subItem][name].type[type];
-    console.log(base, materialValue,typeValue);
     return base + materialValue + typeValue;
   };
 
@@ -271,7 +269,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, setCft }) => {
           <img style={{ marginRight: "0.5rem" }} src={itembox} />
           <span>Total Items Added</span>
         </div>
-        {itemCount}
+        {totalItemCount}
       </div>
       <div className="Inventory-container">
         <span>Add Items from Inventory</span>

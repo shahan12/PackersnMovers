@@ -18,14 +18,17 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [fromCity, setFromCity] = useState("Bangalore");
   const [toCity, setToCity] = useState("Bangalore");
   const [disabled, setDisabled] = useState(true);
-  const [addonsPrice, setAddonsPrice] = useState(0);
+  const [addonsPrice, setAddonsPrice] = useState('');
   const [basePrice, setBasePrice] = useState(0);
   const [floorCharges, setFloorCharges] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [totalCostBF, setTotalCostBF] = useState(0);
 
   useEffect(() => {
-  setTotalCost(addonsPrice + floorCharges +  basePrice + packageSel.price ? packageSel.price : 0);
-
+  
+    setTotalCost(addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0));
+  
+    setTotalCostBF(floorCharges +  basePrice);
   let totalcostData = {
     "BasePrice": basePrice,
     "FloorCharges": floorCharges,
@@ -35,11 +38,12 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     "packaging": packageSel.packageName,
     "packagingPrice": packageSel.price,
     "totalCost": totalCost,
+    "totalCostBF": totalCostBF,
   }
-  
+
   dispatch(updateTotalCost(totalcostData));
 
-  }, [floorCharges, addonsPrice, basePrice, packageSel, cft, totalCost])
+  }, [floorCharges, addonsPrice, basePrice, packageSel, cft])
 
   useEffect(() => {
     let calculatedTotalPrice = 0;
@@ -48,10 +52,8 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
       const item = AddOnsADDED[itemName];
       calculatedTotalPrice += item.price * item.count;
     }
-
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
-
 
   return (
     <div className="requirements-section-2 flex">
@@ -112,11 +114,11 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
             </div>
             <div className="cost-details-child"> 
               <span>Add Ons</span>
-              <span>{addonsPrice}</span>
+              <span>₹{addonsPrice}</span>
             </div>
             <div className="cost-details-child"> 
               <span>Packaging</span>
-              <span>{packageSel.price}</span>
+              <span>₹{packageSel.price}</span>
             </div>
             <div className="cost-details-child cost-line"> 
               <span>Total Cost: </span>

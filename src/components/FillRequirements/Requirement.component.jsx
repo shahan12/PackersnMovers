@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./fillReq.css";
 import "../../images/bachelor.svg";
 import "../../images/family.svg";
@@ -13,10 +13,13 @@ import downArray from '../../images/downarrow.png';
 import { sendRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements } from '../../redux/actions';
+import { useSelector } from 'react-redux';
 
 function Requirement({progress, setProgress}) {
 
   const dispatch = useDispatch();
+
+  let RequirementsRedux = useSelector((state) => state.RequirementsItems);
   const [familyType, setfamilyType] = useState("");
   const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
@@ -36,12 +39,23 @@ function Requirement({progress, setProgress}) {
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [familyNumber, setFamilyNumber] = useState(2);
 
-  const FlatrequireMents = () => {
-    if (progress === 'requirement') {
-      setProgress('inventory');
+  useEffect(() => {
+    if (RequirementsRedux) {
+      setfamilyType(RequirementsRedux.requirements.familyType || ""); 
+      setHouseType(RequirementsRedux.requirements.houseType || ""); 
+      setFamilyNumber(RequirementsRedux.requirements.familyNumber || 2); 
+      setFloorNumber(RequirementsRedux.requirements.floorNumber || ""); 
+      setLiftValue(RequirementsRedux.requirements.fromLift || ""); 
+      setMovingFloorNumber(RequirementsRedux.requirements.toFloor || ""); 
+      setMovingToLiftValue(RequirementsRedux.requirements.toLift || ""); 
     }
-    const requirementData = {
-        "familytype": familyType,
+  }, [RequirementsRedux]); 
+
+
+  const FlatrequireMents = () => {
+
+    const newRequirementData  = {
+        "familyType": familyType,
         "houseType": houseType,
         "familyNumber": familyNumber,
         "floorNumber": floorNumber,
@@ -50,10 +64,26 @@ function Requirement({progress, setProgress}) {
         "toLift": movingToLiftValue
     }
     
-    dispatch(updateRequirements(requirementData));
-    sendRequestReq(requirementData);
+    if (!isEqual(newRequirementData, RequirementsRedux.requirements)) {
+      dispatch(updateRequirements(newRequirementData));
+      sendRequestReq(newRequirementData);
+    }
+    setProgress('inventory');
   };
+  function isEqual(objA, objB) {
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
+    if (keysA.length !== keysB.length) {
+      return false;
+    }
+    for (let key of keysA) {
+      if (objA[key] !== objB[key]) {
+        return false;
+      }
+    }
 
+    return true;
+  }
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
@@ -215,8 +245,21 @@ function Requirement({progress, setProgress}) {
           </div>
         </div>
         <div className="fill-req-CTA-container flex">
-        <div className='prevButton'></div>
-          <button className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+        <div className='prevButton'></div><button
+          disabled={
+            !familyType ||
+            !houseType ||
+            !familyNumber ||
+            !floorNumber ||
+            !liftValue ||
+            !movingFloorNumber ||
+            !movingToLiftValue
+          }
+          className="cta-button"
+          onClick={FlatrequireMents}
+        >
+          NEXT
+        </button>
         </div>
       </div>
   );
