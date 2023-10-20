@@ -10,7 +10,7 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendBasePriceRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend,sendFloorChargeRequestToBackend,sendTotalBoxRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements } from '../../redux/actions';
 import { useSelector } from 'react-redux';
@@ -22,7 +22,9 @@ function Requirement({progress, setProgress}) {
 
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);
   const [familyType, setfamilyType] = useState("");
-  const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
+  const [basePriceFromAPI, setBasePriceFromAPI] = useState('');
+  const [floorChargeFromAPI, setFloorChargeFromAPI] = useState('');
+  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState('');
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const houseTypes = [
@@ -103,10 +105,24 @@ function Requirement({progress, setProgress}) {
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      console.log("finally sending backend  function 2:",API_Req_Data_JSON);
-      const response = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      setResponseRequirementAPIData(response);
-      console.log("rcd from backend :", response);
+      // console.log("finally sending to basePrice backend function 2:",API_Req_Data_JSON);
+      const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
+      setBasePriceFromAPI(basePriceResponse);
+      console.log("rcd from basePrice backend :", basePriceResponse);
+
+      // console.log("finally sending to floorPrice backend function 2:",API_Req_Data_JSON);
+      const floorChargeResponse = await sendFloorChargeRequestToBackend(API_Req_Data_JSON);
+      setFloorChargeFromAPI(floorChargeResponse);
+      console.log("rcd from floorPrice backend :", floorChargeResponse);
+      
+      // console.log("finally sending to totalBox backend function 2:",API_Req_Data_JSON);
+      const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
+      setTotalBoxFromAPI(totalBoxResponse);
+      console.log("rcd from totalBox backend :", totalBoxResponse);
+
+      console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
+      // store these values in redux
+
     } catch (error) {
       console.error('Error:', error);
     }

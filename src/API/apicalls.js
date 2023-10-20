@@ -39,9 +39,32 @@ export const sendRegisterRequestToBackend = async (data) => {
 
 export const sendBasePriceRequestToBackend = async (data) => {
   try {
-    console.log("final data to send backend : ", data);
-    const response = await instance.put('http://localhost:3001/basePrice', data);
-    return response.data;
+    console.log("final data to send basePrice backend : ", data);
+    // const response = await instance.put('http://localhost:3001/basePrice', data);
+    // return response.data;
+    return 100;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendFloorChargeRequestToBackend = async (data) => {
+  try {
+    console.log("final data to send floorCharges backend : ", data);
+    // const response = await instance.put('http://localhost:3001/floorCharges', data);
+    // return response.data;
+    return 50;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendTotalBoxRequestToBackend = async (data) => {
+  try {
+    console.log("final data to send totalBox backend : ", data);
+    // const response = await instance.put('http://localhost:3001/totalNoBoxes', data);
+    // return response.data;
+    return 75;
   } catch (error) {
     throw error;
   }
