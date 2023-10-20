@@ -40,7 +40,8 @@ function Requirement({progress, setProgress}) {
   const [liftValue, setLiftValue] = useState("");
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [familyNumber, setFamilyNumber] = useState(2);
-
+  const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
+  console.log(sessionStorage.getItem('distance'));
   useEffect(() => {
     if (RequirementsRedux) {
       setfamilyType(RequirementsRedux.requirements.familyType || ""); 
@@ -48,14 +49,15 @@ function Requirement({progress, setProgress}) {
       setFamilyNumber(RequirementsRedux.requirements.familyNumber || 2); 
       setFloorNumber(RequirementsRedux.requirements.floorNumber || ""); 
       setLiftValue(RequirementsRedux.requirements.fromLift || ""); 
-      setMovingFloorNumber(RequirementsRedux.requirements.toFloor || ""); 
+      setMovingFloorNumber(RequirementsRedux.requirements.toFloor || "");
       setMovingToLiftValue(RequirementsRedux.requirements.toLift || "");
+      setDistance(RequirementsRedux.requirements.distance || sessionStorage.getItem('distance'));
     }
   }, [RequirementsRedux]); 
 
   const FlatrequireMents = () => {
     console.log("clicked next");
-    const newRequirementData  = {
+    const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
         "houseType": houseType,
         "familyNumber": familyNumber,
@@ -66,9 +68,21 @@ function Requirement({progress, setProgress}) {
         "phoneNumber":phoneNumber
     }
     
+    const forAPIRequirement  = {          // for API CALL IT INCLUDES DISTANCE
+      "familyType": familyType,
+      "houseType": houseType,
+      "familyNumber": familyNumber,
+      "floorNumber": floorNumber,
+      "fromLift": liftValue,
+      "toFloor": movingFloorNumber,
+      "toLift": movingToLiftValue,
+      "phoneNumber":phoneNumber,
+      distance
+  }
+    
       dispatch(updateRequirements(newRequirementData));
-      console.log("sending to backend function 1 :",newRequirementData);
-      sendRequestReq(newRequirementData);
+      console.log("distance :",distance);
+      sendRequestReq(forAPIRequirement);
 
       setProgress('inventory');
   };
