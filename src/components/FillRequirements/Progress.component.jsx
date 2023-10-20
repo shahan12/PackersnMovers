@@ -14,14 +14,13 @@ const Progress = ({ progress, setProgress }) => {
 
   
   const [totalCost, setTotalCost] = useState();
-  console.log("from redux total item ",ITEMADDED);
+  console.log("from redux total item ",RequirementsRedux);
   useEffect(() => {
     if (RequirementsRedux) {
     setTotalCost(totalCostRedux);
     }
   }, [totalCostRedux]);
 
-  console.log("totalCost", totalCost);
 
   const prev = () => {
     if (progress === "progress") {

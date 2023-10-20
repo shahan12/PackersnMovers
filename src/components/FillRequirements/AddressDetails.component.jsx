@@ -4,31 +4,19 @@ import { useSelector } from 'react-redux';
 import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
 import { useDispatch } from 'react-redux';
-import { updateTotalCost } from '../../redux/actions';
-
-
+import { updateTotalCost, updateRequirements } from '../../redux/actions';
+import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 
 function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
+  const libraries = ['places'];
+  const inputRefFrom = React.useRef();
+  const inputRefTo = React.useRef();
   const dispatch = useDispatch();
-  let ITEMADDED = useSelector((state) => state.selectedItems);
-  let Requirements = useSelector((state) => state.RequirementsItems);
+  // let ITEMADDED = useSelector((state) => state.selectedItems);
+  // let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
-
-  const [fromCity, setFromCity] = useState("Bangalore");
-  const [toCity, setToCity] = useState("Bangalore");
-  const [disabled, setDisabled] = useState(true);
-  const [addonsPrice, setAddonsPrice] = useState('');
-  const [basePrice, setBasePrice] = useState(0);
-  const [floorCharges, setFloorCharges] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
-  const [totalCostBF, setTotalCostBF] = useState(0);
-
-  useEffect(()=>{
-    setFromCity(sessionStorage.getItem('fromAddress'));
-    setToCity(sessionStorage.getItem('toAddress'));
-  },[])
-
+  
   useEffect(() => {
     let calculatedTotalPrice = 0;
 
@@ -39,7 +27,16 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
 
-  
+  const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
+  const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
+  const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
+  const [disabled, setDisabled] = useState(true);
+  const [addonsPrice, setAddonsPrice] = useState('');
+  const [basePrice, setBasePrice] = useState(0);
+  const [floorCharges, setFloorCharges] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [totalCostBF, setTotalCostBF] = useState(0);
+
   const newTotalCost = addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0);
   const newTotalCostBF = floorCharges + basePrice;
 
@@ -62,41 +59,99 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   }, [floorCharges, addonsPrice, basePrice, packageSel, cft,newTotalCost , newTotalCostBF]);
 
+  useEffect(() => {
+    if(!disabled) {
+      calculateDistance();
+    }
+  }, [fromAddress, toAddress]);
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  const handleFromPlaceChanged = () => {
+    const [place] = inputRefFrom.current.getPlaces();
+    if (place) {
+      setFromAddress(place.formatted_address);
+    }
+  };
+
+  const handleToPlaceChanged = () => {
+    const [place] = inputRefTo.current.getPlaces();
+    if (place) {
+      setToAddress(place.formatted_address);
+    }
+  };
+  const calculateDistance = () => {
+    if (fromAddress && toAddress) {
+      const service = new window.google.maps.DistanceMatrixService();
+      service.getDistanceMatrix(
+        {
+          origins: [fromAddress],
+          destinations: [toAddress],
+          travelMode: 'DRIVING',
+        },
+        (response, status) => {
+          
+          if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+            setDistance(response.rows[0].elements[0].distance.text);
+            sessionStorage.setItem('fromAddress',fromAddress);
+            sessionStorage.setItem('toAddress',toAddress);
+            sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);
+            const requirementData = {
+              'fromAddress': fromAddress,
+              'toAddress': toAddress,
+              'distance': response.rows[0].elements[0].distance.text,
+            }
+            dispatch(updateRequirements(requirementData));
+          } else {
+            alert("Region Not Supported.");
+            setDistance(null); // Unable to calculate distance
+          }
+        }
+      );
+    }
+  }
+
   return (
     <div className="requirements-section-2 flex">
     <div className="requirements-your-details-wrapper">
       <div className="border-bottom extra-margin">
         <h2>Your Details</h2>
       </div>
-      <div className="flex space-between requirement-sub-header">
+      <div className="flex space-between requirement-sub-header margin-bottom-10">
         <span>Address</span>
-        <img
-          src={Edit}
-          alt={"Edit-Icon"}
-          className="edit-icon"
-          onClick={() => {
-            setDisabled(!disabled);
-          }}
+        {progress === 'requirement'  && (
+          <img
+            src={Edit}
+            alt={"Edit-Icon"}
+            className="edit-icon"
+            onClick={() => {
+              setDisabled(!disabled);
+            }}
         ></img>
+        )}
       </div>
       <div className="relocate-drop-down-container margin-bottom-10">
-        <span>to address-&gt;{toCity}</span>
-        <br />
-        <span>from address-&gt;{fromCity}</span>
-        <DropDown
-          value={fromCity}
-          setValue={setFromCity}
-          option={Data.IndianCitiesPinCode}
-          disabled={disabled}
-        />
+      {isLoaded && (
+          <StandaloneSearchBox 
+            onLoad={ref => (inputRefFrom.current = ref)} 
+            onPlacesChanged={handleFromPlaceChanged} 
+          >
+            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress}/>
+          </StandaloneSearchBox>
+        )}
       </div>
       <div className="relocate-drop-down-container">
-        <DropDown
-          value={toCity}
-          setValue={setToCity}
-          option={Data.IndianCitiesPinCode}
-          disabled={disabled}
-        />
+      {isLoaded && (
+          <StandaloneSearchBox 
+            onLoad={ref => (inputRefTo.current = ref)} 
+            onPlacesChanged={handleToPlaceChanged} 
+          >
+            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress} />
+          </StandaloneSearchBox>
+        )}
       </div>
     </div>
     {progress === 'progress' ? ('') : (

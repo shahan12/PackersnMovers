@@ -36,12 +36,7 @@ function Relocate({setLoginModal}) {
     e.preventDefault();
 
     if(activeTab === "Within City" && fromAddress && toAddress) {
-      const requirementData = {
-        'fromAddress': fromAddress,
-        'toAddress': toAddress,
-        'distance': distance,
-      }
-      dispatch(updateAddress(requirementData));
+
     }
       else if (activeTab === "Between City" && fromCity && toCity) {
       const requirementData = {
@@ -98,12 +93,21 @@ function Relocate({setLoginModal}) {
           travelMode: 'DRIVING',
         },
         (response, status) => {
+          
           if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
             setDistance(response.rows[0].elements[0].distance.text);
+            console.log(response);
             sessionStorage.setItem('fromAddress',fromAddress);
             sessionStorage.setItem('toAddress',toAddress);
             sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);
+            const requirementData = {
+              'fromAddress': fromAddress,
+              'toAddress': toAddress,
+              'distance': distance,
+            }
+            dispatch(updateAddress(requirementData));
           } else {
+            alert("Region Not Supported.");
             setDistance(null); // Unable to calculate distance
           }
         }
@@ -173,7 +177,7 @@ function Relocate({setLoginModal}) {
                 onPlacesChanged={handleToPlaceChanged} 
                 options={searchOptions}
                 >
-                  <input type="text" className="form-control" placeholder="From Address" />
+                  <input type="text" className="form-control" placeholder="To Address" />
                 </StandaloneSearchBox>
               )}
             </div>
@@ -224,7 +228,7 @@ function Relocate({setLoginModal}) {
       )}
 
       <div className="cta-container">
-        <button onClick={handleSubmit} className="cta-button check-price">
+        <button onClick={handleSubmit} disabled={activeTab === "Within City" ? (!fromAddress || !toAddress) : ''} className="cta-button check-price">
           Check Prices
         </button>
         {/* <RegisterModal isOpen={modalOpen} onClose={closeModal} postData={postData}/> */}

@@ -24,9 +24,6 @@ function Requirement({progress, setProgress}) {
   const [familyType, setfamilyType] = useState("");
   const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
-  const [fromAddress,setFromAddress]=useState((sessionStorage.getItem('fromAddress')) || '');
-  const [toAddress,setToAddress]=useState((sessionStorage.getItem('toAddress')) || '');
-  const [distance,setDistance]=useState((sessionStorage.getItem('distance')) || '');
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const houseTypes = [
     "1 RK",
@@ -43,7 +40,8 @@ function Requirement({progress, setProgress}) {
   const [liftValue, setLiftValue] = useState("");
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [familyNumber, setFamilyNumber] = useState(2);
-
+  const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
+  console.log(sessionStorage.getItem('distance'));
   useEffect(() => {
     if (RequirementsRedux) {
       setfamilyType(RequirementsRedux.requirements.familyType || ""); 
@@ -51,15 +49,15 @@ function Requirement({progress, setProgress}) {
       setFamilyNumber(RequirementsRedux.requirements.familyNumber || 2); 
       setFloorNumber(RequirementsRedux.requirements.floorNumber || ""); 
       setLiftValue(RequirementsRedux.requirements.fromLift || ""); 
-      setMovingFloorNumber(RequirementsRedux.requirements.toFloor || ""); 
-      setMovingToLiftValue(RequirementsRedux.requirements.toLift || ""); 
+      setMovingFloorNumber(RequirementsRedux.requirements.toFloor || "");
+      setMovingToLiftValue(RequirementsRedux.requirements.toLift || "");
+      setDistance(RequirementsRedux.requirements.distance || sessionStorage.getItem('distance'));
     }
   }, [RequirementsRedux]); 
 
-
   const FlatrequireMents = () => {
     console.log("clicked next");
-    const newRequirementData  = {
+    const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
         "houseType": houseType,
         "familyNumber": familyNumber,
@@ -67,15 +65,26 @@ function Requirement({progress, setProgress}) {
         "fromLift": liftValue,
         "toFloor": movingFloorNumber,
         "toLift": movingToLiftValue,
-        toAddress,fromAddress,distance,phoneNumber
+        "phoneNumber":phoneNumber
     }
     
-    if (!isEqual(newRequirementData, RequirementsRedux.requirements)) {
+    const forAPIRequirement  = {          // for API CALL IT INCLUDES DISTANCE
+      "familyType": familyType,
+      "houseType": houseType,
+      "familyNumber": familyNumber,
+      "floorNumber": floorNumber,
+      "fromLift": liftValue,
+      "toFloor": movingFloorNumber,
+      "toLift": movingToLiftValue,
+      "phoneNumber":phoneNumber,
+      distance
+  }
+    
       dispatch(updateRequirements(newRequirementData));
-      console.log("sending to backend function 1 :",newRequirementData);
-      sendRequestReq(newRequirementData);
-    }
-    setProgress('inventory');
+      console.log("distance :",distance);
+      sendRequestReq(forAPIRequirement);
+
+      setProgress('inventory');
   };
   function isEqual(objA, objB) {
     const keysA = Object.keys(objA);
