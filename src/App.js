@@ -38,6 +38,7 @@ function App() {
               showPopUp={showPopUp}
               setShowPopUp={setShowPopUp}
               loginModal={loginModal}
+              setLoginModal={setLoginModal}
             />
           }
         />
