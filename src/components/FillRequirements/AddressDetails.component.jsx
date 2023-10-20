@@ -116,44 +116,6 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   return (
     <div className="requirements-section-2 flex">
-    <div className="requirements-your-details-wrapper">
-      <div className="border-bottom extra-margin">
-        <h2>Your Details</h2>
-      </div>
-      <div className="flex space-between requirement-sub-header margin-bottom-10">
-        <span>Address</span>
-        {progress === 'requirement'  && (
-          <img
-            src={Edit}
-            alt={"Edit-Icon"}
-            className="edit-icon"
-            onClick={() => {
-              setDisabled(!disabled);
-            }}
-        ></img>
-        )}
-      </div>
-      <div className="relocate-drop-down-container margin-bottom-10">
-      {isLoaded && (
-          <StandaloneSearchBox 
-            onLoad={ref => (inputRefFrom.current = ref)} 
-            onPlacesChanged={handleFromPlaceChanged} 
-          >
-            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress}/>
-          </StandaloneSearchBox>
-        )}
-      </div>
-      <div className="relocate-drop-down-container">
-      {isLoaded && (
-          <StandaloneSearchBox 
-            onLoad={ref => (inputRefTo.current = ref)} 
-            onPlacesChanged={handleToPlaceChanged} 
-          >
-            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress} />
-          </StandaloneSearchBox>
-        )}
-      </div>
-    </div>
     {progress === 'progress' ? ('') : (
       
       <div className="requirements-your-details-wrapper">
@@ -192,6 +154,44 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
         </div>
       </div>
     )}
+    <div className="requirements-your-details-wrapper">
+      <div className="border-bottom extra-margin">
+        <h2>Your Details</h2>
+      </div>
+      <div className="flex space-between requirement-sub-header margin-bottom-10">
+        <span>Address</span>
+        {progress === 'requirement'  && (
+          <img
+            src={Edit}
+            alt={"Edit-Icon"}
+            className="edit-icon"
+            onClick={() => {
+              setDisabled(!disabled);
+            }}
+        ></img>
+        )}
+      </div>
+      <div className="relocate-drop-down-container margin-bottom-10">
+      {isLoaded && (
+          <StandaloneSearchBox 
+            onLoad={ref => (inputRefFrom.current = ref)} 
+            onPlacesChanged={handleFromPlaceChanged} 
+          >
+            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress}/>
+          </StandaloneSearchBox>
+        )}
+      </div>
+      <div className="relocate-drop-down-container">
+      {isLoaded && (
+          <StandaloneSearchBox 
+            onLoad={ref => (inputRefTo.current = ref)} 
+            onPlacesChanged={handleToPlaceChanged} 
+          >
+            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress} />
+          </StandaloneSearchBox>
+        )}
+      </div>
+    </div>
   </div>
   );
 }

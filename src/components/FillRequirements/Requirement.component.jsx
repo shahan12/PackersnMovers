@@ -77,7 +77,7 @@ function Requirement({progress, setProgress}) {
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
       "phoneNumber":phoneNumber,
-      distance
+      distance                //use this distance
   }
     
       dispatch(updateRequirements(newRequirementData));
