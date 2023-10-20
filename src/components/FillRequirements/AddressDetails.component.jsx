@@ -37,6 +37,9 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [totalCost, setTotalCost] = useState(0);
   const [totalCostBF, setTotalCostBF] = useState(0);
 
+  console.log("in address component : ", fromAddress);
+  console.log("in address component : ", toAddress);
+
   const newTotalCost = addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0);
   const newTotalCostBF = floorCharges + basePrice;
 

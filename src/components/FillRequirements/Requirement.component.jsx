@@ -43,6 +43,8 @@ function Requirement({progress, setProgress}) {
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [familyNumber, setFamilyNumber] = useState(2);
   const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
+  const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
+  const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
   console.log(sessionStorage.getItem('distance'));
   useEffect(() => {
     if (RequirementsRedux) {
@@ -54,6 +56,8 @@ function Requirement({progress, setProgress}) {
       setMovingFloorNumber(RequirementsRedux.requirements.toFloor || "");
       setMovingToLiftValue(RequirementsRedux.requirements.toLift || "");
       setDistance(RequirementsRedux.requirements.distance || sessionStorage.getItem('distance'));
+      setFromAddress(RequirementsRedux.requirements.fromAddress || sessionStorage.getItem('fromAddress'));
+      setToAddress(RequirementsRedux.requirements.toAddress || sessionStorage.getItem('toAddress'));
     }
   }, [RequirementsRedux]); 
 
@@ -79,7 +83,7 @@ function Requirement({progress, setProgress}) {
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
       "phoneNumber":phoneNumber,
-      distance                //use this distance
+      distance, fromAddress, toAddress            //use this distance
   }
     
       dispatch(updateRequirements(newRequirementData));
@@ -110,12 +114,14 @@ function Requirement({progress, setProgress}) {
       setBasePriceFromAPI(basePriceResponse);
       console.log("rcd from basePrice backend :", basePriceResponse);
 
-      // console.log("finally sending to floorPrice backend function 2:",API_Req_Data_JSON);
-      const floorChargeResponse = await sendFloorChargeRequestToBackend(API_Req_Data_JSON);
+      // console.log("to calculate floor charges ");
+      // console.log(parseInt(API_Req_Data.floorNumber),API_Req_Data.fromLift,parseInt(API_Req_Data.toFloor),API_Req_Data.toLift);
+      let floorChargeResponse = 0;
+      if(API_Req_Data.fromLift==='No') floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
+      if(API_Req_Data.toLift==='No') floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
       setFloorChargeFromAPI(floorChargeResponse);
-      console.log("rcd from floorPrice backend :", floorChargeResponse);
+      console.log("calculated floorPrice :", floorChargeResponse);
       
-      // console.log("finally sending to totalBox backend function 2:",API_Req_Data_JSON);
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
       setTotalBoxFromAPI(totalBoxResponse);
       console.log("rcd from totalBox backend :", totalBoxResponse);
