@@ -20,8 +20,9 @@ export const sendRequestToBackend = async (data) => {
 export const sendLoginRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
-    const response = await axios.get('http://localhost:3001/login', {params :data});
-    return response.data;
+    // const response = await axios.get('http://localhost:3001/login', {params :data});
+    // return response.data;
+    return "Login Sucessfull..."
   } catch (error) {
     throw error;
   }

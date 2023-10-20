@@ -68,20 +68,12 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
   };
   return (
     <>
-      <div className="home-landing-container">
-        <div className="home-elements-container">
-          <div className="section-container container-home" id="home">
-            <img
-              className="img-left-sticky"
-              src={purpleCircle}
-              alt="process-icon"
-            />
-            <img
-              className="img-right-sticky"
-              src={orangeCircle1}
-              alt="process-icon"
-            />
-            <div className="container-item">
+     
+    <div className="container-fluid home-header-container">
+      <div className="conatiner home-landing-container">
+          <div className="row">
+          <div className="col-lg-6" id="home">
+          <div className="container-item">
               <div ref={ref}>
                 <img
                   className={`landing-img ${inView ? "item-animate" : ""}`}
@@ -91,17 +83,16 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               </div>
             </div>
           </div>
-          {visible && show && (
+          </div>
+      </div>
+
+      {visible && show && (
             <div className="home-relocate-wrapper">
-              <Relocate setLoginModal={setLoginModal}/>
+              <Relocate className="relocate" setLoginModal={setLoginModal}/>
             </div>
           )}
-          <div className="section-container container-service" id="service">
-            <img
-              className="img-left-sticky"
-              src={orangeCircle2}
-              alt="process-icon"
-            />
+
+      <div className="container pt-5" id="service">
             <div className="container-item">
               <h2>Our Services</h2>
               <div className="flex services-row-one">
@@ -119,12 +110,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             </div>
           </div>
 
-          <div className="section-container container-process" id="process">
-            <img
-              className="img-right-sticky-process"
-              src={purpleCircle3}
-              alt="process-icon"
-            />
+      <div className="container-process " id="process">
             <div className="container-item">
               <h2>Our Process</h2>
               <img
@@ -132,7 +118,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
                 src={processMove}
                 alt="process-icon"
               />
-              <div className="center-div process-row-one">
+              <div className="center-div process-row-one pb-3">
                 <NumberInc
                   value={20}
                   text={"Lakh+"}
@@ -154,47 +140,46 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               </div>
             </div>
           </div>
-
-          <div className="section-container container-blogs" id="process">
-            <img
-              className="img-left-sticky"
-              src={orangeCircle2}
-              alt="process-icon"
-            />
-            <div className="container-item">
+        
+      <div className="container container-blogs" id="process">
+        <div className="container-item">
               <h2>What Our Customers Say</h2>
               <BlogVideo />
             </div>
-          </div>
-
-          <div className="section-container container-process" id="process">
-            <img
-              className="img-right-sticky-process"
-              src={purpleCircle3}
-              alt="process-icon"
-            />
-            <div className="container-item">
-              <h2>Service Comparison</h2>
-              <CompareTable />
-            </div>
-          </div>
-
-          <div className="section-container container-faq" id="process">
             <img
               className="img-left-sticky"
               src={orangeCircle2}
               alt="process-icon"
             />
-            <div className="container-item-full">
+            <img
+              className="img-right-sticky"
+              src={purpleCircle3}
+              alt="process-icon"
+            />
+            
+          </div>
+
+        <div className="container-table pt-5">
+          <div className="container " id="process">
+            <img
+              className="img-right-sticky-process"
+              src={purpleCircle3}
+              alt="process-icon"
+            />
+              <h2 className="container-h2">Service Comparison</h2>
+            <CompareTable />
+          </div>
+          </div>  
+  
+      <div className="container py-5">
               <h2>FAQs</h2>
-              <div className="container-table-faq">
-                <RetractableTable data={data} />
-                <RetractableTable data={data} />
+              <div className="row">
+                <div className="col-12"><RetractableTable data={data} /></div>
+                <div className="col-12"><RetractableTable data={data} /></div>
               </div>
             </div>
-          </div>
-
-          <div className="section-container aboutUs" id="process">
+    
+      <div className="container" id="process">
             <img
               className="img-left-sticky"
               src={orangeCircle2}
@@ -205,12 +190,9 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               src={purpleCircle3}
               alt="process-icon"
             />
-            <div className="container-item-full">
               <AboutUs />
-            </div>
           </div>
-        </div>
-      </div>
+          </div>
     </>
   );
 }

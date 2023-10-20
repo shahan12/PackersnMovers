@@ -1,8 +1,4 @@
 .home-landing-container{
-    position: relative;
-    margin: 0;
-    padding: 0;
-    width: 100%;
     margin-top: -10rem;
 }
 
@@ -35,6 +31,23 @@
     right: 12rem;
     z-index: 10;
 }
+
+
+
+
+/* Media query for smaller devices (adjust max-width as needed) */
+@media (max-width: 992px) {
+  .home-relocate-wrapper {
+    top: 80px; 
+    position: sticky;
+    top: 0; /* Adjust this value based on your desired spacing from the top */
+    z-index: 10; /* Adjust the z-index as needed */
+    background-color: #fff; /* Background color for the sticky area */
+    padding: 20px; /* Add padding to create space around the content */
+    
+  }
+}
+
 /* service Containers */
 
 .section-container {
@@ -72,7 +85,8 @@
     position: absolute;
     bottom: -4rem; 
     right: 0; 
-    z-index: 0;
+    top:0;
+    z-index: 1;
 }
 .landing-img {
     width: 50rem;
@@ -80,23 +94,52 @@
     z-index: 3;
 }
 
+.container-h2 {
+    padding-top: 0; /* Remove or adjust top margin */
+    margin-bottom: 10px; /* Adjust bottom margin as needed */
+  }
 
 /* service Container home */ 
-.container-service, .container-process {
+.container-service{
     background-size: cover;
     height: 40rem;
     padding-top: 5rem;
     position: relative;
 }
 
-/* process Container home */ 
 .container-process {
     background-size: cover;
     height: 40rem;
-    padding-top: 3rem;
+    padding-top: 2rem;
     position: relative;
-    background-image: url('../../images/1bg.svg');
 }
+
+/* process Container home */ 
+.container-process {
+    background-image: url('../../images/1bg.svg');
+    background-size: cover; /* Adjust as needed */
+   background-repeat: no-repeat; /* Adjust as needed */
+   background-position: center center;
+   max-width: 100%;
+
+}
+
+.container-table {
+    background-size: cover;
+    height: 40rem;
+    position: relative;
+}
+
+/* process Container home */ 
+.container-table {
+    background-image: url('../../images/1bg.svg');
+    background-size: cover; /* Adjust as needed */
+   background-repeat: no-repeat; /* Adjust as needed */
+   background-position: center center;
+   max-width: 100%;
+
+}
+
 .img-right-sticky-process {
     position: absolute;
     bottom: 0; 
@@ -120,16 +163,8 @@
 /* process Container home */ 
 .container-blogs {
     background-size: cover;
-    height: 40rem;
-    padding-top: 4rem;
+    padding: 2rem;
     position: relative;
-}
-
-.container-faq {
-    padding-top: 4rem;
-    height: 35rem;
-    padding-right: 0rem;
-
 }
 
 .container-item-full {
@@ -153,7 +188,38 @@
         margin-top: 13rem;
         z-index: 1;
     }
+    .home-relocate-wrapper{
+        float: right;
+    }
   }
+  @media (max-width: 1400px) {
+    .landing-img {
+        width: 40rem;
+        margin-top: 13rem;
+        z-index: 1;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .landing-img {
+        width: 35rem;
+        margin-top: 17rem;
+        z-index: 1;
+    }
+  }
+
+  @media (max-width: 660px) {
+    .landing-img {
+        width: rem;
+        margin-top: 25rem;
+        z-index: 1;
+    }
+  }
+
+  .custom-max-width {
+    max-width: 100%; /* Adjust the percentage as needed */
+  }
+ 
 
   @media (max-width: 600px) {
     .home-landing-container{
@@ -161,9 +227,6 @@
     }
     .section-container {
         padding: 0;
-    }
-    img {
-        width: 10rem;
     }
     .container-process {
         height: 100%;
@@ -176,8 +239,8 @@
         margin-left: 0;
     }
     .landing-img {
-        width: 19rem;
-        margin-top: 20rem;
+        width: 20rem;
+        margin-top: 5rem;
     }
     .services-row-one{
         gap: 2rem;
@@ -191,9 +254,7 @@
         margin-top: 2rem;
         gap: 1rem;
     }
-    .container-blogs {
-        height: 20rem;
-    }
+    
     .container-faq {
         height: 100%;
     }
