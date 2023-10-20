@@ -22,7 +22,7 @@ function FillRequrements(props) {
   return (
     <div className="orders-compoennt-wrapper">
       <Header progress={progress} />
-      <div className="fillReq-requirements-wrapper flex">
+      <div className="fillReq-requirements-wrapper">
       {progress === 'requirement' ? (
         <Requirement progress={progress} setProgress={setProgress} />
       ) : progress === 'inventory' ? (
