@@ -25,27 +25,6 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [totalCostBF, setTotalCostBF] = useState(0);
 
   useEffect(() => {
-  
-    setTotalCost(addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0));
-  
-    setTotalCostBF(floorCharges +  basePrice);
-  let totalcostData = {
-    "BasePrice": basePrice,
-    "FloorCharges": floorCharges,
-    "totalItemCount": totalItemCount,
-    "cft": cft,
-    "addonsPrice": addonsPrice,
-    "packaging": packageSel.packageName,
-    "packagingPrice": packageSel.price,
-    "totalCost": totalCost,
-    "totalCostBF": totalCostBF,
-  }
-
-  dispatch(updateTotalCost(totalcostData));
-
-  }, [floorCharges, addonsPrice, basePrice, packageSel, cft])
-
-  useEffect(() => {
     let calculatedTotalPrice = 0;
 
     for (const itemName in AddOnsADDED) {
@@ -54,6 +33,29 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     }
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
+
+  
+  const newTotalCost = addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0);
+  const newTotalCostBF = floorCharges + basePrice;
+
+  useEffect(() => {
+    let totalcostData = {
+      "BasePrice": basePrice,
+      "FloorCharges": floorCharges,
+      "totalItemCount": totalItemCount,
+      "cft": cft,
+      "addonsPrice": addonsPrice,
+      "packaging": packageSel.packageName,
+      "packagingPrice": packageSel.price,
+      "totalCost": newTotalCost,
+      "totalCostBF": newTotalCostBF,
+    }
+
+    setTotalCost(addonsPrice + floorCharges + basePrice + (packageSel.price ? packageSel.price : 0));
+    setTotalCostBF(floorCharges +  basePrice);
+    dispatch(updateTotalCost(totalcostData));
+
+  }, [floorCharges, addonsPrice, basePrice, packageSel, cft,newTotalCost , newTotalCostBF]);
 
   return (
     <div className="requirements-section-2 flex">

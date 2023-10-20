@@ -54,18 +54,18 @@
 			}
 		},
 		"Tables & Chairs": {
-			"coffee_table": {
+			"coffee table": {
 				"base": 55,
 				"material": {
 					"Not Applicable": 0,
-					"glass_top": 5,
-					"wooden_top": 5
+					"glass top": 5,
+					"wooden top": 5
 				},
 				"type": {
 					"Not Applicable": 0
 				}
 			},
-			"centre_table": {
+			"centre table": {
 				"base": 5,
 				"material": {
 					"Not Applicable": 0,
@@ -74,108 +74,6 @@
 				},
 				"type": {
 					"Not Applicable": 0
-				}
-			},
-			"2_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden ": 5,
-					"metal ": 7,
-					"glass": 7
-				},
-				"type": {
-					"Not Applicable": 0
-				}
-			},
-			"3_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden dismental": 5,
-					"wooden non-dismental": 5,
-					"metal foldable": 5,
-					"metal no-foldable": 7,
-					"glass top": 7
-				},
-				"type": {
-					"Not Applicable": 0,
-					"dismental": 5,
-					"non_dismental": 2,
-					"foldable": 5,
-					"non_foldable": 2
-				}
-			},
-			"4_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden dismental": 10,
-					"wooden non-dismental": 15,
-					"metal foldable": 10,
-					"metal no-foldable": 15,
-					"glass top": 15
-				},
-				"type": {
-					"Not Applicable": 0,
-					"dismental": 5,
-					"non_dismental": 5,
-					"foldable": 5,
-					"non_foldable": 5
-				}
-			},
-			"5_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden dismental": 20,
-					"wooden non-dismental": 24,
-					"metal foldable": 20,
-					"metal no-foldable": 24,
-					"glass top": 24
-				},
-				"type": {
-					"Not Applicable": 0,
-					"dismental": 5,
-					"non_dismental": 5,
-					"foldable": 5,
-					"non_foldable": 5
-				}
-			},
-			"6_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden dismental": 26,
-					"wooden non-dismental": 30,
-					"metal foldable": 26,
-					"metal no-foldable": 30,
-					"glass top": 30
-				},
-				"type": {
-					"Not Applicable": 0,
-					"dismental": 5,
-					"non_dismental": 5,
-					"foldable": 5,
-					"non_foldable": 5
-				}
-			},
-			"7_seater_dining_table": {
-				"base": 5,
-				"material": {
-					"Not Applicable": 0,
-					"wooden dismental": 38,
-					"wooden non-dismental": 38,
-					"metal foldable": 38,
-					"metal no-foldable": 38,
-					"glass top": 50
-				},
-				"type": {
-					"Not Applicable": 0,
-					"dismental": 5,
-					"non_dismental": 5,
-					"foldable": 5,
-					"non_foldable": 5
 				}
 			},
 			"side table": {
@@ -233,6 +131,110 @@
 				}
 			}
 		},
+		"Dining Table": {
+			"2 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden ": 5,
+					"metal ": 7,
+					"glass": 7
+				},
+				"type": {
+					"Not Applicable": 0
+				}
+			},
+			"3 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden dismental": 5,
+					"wooden non-dismental": 5,
+					"metal foldable": 5,
+					"metal no-foldable": 7,
+					"glass top": 7
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non dismental": 2,
+					"foldable": 5,
+					"non foldable": 2
+				}
+			},
+			"4 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden dismental": 10,
+					"wooden non-dismental": 15,
+					"metal foldable": 10,
+					"metal no-foldable": 15,
+					"glass top": 15
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non dismental": 5,
+					"foldable": 5,
+					"non foldable": 5
+				}
+			},
+			"5 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden dismental": 20,
+					"wooden non-dismental": 24,
+					"metal foldable": 20,
+					"metal no-foldable": 24,
+					"glass top": 24
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non dismental": 5,
+					"foldable": 5,
+					"non foldable": 5
+				}
+			},
+			"6 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden dismental": 26,
+					"wooden non-dismental": 30,
+					"metal foldable": 26,
+					"metal no-foldable": 30,
+					"glass top": 30
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non dismental": 5,
+					"foldable": 5,
+					"non foldable": 5
+				}
+			},
+			"7 seater dining table": {
+				"base": 5,
+				"material": {
+					"Not Applicable": 0,
+					"wooden dismental": 38,
+					"wooden non-dismental": 38,
+					"metal foldable": 38,
+					"metal no-foldable": 38,
+					"glass top": 50
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non dismental": 5,
+					"foldable": 5,
+					"non foldable": 5
+				}
+			}
+		},
 		"Beds & Mattress": {
 			"Mattress": {
 				"base": 10,
@@ -255,7 +257,7 @@
 					"dismental": 36,
 					"non-dismental": 36,
 					"foldable": 36,
-					"non_foldable": 36
+					"non foldable": 36
 				},
 				"material": {
 					"Not Applicable": 0,
@@ -270,7 +272,7 @@
 					"dismental": 31,
 					"non-dismental": 31,
 					"foldable": 31,
-					"non_foldable": 31
+					"non foldable": 31
 				},
 				"material": {
 					"Not Applicable": 0,
@@ -285,7 +287,7 @@
 					"dismental": 20,
 					"non-dismental": 20,
 					"foldable": 20,
-					"non_foldable": 20
+					"non foldable": 20
 				},
 				"material": {
 					"Not Applicable": 0,
@@ -300,7 +302,7 @@
 					"dismental": 20,
 					"non-dismental": 1,
 					"foldable": 1,
-					"non_foldable": 1
+					"non foldable": 1
 				},
 				"material": {
 					"Not Applicable": 0,
@@ -482,7 +484,7 @@
 					"Not Applicable": 0
 				}
 			},
-			"washing_machine": {
+			"washing machine": {
 				"base": 11,
 				"type": {
 					"Not Applicable": 0,
