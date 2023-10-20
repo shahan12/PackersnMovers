@@ -64,10 +64,13 @@ app.post('/signup', (req, res) => {
 // This api is for check user mobile and password is exist in db or not
 app.get('/login', (req, res) => {
 
-    var mobile = userSignup.userMobile;
-    var password = userSignup.password;
+    // var mobile = userSignup.userMobile;
+    // var password = userSignup.password;
 
-    q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + userSignup.userMobile + "' AND user_password = '" + userSignup.password + "'";
+    var mobile = req.query.userMobile;
+    var password = req.query.password;
+
+    q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
 
     con.query(q6, (error, result) => {
         if (error) throw error;
@@ -186,12 +189,26 @@ const Address = {
 }
 app.put('/basePrice', (req, res) => {
 
-    var fromAdd = Address.from;
-    var toAdd = Address.to;
-    var totalDistance = Address.distance;
-    var houseType = RequirementData.houseType;
+    // var fromAdd = Address.from;
+    // var toAdd = Address.to;
+    // var totalDistance = Address.distance;
+    // var houseType = RequirementData.houseType;
 
-    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
+    var fromAdd = req.body.fromAddress;
+    var toAdd = req.body.toAddress;
+    var totalDistance = Math.round(parseFloat(req.body.distance));
+    var houseType = req.body.houseType.replace(' ','').toLowerCase();;
+    var phoneNumber=req.body.phoneNumber;
+    
+    console.log("backend rcvd in base price :");
+    console.log(fromAdd)
+    console.log(toAdd)
+    console.log(totalDistance)
+    console.log(houseType)
+    console.log(phoneNumber);
+
+    // var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
+    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + phoneNumber + "'";
     con.query(q11, (error, result) => {
         if (error) throw error;
 
