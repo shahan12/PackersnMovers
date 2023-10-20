@@ -21,7 +21,6 @@ const Progress = ({ progress, setProgress }) => {
     }
   }, [totalCostRedux]);
 
-  console.log("totalCost", totalCost);
 
   const prev = () => {
     if (progress === "progress") {

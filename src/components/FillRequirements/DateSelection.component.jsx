@@ -82,7 +82,7 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
       </div>
       <div className="fill-req-CTA-container flex nextbuttonMove">
         <div className='prevButton' onClick={handlePrevious}>&lt; Previous</div>
-        <button disabled={!selectedDay || !selectedDay || !packageSel} className="cta-button" onClick={FlatrequireMents}>NEXT</button>
+        <button disabled={!selectedDay || !selectedTime || !packageSel} className="cta-button" onClick={FlatrequireMents}>NEXT</button>
 
       </div>
     </div>

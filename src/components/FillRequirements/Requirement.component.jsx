@@ -24,9 +24,6 @@ function Requirement({progress, setProgress}) {
   const [familyType, setfamilyType] = useState("");
   const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
   const [houseType, setHouseType] = useState("");
-  const [fromAddress,setFromAddress]=useState((sessionStorage.getItem('fromAddress')) || '');
-  const [toAddress,setToAddress]=useState((sessionStorage.getItem('toAddress')) || '');
-  const [distance,setDistance]=useState((sessionStorage.getItem('distance')) || '');
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const houseTypes = [
     "1 RK",
@@ -52,10 +49,9 @@ function Requirement({progress, setProgress}) {
       setFloorNumber(RequirementsRedux.requirements.floorNumber || ""); 
       setLiftValue(RequirementsRedux.requirements.fromLift || ""); 
       setMovingFloorNumber(RequirementsRedux.requirements.toFloor || ""); 
-      setMovingToLiftValue(RequirementsRedux.requirements.toLift || ""); 
+      setMovingToLiftValue(RequirementsRedux.requirements.toLift || "");
     }
   }, [RequirementsRedux]); 
-
 
   const FlatrequireMents = () => {
     console.log("clicked next");
@@ -67,15 +63,14 @@ function Requirement({progress, setProgress}) {
         "fromLift": liftValue,
         "toFloor": movingFloorNumber,
         "toLift": movingToLiftValue,
-        toAddress,fromAddress,distance,phoneNumber
+        "phoneNumber":phoneNumber
     }
     
-    if (!isEqual(newRequirementData, RequirementsRedux.requirements)) {
       dispatch(updateRequirements(newRequirementData));
       console.log("sending to backend function 1 :",newRequirementData);
       sendRequestReq(newRequirementData);
-    }
-    setProgress('inventory');
+
+      setProgress('inventory');
   };
   function isEqual(objA, objB) {
     const keysA = Object.keys(objA);
