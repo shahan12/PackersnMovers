@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import "./calendar.css";
 
@@ -10,9 +10,19 @@ const Progress = ({ progress, setProgress }) => {
   let AddOnsADDED = useSelector((state) => state.addOnsItems);    // all add ons items
   let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
-  let totalCost = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
+  let totalCostRedux = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
 
-  console.log("DateTimeRedux", DateTimeRedux, totalCost, ITEMADDED, RequirementsRedux, AddOnsADDED);
+  
+  const [totalCost, setTotalCost] = useState();
+
+  useEffect(() => {
+    if (RequirementsRedux) {
+    setTotalCost(totalCostRedux);
+    }
+  }, [totalCostRedux]);
+
+  console.log("totalCost", totalCost);
+
   const prev = () => {
     if (progress === "progress") {
       setProgress("dateselection");
@@ -49,31 +59,31 @@ const Progress = ({ progress, setProgress }) => {
         </div>
         <div className="cost-details-child">
           <span>Base Price</span>
-          <span>{totalCost.basePrice}</span>
+          <span>{totalCost?.basePrice}</span>
         </div>
         <div className="cost-details-child">
           <span>Floor Charges</span>
-          <span>{totalCost.floorCharges}</span>
+          <span>{totalCost?.floorCharges}</span>
         </div>
         <div className="cost-details-child">
           <span>Total Items Added</span>
-          <span>{totalCost.totalItemCount}</span>
+          <span>{totalCost?.totalItemCount}</span>
         </div>
         <div className="cost-details-child">
           <span>CFT</span>
-          <span>{totalCost.cft}</span>
+          <span>{totalCost?.cft}</span>
         </div>
         <div className="cost-details-child">
           <span>Add Ons</span>
-          <span>{totalCost.addonsPrice}</span>
+          <span>{totalCost?.addonsPrice}</span>
         </div>
         <div className="cost-details-child">
-          <span>Packaging Selected: {totalCost.packaging}</span>
-          <span>{totalCost.packagingPrice}</span>
+          <span>Packaging Selected: {totalCost?.packaging}</span>
+          <span>{totalCost?.packagingPrice}</span>
         </div>
         <div className="cost-details-child cost-line">
           <span>Total Cost: </span>
-          <span className="highlightcost">₹{totalCost.totalCost}</span>
+          <span className="highlightcost">₹{totalCost?.totalCost}</span>
         </div>
       </div>
 

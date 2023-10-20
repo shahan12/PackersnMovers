@@ -2,45 +2,51 @@
   "AddOns": [
     {
       "name": "Carton",
-      "price": 2499,
-      "max item": 10,
-      "desc": "This is the description for Carton addon."
+      "price": 100,
+      "max item": 100,
+      "desc": "Add if you want to add more box."
     },
     {
-      "name": "Labor",
-      "price": 100,
-      "max item": 5,
-      "desc": "This is the description for Carton addon."
+      "name": "Labour",
+      "price": 500,
+      "max item": 20,
+      "desc": "If you need extra hands apart from the usual 4-8 members assigned by your size of Home."
     },
     {
       "name": "Split AC",
-      "price": 200,
-      "max item": 5,
-      "desc": "This is the description for Carton addon."
+      "price": 1400,
+      "max item": 50,
+      "desc": "For Split AC Installation."
     },
     {
-      "name": "Carpentry",
-      "price": 200,
-      "max item": 1,
-      "desc": "This is the description for Carton addon."
+      "name": "Split AC U",
+      "price": 500,
+      "max item": 50,
+      "desc": "For Split AC UnInstallation."
     },
     {
-      "name": "Window AC",
-      "price": 200,
-      "max item": 5,
-      "desc": "This is the description for Carton addon."
+      "name": "Window AC ",
+      "price": 800,
+      "max item": 50,
+      "desc": "For Window AC Installation."
+    },
+    {
+      "name": "Window AC U",
+      "price": 300,
+      "max item": 50,
+      "desc": "For Window AC UnInstallation."
     },
     {
       "name": "Electrician",
-      "price": 150,
+      "price": 1200,
       "max item": 1,
-      "desc": "This is the description for Carton addon."
+      "desc": "If you need an Electrician."
     },
     {
-      "name": "Painting",
-      "price": 2499,
+      "name": "Carpenter",
+      "price": 1200,
       "max item": 1,
-      "desc": "This is the description for Carton addon."
+      "desc": "For your Furniture needs."
     }
   ]
 }

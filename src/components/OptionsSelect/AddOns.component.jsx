@@ -5,6 +5,10 @@ import minus from '../../images/minus.png';
 import plus from '../../images/plus.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAddOnsItems } from '../../redux/actions';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InfoIcon from '@mui/icons-material/Info';
+
 
 const AddOns = ({onSelect}) => {
   const dispatch = useDispatch();
@@ -40,7 +44,14 @@ const AddOns = ({onSelect}) => {
         {Data.AddOns.map((addon, index) => (
           <div className={`daybox-item addonBox ${selectedAddOns[addon.name]?.count > 0 ? 'addonBox-hover' : ''}`} key={index}>
             <p>{addon.name}</p>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
             <p className='weekday-price'> ₹ {addon.price}</p>
+            <Tooltip title={addon.desc} placement="right">
+              <IconButton>
+                <InfoIcon fontSize="small" style={{ fontSize: 16 }}/>
+              </IconButton>
+            </Tooltip>
+            </div>
             <div className='addonbox-counter'>
               <button onClick={() => handleAddOnClick(addon, "subtract")}>
                 <img src={minus} alt="Subtract" />

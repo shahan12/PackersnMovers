@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./fillReq.css";
 import "../../images/bachelor.svg";
 import "../../images/family.svg";
@@ -14,6 +14,11 @@ function FillRequrements(props) {
   const [packageSel, setPackageSel] = useState('null');
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [cft, setCft] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [progress]);
+
   return (
     <div className="orders-compoennt-wrapper">
       <Header progress={progress} />
