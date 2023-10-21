@@ -13,7 +13,6 @@ import { updateSelectedItems } from "../../redux/actions";
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
-
   const [itemCount, setItemCount] = useState(0);
   const [inventoryData, setInventoryData] = useState(FURNITURE);
   const [expandedItem, setExpandedItem] = useState(null);

@@ -11,7 +11,7 @@ import Progress from "./Progress.component";
 
 function FillRequrements(props) {
   const [progress, setProgress] = useState("requirement");
-  const [packageSel, setPackageSel] = useState('null');
+  const [packageSel, setPackageSel] = useState({ packageName: 'Standard', price: 0 });
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [cft, setCft] = useState(0);
 
@@ -22,7 +22,7 @@ function FillRequrements(props) {
   return (
     <div className="orders-compoennt-wrapper">
       <Header progress={progress} />
-      <div className="fillReq-requirements-wrapper flex">
+      <div className="fillReq-requirements-wrapper">
       {progress === 'requirement' ? (
         <Requirement progress={progress} setProgress={setProgress} />
       ) : progress === 'inventory' ? (

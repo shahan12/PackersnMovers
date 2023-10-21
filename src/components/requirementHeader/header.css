@@ -17,3 +17,9 @@
     position: relative;
     top: -10px;
 }
+
+@media (max-width: 1200px) {
+    .header-component-wrapper{
+      display: none;
+    }
+  }

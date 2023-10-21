@@ -1,3 +1,35 @@
-.orders-compoennt-wrapper{
+.orders-compoennt-wrapper {
     padding: 1.875rem 9.187rem 9.187rem;
+}
+
+@media (max-width: 2000px) {
+    .orders-compoennt-wrapper {
+        padding: 1.875rem 4rem 4rem; 
+    }
+}
+
+@media (max-width: 1600px) {
+    .orders-compoennt-wrapper {
+        padding: 1.5rem 3rem 3rem; 
+        overflow: hidden; 
+    }
+}
+@media (max-width: 1400px) {
+    .orders-compoennt-wrapper {
+        padding: 1.5rem 2rem 2rem; 
+        overflow: hidden; /* Hide scrollbars */
+    }
+}
+@media (max-width: 1200px) {
+    .orders-compoennt-wrapper {
+        padding: 1.5rem 2rem 2rem; 
+        overflow: hidden; /* Hide scrollbars */
+    }
+}
+
+@media (max-width: 800px) {
+    .orders-compoennt-wrapper {
+        padding: 1.5rem 1rem 1rem; 
+        overflow: hidden; /* Hide scrollbars */
+    }
 }

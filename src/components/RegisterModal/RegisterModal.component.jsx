@@ -6,8 +6,12 @@ import companyLogo from "../../images/SHIFTKART-LOGO.png";
 import { AppContext } from "../../context/context";
 import { saveData } from "../../network/saveData";
 import OTPInput from "react18-input-otp";
+import { sendLoginRequestToBackend, sendRegisterRequestToBackend } from '../../API/apicalls';
+import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 const RegisterModal = ({ onClose, postData, flow }) => {
+  const navigate=useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [xData, setXData] = useContext(AppContext);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
@@ -27,6 +31,11 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
   const handleSubmit = (e, flow) => {
     e.preventDefault();
+    const loginData = {
+      "userMobile": phoneNumber,
+      "password": OTP
+  }
+  sessionStorage.setItem('phoneNumber', phoneNumber);
     if (flow === "register") {
       // Perform login logic with the phoneNumber
       // For this example, let's just log the phone number
@@ -35,8 +44,39 @@ const RegisterModal = ({ onClose, postData, flow }) => {
       setXData({ data });
       // saveData(payload);
       setThankYou(true);
+      if(phoneNumber.length>0 && OTP.length>0) sendRegisterRequest(loginData);
     } else if (flow === "login") {
       setOtpPage(true);
+      if(phoneNumber.length>0 && OTP.length>0) sendLoginRequest(loginData);;
+    }
+  };
+
+  const sendLoginRequest = async (loginData) => {
+    // const API_Req_Data_JSON = JSON.stringify(loginData);
+    try {
+      console.log("sending : ",loginData);
+      const response = await sendLoginRequestToBackend(loginData);
+      console.log(response);
+      if(response==='Login Sucessfull...'){
+        window.sessionStorage.setItem("loggedIn", "true");
+        // navigate("/fill-details");
+        window.open("/fill-details", "_self");
+      }
+      if(response==='Mismatched data...'){
+        alert(response);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const sendRegisterRequest = async (API_Req_Data) => {
+    const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
+    try {
+      const response = await sendRegisterRequestToBackend(API_Req_Data_JSON);
+      window.open("/fill-details", "_self");
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -45,12 +85,12 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
   const validateOTP = () => {
-    if (OTP === "000000") {
-      window.sessionStorage.setItem("loggedIn", "true");
-      window.open("/fill-details", "_self");
-    } else {
-      setInvalidOTP(true);
-    }
+    // if (OTP === "000000") {
+      // window.sessionStorage.setItem("loggedIn", "true");
+      // window.open("/fill-details", "_self");
+    // } else {
+      // setInvalidOTP(true);
+    // }
   };
 
   return (
@@ -81,7 +121,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
             {flow === "register" && <h2>Let us get in touch with you!</h2>}
             {flow === "login" && <h2>Enter Number to Continue</h2>}
             {!thankYou && !otpPage && (
-              <form onSubmit={handleSubmit}>
+              <form>
                 <input
                   type="text"
                   id="phoneNumber"
@@ -102,7 +142,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
                   } cta-button`}
                 >
-                  Connect!
+                  Connect! 
                 </button>
               </form>
             )}
@@ -126,7 +166,9 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     <button
                       type="submit"
                       disabled={OTP.length < 6}
-                      onClick={() => validateOTP()}
+                        onClick={(e) =>
+                          handleSubmit(e, flow === "register" ? "register" : "login")
+                        }
                       className={`${
                         !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
                       } cta-button`}

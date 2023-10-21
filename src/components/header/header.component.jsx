@@ -74,7 +74,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
             ></img>
           </div>
           {showMoreOption && (
-            <div className="header-more-option-dropdown">Logout</div>
+            <div className="header-more-option-dropdown" onClick={hanleLogOut}>Log out</div>
           )}
         </div>
       ) : (
