@@ -58,11 +58,11 @@ const Progress = ({ progress, setProgress }) => {
         </div>
         <div className="cost-details-child">
           <span>Base Price</span>
-          <span>{totalCost?.basePrice}</span>
+          <span>₹{totalCost?.basePrice}</span>
         </div>
         <div className="cost-details-child">
           <span>Floor Charges</span>
-          <span>{totalCost?.floorCharges}</span>
+          <span>₹{totalCost?.floorCharges}</span>
         </div>
         <div className="cost-details-child">
           <span>Total Items Added</span>
@@ -74,11 +74,11 @@ const Progress = ({ progress, setProgress }) => {
         </div>
         <div className="cost-details-child">
           <span>Add Ons</span>
-          <span>{totalCost?.addonsPrice}</span>
+          <span>₹{totalCost?.addonsPrice}</span>
         </div>
         <div className="cost-details-child">
           <span>Packaging Selected: {totalCost?.packaging}</span>
-          <span>{totalCost?.packagingPrice}</span>
+          <span>₹{totalCost?.packagingPrice}</span>
         </div>
         <div className="cost-details-child cost-line">
           <span>Total Cost: </span>

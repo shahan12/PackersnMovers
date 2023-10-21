@@ -13,6 +13,8 @@
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.08), 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
     padding: 0 2.56rem 2.5rem;
     flex:2;
+    overflow-x: auto; /* Allow child content to scroll horizontally */
+    white-space: nowrap; 
 }
 .requirements-section-2 {
     display: flex;

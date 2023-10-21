@@ -10,7 +10,7 @@ function DateOption({ onSelect, selectedDayValue }) {
   const [priceRed, setPriceRed] = useState(0);
 
   useEffect(() => {
-      setPriceRed(totalCost.totalCostBF);
+      setPriceRed(totalCost.totalCostBF ? totalCost.totalCostBF : 0);
   }, [totalCost]);
 
   const weekdays = [
