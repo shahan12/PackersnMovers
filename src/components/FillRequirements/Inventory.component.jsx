@@ -22,7 +22,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
 
-
+  console.log("selected items", selectedItems);
 
   const handleItemClick = (item) => {
     setExpandedItem(item);
@@ -155,7 +155,8 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
       updatedItems[category][subItem][name].count || 0;
 
       calculateTotalAndCft();
-    setSelectedItems(updatedItems);
+      setSelectedItems(updatedItems);
+      calculateTotalAndCft();
   };
 
   const calculateCost = (name, category, subItem, type, material) => {

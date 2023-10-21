@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import "./calendar.css";
+import { sendFinalItemsToBackend } from '../../API/apicalls';
 
 import Modal from "react-modal";
 import ThankYouModal from "../ThankYouModal/thankYouModal.component";
@@ -12,8 +13,8 @@ const Progress = ({ progress, setProgress }) => {
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
 
-  
-  const [totalCost, setTotalCost] = useState();
+  console.log("total cost redux : ", totalCostRedux);
+  const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
   console.log("from redux total item ",RequirementsRedux);
   useEffect(() => {
     if (RequirementsRedux) {
@@ -28,7 +29,13 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  const bookingConfirm = () => {
+  const bookingConfirm = async () => {
+    // console.log(AddOnsADDED)
+    // console.log(ITEMADDED);
+    // console.log(DateTimeRedux);
+    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux};
+    const response=await sendFinalItemsToBackend(API_DATA);
+    console.log("final response :",response);
     if (progress === "progress") {
       openModal();
     }

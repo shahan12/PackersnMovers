@@ -264,7 +264,13 @@ function Requirement({progress, setProgress}) {
             <div className="more-option-floor-input">
               <MultiDropDown
                 label="Floor"
-                value={floorNumbers}
+                value={[
+                  "Ground Floor","1st Floor","2nd Floor","3rd Floor","4th Floor","5th Floor",
+                  "6th Floor","7th Floor","8th Floor","9th Floor","10th Floor",
+                  "11th Floor","12th Floor","13th Floor","14th Floor","15th Floor",
+                  "16th Floor","17th Floor","18th Floor","19th Floor","20th Floor",
+                  "21st Floor","22nd Floor","23rd Floor","24th Floor","25th Floor",
+                  "26th Floor","27th Floor","28th Floor","29th Floor","30th Floor"]}
                 selectedValue={floorNumber}
                 setSelectedValue={setFloorNumber}
               />

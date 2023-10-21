@@ -61,7 +61,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     }
 
     setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0));
-    // dispatch(updateTotalCost(totalcostData));
+    dispatch(updateTotalCost(totalcostData));
 
   }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost]);
 

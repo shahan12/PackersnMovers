@@ -70,3 +70,14 @@ export const sendTotalBoxRequestToBackend = async (data) => {
     throw error;
   }
 };
+
+export const sendFinalItemsToBackend = async (data) => {
+  try {
+    console.log("final data............. : ", data);
+    const response = await instance.put('http://localhost:3001/inventory', data);
+    console.log("reply from backend :",response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
