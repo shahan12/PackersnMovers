@@ -649,6 +649,19 @@ app.put('/updateUser', updateProfile, (req, res) => {
 
 });
 
+app.put('/inventory',(req,res)=>{
+    console.log("addons : ");
+    console.log(req.body.addons);
+
+    console.log("data time : ");
+    console.log(req.body.dataTime);
+    
+    console.log("user_inventory : ");
+    console.log(req.body.user_inventory);
+
+    res.status(200).json("data saved successfully");
+})
+
 app.listen(port, () => {
     console.log("Server running on", port);
 })
