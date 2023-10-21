@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
+
+  let TotalCostItems = useSelector((state) => state.TotalCostItems);
+  console.log("->>>>>>",TotalCostItems);
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
@@ -18,6 +21,8 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const [expandedItem, setExpandedItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
+
+
 
   const handleItemClick = (item) => {
     setExpandedItem(item);

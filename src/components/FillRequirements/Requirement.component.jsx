@@ -22,9 +22,9 @@ function Requirement({progress, setProgress}) {
 
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);
   const [familyType, setfamilyType] = useState("");
-  const [basePriceFromAPI, setBasePriceFromAPI] = useState(1000);
-  const [floorChargeFromAPI, setFloorChargeFromAPI] = useState(2000);
-  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState('');
+  const [basePriceFromAPI, setBasePriceFromAPI] = useState(useSelector((state)=> state.TotalCostItems.basePrice) || 0);
+  const [floorChargeFromAPI, setFloorChargeFromAPI] = useState(useSelector((state)=> state.TotalCostItems.floorCharges) || 0);
+  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState(0);
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const [totalCostBF, setTotalCostBF] = useState();
@@ -55,6 +55,8 @@ function Requirement({progress, setProgress}) {
   const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
   const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
   console.log(sessionStorage.getItem('distance'));
+
+    
   useEffect(() => {
     if (RequirementsRedux) {
       setfamilyType(RequirementsRedux.requirements.familyType || ""); 
@@ -70,7 +72,7 @@ function Requirement({progress, setProgress}) {
     }
   }, [RequirementsRedux]); 
 
-  const FlatrequireMents = () => {
+  const FlatrequireMents = async () => {
     console.log("clicked next");
     const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
@@ -97,8 +99,8 @@ function Requirement({progress, setProgress}) {
     
       dispatch(updateRequirements(newRequirementData));
       console.log("distance :",distance);
-      sendRequestReq(forAPIRequirement);
 
+      await sendRequestReq(forAPIRequirement);
       setProgress('inventory');
   };
   function isEqual(objA, objB) {
@@ -131,14 +133,12 @@ function Requirement({progress, setProgress}) {
       
       if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
       floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
-
       setFloorChargeFromAPI(floorChargeResponse);
       console.log("calculated floorPrice :", floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
       setTotalBoxFromAPI(totalBoxResponse);
       console.log("rcd from totalBox backend :", totalBoxResponse);
-
       console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
       // store these values in redux
     } catch (error) {
@@ -148,7 +148,7 @@ function Requirement({progress, setProgress}) {
 
 
   useEffect(() => {
-        
+    console.log("dispatch in useeffect values : ",basePriceFromAPI,floorChargeFromAPI,totalBoxFromAPI)
     setTotalCostBF(basePriceFromAPI +  floorChargeFromAPI);
     let totalcostData = {
       "basePrice": basePriceFromAPI,
@@ -311,7 +311,10 @@ function Requirement({progress, setProgress}) {
             !floorNumber ||
             !liftValue ||
             !movingFloorNumber ||
-            !movingToLiftValue
+            !movingToLiftValue ||
+            !fromAddress ||
+            !toAddress ||
+            !distance
           }
           className="cta-button"
           onClick={FlatrequireMents}

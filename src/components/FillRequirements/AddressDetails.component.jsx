@@ -10,8 +10,8 @@ import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);
-  const [basePrice, setBasePrice] = useState(0);
-  const [floorCharges, setFloorCharges] = useState(0);
+  const [basePrice, setBasePrice] = useState(useSelector((state)=> state.TotalCostItems.basePrice));
+  const [floorCharges, setFloorCharges] = useState(useSelector((state)=> state.TotalCostItems.floorCharges));
   const [totalCost, setTotalCost] = useState(0);
   const [totalCostBF, setTotalCostBF] = useState(0);
   const libraries = ['places'];
@@ -36,9 +36,9 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   useEffect(() => {
     if (totalCostRedux) {
-      setTotalCostBF(totalCostRedux.totalCostBF || 0); 
-      setBasePrice(totalCostRedux.basePrice || 0);  
-      setFloorCharges(totalCostRedux.floorCharges || 0); 
+      setTotalCostBF(totalCostRedux.totalCostBF); 
+      setBasePrice(totalCostRedux.basePrice);  
+      setFloorCharges(totalCostRedux.floorCharges); 
     }
   }, [totalCostRedux]);
 
@@ -61,7 +61,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     }
 
     setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0));
-    dispatch(updateTotalCost(totalcostData));
+    // dispatch(updateTotalCost(totalcostData));
 
   }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost]);
 
@@ -135,7 +135,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
             </div>
             <div className="cost-details-child"> 
               <span>Floor Charges</span>
-              <span>₹{totalCostBF}</span>
+              <span>₹{floorCharges}</span>
             </div>
             <div className="cost-details-child"> 
               <span>Total Items Added</span>

@@ -71,14 +71,18 @@ function Relocate({setLoginModal}) {
   });
 
   const handleFromPlaceChanged = () => {
-    const [place] = inputRefFrom.current.getPlaces();
+    if(!inputRefFrom?.current?.getPlaces()){
+      return;
+    }
+    const [place] = inputRefFrom?.current?.getPlaces();
     if (place) {
       setFromAddress(place.formatted_address);
     }
   };
 
   const handleToPlaceChanged = () => {
-    const [place] = inputRefTo.current.getPlaces();
+    if(!inputRefTo?.current?.getPlaces()) return;
+    const [place] = inputRefTo?.current?.getPlaces();
     if (place) {
       setToAddress(place.formatted_address);
     }
