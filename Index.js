@@ -128,17 +128,25 @@ const RequirementData = {
 // This api get total no. of boxes
 app.put('/totalNoBoxes', (req, res) => {
 
-    var houseType = RequirementData.houseType;
-    var familyType = RequirementData.familyType;
-    var members = RequirementData.familyNumber;
-    var mobile = userSignup.userMobile;
+    // var houseType = RequirementData.houseType;
+    // var familyType = RequirementData.familyType;
+    // var members = RequirementData.familyNumber;
+    // var mobile = userSignup.userMobile;
     var totalCarton;
 
-    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
+    var houseType = req.body.houseType.replace(' ','').toLowerCase();
+    var familyType = (req.body.familyType).toLowerCase();
+    var members = parseInt(req.body.familyNumber);
+    var mobile = req.body.phoneNumber;
+    console.log("total box backend :",houseType, familyType, members, mobile);
+    var totalCarton;
+
+    // var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
+    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobile + "'";
     con.query(q13, (error, result) => {
         if (error) throw error;
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
+        // res.setHeader('Content-Type', 'application/json');
+        // res.status(200);
     })
 
     var q10 = "SELECT boxes_qty FROM boxFixedPrice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
@@ -155,19 +163,19 @@ app.put('/totalNoBoxes', (req, res) => {
             res.status(200).json(totalBachelorBox);
         }
         else if (members == 1) {
-            res.setHeader('Content-Type', 'application/json');
+            // res.setHeader('Content-Type', 'application/json');
             totalCarton = flag ;
             res.status(200).json(flag);
         }
         if (familyType == 'family' && members > 1) {
             var check = (members - 4) * 4;
             var totalFamilyBox = flag + check;
-            res.setHeader('Content-Type', 'application/json');
+            // res.setHeader('Content-Type', 'application/json');
             totalCarton = totalFamilyBox;
             res.status(200).json(totalFamilyBox);
         }
         else if (members == 4) {
-            res.setHeader('Content-Type', 'application/json');
+            // res.setHeader('Content-Type', 'application/json');
             totalCarton = flag;
             res.status(200).json(flag);
         }
@@ -175,7 +183,7 @@ app.put('/totalNoBoxes', (req, res) => {
         q19 = "UPDATE inventoryData SET carton='"+totalCarton+"' WHERE user_mobile = '"+mobile+"'";
         con.query(q19,(error,result)=>{
             if(error) throw error;
-            res.status(200);
+            // res.status(200);
         });
     });
 
@@ -201,8 +209,8 @@ app.put('/basePrice', (req, res) => {
     var phoneNumber=req.body.phoneNumber;
     
     console.log("backend rcvd in base price :");
-    console.log(fromAdd)
-    console.log(toAdd)
+    console.log("from address :",fromAdd);
+    console.log("to address :",toAdd);
     console.log(totalDistance)
     console.log(houseType)
     console.log(phoneNumber);
