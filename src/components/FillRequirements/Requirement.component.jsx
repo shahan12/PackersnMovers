@@ -38,6 +38,14 @@ function Requirement({progress, setProgress}) {
     "VILLA",
     "BUNGLOW",
   ];
+  const floorNumbers=[
+    "Ground Floor","1st Floor","2nd Floor","3rd Floor","4th Floor","5th Floor",
+    "6th Floor","7th Floor","8th Floor","9th Floor","10th Floor",
+    "11th Floor","12th Floor","13th Floor","14th Floor","15th Floor",
+    "16th Floor","17th Floor","18th Floor","19th Floor","20th Floor",
+    "21st Floor","22nd Floor","23rd Floor","24th Floor","25th Floor",
+    "26th Floor","27th Floor","28th Floor","29th Floor","30th Floor"];
+
   const [floorNumber, setFloorNumber] = useState("");
   const [movingFloorNumber, setMovingFloorNumber] = useState("");
   const [liftValue, setLiftValue] = useState("");
@@ -112,15 +120,19 @@ function Requirement({progress, setProgress}) {
     try {
       // console.log("finally sending to basePrice backend function 2:",API_Req_Data_JSON);
       const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      setBasePriceFromAPI(1000);
+      setBasePriceFromAPI(basePriceResponse);
       console.log("rcd from basePrice backend :", basePriceResponse);
 
       // console.log("to calculate floor charges ");
       // console.log(parseInt(API_Req_Data.floorNumber),API_Req_Data.fromLift,parseInt(API_Req_Data.toFloor),API_Req_Data.toLift);
       let floorChargeResponse = 0;
-      if(API_Req_Data.fromLift==='No') floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
-      if(API_Req_Data.toLift==='No') floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
-      setFloorChargeFromAPI(2000);
+      if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
+      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
+      
+      if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
+      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
+
+      setFloorChargeFromAPI(floorChargeResponse);
       console.log("calculated floorPrice :", floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
@@ -141,6 +153,7 @@ function Requirement({progress, setProgress}) {
     let totalcostData = {
       "basePrice": basePriceFromAPI,
       "floorCharges": floorChargeFromAPI,
+      "totalBox" : totalBoxFromAPI,
       "totalCostBF": totalCostBF,
     }
     dispatch(updateTotalCost(totalcostData));
@@ -246,14 +259,7 @@ function Requirement({progress, setProgress}) {
             <div className="more-option-floor-input">
               <MultiDropDown
                 label="Floor"
-                value={[
-                  "Ground Floor",
-                  "1st Floor",
-                  "2nd Floor",
-                  "3rd Floor",
-                  "4th Floor",
-                  "5th Floor ",
-                ]}
+                value={floorNumbers}
                 selectedValue={floorNumber}
                 setSelectedValue={setFloorNumber}
               />
