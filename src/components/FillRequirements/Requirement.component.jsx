@@ -96,11 +96,16 @@ function Requirement({progress, setProgress}) {
       "phoneNumber":phoneNumber,
       distance, fromAddress, toAddress            //use this distance
   }
-    
-      dispatch(updateRequirements(newRequirementData));
-      console.log("distance :",distance);
-
-      await sendRequestReq(forAPIRequirement);
+      // console.log("comparing : ")
+      // console.log(RequirementsRedux.requirements);
+      // console.log("<-and->")
+      const {phoneNumber: num, ...remainingInfo}=newRequirementData;
+      // console.log(remainingInfo);
+      if(JSON.stringify(RequirementsRedux.requirements)!==JSON.stringify(remainingInfo)){
+        dispatch(updateRequirements(newRequirementData));
+        console.log("distance :",distance);
+        await sendRequestReq(forAPIRequirement);
+      }
       setProgress('inventory');
   };
   function isEqual(objA, objB) {

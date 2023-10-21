@@ -236,10 +236,12 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
               </select>
             <div className="itemDetails-child">
               <div className="itemDetails-child-inc">
-                <img
-                  src={minus}
-                  onClick={() => handleMinusClick(name, category, subItem)}
-                />
+                <button 
+                  onClick={() => handleMinusClick(name, category, subItem)}>
+                  <img
+                    src={minus} alt="Minus"/>
+                </button>
+                
                 <span>
                   {selectedItems[category]?.[subItem]?.[name]?.count || 0}
                 </span>
