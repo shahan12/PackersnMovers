@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
+
+  let TotalCostItems = useSelector((state) => state.TotalCostItems);
+  console.log("->>>>>>",TotalCostItems);
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
@@ -18,6 +21,8 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const [expandedItem, setExpandedItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
+
+  console.log("selected items", selectedItems);
 
   const handleItemClick = (item) => {
     setExpandedItem(item);
@@ -93,8 +98,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
       cost: calculateCost(name, category, subItem, updatedItems[category][subItem][name].type, updatedItems[category][subItem][name].material),
     };
   
-    calculateTotalAndCft();
+    // calculateTotalAndCft();
     setSelectedItems(updatedItems);
+    calculateTotalAndCft();
   };
   
   
@@ -122,8 +128,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
-      calculateTotalAndCft();
+      // calculateTotalAndCft();
     setSelectedItems(updatedItems);
+    calculateTotalAndCft();
   };
 
   const handleMaterialChange = (name, category, subItem, material, type) => {
@@ -149,8 +156,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
+      // calculateTotalAndCft();
+      setSelectedItems(updatedItems);
       calculateTotalAndCft();
-    setSelectedItems(updatedItems);
   };
 
   const calculateCost = (name, category, subItem, type, material) => {
@@ -231,10 +239,12 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
               </select>
             <div className="itemDetails-child">
               <div className="itemDetails-child-inc">
-                <img
-                  src={minus}
-                  onClick={() => handleMinusClick(name, category, subItem)}
-                />
+                <button 
+                  onClick={() => handleMinusClick(name, category, subItem)}>
+                  <img
+                    src={minus} alt="Minus"/>
+                </button>
+                
                 <span>
                   {selectedItems[category]?.[subItem]?.[name]?.count || 0}
                 </span>
