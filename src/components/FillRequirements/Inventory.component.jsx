@@ -98,8 +98,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
       cost: calculateCost(name, category, subItem, updatedItems[category][subItem][name].type, updatedItems[category][subItem][name].material),
     };
   
-    calculateTotalAndCft();
+    // calculateTotalAndCft();
     setSelectedItems(updatedItems);
+    calculateTotalAndCft();
   };
   
   
@@ -127,8 +128,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
-      calculateTotalAndCft();
+      // calculateTotalAndCft();
     setSelectedItems(updatedItems);
+    calculateTotalAndCft();
   };
 
   const handleMaterialChange = (name, category, subItem, material, type) => {
@@ -154,7 +156,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     updatedItems[category][subItem][name].count =
       updatedItems[category][subItem][name].count || 0;
 
-      calculateTotalAndCft();
+      // calculateTotalAndCft();
       setSelectedItems(updatedItems);
       calculateTotalAndCft();
   };
