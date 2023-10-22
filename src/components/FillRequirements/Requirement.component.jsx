@@ -10,9 +10,9 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendBasePriceRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend,sendFloorChargeRequestToBackend,sendTotalBoxRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
-import { updateRequirements } from '../../redux/actions';
+import { updateRequirements, updateTotalCost } from '../../redux/actions';
 import { useSelector } from 'react-redux';
 import { json } from "react-router-dom";
 
@@ -22,9 +22,12 @@ function Requirement({progress, setProgress}) {
 
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);
   const [familyType, setfamilyType] = useState("");
-  const [responseRequirementAPIData, setResponseRequirementAPIData] = useState('');
+  const [basePriceFromAPI, setBasePriceFromAPI] = useState(1000);
+  const [floorChargeFromAPI, setFloorChargeFromAPI] = useState(2000);
+  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState('');
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
+  const [totalCostBF, setTotalCostBF] = useState();
   const houseTypes = [
     "1 RK",
     "1 BHK",
@@ -35,12 +38,22 @@ function Requirement({progress, setProgress}) {
     "VILLA",
     "BUNGLOW",
   ];
+  const floorNumbers=[
+    "Ground Floor","1st Floor","2nd Floor","3rd Floor","4th Floor","5th Floor",
+    "6th Floor","7th Floor","8th Floor","9th Floor","10th Floor",
+    "11th Floor","12th Floor","13th Floor","14th Floor","15th Floor",
+    "16th Floor","17th Floor","18th Floor","19th Floor","20th Floor",
+    "21st Floor","22nd Floor","23rd Floor","24th Floor","25th Floor",
+    "26th Floor","27th Floor","28th Floor","29th Floor","30th Floor"];
+
   const [floorNumber, setFloorNumber] = useState("");
   const [movingFloorNumber, setMovingFloorNumber] = useState("");
   const [liftValue, setLiftValue] = useState("");
   const [movingToLiftValue, setMovingToLiftValue] = useState("");
   const [familyNumber, setFamilyNumber] = useState(2);
   const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
+  const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
+  const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
   console.log(sessionStorage.getItem('distance'));
   useEffect(() => {
     if (RequirementsRedux) {
@@ -52,6 +65,8 @@ function Requirement({progress, setProgress}) {
       setMovingFloorNumber(RequirementsRedux.requirements.toFloor || "");
       setMovingToLiftValue(RequirementsRedux.requirements.toLift || "");
       setDistance(RequirementsRedux.requirements.distance || sessionStorage.getItem('distance'));
+      setFromAddress(RequirementsRedux.requirements.fromAddress || sessionStorage.getItem('fromAddress'));
+      setToAddress(RequirementsRedux.requirements.toAddress || sessionStorage.getItem('toAddress'));
     }
   }, [RequirementsRedux]); 
 
@@ -77,7 +92,7 @@ function Requirement({progress, setProgress}) {
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
       "phoneNumber":phoneNumber,
-      distance                //use this distance
+      distance, fromAddress, toAddress            //use this distance
   }
     
       dispatch(updateRequirements(newRequirementData));
@@ -103,14 +118,46 @@ function Requirement({progress, setProgress}) {
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      console.log("finally sending backend  function 2:",API_Req_Data_JSON);
-      const response = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      setResponseRequirementAPIData(response);
-      console.log("rcd from backend :", response);
+      // console.log("finally sending to basePrice backend function 2:",API_Req_Data_JSON);
+      const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
+      setBasePriceFromAPI(basePriceResponse);
+      console.log("rcd from basePrice backend :", basePriceResponse);
+
+      // console.log("to calculate floor charges ");
+      // console.log(parseInt(API_Req_Data.floorNumber),API_Req_Data.fromLift,parseInt(API_Req_Data.toFloor),API_Req_Data.toLift);
+      let floorChargeResponse = 0;
+      if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
+      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
+      
+      if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
+      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
+
+      setFloorChargeFromAPI(floorChargeResponse);
+      console.log("calculated floorPrice :", floorChargeResponse);
+      
+      const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
+      setTotalBoxFromAPI(totalBoxResponse);
+      console.log("rcd from totalBox backend :", totalBoxResponse);
+
+      console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
+      // store these values in redux
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+
+  useEffect(() => {
+        
+    setTotalCostBF(basePriceFromAPI +  floorChargeFromAPI);
+    let totalcostData = {
+      "basePrice": basePriceFromAPI,
+      "floorCharges": floorChargeFromAPI,
+      "totalBox" : totalBoxFromAPI,
+      "totalCostBF": totalCostBF,
+    }
+    dispatch(updateTotalCost(totalcostData));
+  }, [basePriceFromAPI, floorChargeFromAPI, totalCostBF]);
 
   const handleArrowClick = (action) => {
     if (action === 'increment' && familyNumber < 10) {
@@ -212,14 +259,7 @@ function Requirement({progress, setProgress}) {
             <div className="more-option-floor-input">
               <MultiDropDown
                 label="Floor"
-                value={[
-                  "Ground Floor",
-                  "1st Floor",
-                  "2nd Floor",
-                  "3rd Floor",
-                  "4th Floor",
-                  "5th Floor ",
-                ]}
+                value={floorNumbers}
                 selectedValue={floorNumber}
                 setSelectedValue={setFloorNumber}
               />
