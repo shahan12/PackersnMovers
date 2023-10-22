@@ -87,8 +87,12 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
       </div>
 
       {visible && show && (
-            <div className="home-relocate-wrapper">
+        <div className="container pt-5" id="service">
+        <div className="container-item">
+            <div className="home-relocate-wrapper ">
               <Relocate className="relocate" setLoginModal={setLoginModal}/>
+            </div>
+            </div>
             </div>
           )}
 
