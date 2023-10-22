@@ -6,11 +6,13 @@ import RegisterModal from "../RegisterModal/RegisterModal.component";
 import PhoneIcon from "../../images/phone.svg";
 import ProfilePic from "../../images/defaultPic.svg";
 import DownArrow from "../../images/downarrow.png";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [showMoreOption, setShowMoreOption] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     if (window.location.pathname.includes("fill-details") > 0) {
@@ -22,6 +24,11 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     setModalOpen(false);
     setLoginModal(false);
   };
+
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
+
 
   useEffect(() => {
     if (showPopUp) {
@@ -47,14 +54,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           flow={"login"}
         />
       )}
-      <div className="align-center">
-        <img src={logo} alt="logo" className="header-logo-img"></img>
-      </div>
+      
       {showfillHeader ? (
         <div className="header-cta-container align-center space-between grey-600">
+          <div className="align-center">
+        <img src={logo} alt="logo" className="header-logo-img"></img>
+      </div>
           <span className="header-item-phoneNumber-container">
             <img src={PhoneIcon} alt={"phone"}></img>
-            <span>+91 8847885671</span>
+            <span>+91 884788xxx</span>
           </span>
           <div className="header-profile-picture-container">
             <img
@@ -78,47 +86,44 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           )}
         </div>
       ) : (
-        <div className="header-cta-container align-center space-between grey-600">
-          <div className="header-sign-in-btn">
-            <Link to="/" className="header-CTA-item">
-              Home
-            </Link>
-          </div>
-          <div className="header-sign-in-btn">
-            <Link to="/about-us" className="header-CTA-item">
-              About Us
-            </Link>
-          </div>
-          {/* <div className="header-user-wrapper">
-          <button
-            className="header-user-wrapper-btn"
-            onClick={() => setModalOpen(true)}
-          >
-            Get in touch with us!
-          </button>
-          {modalOpen && (
-            <RegisterModal
-              isOpen={modalOpen}
-              onClose={closeModal}
-              flow={"register"}
-            />
-          )}
-        </div> */}
-          {!isAuthenticated ? (
-            <div
-              className="header-sign-in-btn"
-              onClick={() => {
-                setLoginModal(true);
-              }}
-            >
-              Login
-            </div>
-          ) : (
-            <div className="header-user-wrapper" onClick={hanleLogOut}>
-              <span>Log Out</span>
-            </div>
-          )}
+        <nav className="navbar navbar-expand-md navbar-light bg-white fixed-top ggs">
+        <div className="container">
+        <Link to="/" className="navbar-brand mr-3">
+          <img src={logo} alt="logo" className="header-logo-img" />
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarToggle"
+          aria-controls="navbarToggle"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleNav}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className={`collapse navbar-collapse justify-content-end ${isNavOpen ? 'show' : ''}`} id="navbarToggle">
+          <ul className="navbar-nav align-items-end ">
+            <li className="nav-item">
+              <Link to="/" className="nav-link">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item ">
+              <Link to="/about-us" className="nav-link">
+                About Us
+              </Link>
+            </li>
+            <li className="nav-item ">
+              <Link className="nav-link" onClick={() => setLoginModal(true)}>
+                Log In
+              </Link>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
       )}
     </article>
   );

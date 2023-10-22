@@ -80,7 +80,7 @@ const CompareTable = () => {
   return (
     <div ref={ref}>
       {isVisible && (
-        <table className="custom-table">
+        <table className="custom-table table-responsive">
           <thead>
             <tr>
               <th className="tableFirst thCustom">Services</th>
