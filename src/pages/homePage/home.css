@@ -41,7 +41,7 @@
     top: 80px; 
     position: sticky;
     top: 0; /* Adjust this value based on your desired spacing from the top */
-    z-index: 10; /* Adjust the z-index as needed */
+    z-index: 0; /* Adjust the z-index as needed */
     background-color: #fff; /* Background color for the sticky area */
     padding: 20px; /* Add padding to create space around the content */
     
@@ -150,7 +150,7 @@
 .process-img {
     width: 50rem;
     margin-top: 5rem;
-    z-index: 1;
+    z-index: 0;
 }
 .process-row-one{
     gap: 4rem;

@@ -180,7 +180,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             </div>
     
       <div className="container" id="process">
-            <img
+            {/* <img
               className="img-left-sticky"
               src={orangeCircle2}
               alt="process-icon"
@@ -189,7 +189,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               className="img-right-sticky-process"
               src={purpleCircle3}
               alt="process-icon"
-            />
+            /> */}
               <AboutUs />
           </div>
           </div>
