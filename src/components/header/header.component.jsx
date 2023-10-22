@@ -86,7 +86,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           )}
         </div>
       ) : (
-        <nav className="navbar navbar-expand-md navbar-light bg-white fixed-top ggs">
+        <nav className="navbar navbar-expand-md navbar-light bg-transparent fixed-top ggs">
         <div className="container">
         <Link to="/" className="navbar-brand mr-3">
           <img src={logo} alt="logo" className="header-logo-img" />

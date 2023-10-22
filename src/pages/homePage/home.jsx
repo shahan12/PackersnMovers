@@ -74,13 +74,11 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
           <div className="row">
           <div className="col-lg-6" id="home">
           <div className="container-item">
-              <div ref={ref}>
                 <img
                   className={`landing-img ${inView ? "item-animate" : ""}`}
                   src={landingHome}
                   alt="process-icon"
                 />
-              </div>
             </div>
           </div>
           </div>
