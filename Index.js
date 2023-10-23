@@ -30,21 +30,32 @@ const userSignup = {
     password: "12345678"
 }
 
-// This api signup the user and check password exist or not 
-app.post('/signup', (req, res) => {
+// This api signup(post-> initially) the user and check password exist or not 
+app.get('/login', (req, res) => {
 
-    var mobile = userSignup.userMobile;
-    var password = userSignup.password;
+    // var mobile = userSignup.userMobile;
+    // var password = userSignup.password;
+
+
+    var mobile = req.query.userMobile;
+    var password = req.query.password;
     var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
 
 
     con.query(q8, (error, result) => {
         if (error) throw error;
-
         if (result.rows.length > 0) {
-            res.send("User already exists");
+            console.log("user already exist");
+            q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
+            con.query(q6,(error, result)=>{
+                if(error) throw error;
+                if(result.rows.length > 0) {res.send("Login Sucessfull...");}
+                else {res.send("Mismatched data...");}
+
+            });
         }
         else {
+            console.log("new user to register");
             var q9 = "BEGIN;"+
             "INSERT INTO userInfo(user_mobile, user_password) VALUES ('"+mobile+"', '"+password+"');"+
             "INSERT INTO inventoryData(user_mobile) VALUES ('"+mobile+"');"+
@@ -53,7 +64,8 @@ app.post('/signup', (req, res) => {
             con.query(q9, (error, result) => {
                 if (error) throw error;
                 mobileNo = mobile;
-                res.send("User logged in.." + result.rows);
+                // res.send("User logged in.." + result.rows);
+                res.send("Login Sucessfull...");
 
             });
 
@@ -62,27 +74,27 @@ app.post('/signup', (req, res) => {
 });
 
 // This api is for check user mobile and password is exist in db or not
-app.get('/login', (req, res) => {
+// app.get('/login', (req, res) => {
 
-    // var mobile = userSignup.userMobile;
-    // var password = userSignup.password;
+//     // var mobile = userSignup.userMobile;
+//     // var password = userSignup.password;
 
-    var mobile = req.query.userMobile;
-    var password = req.query.password;
+//     var mobile = req.query.userMobile;
+//     var password = req.query.password;
 
-    q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
+//     q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
 
-    con.query(q6, (error, result) => {
-        if (error) throw error;
-        if (result.rows.length > 0) {
-            res.send("Login Sucessfull...");
-        }
-        else {
-            res.send("Mismatched data...");
-        }
+//     con.query(q6, (error, result) => {
+//         if (error) throw error;
+//         if (result.rows.length > 0) {
+//             res.send("Login Sucessfull...");
+//         }
+//         else {
+//             res.send("Mismatched data...");
+//         }
 
-    });
-});
+//     });
+// });
 
 //Demo data for updating the password
 const updatePassword = {
