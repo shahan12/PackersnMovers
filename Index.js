@@ -671,7 +671,32 @@ app.put('/inventory',(req,res)=>{
     console.log("user_inventory : ");
     console.log(req.body.user_inventory);
 
-    res.status(200).json("data saved successfully");
+    console.log("data :");
+    console.log(req.body.dataTime?.selectedDay?.date);
+
+    console.log("label :");
+    console.log(req.body.dataTime?.selectedTime?.label);
+
+    console.log("mobile :")
+    console.log(req.body.mobile);
+
+    var addons=JSON.stringify(req.body.addons);
+    var user_inventory=JSON.stringify(req.body.user_inventory);
+
+
+    // q21 = "UPDATE inventoryData SET user_inventory='" + req.body.user_inventory + "', event_date='" + req.body.dataTime.selectedDay.date + "', event_time='" + req.body.dataTime.selectedTime.label + "', addons='" + req.body.addons + "' WHERE user_mobile='" + req.body.mobile + "'";
+    q21 = `UPDATE inventoryData SET event_time='${req.body.dataTime.selectedTime.label}',
+    user_inventory='${user_inventory}',
+    addons='${addons}' WHERE user_mobile='${req.body.mobile}'`;
+
+    con.query(q21, (error, result) => {
+        if(error) throw error;
+        if(result.rows.length>0){
+            console.log("inventory data saved successfully");
+        }
+        res.status(200).json("data saved successfully");
+    })
+    
 })
 
 app.listen(port, () => {
