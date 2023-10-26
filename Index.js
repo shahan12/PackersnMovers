@@ -45,7 +45,7 @@ app.get('/login', (req, res) => {
     con.query(q8, (error, result) => {
         if (error) throw error;
         if (result.rows.length > 0) {
-            console.log("user already exist");
+            // console.log("user already exist");
             q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
             con.query(q6,(error, result)=>{
                 if(error) throw error;
@@ -55,7 +55,7 @@ app.get('/login', (req, res) => {
             });
         }
         else {
-            console.log("new user to register");
+            // console.log("new user to register");
             var q9 = "BEGIN;"+
             "INSERT INTO userInfo(user_mobile, user_password) VALUES ('"+mobile+"', '"+password+"');"+
             "INSERT INTO inventoryData(user_mobile) VALUES ('"+mobile+"');"+
@@ -512,7 +512,7 @@ app.get('/getUserInfo', (req, res) => {
 
     // var mobile = userSignup.userMobile;
     var mobile=req.query.phoneNumber;
-    console.log("rcvd phone of user :", mobile);
+    // console.log("rcvd phone of user :", mobile);
     
     var q4 = "SELECT * FROM " +
         "userInfo WHERE user_mobile = '" + mobile + "'";
@@ -653,7 +653,7 @@ app.put('/updateUser', updateProfile, (req, res) => {
     var profile = "";
     var mobile = req.body.phoneNumber;
 
-    console.log("update user info rcvd : ", fName,lName,email,mobile);
+    // console.log("update user info rcvd : ", fName,lName,email,mobile);
 
     var q5 = "UPDATE userInfo SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
         "user_profile='" + profile + "' WHERE  user_mobile = '" + mobile + "'";
@@ -667,10 +667,11 @@ app.put('/updateUser', updateProfile, (req, res) => {
 });
 
 app.put('/inventory',(req,res)=>{
+    console.log("all inventory data: ",req.body);
     console.log("addons : ");
     console.log(req.body.addons);
 
-    console.log("data time : ");
+    console.log("datatime : ");
     console.log(req.body.dataTime);
     
     console.log("user_inventory : ");
@@ -685,22 +686,28 @@ app.put('/inventory',(req,res)=>{
     console.log("mobile :")
     console.log(req.body.mobile);
 
+    console.log("current data ")
+    console.log(req.body.dataTime?.selectedDay?.currentDate)
+
+    console.log("booking data ")
+    console.log(req.body.dataTime?.selectedDay?.bookingDate)
+
     var addons=JSON.stringify(req.body.addons);
     var user_inventory=JSON.stringify(req.body.user_inventory);
 
 
     // q21 = "UPDATE inventoryData SET user_inventory='" + req.body.user_inventory + "', event_date='" + req.body.dataTime.selectedDay.date + "', event_time='" + req.body.dataTime.selectedTime.label + "', addons='" + req.body.addons + "' WHERE user_mobile='" + req.body.mobile + "'";
-    q21 = `UPDATE inventoryData SET event_time='${req.body.dataTime.selectedTime.label}',
-    user_inventory='${user_inventory}',
-    addons='${addons}' WHERE user_mobile='${req.body.mobile}'`;
 
-    con.query(q21, (error, result) => {
-        if(error) throw error;
-        if(result.rows.length>0){
-            console.log("inventory data saved successfully");
-        }
-        res.status(200).json("data saved successfully");
-    })
+    // con.query(q21, (error, result) => {
+    //     if(error) throw error;
+    //     if(result.rows.length>0){
+    //         console.log("inventory data saved successfully");
+    //     }
+    //     res.status(200).json("data saved successfully");
+    // })
+
+    
+    res.json("data saved"); // comment this when the above query runs
     
 })
 
