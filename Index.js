@@ -13,7 +13,7 @@ const { existsSync } = require('fs');
 const { STATUS_CODES } = require('http');
 var totalBoxes = 1;
 var totalFloorCharges = 1;
-var mobileNo;
+var mobile;
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -37,7 +37,7 @@ app.get('/login', (req, res) => {
     // var password = userSignup.password;
 
 
-    var mobile = req.query.userMobile;
+    mobile = req.query.userMobile;
     var password = req.query.password;
     var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
 
@@ -105,12 +105,12 @@ const updatePassword = {
 
 app.put('/updatePassword', (req, res) => {
 
-    var userNumber = updatePassword.userMobile;
+    // var userNumber = updatePassword.userMobile;
     var newPassword = updatePassword.newPass;
     var cnfrmPassword = updatePassword.cnfrmPass;
 
     if (newPassword === cnfrmPassword) {
-        q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + userNumber + "'";
+        q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + mobile + "'";
         con.query(q7, (error, result) => {
             if (error) throw error;
             res.send("Password updated..." + result.rows);
@@ -149,7 +149,7 @@ app.put('/totalNoBoxes', (req, res) => {
     var houseType = req.body.houseType.replace(' ','').toLowerCase();
     var familyType = (req.body.familyType).toLowerCase();
     var members = parseInt(req.body.familyNumber);
-    var mobile = req.body.phoneNumber;
+    // var mobile = req.body.phoneNumber;
     console.log("total box backend :",houseType, familyType, members, mobile);
     var totalCarton;
 
@@ -218,17 +218,17 @@ app.put('/basePrice', (req, res) => {
     var toAdd = req.body.toAddress;
     var totalDistance = Math.round(parseFloat(req.body.distance));
     var houseType = req.body.houseType.replace(' ','').toLowerCase();;
-    var phoneNumber=req.body.phoneNumber;
+    // var phoneNumber=req.body.phoneNumber;
     
     console.log("backend rcvd in base price :");
     console.log("from address :",fromAdd);
     console.log("to address :",toAdd);
     console.log(totalDistance)
     console.log(houseType)
-    console.log(phoneNumber);
+    console.log(mobile);
 
     // var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
-    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + phoneNumber + "'";
+    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + mobile + "'";
     con.query(q11, (error, result) => {
         if (error) throw error;
 
@@ -466,10 +466,10 @@ app.put('/floorCharges', function (req, res) {
     var fromLift = RequirementData.fromLift;
     var toFloor = RequirementData.toFloor;
     var toLift = RequirementData.toLift;
-    var userPhone = updatePassword.userMobile
+    // var userPhone = updatePassword.userMobile
     var finalCharges, charges1, charges2;
 
-    var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + userPhone + "'";
+    var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + mobile + "'";
     con.query(q14, (error, result) => {
         if (error) throw error;
         res.status(200).json("Will reach you shortly");
@@ -495,10 +495,10 @@ app.put('/saveUserInfo', storage, (req, res) => {
     var fName = req.body.fName;
     var lName = req.body.lName;
     var email = req.body.email;
-    var mobileNo = updatePassword.userMobile;
+    // var mobileNo = updatePassword.userMobile;
     var profile = req.file.path;
 
-    var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + mobileNo + "'";
+    var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + mobile + "'";
 
     con.query(q3, (error, result) => {
         if (error) throw error;
@@ -511,7 +511,7 @@ app.put('/saveUserInfo', storage, (req, res) => {
 app.get('/getUserInfo', (req, res) => {
 
     // var mobile = userSignup.userMobile;
-    var mobile=req.query.phoneNumber;
+    // var mobile=req.query.phoneNumber;
     // console.log("rcvd phone of user :", mobile);
     
     var q4 = "SELECT * FROM " +
@@ -532,7 +532,7 @@ app.put('/dateTimeSelect', (req, res) => {
 
     var finalDate = dateSelection.Date;
     var finalTime = dateSelection.timeSlot;
-    var mobile = userSignup.userMobile;
+    // var mobile = userSignup.userMobile;
 
     var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '"+mobile+"'";
     con.query(q15, (error, result) => {
@@ -594,7 +594,7 @@ app.put('/addons',(req,res)=>{
         addons: addons,
       };
       var add_on = JSON.stringify(insertData);
-      var mobile = userSignup.userMobile;
+    //   var mobile = userSignup.userMobile;
 
     var q16 = "UPDATE inventoryData SET addons='"+add_on+"'::jsonb WHERE user_mobile='"+mobile+"'";
     con.query(q16,(error,result)=>{
@@ -613,11 +613,11 @@ var booking = {
 }
 app.get('/myBooking',(req,res)=>{
 
-    var mobile = userSignup.userMobile;
+    // var mobile = userSignup.userMobile;
 
     var q17 = "BEGIN;"+ 
     "SELECT house_type,total_distance FROM userInfo WHERE user_mobile='"+mobile+"';"+
-    "SELECT event_date,event_time,carton FROM inventoryData WHERE user_mobile='"+mobile+"';"+
+    "SELECT book_date,book_slot_time FROM inventoryData WHERE user_mobile='"+mobile+"';"+
     "COMMIT;";
 
 
@@ -651,7 +651,7 @@ app.put('/updateUser', updateProfile, (req, res) => {
     var email = req.body.email;
     // var profile = req.file.path;
     var profile = "";
-    var mobile = req.body.phoneNumber;
+    // var mobile = req.body.phoneNumber;
 
     // console.log("update user info rcvd : ", fName,lName,email,mobile);
 
@@ -696,18 +696,18 @@ app.put('/inventory',(req,res)=>{
     var user_inventory=JSON.stringify(req.body.user_inventory);
 
 
-    // q21 = "UPDATE inventoryData SET user_inventory='" + req.body.user_inventory + "', event_date='" + req.body.dataTime.selectedDay.date + "', event_time='" + req.body.dataTime.selectedTime.label + "', addons='" + req.body.addons + "' WHERE user_mobile='" + req.body.mobile + "'";
+    q21 = "UPDATE inventoryData SET user_inventory='" + user_inventory + "', book_date='" + req.body.dataTime.selectedDay.currentDate + "', event_time='" + req.body.dataTime.selectedTime.label + "', addons='" + addons + "' WHERE user_mobile='" + req.body.mobile + "'";
 
-    // con.query(q21, (error, result) => {
-    //     if(error) throw error;
-    //     if(result.rows.length>0){
-    //         console.log("inventory data saved successfully");
-    //     }
-    //     res.status(200).json("data saved successfully");
-    // })
+    con.query(q21, (error, result) => {
+        if(error) throw error;
+        if(result.rows.length>0){
+            console.log("inventory data saved successfully");
+        }
+        res.status(200).json("data saved successfully");
+    })
 
     
-    res.json("data saved"); // comment this when the above query runs
+   // res.json("data saved"); // comment this when the above query runs
     
 })
 
