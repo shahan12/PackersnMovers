@@ -1,6 +1,7 @@
 const express = require('express');
 const con = require('./Connection');
 const multer = require('multer');
+const moment = require('moment-timezone');
 var path = require('path');
 var app = express();                           //totalBoxes and basePrice api need to be work on
 var port = 3001;
@@ -13,7 +14,7 @@ const { existsSync } = require('fs');
 const { STATUS_CODES } = require('http');
 var totalBoxes = 1;
 var totalFloorCharges = 1;
-var mobile;
+global.mobile;
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -37,7 +38,7 @@ app.get('/login', (req, res) => {
     // var password = userSignup.password;
 
 
-    mobile = req.query.userMobile;
+    global.mobile = req.query.userMobile;
     var password = req.query.password;
     var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
 
@@ -110,7 +111,7 @@ app.put('/updatePassword', (req, res) => {
     var cnfrmPassword = updatePassword.cnfrmPass;
 
     if (newPassword === cnfrmPassword) {
-        q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + mobile + "'";
+        q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + global.mobile + "'";
         con.query(q7, (error, result) => {
             if (error) throw error;
             res.send("Password updated..." + result.rows);
@@ -150,11 +151,11 @@ app.put('/totalNoBoxes', (req, res) => {
     var familyType = (req.body.familyType).toLowerCase();
     var members = parseInt(req.body.familyNumber);
     // var mobile = req.body.phoneNumber;
-    console.log("total box backend :",houseType, familyType, members, mobile);
+    console.log("total box backend :",houseType, familyType, members, global.mobile);
     var totalCarton;
 
     // var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
-    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobile + "'";
+    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
     con.query(q13, (error, result) => {
         if (error) throw error;
         // res.setHeader('Content-Type', 'application/json');
@@ -192,7 +193,7 @@ app.put('/totalNoBoxes', (req, res) => {
             res.status(200).json(flag);
         }
         
-        q19 = "UPDATE inventoryData SET carton='"+totalCarton+"' WHERE user_mobile = '"+mobile+"'";
+        q19 = "UPDATE inventoryData SET carton='"+totalCarton+"' WHERE user_mobile = '"+global.mobile+"'";
         con.query(q19,(error,result)=>{
             if(error) throw error;
             // res.status(200);
@@ -225,10 +226,10 @@ app.put('/basePrice', (req, res) => {
     console.log("to address :",toAdd);
     console.log(totalDistance)
     console.log(houseType)
-    console.log(mobile);
+    console.log(global.mobile);
 
     // var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
-    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + mobile + "'";
+    var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + global.mobile + "'";
     con.query(q11, (error, result) => {
         if (error) throw error;
 
@@ -453,6 +454,7 @@ app.put('/basePrice', (req, res) => {
                 res.status(200).json(basePrice);
             }
         }
+        res.status(200);
 
     })
 
@@ -469,7 +471,7 @@ app.put('/floorCharges', function (req, res) {
     // var userPhone = updatePassword.userMobile
     var finalCharges, charges1, charges2;
 
-    var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + mobile + "'";
+    var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + global.mobile + "'";
     con.query(q14, (error, result) => {
         if (error) throw error;
         res.status(200).json("Will reach you shortly");
@@ -498,7 +500,7 @@ app.put('/saveUserInfo', storage, (req, res) => {
     // var mobileNo = updatePassword.userMobile;
     var profile = req.file.path;
 
-    var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + mobile + "'";
+    var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + global.mobile + "'";
 
     con.query(q3, (error, result) => {
         if (error) throw error;
@@ -515,7 +517,7 @@ app.get('/getUserInfo', (req, res) => {
     // console.log("rcvd phone of user :", mobile);
     
     var q4 = "SELECT * FROM " +
-        "userInfo WHERE user_mobile = '" + mobile + "'";
+        "userInfo WHERE user_mobile = '" + global.mobile + "'";
 
     con.query(q4, (err, result) => {
         if (err) throw err;
@@ -534,7 +536,7 @@ app.put('/dateTimeSelect', (req, res) => {
     var finalTime = dateSelection.timeSlot;
     // var mobile = userSignup.userMobile;
 
-    var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '"+mobile+"'";
+    var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '"+global.mobile+"'";
     con.query(q15, (error, result) => {
         if (error) throw error;
         res.status(200).json("Date Selection Completed");
@@ -596,7 +598,7 @@ app.put('/addons',(req,res)=>{
       var add_on = JSON.stringify(insertData);
     //   var mobile = userSignup.userMobile;
 
-    var q16 = "UPDATE inventoryData SET addons='"+add_on+"'::jsonb WHERE user_mobile='"+mobile+"'";
+    var q16 = "UPDATE inventoryData SET addons='"+add_on+"'::jsonb WHERE user_mobile='"+global.mobile+"'";
     con.query(q16,(error,result)=>{
         if(error) throw error;
         res.send("addons added..." + result.rows);
@@ -616,8 +618,8 @@ app.get('/myBooking',(req,res)=>{
     // var mobile = userSignup.userMobile;
 
     var q17 = "BEGIN;"+ 
-    "SELECT house_type,total_distance FROM userInfo WHERE user_mobile='"+mobile+"';"+
-    "SELECT book_date,book_slot_time FROM inventoryData WHERE user_mobile='"+mobile+"';"+
+    "SELECT house_type,total_distance FROM userInfo WHERE user_mobile='"+global.mobile+"';"+
+    "SELECT book_date,book_slot_time FROM inventoryData WHERE user_mobile='"+global.mobile+"';"+
     "COMMIT;";
 
 
@@ -656,17 +658,19 @@ app.put('/updateUser', updateProfile, (req, res) => {
     // console.log("update user info rcvd : ", fName,lName,email,mobile);
 
     var q5 = "UPDATE userInfo SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
-        "user_profile='" + profile + "' WHERE  user_mobile = '" + mobile + "'";
+        "user_profile='" + profile + "' WHERE  user_mobile = '" + global.mobile + "'";
 
     con.query(q5, (err, result) => {
         if (err) throw err;
-        console.log(mobile);
+        console.log(global.mobile);
         res.send("Rows updated" + result.rows);
     });
 
 });
 
 app.put('/inventory',(req,res)=>{
+
+    var mobile = req.body.mobile;
     console.log("all inventory data: ",req.body);
     console.log("addons : ");
     console.log(req.body.addons);
@@ -695,8 +699,43 @@ app.put('/inventory',(req,res)=>{
     var addons=JSON.stringify(req.body.addons);
     var user_inventory=JSON.stringify(req.body.user_inventory);
 
+// Function to get the current date in 'dd/mm/yyyy' format
+function getCurrentDate() {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const yyyy = today.getFullYear();
+    return dd + '-' + mm + '-' + yyyy;
+  }
+  
+  // Function to generate a random 6-digit number
+  function getRandNumber() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
+  console.log(global.mobile);
+  
+  // Function to extract the last 4 digits of a phone number (replace 'phone' with your actual phone number)
+  function getLast4Digitmobile(mobile) {
+    if (typeof mobile === 'string' && mobile.length >= 4) {
+        return mobile.slice(-4);
+      } 
+  }
+  
+  // Concatenate the components to create the order ID
+  const prefix = 'SK';
+  const currentDate = getCurrentDate();
+  const randomDigits = getRandNumber();
+   const phone = mobile; // Replace with the actual phone number
+  const last4Digits = getLast4Digitmobile(phone);
+  
+  const orderID = `${prefix}${currentDate}${randomDigits}${last4Digits}`;
+  
+  console.log(orderID);
+  
 
-    q21 = "UPDATE inventoryData SET user_inventory='" + user_inventory + "', book_date='" + req.body.dataTime.selectedDay.currentDate + "', event_time='" + req.body.dataTime.selectedTime.label + "', addons='" + addons + "' WHERE user_mobile='" + req.body.mobile + "'";
+
+
+    q21 = "UPDATE inventoryData SET user_inventory='" + user_inventory + "', book_date='" + req.body.dataTime.selectedDay.currentDate + "', book_slot_time ='" + req.body.dataTime.selectedTime.label + "', addons='" + addons + "' , order_id = '"+ orderID +"' , user_current_date = '"+ currentDate+"' WHERE user_mobile='" + req.body.mobile + "'";
 
     con.query(q21, (error, result) => {
         if(error) throw error;
@@ -707,9 +746,9 @@ app.put('/inventory',(req,res)=>{
     })
 
     
-   // res.json("data saved"); // comment this when the above query runs
+    res.status(200); // comment this when the above query runs
     
-})
+});
 
 app.listen(port, () => {
     console.log("Server running on", port);
