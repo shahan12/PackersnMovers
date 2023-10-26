@@ -4,11 +4,12 @@ import DefaultImg from "../../images/default-profile.svg";
 import EditProfilePopUp from "../../components/EditProfileModal/EditProfileModal.component";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Popper from 'popper.js';
-
+import { useSelector } from "react-redux";
 
 function EditProfile(props) {
   const [profileImg, setProfileImg] = useState(DefaultImg);
   const [openModal, setOpenModal] = useState(false);
+  const [phoneNumber,setPhoneNumber]=useState(sessionStorage.getItem('phoneNumber'));
   return (
     <>
       {" "}
@@ -43,7 +44,7 @@ function EditProfile(props) {
         <form className="form-group">
           <div className="row">
             <div className="col-12 col-md-6 mr-3 mx-auto">
-              <label for="fname" className="label form-label">
+              <label htmlFor="fname" className="label form-label">
                 First name
               </label>{" "}
               <br></br>
@@ -56,7 +57,7 @@ function EditProfile(props) {
               <br></br>
             </div>
             <div className="col-12 col-md-6">
-              <label for="lname" className="label form-label">
+              <label htmlFor="lname" className="label form-label">
                 Last name
               </label>{" "}
               <br></br>
@@ -71,7 +72,7 @@ function EditProfile(props) {
           </div>
           <div className="row">
           <div className="col-12 col-md-6">
-              <label for="fname" className="label form-label">
+              <label htmlFor="fname" className="label form-label">
                 Email
               </label>{" "}
               <br></br>
@@ -84,7 +85,7 @@ function EditProfile(props) {
               <br></br>
             </div>
             <div className="col-12 col-md-6">
-              <label for="fname" className="label form-label">
+              <label htmlFor="fname" className="label form-label">
                 Mobile No.
               </label>{" "}
               <br></br>
@@ -92,6 +93,8 @@ function EditProfile(props) {
                 type="number"
                 id="fname"
                 name="fname"
+                value={phoneNumber}
+                disabled
                 className="form-control"
               />{" "}
               <br></br>

@@ -34,6 +34,13 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     sessionStorage.removeItem("loggedIn");
     window.open("/", "_self");
   };
+  const handleProfile = () => {
+    window.open("/edit-profile", "_self");
+  };
+  const handleLogoToHome=()=>{
+    window.open("/", "_self");
+  }
+  
   return (
     <article
       className={`header-container space-between ${
@@ -48,7 +55,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         />
       )}
       <div className="align-center">
-        <img src={logo} alt="logo" className="header-logo-img"></img>
+        <img src={logo} alt="logo" className="header-logo-img" onClick={handleLogoToHome}></img>
       </div>
       {showfillHeader ? (
         <div className="header-cta-container align-center space-between grey-600">
@@ -61,6 +68,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               src={ProfilePic}
               alt="profile-pic"
               className="flex width-100"
+              onClick={handleProfile}
             ></img>
           </div>
           <div
@@ -74,8 +82,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
             ></img>
           </div>
           {showMoreOption && (
+            <>
+            <div className="header-more-option-dropdown" onClick={handleProfile}>Profile</div>
             <div className="header-more-option-dropdown" onClick={hanleLogOut}>Log out</div>
+            </>
           )}
+          
+          {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
+          <div className="profile-btn" onClick={handleProfile}>Profile</div>
+
         </div>
       ) : (
         <div className="header-cta-container align-center space-between grey-600">
