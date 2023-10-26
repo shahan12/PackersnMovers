@@ -510,8 +510,10 @@ app.put('/saveUserInfo', storage, (req, res) => {
 // This is for getting user info base on user's mobile number
 app.get('/getUserInfo', (req, res) => {
 
-    var mobile = userSignup.userMobile;
-
+    // var mobile = userSignup.userMobile;
+    var mobile=req.query.phoneNumber;
+    console.log("rcvd phone of user :", mobile);
+    
     var q4 = "SELECT * FROM " +
         "userInfo WHERE user_mobile = '" + mobile + "'";
 
@@ -644,11 +646,14 @@ const updateProfile = multer({
     })
 }).single("profile");
 app.put('/updateUser', updateProfile, (req, res) => {
-    var fName = req.body.fName;
-    var lName = req.body.lName;
+    var fName = req.body.firstName;
+    var lName = req.body.lastName;
     var email = req.body.email;
-    var profile = req.file.path;
-    var mobile = req.session.userNo.mobile;
+    // var profile = req.file.path;
+    var profile = "";
+    var mobile = req.body.phoneNumber;
+
+    console.log("update user info rcvd : ", fName,lName,email,mobile);
 
     var q5 = "UPDATE userInfo SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
         "user_profile='" + profile + "' WHERE  user_mobile = '" + mobile + "'";
