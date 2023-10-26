@@ -81,3 +81,27 @@ export const sendFinalItemsToBackend = async (data) => {
     throw error;
   }
 };
+
+export const getUserInfoFromBackend = async (data) => {
+  try {
+    console.log("sending to getUserInfo backend :",data)
+    const response = await instance.get('http://localhost:3001/getUserInfo', {params :data});
+    console.log("reply from user info backend :",response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUserInfoToBackend = async (data) => {
+  try {
+
+    const response = await instance.put('http://localhost:3001/updateUser', data);
+    console.log("reply from update user info backend :",response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+

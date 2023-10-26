@@ -48,16 +48,16 @@ function App() {
         <Route
           exact
           path="/fill-details"
-          element={
-            isAuthenticated ? (
-              <Order />
-            ) : (
-              <Navigate to="/?login-redirect=true" replace />
-            )
-          }
+          element={ isAuthenticated ? (<Order />) : (<Navigate to="/?login-redirect=true" replace />)}
         />
-        <Route exact path="/edit-profile" element={<EditProfile />} />
-        <Route exact path="/bookings" element={<Bookings />} />
+        <Route
+          exact 
+          path="/edit-profile"
+          element={ isAuthenticated ? (<EditProfile />) : (<Navigate to="/?login-redirect=true" replace />)} />
+        <Route 
+          exact 
+          path="/bookings" 
+          element={ isAuthenticated ? (<Bookings />) : (<Navigate to="/?login-redirect=true" replace />)} />
       </Routes>
       <Footer />
     </AppProvider>

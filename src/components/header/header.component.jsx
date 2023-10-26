@@ -32,6 +32,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
 
   const hanleLogOut = () => {
     sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("toAddress");
+    sessionStorage.removeItem("phoneNumber");
+    sessionStorage.removeItem("fromAddress");
+    sessionStorage.removeItem("distance");
+    sessionStorage.removeItem("auth");
+    sessionStorage.removeItem("firstName");
+    sessionStorage.removeItem("lastName");
+    sessionStorage.removeItem("email");
+
     window.open("/", "_self");
   };
   const handleProfile = () => {
