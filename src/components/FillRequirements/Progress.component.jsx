@@ -34,7 +34,7 @@ const Progress = ({ progress, setProgress }) => {
     // console.log(ITEMADDED);
     // console.log(DateTimeRedux);
     // console.log("------->", RequirementsRedux.requirements.phoneNumber);
-    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "mobile": RequirementsRedux.requirements.phoneNumber};
+    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
     console.log("final response :",response);
     if (progress === "progress") {
