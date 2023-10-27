@@ -10,7 +10,7 @@ import officeShift from "../../images/_Group_ (2).svg";
 import storageShift from "../../images/_Group_ (3).svg";
 import industrialShift from "../../images/Group (1).svg";
 import processMove from "../../images/process.svg";
-import landingHome from "../../images/homelanding.svg";
+import landingHome from "../../images/2-people.png";
 import purpleCircle from "../../images/1purplecircle.svg";
 import orangeCircle1 from "../../images/1orangecircle.svg";
 import orangeCircle2 from "../../images/2orangecircle.svg";
@@ -20,9 +20,8 @@ import CompareTable from "../../components/CompareTable/CompareTable.component";
 import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Popper from 'popper.js';
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import Popper from "popper.js";
 
 function Home({ setShowPopUp, loginModal, setLoginModal }) {
   const { ref, inView } = useInView({
@@ -93,7 +92,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
           </div>
           {visible && show && (
             <div className="home-relocate-wrapper">
-              <Relocate setLoginModal={setLoginModal}/>
+              <Relocate setLoginModal={setLoginModal} />
             </div>
           )}
           <div className="section-container container-service" id="service">

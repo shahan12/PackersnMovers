@@ -50,6 +50,8 @@
     justify-content: center;
     width: 7rem;
     border-radius: 50%;
+    border: .5rem solid #F3F7FA;
+   
   }
   .login-modal-image {
     padding-left: 2rem;
@@ -58,6 +60,7 @@
   .login-modal-image img {
     max-width: 20rem;
     height: auto;
+    margin-bottom: 2rem;
   }
   .login-modal-image h4 {
     text-align: left;

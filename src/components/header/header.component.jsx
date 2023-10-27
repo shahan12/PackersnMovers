@@ -46,10 +46,10 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const handleProfile = () => {
     window.open("/edit-profile", "_self");
   };
-  const handleLogoToHome=()=>{
+  const handleLogoToHome = () => {
     window.open("/", "_self");
-  }
-  
+  };
+
   return (
     <article
       className={`header-container space-between ${
@@ -64,7 +64,12 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         />
       )}
       <div className="align-center">
-        <img src={logo} alt="logo" className="header-logo-img" onClick={handleLogoToHome}></img>
+        <img
+          src={logo}
+          alt="logo"
+          className="header-logo-img"
+          onClick={handleLogoToHome}
+        ></img>
       </div>
       {showfillHeader ? (
         <div className="header-cta-container align-center space-between grey-600">
@@ -92,27 +97,66 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           </div>
           {showMoreOption && (
             <>
-            <div className="header-more-option-dropdown" onClick={handleProfile}>Profile</div>
-            <div className="header-more-option-dropdown" onClick={hanleLogOut}>Log out</div>
+              <div
+                className="header-more-option-dropdown"
+                onClick={handleProfile}
+              >
+                Profile
+              </div>
+              <div
+                className="header-more-option-dropdown"
+                onClick={hanleLogOut}
+              >
+                Log out
+              </div>
             </>
           )}
-          
-          {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
-          <div className="profile-btn" onClick={handleProfile}>Profile</div>
 
+          {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
+          <div className="profile-btn" onClick={handleProfile}>
+            Profile
+          </div>
         </div>
       ) : (
         <div className="header-cta-container align-center space-between grey-600">
-          <div className="header-sign-in-btn">
-            <Link to="/" className="header-CTA-item">
-              Home
-            </Link>
-          </div>
           <div className="header-sign-in-btn">
             <Link to="/about-us" className="header-CTA-item">
               About Us
             </Link>
           </div>
+          <div className="header-cta-container align-center space-between grey-600">
+            {!isAuthenticated ? (
+              <div
+                className="header-sign-in-btn"
+                onClick={() => {
+                  setLoginModal(true);
+                }}
+              >
+                Corporate
+              </div>
+            ) : (
+              <div className="header-user-wrapper" onClick={hanleLogOut}>
+                <span>Log Out</span>
+              </div>
+            )}
+          </div>
+          <div className="header-cta-container align-center space-between grey-600">
+            {!isAuthenticated ? (
+              <div
+                className="header-sign-in-btn"
+                onClick={() => {
+                  setLoginModal(true);
+                }}
+              >
+                Commercial
+              </div>
+            ) : (
+              <div className="header-user-wrapper" onClick={hanleLogOut}>
+                <span>Log Out</span>
+              </div>
+            )}
+          </div>
+
           {/* <div className="header-user-wrapper">
           <button
             className="header-user-wrapper-btn"
