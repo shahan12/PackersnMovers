@@ -12,7 +12,7 @@ function Footer(props) {
     <div className="footer-wrapper">
       <div className="footer-upper-section-container align-center space-between">
         <div className="footer-list-wrapper">
-          <a>About Us</a>
+          <a href="about-us">About Us</a>
         </div>
         <div className="footer-list-wrapper">
           <a>Customer Portal</a>
