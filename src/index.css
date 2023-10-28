@@ -97,3 +97,13 @@ code {
 .width-100 {
   width: 100%;
 }
+
+@media (max-width: 600px) {
+  img {
+    width: 25% !important;
+    height: 25% !important;
+  }
+  .cta-button {
+    width: 100%;
+  }
+}

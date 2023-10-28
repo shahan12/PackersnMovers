@@ -74,3 +74,19 @@
     color: orange; 
     border-color: orange; 
   }
+
+  @media (max-width: 600px) {
+    .edit-profile-cta-container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+    }
+    .cta-btn-edit-profile{
+        width: 100%;
+    }
+    .edit-icon {
+        width: 2rem !important;
+        margin: 0 0 1rem 1rem;
+    }
+  }

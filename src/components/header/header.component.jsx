@@ -135,9 +135,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                 Corporate
               </div>
             ) : (
-              <div className="header-user-wrapper" onClick={hanleLogOut}>
-                <span>Log Out</span>
-              </div>
+              <></>
             )}
           </div>
           <div className="header-cta-container align-center space-between grey-600">
@@ -151,9 +149,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                 Commercial
               </div>
             ) : (
-              <div className="header-user-wrapper" onClick={hanleLogOut}>
-                <span>Log Out</span>
-              </div>
+              <></>
             )}
           </div>
 

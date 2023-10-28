@@ -57,21 +57,24 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
   const sendLoginRequest = async (loginData) => {
     // const API_Req_Data_JSON = JSON.stringify(loginData);
-    try {
-      console.log("sending : ", loginData);
-      const response = await sendLoginRequestToBackend(loginData);
-      console.log(response);
-      if (response === "Login Sucessfull...") {
-        window.sessionStorage.setItem("loggedIn", "true");
-        // navigate("/fill-details");
-        window.open("/fill-details", "_self");
-      }
-      if (response === "Mismatched data...") {
-        alert(response);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    // try {
+    //   console.log("sending : ", loginData);
+    //   const response = await sendLoginRequestToBackend(loginData);
+    //   console.log(response);
+    //   if (response === "Login Sucessfull...") {
+    //     window.sessionStorage.setItem("loggedIn", "true");
+    //     // navigate("/fill-details");
+    //     window.open("/fill-details", "_self");
+    //   }
+    //   if (response === "Mismatched data...") {
+    //     alert(response);
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
+    window.sessionStorage.setItem("loggedIn", "true");
+    // navigate("/fill-details");
+    window.open("/fill-details", "_self");
   };
 
   const sendRegisterRequest = async (API_Req_Data) => {
