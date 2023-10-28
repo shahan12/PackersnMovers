@@ -3,7 +3,7 @@ const con = require('./Connection');
 const multer = require('multer');
 const moment = require('moment-timezone');
 var path = require('path');
-var app = express();                           //totalBoxes and basePrice api need to be work on
+var app = express();                           //totalBoxes and global.basePrice api need to be work on
 var port = 3001;
 
 
@@ -14,7 +14,10 @@ const { existsSync } = require('fs');
 const { STATUS_CODES } = require('http');
 var totalBoxes = 1;
 var totalFloorCharges = 1;
+global.totalCarton;
 global.mobile;
+global.basePrice;
+global.orderID;
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,20 +51,20 @@ app.get('/login', (req, res) => {
         if (result.rows.length > 0) {
             // console.log("user already exist");
             q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
-            con.query(q6,(error, result)=>{
-                if(error) throw error;
-                if(result.rows.length > 0) {res.send("Login Sucessfull...");}
-                else {res.send("Mismatched data...");}
+            con.query(q6, (error, result) => {
+                if (error) throw error;
+                if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
+                else { res.send("Mismatched data..."); }
 
             });
         }
         else {
             // console.log("new user to register");
-            var q9 = "BEGIN;"+
-            "INSERT INTO userInfo(user_mobile, user_password) VALUES ('"+mobile+"', '"+password+"');"+
-            "INSERT INTO inventoryData(user_mobile) VALUES ('"+mobile+"');"+
-            "INSERT INTO userBooking(user_mobile) VALUES ('"+mobile+"');"+
-            "COMMIT;";
+            var q9 = "BEGIN;" +
+                "INSERT INTO userInfo(user_mobile, user_password) VALUES ('" + mobile + "', '" + password + "');" +
+                "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
+                "INSERT INTO userBooking(user_mobile) VALUES ('" + mobile + "');" +
+                "COMMIT;";
             con.query(q9, (error, result) => {
                 if (error) throw error;
                 mobileNo = mobile;
@@ -145,24 +148,19 @@ app.put('/totalNoBoxes', (req, res) => {
     // var familyType = RequirementData.familyType;
     // var members = RequirementData.familyNumber;
     // var mobile = userSignup.userMobile;
-    var totalCarton;
+    
 
-    var houseType = req.body.houseType.replace(' ','').toLowerCase();
+    var houseType = req.body.houseType.replace(' ', '').toLowerCase();
     var familyType = (req.body.familyType).toLowerCase();
     var members = parseInt(req.body.familyNumber);
     // var mobile = req.body.phoneNumber;
-    console.log("total box backend :",houseType, familyType, members, global.mobile);
-    var totalCarton;
+    console.log("total box backend :", houseType, familyType, members, global.mobile);
+    
 
     // var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
-    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
-    con.query(q13, (error, result) => {
-        if (error) throw error;
-        // res.setHeader('Content-Type', 'application/json');
-        // res.status(200);
-    })
 
-    var q10 = "SELECT boxes_qty FROM boxFixedPrice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
+
+    var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
 
 
     con.query(q10, (error, result) => {
@@ -172,32 +170,34 @@ app.put('/totalNoBoxes', (req, res) => {
         if (familyType == 'bachelor' && members > 1) {
             var check = (members - 1) * 4;
             var totalBachelorBox = flag + check;
-            totalCarton = totalBachelorBox;
+            global.totalCarton = totalBachelorBox;
             res.status(200).json(totalBachelorBox);
         }
         else if (members == 1) {
             // res.setHeader('Content-Type', 'application/json');
-            totalCarton = flag ;
+            global.totalCarton = flag;
             res.status(200).json(flag);
         }
         if (familyType == 'family' && members > 1) {
             var check = (members - 4) * 4;
             var totalFamilyBox = flag + check;
             // res.setHeader('Content-Type', 'application/json');
-            totalCarton = totalFamilyBox;
+            global.totalCarton = totalFamilyBox;
             res.status(200).json(totalFamilyBox);
         }
         else if (members == 4) {
             // res.setHeader('Content-Type', 'application/json');
-            totalCarton = flag;
+            global.totalCarton = flag;
             res.status(200).json(flag);
         }
-        
-        q19 = "UPDATE inventoryData SET carton='"+totalCarton+"' WHERE user_mobile = '"+global.mobile+"'";
-        con.query(q19,(error,result)=>{
-            if(error) throw error;
-            // res.status(200);
+        console.log("Total carton: ", global.totalCarton);
+        var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
+        con.query(q13, (error, result) => {
+            if (error) throw error;
+            console.log("TOTAL BOXES: ",global.totalCarton);
         });
+
+        
     });
 
 });
@@ -218,12 +218,12 @@ app.put('/basePrice', (req, res) => {
     var fromAdd = req.body.fromAddress;
     var toAdd = req.body.toAddress;
     var totalDistance = Math.round(parseFloat(req.body.distance));
-    var houseType = req.body.houseType.replace(' ','').toLowerCase();;
+    var houseType = req.body.houseType.replace(' ', '').toLowerCase();;
     // var phoneNumber=req.body.phoneNumber;
-    
+
     console.log("backend rcvd in base price :");
-    console.log("from address :",fromAdd);
-    console.log("to address :",toAdd);
+    console.log("from address :", fromAdd);
+    console.log("to address :", toAdd);
     console.log(totalDistance)
     console.log(houseType)
     console.log(global.mobile);
@@ -238,224 +238,235 @@ app.put('/basePrice', (req, res) => {
         // con.query(q12,(error,result)=>{
         //     if(error) throw error;
         // })
+        if(true){
+            if (houseType == "1rk") {
+                if (totalDistance <= 5) {
+                    global.basePrice = 2199;
 
-        if (houseType == "1rk") {
-            if (totalDistance <= 5) {
-                basePrice = 2199;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 5 && totalDistance <= 10) {
-                basePrice = 2499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 10 && totalDistance <= 15) {
-                basePrice = 2799;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 15 && totalDistance <= 20) {
-                basePrice = 2999;
-                res.status(200).json(basePrice);
-            }
+                }
+                if (totalDistance >= 5 && totalDistance <= 10) {
+                    global.basePrice = 2499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 10 && totalDistance <= 15) {
+                    global.basePrice = 2799;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 15 && totalDistance <= 20) {
+                    global.basePrice = 2999;
+                    // res.status(200).json(global.basePrice);
+                }
 
-            if (totalDistance >= 20 && totalDistance <= 25) {
-                basePrice = 3349;
-                res.status(200).json(basePrice);
+                if (totalDistance >= 20 && totalDistance <= 25) {
+                    global.basePrice = 3349;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 25 && totalDistance <= 30) {
+                    global.basePrice = 3699;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 30 && totalDistance <= 35) {
+                    global.basePrice = 4099;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 35 && totalDistance <= 40) {
+                    global.basePrice = 4499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 40 && totalDistance <= 45) {
+                    global.basePrice = 4849;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 50) {
+                    global.basePrice = 5199;
+                    // res.status(200).json(global.basePrice);
+                }
+
             }
-            if (totalDistance >= 25 && totalDistance <= 30) {
-                basePrice = 3699;
-                res.status(200).json(basePrice);
+            // res.send(global.basePrice);
+            if (houseType == "1bhk") {
+                if (totalDistance <= 5) {
+                    global.basePrice = 3199;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 5 && totalDistance <= 10) {
+                    global.basePrice = 4499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 10 && totalDistance <= 15) {
+                    global.basePrice = 4999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 15 && totalDistance <= 20) {
+                    global.basePrice = 5299;
+                    // res.status(200).json(global.basePrice);
+                }
+
+                if (totalDistance >= 20 && totalDistance <= 25) {
+                    global.basePrice = 6499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 25 && totalDistance <= 30) {
+                    global.basePrice = 6999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 30 && totalDistance <= 35) {
+                    global.basePrice = 7499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 35 && totalDistance <= 40) {
+                    global.basePrice = 7999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 40 && totalDistance <= 45) {
+                    global.basePrice = 8499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 50) {
+                    global.basePrice = 8999;
+                    // res.status(200).json(global.basePrice);
+                }
+
             }
-            if (totalDistance >= 30 && totalDistance <= 35) {
-                basePrice = 4099;
-                res.status(200).json(basePrice);
+            // res.send(global.basePrice);
+            if (houseType == "1bhkHeavy") {
+                if (totalDistance <= 5) {
+                    global.basePrice = 3899;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 5 && totalDistance <= 10) {
+                    global.basePrice = 4499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 10 && totalDistance <= 15) {
+                    global.basePrice = 5499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 15 && totalDistance <= 20) {
+                    global.basePrice = 5999;
+                    // res.status(200).json(global.basePrice);
+                }
+
+                if (totalDistance >= 20 && totalDistance <= 25) {
+                    global.basePrice = 6549;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 25 && totalDistance <= 30) {
+                    global.basePrice = 7099;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 30 && totalDistance <= 35) {
+                    global.basePrice = 7649;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 35 && totalDistance <= 40) {
+                    global.basePrice = 8199;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 40 && totalDistance <= 45) {
+                    global.basePrice = 8749;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 50) {
+                    global.basePrice = 9299;
+                    // res.status(200).json(global.basePrice);
+                }
+
             }
-            if (totalDistance >= 35 && totalDistance <= 40) {
-                basePrice = 4499;
-                res.status(200).json(basePrice);
+            // res.send(global.basePrice);
+            if (houseType == "2bhk") {
+                if (totalDistance <= 5) {
+                    global.basePrice = 7999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 5 && totalDistance <= 10) {
+                    global.basePrice = 12999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 10 && totalDistance <= 15) {
+                    global.basePrice = 13999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 15 && totalDistance <= 20) {
+                    global.basePrice = 13999;
+                    // res.status(200).json(global.basePrice);
+                }
+
+                if (totalDistance >= 20 && totalDistance <= 25) {
+                    global.basePrice = 14899;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 25 && totalDistance <= 30) {
+                    global.basePrice = 15799;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 30 && totalDistance <= 35) {
+                    global.basePrice = 16699;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 35 && totalDistance <= 40) {
+                    global.basePrice = 17599;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 40 && totalDistance <= 45) {
+                    global.basePrice = 18499;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 50) {
+                    global.basePrice = 19399;
+                    // res.status(200).json(global.basePrice);
+                }
+
             }
-            if (totalDistance >= 40 && totalDistance <= 45) {
-                basePrice = 4849;
-                res.status(200).json(basePrice);
+            // res.send(global.basePrice);
+            if (houseType == "2bhkHeavy") {
+                if (totalDistance <= 5) {
+                    global.basePrice = 8999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 5 && totalDistance <= 10) {
+                    global.basePrice = 14999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 10 && totalDistance <= 15) {
+                    global.basePrice = 16999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 15 && totalDistance <= 20) {
+                    global.basePrice = 17999;
+                    // res.status(200).json(global.basePrice);
+                }
+
+                if (totalDistance >= 20 && totalDistance <= 25) {
+                    global.basePrice = 18999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 25 && totalDistance <= 30) {
+                    global.basePrice = 19999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 30 && totalDistance <= 35) {
+                    global.basePrice = 20999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 35 && totalDistance <= 40) {
+                    global.basePrice = 21999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 40 && totalDistance <= 45) {
+                    global.basePrice = 22999;
+                    // res.status(200).json(global.basePrice);
+                }
+                if (totalDistance >= 50) {
+                    global.basePrice = 23999;
+                    // res.status(200).json(global.basePrice);
+                }
+
             }
-            if (totalDistance >= 50) {
-                basePrice = 5199;
-                res.status(200).json(basePrice);
-            }
+            res.setHeader('Content-Type', 'application/json');
+            res.json(global.basePrice).status(200);
         }
-        if (houseType == "1bhk") {
-            if (totalDistance <= 5) {
-                basePrice = 3199;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 5 && totalDistance <= 10) {
-                basePrice = 4499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 10 && totalDistance <= 15) {
-                basePrice = 4999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 15 && totalDistance <= 20) {
-                basePrice = 5299;
-                res.status(200).json(basePrice);
-            }
-
-            if (totalDistance >= 20 && totalDistance <= 25) {
-                basePrice = 6499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 25 && totalDistance <= 30) {
-                basePrice = 6999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 30 && totalDistance <= 35) {
-                basePrice = 7499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 35 && totalDistance <= 40) {
-                basePrice = 7999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 40 && totalDistance <= 45) {
-                basePrice = 8499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 50) {
-                basePrice = 8999;
-                res.status(200).json(basePrice);
-            }
-        }
-        if (houseType == "1bhkHeavy") {
-            if (totalDistance <= 5) {
-                basePrice = 3899;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 5 && totalDistance <= 10) {
-                basePrice = 4499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 10 && totalDistance <= 15) {
-                basePrice = 5499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 15 && totalDistance <= 20) {
-                basePrice = 5999;
-                res.status(200).json(basePrice);
-            }
-
-            if (totalDistance >= 20 && totalDistance <= 25) {
-                basePrice = 6549;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 25 && totalDistance <= 30) {
-                basePrice = 7099;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 30 && totalDistance <= 35) {
-                basePrice = 7649;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 35 && totalDistance <= 40) {
-                basePrice = 8199;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 40 && totalDistance <= 45) {
-                basePrice = 8749;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 50) {
-                basePrice = 9299;
-                res.status(200).json(basePrice);
-            }
-        }
-        if (houseType == "2bhk") {
-            if (totalDistance <= 5) {
-                basePrice = 7999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 5 && totalDistance <= 10) {
-                basePrice = 12999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 10 && totalDistance <= 15) {
-                basePrice = 13999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 15 && totalDistance <= 20) {
-                basePrice = 13999;
-                res.status(200).json(basePrice);
-            }
-
-            if (totalDistance >= 20 && totalDistance <= 25) {
-                basePrice = 14899;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 25 && totalDistance <= 30) {
-                basePrice = 15799;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 30 && totalDistance <= 35) {
-                basePrice = 16699;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 35 && totalDistance <= 40) {
-                basePrice = 17599;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 40 && totalDistance <= 45) {
-                basePrice = 18499;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 50) {
-                basePrice = 19399;
-                res.status(200).json(basePrice);
-            }
-        }
-        if (houseType == "2bhkHeavy") {
-            if (totalDistance <= 5) {
-                basePrice = 8999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 5 && totalDistance <= 10) {
-                basePrice = 14999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 10 && totalDistance <= 15) {
-                basePrice = 16999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 15 && totalDistance <= 20) {
-                basePrice = 17999;
-                res.status(200).json(basePrice);
-            }
-
-            if (totalDistance >= 20 && totalDistance <= 25) {
-                basePrice = 18999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 25 && totalDistance <= 30) {
-                basePrice = 19999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 30 && totalDistance <= 35) {
-                basePrice = 20999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 35 && totalDistance <= 40) {
-                basePrice = 21999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 40 && totalDistance <= 45) {
-                basePrice = 22999;
-                res.status(200).json(basePrice);
-            }
-            if (totalDistance >= 50) {
-                basePrice = 23999;
-                res.status(200).json(basePrice);
-            }
-        }
-        res.status(200);
-
+        
     })
 
 
@@ -515,7 +526,7 @@ app.get('/getUserInfo', (req, res) => {
     // var mobile = userSignup.userMobile;
     // var mobile=req.query.phoneNumber;
     // console.log("rcvd phone of user :", mobile);
-    
+
     var q4 = "SELECT * FROM " +
         "userInfo WHERE user_mobile = '" + global.mobile + "'";
 
@@ -536,102 +547,101 @@ app.put('/dateTimeSelect', (req, res) => {
     var finalTime = dateSelection.timeSlot;
     // var mobile = userSignup.userMobile;
 
-    var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '"+global.mobile+"'";
+    var q15 = "UPDATE inventoryData SET event_date = '" + finalDate + "', event_time='" + finalTime + "' WHERE user_mobile = '" + global.mobile + "'";
     con.query(q15, (error, result) => {
         if (error) throw error;
         res.status(200).json("Date Selection Completed");
     })
 });
 
-var addons={
-    carton:{
-        cost:250,
-        count:2,
-        totalPrice:500
+var addons = {
+    carton: {
+        cost: 250,
+        count: 2,
+        totalPrice: 500
     },
-    labour:{
-        cost:200,
-        count:2,
-        totalPrice:500
+    labour: {
+        cost: 200,
+        count: 2,
+        totalPrice: 500
     },
-    splitACInstallation:{
-        cost:500,
-        count:1,
-        totalPrice:500
+    splitACInstallation: {
+        cost: 500,
+        count: 1,
+        totalPrice: 500
     },
-    splitACUninstallation:{
-        cost:500,
-        count:2,
-        totalPrice:1000
+    splitACUninstallation: {
+        cost: 500,
+        count: 2,
+        totalPrice: 1000
     },
-    windowACInstallation:{
-        cost:200,
-        count:1,
-        totalPrice:200
+    windowACInstallation: {
+        cost: 200,
+        count: 1,
+        totalPrice: 200
     },
-    windowACUninstallation:{
-        cost:200,
-        count:1,
-        totalPrice:200
+    windowACUninstallation: {
+        cost: 200,
+        count: 1,
+        totalPrice: 200
     },
-    carpentry:{
-        cost:500,
-        count:1,
-        totalPrice:500
+    carpentry: {
+        cost: 500,
+        count: 1,
+        totalPrice: 500
     },
-    electrition:{
-        cost:100,
-        count:2,
-        totalPrice:200
+    electrition: {
+        cost: 100,
+        count: 2,
+        totalPrice: 200
     },
-    painting:{
-        cost:800,
-        count:2,
-        totalPrice:1600
+    painting: {
+        cost: 800,
+        count: 2,
+        totalPrice: 1600
     }
 }
 
-app.put('/addons',(req,res)=>{
+app.put('/addons', (req, res) => {
     const insertData = {
         addons: addons,
-      };
-      var add_on = JSON.stringify(insertData);
+    };
+    var add_on = JSON.stringify(insertData);
     //   var mobile = userSignup.userMobile;
 
-    var q16 = "UPDATE inventoryData SET addons='"+add_on+"'::jsonb WHERE user_mobile='"+global.mobile+"'";
-    con.query(q16,(error,result)=>{
-        if(error) throw error;
+    var q16 = "UPDATE inventoryData SET addons='" + add_on + "'::jsonb WHERE user_mobile='" + global.mobile + "'";
+    con.query(q16, (error, result) => {
+        if (error) throw error;
         res.send("addons added..." + result.rows);
     })
 });
 
 var booking = {
-    houseType:"1bhk",
-    carton:"28",
-    totalItemsAdded:"30",
-    distance:50,
-    date:"10-10-2023",
-    time:"6AM-8AM"
+    houseType: "1bhk",
+    carton: "28",
+    totalItemsAdded: "30",
+    distance: 50,
+    date: "10-10-2023",
+    time: "6AM-8AM"
 }
-app.get('/myBooking',(req,res)=>{
+app.get('/myBooking', (req, res) => {
 
     // var mobile = userSignup.userMobile;
 
-    var q17 = "BEGIN;"+ 
-    "SELECT house_type,total_distance FROM userInfo WHERE user_mobile='"+global.mobile+"';"+
-    "SELECT book_date,book_slot_time FROM inventoryData WHERE user_mobile='"+global.mobile+"';"+
-    "COMMIT;";
+    const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
+    i.book_date, i.book_slot_time, i.total_items, i.total_box, i.order_id 
+    FROM userInfo u INNER JOIN inventoryData i ON u.user_mobile = i.user_mobile 
+    WHERE u.user_mobile = $1 `;
 
+    console.log(global.mobile);
+    const userMobile = global.mobile;
 
+    con.query(q17, [userMobile], (error, results) => {
+        if (error) throw error;
+        console.log('Query results:', results.rows);
+        res.send(results.rows);
 
-con.query(q17,(error,result)=>{
-    if(error) throw error;
-    const userInfoResult = result[1].rows; // First query result
-    const inventoryDataResult = result[2].rows; // Second query result
-    const mergedResult = userInfoResult.concat(inventoryDataResult);
-    res.send(mergedResult);
-
-}); 
+    });
 
 })
 
@@ -668,16 +678,16 @@ app.put('/updateUser', updateProfile, (req, res) => {
 
 });
 
-app.put('/inventory',(req,res)=>{
+app.put('/inventory', (req, res) => {
 
     var mobile = req.body.mobile;
-    console.log("all inventory data: ",req.body);
+    console.log("all inventory data: ", req.body);
     console.log("addons : ");
     console.log(req.body.addons);
 
     console.log("datatime : ");
     console.log(req.body.dataTime);
-    
+
     console.log("user_inventory : ");
     console.log(req.body.user_inventory);
 
@@ -696,58 +706,62 @@ app.put('/inventory',(req,res)=>{
     console.log("booking data ")
     console.log(req.body.dataTime?.selectedDay?.bookingDate)
 
-    var addons=JSON.stringify(req.body.addons);
-    var user_inventory=JSON.stringify(req.body.user_inventory);
+    console.log("total items ")
+    console.log(req.body.totalCost?.totalItemCount)
 
-// Function to get the current date in 'dd/mm/yyyy' format
-function getCurrentDate() {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const yyyy = today.getFullYear();
-    return dd + '-' + mm + '-' + yyyy;
-  }
-  
-  // Function to generate a random 6-digit number
-  function getRandNumber() {
-    return Math.floor(100000 + Math.random() * 900000);
-  }
-  console.log(global.mobile);
-  
-  // Function to extract the last 4 digits of a phone number (replace 'phone' with your actual phone number)
-  function getLast4Digitmobile(mobile) {
-    if (typeof mobile === 'string' && mobile.length >= 4) {
-        return mobile.slice(-4);
-      } 
-  }
-  
-  // Concatenate the components to create the order ID
-  const prefix = 'SK';
-  const currentDate = getCurrentDate();
-  const randomDigits = getRandNumber();
-   const phone = mobile; // Replace with the actual phone number
-  const last4Digits = getLast4Digitmobile(phone);
-  
-  const orderID = `${prefix}${currentDate}${randomDigits}${last4Digits}`;
-  
-  console.log(orderID);
-  
+    var addons = JSON.stringify(req.body.addons);
+    var user_inventory = JSON.stringify(req.body.user_inventory);
+
+    // Function to get the current date in 'dd/mm/yyyy' format
+    function getCurrentDate() {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const yyyy = today.getFullYear();
+        return dd + mm + yyyy;
+    }
+
+    // Function to generate a random 6-digit number
+    function getRandNumber() {
+        return Math.floor(100000 + Math.random() * 900000);
+    }
+    console.log(global.mobile);
+
+    // Function to extract the last 4 digits of a phone number 
+    function getLast4Digitmobile(mobile) {
+        if (typeof mobile === 'string' && mobile.length >= 4) {
+            return mobile.slice(-4);
+        }
+    }
+
+    // Concatenate the components to create the order ID
+    const prefix = 'SK';
+    const currentDate = getCurrentDate();
+    const randomDigits = getRandNumber();
+    const phone = mobile;
+    const last4Digits = getLast4Digitmobile(phone);
+
+    global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
+
+    console.log(global.orderID);
 
 
+    const intvalue = parseInt(global.totalCarton);
 
-    q21 = "UPDATE inventoryData SET user_inventory='" + user_inventory + "', book_date='" + req.body.dataTime.selectedDay.currentDate + "', book_slot_time ='" + req.body.dataTime.selectedTime.label + "', addons='" + addons + "' , order_id = '"+ orderID +"' , user_current_date = '"+ currentDate+"' WHERE user_mobile='" + req.body.mobile + "'";
+    q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, total_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '"+ intvalue +"' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
 
     con.query(q21, (error, result) => {
-        if(error) throw error;
-        if(result.rows.length>0){
-            console.log("inventory data saved successfully");
-        }
-        res.status(200).json("data saved successfully");
+        if (error) throw error;
+        console.log(result.rows);
+        // if (result.rows.length > 0) {
+        //     console.log("inventory data saved successfully");
+        // }
+        res.send(result.rows);
     })
 
-    
+
     res.status(200); // comment this when the above query runs
-    
+
 });
 
 app.listen(port, () => {
