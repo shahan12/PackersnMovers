@@ -156,7 +156,18 @@
         margin-right: 5rem;
     }
   }
-
+  @media (min-width: 2400px) {
+    .landing-img {
+        width: 45rem;
+        margin-top: 10rem;
+        margin-right: 25rem;
+    }
+    .img-left-sticky{
+        top: 13rem;
+        left: 9rem;
+        z-index: 0;
+    }
+  }
   @media (max-width: 600px) {
     .home-landing-container{
         margin-top: -13rem;
