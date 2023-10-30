@@ -1,0 +1,35 @@
+[
+  {
+      "house_type": "1bhk",
+      "total_distance": 5,
+      "from_address": "HSR Layout, Bengaluru, Karnataka, India",
+      "to_address": "Koramangala, Bengaluru, Karnataka, India",
+      "book_date": "2023-10-27T18:30:00.000Z",
+      "book_slot_time": "8-10 AM",
+      "total_items": 5,
+      "total_box": 7,
+      "order_id": "SK28102023-6483331235"
+  },
+  {
+      "house_type": "1bhk",
+      "total_distance": 5,
+      "from_address": "HSR Layout, Bengaluru, Karnataka, India",
+      "to_address": "Koramangala, Bengaluru, Karnataka, India",
+      "book_date": "2023-10-27T18:30:00.000Z",
+      "book_slot_time": "8-10 AM",
+      "total_items": 3,
+      "total_box": 7,
+      "order_id": "SK28102023-3807291235"
+  },
+  {
+      "house_type": "1bhk",
+      "total_distance": 5,
+      "from_address": "HSR Layout, Bengaluru, Karnataka, India",
+      "to_address": "Koramangala, Bengaluru, Karnataka, India",
+      "book_date": "2023-10-27T18:30:00.000Z",
+      "book_slot_time": "8-10 AM",
+      "total_items": 3,
+      "total_box": null,
+      "order_id": "SK28102023-7773541235"
+  }
+]
