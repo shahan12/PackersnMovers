@@ -29,6 +29,11 @@
     text-align: center;
 }
 
+.landing-img {
+    width: 50rem;
+    margin-top: 10rem;
+    z-index: 3;
+}
 .home-relocate-wrapper{
     position: fixed;
     top: 10rem;
@@ -36,6 +41,8 @@
     z-index: 10;
 }
 /* service Containers */
+
+
 
 .section-container {
     position: relative;
@@ -64,20 +71,15 @@
 
 .img-left-sticky {
     position: absolute;
-    top: 12rem;
-    right: 76rem;
-    z-index: 0;
+    top: 0; 
+    left: 0;
+    z-index: 1;
 }
 .img-right-sticky {
     position: absolute;
     bottom: -4rem; 
     right: 0; 
     z-index: 0;
-}
-.landing-img {
-    width: 50rem;
-    margin-top: 10rem;
-    z-index: 3;
 }
 
 
@@ -148,15 +150,6 @@
     flex-direction: row;
     align-items: flex-start;
 }
-
- @media (max-width: 1440px) {
-    .landing-img {
-        width: 35rem;
-        margin-top: 17rem;
-        margin-right: 5rem;
-    }
-  }
-
   @media (max-width: 600px) {
     .home-landing-container{
         margin-top: -13rem;
@@ -176,10 +169,6 @@
     .container-item{
         width: 100%;
         margin-left: 0;
-    }
-    .landing-img {
-        width: 19rem;
-        margin-top: 20rem;
     }
     .services-row-one{
         gap: 2rem;
@@ -204,3 +193,50 @@
     }
     
   }
+
+  @media (max-width: 2000px) {
+    .home-relocate-wrapper{
+        right: 8rem;
+    }
+}
+
+@media (max-width: 1700px) {
+    .container-item {
+        margin-left: 5rem;
+    }
+    .home-relocate-wrapper{
+        right: 6rem;
+    }
+    .landing-img {
+        width: 45rem;
+    }
+}
+
+@media (max-width: 1400px) {
+    .container-item {
+        margin-left: 5rem;
+    }
+    .home-relocate-wrapper{
+        right: 4rem;
+    }
+}
+@media (max-width: 1300px) {
+    .container-item {
+        margin-left: 3rem;
+    }
+    .home-relocate-wrapper{
+        right: 3rem;
+    }
+}
+@media (max-width: 800px) {
+    .fillReq-requirements-wrapper{
+        flex-direction: column;
+    }.requirements-section-1 {
+        padding: 0 1rem 1rem;
+    }
+    .requirements-section-2 {
+        flex:1;
+        flex-direction: column;
+        width: 100%;
+    }
+}
