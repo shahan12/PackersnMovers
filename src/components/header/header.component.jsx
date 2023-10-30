@@ -136,7 +136,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               </div>
             ) : (
               <div className="header-user-wrapper" onClick={hanleLogOut}>
-                <span>Log Out</span>
+                <span>Corporate</span>
               </div>
             )}
           </div>
@@ -152,7 +152,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               </div>
             ) : (
               <div className="header-user-wrapper" onClick={hanleLogOut}>
-                <span>Log Out</span>
+                <span>Commercial</span>
               </div>
             )}
           </div>

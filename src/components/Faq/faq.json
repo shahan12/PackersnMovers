@@ -1,24 +1,24 @@
 {
   "data": [
     {
-      "header1": "How soon will my order ship??",
-      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      "header1": "How soon will my order ship?",
+      "data": "Your order will ship as soon as possible."
     },
     {
       "header1": "Is there any warranty exclusions?",
-      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      "data": "No, we do not have any warranty exclusions."
     },
     {
       "header1": "Are there any return exclusions?",
-      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      "data": "There are no return exclusions."
     },
     {
       "header1": "Will I be charged for a replacement item?",
-      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      "data": "No, there are no additional charges for replacement items."
     },
     {
       "header1": "How can I track my orders & payment?",
-      "data": "Elementum ullamcorper felis nulla scelerisque. Nunc enim nunc mattis leo massa."
+      "data": "You can track your orders and payments through our online platform or mobile app."
     }
   ]
 }
