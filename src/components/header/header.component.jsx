@@ -46,6 +46,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const handleProfile = () => {
     window.open("/edit-profile", "_self");
   };
+  const handleBooking = () => {
+    window.open("/bookings", "_self");
+  };
   const handleLogoToHome = () => {
     window.open("/", "_self");
   };
@@ -115,6 +118,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
           <div className="profile-btn" onClick={handleProfile}>
             Profile
+          </div>
+          <div className="profile-btn" onClick={handleBooking}>
+            Booking
           </div>
         </div>
       ) : (

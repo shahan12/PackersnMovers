@@ -159,7 +159,7 @@ function Requirement({progress, setProgress}) {
       "basePrice": basePriceFromAPI,
       "floorCharges": floorChargeFromAPI,
       "totalBox" : totalBoxFromAPI,
-      "totalCostBF": totalCostBF,
+      "totalCostBF": basePriceFromAPI+floorChargeFromAPI,
     }
     dispatch(updateTotalCost(totalcostData));
   }, [basePriceFromAPI, floorChargeFromAPI, totalCostBF]);

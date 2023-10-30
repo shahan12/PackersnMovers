@@ -20,9 +20,9 @@ const instance = axios.create({
 export const sendLoginRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
-    //  const response = await axios.get('http://localhost:3001/login', {params :data});
-    return "Login Sucessfull...";
-    // return response.data;
+     const response = await axios.get('http://localhost:3001/login', {params :data});
+    // return "Login Sucessfull...";
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -104,4 +104,15 @@ export const updateUserInfoToBackend = async (data) => {
   }
 };
 
+export const getUserBookingFromBackend = async (data) => {
+  try {
+    // console.log("final data to send backend : ", data);
+     const response = await axios.get('http://localhost:3001/myBooking');
+    // return "Login Sucessfull...";
+    console.log("booking data : ", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
