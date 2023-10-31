@@ -12,6 +12,8 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   let totalCostRedux = useSelector((state) => state.TotalCostItems);
   const [basePrice, setBasePrice] = useState(useSelector((state)=> state.TotalCostItems.basePrice));
   const [floorCharges, setFloorCharges] = useState(useSelector((state)=> state.TotalCostItems.floorCharges));
+  const [totalBox, setTotalBox] = useState(useSelector((state)=> state.TotalCostItems.totalBox));
+  const [totalBoxPrice, setTotalBoxPrice] = useState(useSelector((state)=> state.TotalCostItems.totalBoxPrice));
   const [totalCost, setTotalCost] = useState(0);
   const [totalCostBF, setTotalCostBF] = useState(0);
   const libraries = ['places'];
@@ -22,7 +24,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   // let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
   
-  console.log(totalCostRedux.basePrice, "totalCostRedux");
+  console.log(totalCostRedux, "totalCostRedux");
   useEffect(() => {
     let calculatedTotalPrice = 0;
 
@@ -37,8 +39,10 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   useEffect(() => {
     if (totalCostRedux) {
       setTotalCostBF(totalCostRedux.totalCostBF); 
-      setBasePrice(totalCostRedux.basePrice);  
+      setBasePrice(totalCostRedux.basePrice);
       setFloorCharges(totalCostRedux.floorCharges); 
+      setTotalBoxPrice(totalCostRedux.totalBoxPrice); 
+      setTotalBox(totalCostRedux.totalBox); 
     }
   }, [totalCostRedux]);
 
@@ -48,7 +52,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const [disabled, setDisabled] = useState(true);
   const [addonsPrice, setAddonsPrice] = useState('');
 
-  const newTotalCost = addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0);
+  const newTotalCost = addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0) + totalBoxPrice;
 
   useEffect(() => {
     let totalcostData = {
@@ -60,7 +64,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
       "totalCost": newTotalCost,
     }
 
-    setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0));
+    setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0) + totalBoxPrice);
     dispatch(updateTotalCost(totalcostData));
 
   }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost]);
@@ -140,6 +144,10 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
             <div className="cost-details-child"> 
               <span>Total Items Added</span>
               <span>{totalItemCount}</span>
+            </div>
+            <div className="cost-details-child"> 
+              <span>Additional Boxes (per Box ₹100)</span>
+              <span>{totalBox}</span>
             </div>
             <div className="cost-details-child"> 
               <span>CFT</span>

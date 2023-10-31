@@ -6,10 +6,15 @@ import Services from "../../components/services/services.component";
 import RetractableTable from "../../components/Faq/Faq.component";
 import houseShift from "../../images/_Group_.svg";
 import commercialSetting from "../../images/_Group_ (1).svg";
+import petservice from "../../images/petservice.svg";
+import vehicleservice from "../../images/vehicleservice.svg";
+import corpservice from "../../images/corpservice.svg";
+import vehicleconservice from "../../images/vehicleconservice.svg";
 import officeShift from "../../images/_Group_ (2).svg";
 import storageShift from "../../images/_Group_ (3).svg";
 import industrialShift from "../../images/Group (1).svg";
 import processMove from "../../images/process.svg";
+import banner from "../../images/banner.png";
 import landingHome from "../../images/2-people.png";
 import purpleCircle from "../../images/1purplecircle.svg";
 import orangeCircle1 from "../../images/1orangecircle.svg";
@@ -54,7 +59,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
     }
   }, [loginModal]);
   const listenToScroll = () => {
-    let heightToHideFrom = 1920;
+    let heightToHideFrom = 2900;
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop;
     setHeight(winScroll);
@@ -105,15 +110,18 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               <h2>Our Services</h2>
               <div className="flex services-row-one">
                 <Services img={houseShift} text={"House Shifting"} />
-                <Services
-                  img={commercialSetting}
-                  text={"Commercial Shifting"}
-                />
+                <Services img={commercialSetting} text={"Commercial Shifting"} />
                 <Services img={officeShift} text={"Office Shifting"} />
               </div>
               <div className="flex services-row-one">
                 <Services img={storageShift} text={"Storage Shifting"} />
                 <Services img={industrialShift} text={"Industrial Shifting"} />
+                <Services img={corpservice} text={"Corporate Shifting"} />
+              </div>
+              <div className="flex services-row-one">
+                <Services img={vehicleservice} text={"Vehicle Shifting"} />
+                <Services img={petservice} text={"Pet Shifting"} />
+                <Services img={vehicleconservice} text={"Vehicle Contracts"} />
               </div>
             </div>
           </div>
@@ -151,6 +159,11 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
                   color={"#5ccc9c"}
                 />
               </div>
+              <img
+                className="process-img"
+                src={banner}
+                alt="process-icon"
+              />
             </div>
           </div>
 
@@ -204,7 +217,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               src={purpleCircle3}
               alt="process-icon"
             />
-            <div className="container-item-full">
+            <div style={{padding: '5rem'}} className="container-item-full">
               <AboutUs />
             </div>
           </div>

@@ -1,5 +1,6 @@
 .header-container{
-    padding: 1rem 10rem;
+    padding: 1rem 8rem;
+    padding-top: 3rem;
     background: transparent;
     position: sticky;
     top: 0rem;

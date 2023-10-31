@@ -18,8 +18,7 @@
 
 .services-row-one{
     gap: 8rem;
-    margin-bottom: 2rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
 }
 
 
@@ -107,15 +106,13 @@
 }
 
 .process-img {
-    width: 37rem;
-    margin-top: 5rem;
-    margin-right: 7rem;
+    width: 43rem;
+    margin-top: 3rem;
     z-index: 1;
 }
 .process-row-one{
     gap: 4rem;
-    margin-top: 5rem;
-    margin-right: 6rem;
+    margin-top: 3rem;
 }
 
 
@@ -124,8 +121,8 @@
 /* process Container home */ 
 .container-blogs {
     background-size: cover;
-    height: 40rem;
-    padding-top: 4rem;
+    height: 48rem;
+    padding-top: 8rem;
     position: relative;
 }
 
@@ -143,6 +140,10 @@
     align-items: center;
     width: 100%;
 
+}
+.aboutUs {
+        padding: 0;
+        background-color: #F4F4F4;;
 }
 .container-table-faq {
     display: flex;

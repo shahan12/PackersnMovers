@@ -24,7 +24,7 @@ function Requirement({progress, setProgress}) {
   const [familyType, setfamilyType] = useState("");
   const [basePriceFromAPI, setBasePriceFromAPI] = useState(useSelector((state)=> state.TotalCostItems.basePrice) || 0);
   const [floorChargeFromAPI, setFloorChargeFromAPI] = useState(useSelector((state)=> state.TotalCostItems.floorCharges) || 0);
-  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState(0);
+  const [totalBoxFromAPI, setTotalBoxFromAPI] = useState(useSelector((state)=> state.TotalCostItems.totalBox) || 0);
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const [totalCostBF, setTotalCostBF] = useState();
@@ -128,7 +128,7 @@ function Requirement({progress, setProgress}) {
       // console.log("finally sending to basePrice backend function 2:",API_Req_Data_JSON);
       const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
       setBasePriceFromAPI(basePriceResponse);
-      console.log("rcd from basePrice backend :", basePriceResponse);
+      //console.log("rcd from basePrice backend :", basePriceResponse);
 
       // console.log("to calculate floor charges ");
       // console.log(parseInt(API_Req_Data.floorNumber),API_Req_Data.fromLift,parseInt(API_Req_Data.toFloor),API_Req_Data.toLift);
@@ -139,12 +139,13 @@ function Requirement({progress, setProgress}) {
       if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
       floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
       setFloorChargeFromAPI(floorChargeResponse);
-      console.log("calculated floorPrice :", floorChargeResponse);
+      // console.log("calculated floorPrice :", floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
       setTotalBoxFromAPI(totalBoxResponse);
       console.log("rcd from totalBox backend :", totalBoxResponse);
-      console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
+      
+      // console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
       // store these values in redux
     } catch (error) {
       console.error('Error:', error);
@@ -159,10 +160,11 @@ function Requirement({progress, setProgress}) {
       "basePrice": basePriceFromAPI,
       "floorCharges": floorChargeFromAPI,
       "totalBox" : totalBoxFromAPI,
+      "totalBoxPrice" : (totalBoxFromAPI * 100),
       "totalCostBF": basePriceFromAPI+floorChargeFromAPI,
     }
     dispatch(updateTotalCost(totalcostData));
-  }, [basePriceFromAPI, floorChargeFromAPI, totalCostBF]);
+  }, [basePriceFromAPI, floorChargeFromAPI, totalCostBF, totalBoxFromAPI]);
 
   const handleArrowClick = (action) => {
     if (action === 'increment' && familyNumber < 10) {
@@ -171,7 +173,20 @@ function Requirement({progress, setProgress}) {
       setFamilyNumber(familyNumber - 1);
     }
   };
-
+  
+  function performInspection() {
+    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
+      // Show an alert message
+      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
+        
+      } else {
+        // User dismissed the alert, do nothing
+      }
+    } else {
+      // Call the FlatrequireMents function
+      FlatrequireMents();
+    }
+  }
   return (
       <div className="requirements-section-1">
         <div className="border-bottom extra-margin">
@@ -328,7 +343,7 @@ function Requirement({progress, setProgress}) {
             !distance
           }
           className="cta-button"
-          onClick={FlatrequireMents}
+          onClick={performInspection}
         >
           NEXT
         </button>

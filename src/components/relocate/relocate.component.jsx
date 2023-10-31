@@ -59,8 +59,6 @@ function Relocate({setLoginModal}) {
     setModalOpen(true);
   };
 
-  console.log(distance);
-
   useEffect(() => {
     calculateDistance();
   }, [fromAddress, toAddress]);
@@ -168,9 +166,9 @@ function Relocate({setLoginModal}) {
                 <StandaloneSearchBox 
                 onLoad={ref => (inputRefFrom.current = ref)} 
                 onPlacesChanged={handleFromPlaceChanged} 
-                options={searchOptions}
+                options={searchOptions}className="relocate-input-box margin-bottom-40"
                 >
-                  <input type="text" className="form-control" placeholder="From Address" />
+                  <input type="text" className="form-control relocate-input-box" placeholder="From Address" />
                 </StandaloneSearchBox>
               )}
             </div>
@@ -181,7 +179,7 @@ function Relocate({setLoginModal}) {
                 onPlacesChanged={handleToPlaceChanged} 
                 options={searchOptions}
                 >
-                  <input type="text" className="form-control" placeholder="To Address" />
+                  <input type="text" className="form-control  relocate-input-box" placeholder="To Address" />
                 </StandaloneSearchBox>
               )}
             </div>

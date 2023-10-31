@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./header.css";
-import logo from "../../images/SHIFTKART-LOGO.png";
+import logo from "../../images/logo.svg";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import PhoneIcon from "../../images/phone.svg";
 import ProfilePic from "../../images/defaultPic.svg";
@@ -141,7 +141,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                 Corporate
               </div>
             ) : (
-              <div className="header-user-wrapper">
+              <div className="header-sign-in-btn">
                 Corporate
               </div>
             )}
@@ -157,7 +157,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                 Commercial
               </div>
             ) : (
-              <div className="header-user-wrapper">
+              <div className="header-sign-in-btn">
                 Commercial
               </div>
             )}
@@ -188,10 +188,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               Login
             </div>
           ) : (
-            <div className="header-user-wrapper" onClick={hanleLogOut}>
+            <div className="header-sign-in-btn" onClick={hanleLogOut}>
               <span>Log Out</span>
             </div>
           )}
+          <div className="header-cta-container align-center space-between grey-600">
+            <div className="header-user-wrapper">
+              +91 88847-84888
+            </div>
+          </div>
         </div>
       )}
     </article>
