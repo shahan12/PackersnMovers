@@ -15,6 +15,9 @@ import { useDispatch } from 'react-redux';
 import { updateRequirements, updateTotalCost } from '../../redux/actions';
 import { useSelector } from 'react-redux';
 import { json } from "react-router-dom";
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InfoIcon from '@mui/icons-material/Info';
 
 function Requirement({progress, setProgress}) {
 
@@ -238,6 +241,12 @@ function Requirement({progress, setProgress}) {
               <span className="arrowCount">{familyNumber}</span>
               <img src={downArray} onClick={() => handleArrowClick('decrement')}/>
             </div>
+            <Tooltip title="default Family is considered as 4 members and Bachelor is considered for 1 member, by adding an extra member in either case will cost 4 more box." 
+            placement="right">
+              <IconButton>
+                <InfoIcon fontSize="small" style={{ fontSize: 16 }}/>
+              </IconButton>
+            </Tooltip>
           </div>
         </div>
         <div className="house-type-wrapper">
