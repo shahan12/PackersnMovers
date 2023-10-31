@@ -42,8 +42,8 @@ export const sendBasePriceRequestToBackend = async (data) => {
   try {
     console.log("final data to send basePrice backend : ", data);
     const response = await instance.put('http://localhost:3001/basePrice', data);
-    // return response.data;
-    return 100;
+    return response.data;
+    // return 100;
   } catch (error) {
     throw error;
   }
