@@ -85,3 +85,15 @@
 .cta-button:disabled {
     background-color: #ccc; 
   }
+  @media (max-width: 1300px) {
+    .relocate-wrapper {
+        width: 25rem;
+    }
+    
+}
+  @media (max-width: 1100px) {
+    .relocate-wrapper {
+        width: 28rem;
+    }
+    
+  }
