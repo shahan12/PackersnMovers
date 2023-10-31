@@ -1,5 +1,9 @@
 .orders-compoennt-wrapper {
     padding: 1.875rem 9.187rem 9.187rem;
+    
+    background-size: 100%; /* or background-size: cover; */
+    background-repeat: no-repeat;
+    background-image: url('../../images/image.png');
 }
 
 @media (max-width: 2000px) {

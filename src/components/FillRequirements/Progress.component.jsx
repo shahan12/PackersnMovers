@@ -77,6 +77,10 @@ const Progress = ({ progress, setProgress }) => {
           <span>{totalCost?.totalItemCount}</span>
         </div>
         <div className="cost-details-child">
+          <span>Additional Boxes: {totalCost?.totalBox}</span>
+          <span>₹{totalCost?.totalBoxPrice}</span>
+        </div>
+        <div className="cost-details-child">
           <span>CFT</span>
           <span>{totalCost?.cft}</span>
         </div>
