@@ -12,6 +12,7 @@ global.mobile;
 global.basePrice;
 global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
+global.additionalBox;
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -145,10 +146,10 @@ app.put('/totalNoBoxes', (req, res) => {
             if (error) throw error;
             var flag = result.rows[0].boxes_qty;
             if (familyType == 'bachelor' && members > 1) {
-                var additionalBox = (members - 1) * 4;
+                global.additionalBox = (members - 1) * 4;
                 // var totalBachelorBox = flag + check;
                 // global.totalCarton = totalBachelorBox;
-                res.status(200).json(additionalBox);
+                res.status(200).json(global.additionalBox);
             }
             // else if (members == 1) {
             //     // res.setHeader('Content-Type', 'application/json');
@@ -156,11 +157,11 @@ app.put('/totalNoBoxes', (req, res) => {
             //     res.status(200).json(flag);
             // }
             if (familyType == 'family' && members > 4) {
-                var additionalBox = (members - 4) * 4;
+                global.additionalBox = (members - 4) * 4;
                 //var totalFamilyBox = flag + check;
                 // res.setHeader('Content-Type', 'application/json');
                 //global.totalCarton = totalFamilyBox;
-                res.status(200).json(additionalBox);
+                res.status(200).json(global.additionalBox);
             }
             // else if (members == 4) {
             //     // res.setHeader('Content-Type', 'application/json');
@@ -168,13 +169,13 @@ app.put('/totalNoBoxes', (req, res) => {
             //     res.status(200).json(flag);
             // }
             else {
-                res.json("Enter the correct details");
+                res.json(0);
             }
             console.log("Total carton: ", global.totalCarton);
             var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
             con.query(q13, (error, result) => {
                 if (error) throw error;
-                console.log("TOTAL BOXES: ", global.totalCarton);
+                console.log("ADDITIONAL BOXES: ", global.additionalBox);
             });
         });
     }
@@ -578,7 +579,7 @@ app.get('/myBooking', (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
-    i.book_date, i.book_slot_time, i.total_items, i.total_box, i.order_id 
+    i.book_date, i.book_slot_time, i.total_items, i.additional_box, i.order_id 
     FROM userInfo u INNER JOIN inventoryData i ON u.user_mobile = i.user_mobile 
     WHERE u.user_mobile = $1 `;
 
@@ -692,9 +693,9 @@ app.put('/inventory', (req, res) => {
 
         global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
         console.log(global.orderID);
-        const intvalue = parseInt(global.totalCarton);
+        const intvalue = parseInt(global.additionalBox);
 
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, total_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + intvalue + "' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + intvalue + "' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
         con.query(q21, (error, result) => {
             if (error) throw error;
             console.log(result.rows);
