@@ -115,7 +115,7 @@ function Requirement({progress, setProgress}) {
         console.log("distance :",distance);
         await sendRequestReq(forAPIRequirement);
       }
-      // setProgress('inventory');
+      setProgress('inventory');
   };
   function isEqual(objA, objB) {
     const keysA = Object.keys(objA);
@@ -363,18 +363,18 @@ function Requirement({progress, setProgress}) {
         </div>
         <div className="fill-req-CTA-container flex">
         <div className='prevButton'></div><button
-          disabled={
-            !familyType ||
-            !houseType ||
-            !familyNumber ||
-            !floorNumber ||
-            !liftValue ||
-            !movingFloorNumber ||
-            !movingToLiftValue ||
-            !fromAddress ||
-            !toAddress ||
-            !distance
-          }
+         // disabled={
+           // !familyType ||
+           // !houseType ||
+           // !familyNumber ||
+           // !floorNumber ||
+           // !liftValue ||
+           // !movingFloorNumber ||
+           // !movingToLiftValue ||
+            //!fromAddress ||
+           // !toAddress ||
+            //!distance
+          //}
           className="cta-button"
           onClick={performInspection}
         >

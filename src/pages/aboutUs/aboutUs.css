@@ -1,12 +1,11 @@
 
 .about-us-heading {
  text-align: center;
- padding: 3rem 0rem;
 }
 
 .about-us-para-text{
     text-align: justify;
-    margin: 2.5rem 0;
+    margin: 2.5rem;
     font-weight: 400;
     font-size: 1.125rem;
     color: #757575;
@@ -16,6 +15,7 @@
     font-size: 1.125rem;
     color: black;
 }
+
 
 .aboutUs {
     padding: 0rem 15rem 20rem 15rem;

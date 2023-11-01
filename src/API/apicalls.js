@@ -18,14 +18,14 @@ const instance = axios.create({
 // };
 
 export const sendLoginRequestToBackend = async (data) => {
-  try {
-    console.log("final data to send backend : ", data);
-    const response = await axios.get('http://localhost:3001/login', {params :data});
-    // return "Login Sucessfull...";
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  // try {
+    // console.log("final data to send backend : ", data);
+    // const response = await axios.get('http://localhost:3001/login', {params :data});
+    // return response.data;
+  // } catch (error) {
+  //   throw error;
+  // }
+  return "Login Sucessfull...";
 };
 
 export const sendRegisterRequestToBackend = async (data) => {
