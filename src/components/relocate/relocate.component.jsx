@@ -149,7 +149,7 @@ function Relocate({setLoginModal}) {
       </div>
       {activeTab === "Within City" && (
         <div className="relocate-select-city">
-          <div className="relocate-input margin-bottom-40">
+          <div className="relocate-input">
             <p className="small-desc">Select City</p>
             <div className="relocate-drop-down-container">
               <DropDown
@@ -160,19 +160,19 @@ function Relocate({setLoginModal}) {
             </div>
           </div>
           <div className="relocate-search-locality">
-            <p className="small-desc">Enter Addresses</p>
-            <div className="relocate-input margin-bottom-40">
-                  {isLoaded && (
-                <StandaloneSearchBox 
-                onLoad={ref => (inputRefFrom.current = ref)} 
-                onPlacesChanged={handleFromPlaceChanged} 
-                options={searchOptions}className="relocate-input-box margin-bottom-40"
-                >
-                  <input type="text" className="form-control relocate-input-box" placeholder="From Address" />
-                </StandaloneSearchBox>
+            <p className="small-desc">Search From</p>
+            <div className="relocate-input">
+                {isLoaded && (
+              <StandaloneSearchBox 
+              onLoad={ref => (inputRefFrom.current = ref)} 
+              onPlacesChanged={handleFromPlaceChanged} 
+              options={searchOptions}className="relocate-input-box">
+                <input type="text" className="form-control  relocate-input-box"placeholder="From Address" />
+              </StandaloneSearchBox>
               )}
             </div>
             <div className="relocate-input">
+            <p className="small-desc">Search To</p>
             {isLoaded && (
                 <StandaloneSearchBox 
                 onLoad={ref => (inputRefTo.current = ref)} 
