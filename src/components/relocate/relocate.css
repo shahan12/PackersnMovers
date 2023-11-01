@@ -6,7 +6,7 @@
     background-image: url('../../images/purple_house.png');
     opacity: 0.9;
     width: 28rem;
-    background-size: 100%; /* or background-size: cover; */
+    background-size: cover; /* or background-size: cover; */
     background-repeat: no-repeat;
 }
 .relocate-tabs-container {
