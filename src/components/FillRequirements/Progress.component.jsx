@@ -22,6 +22,8 @@ const Progress = ({ progress, setProgress }) => {
     }
   }, [totalCostRedux]);
 
+  console.log("items added are ", ITEMADDED);
+
 
   const prev = () => {
     if (progress === "progress") {

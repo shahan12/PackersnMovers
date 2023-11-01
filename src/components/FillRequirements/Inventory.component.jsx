@@ -13,7 +13,7 @@ import { updateSelectedItems } from "../../redux/actions";
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
 
   let TotalCostItems = useSelector((state) => state.TotalCostItems);
-  console.log("->>>>>>",TotalCostItems);
+  // console.log("->>>>>>",TotalCostItems);
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
@@ -46,11 +46,17 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const calculateTotalAndCft = () => {
     let totalCount = 0;
       let totalCft = 0;
+      console.log("calculating CFT");
+      console.log("calculating in : ", selectedItems);
 
       for (const category in selectedItems) {
+        console.log("category : ", category);
           for (const subCategory in selectedItems[category]) {
+            console.log("sub category :",subCategory);
               for (const item in selectedItems[category][subCategory]) {
+                console.log("item : ", item);
                   const { cost, count } = selectedItems[category][subCategory][item];
+                  console.log("cost , count :",cost,count);
                   totalCount += count;
                   totalCft += count * cost;
               }
@@ -99,8 +105,25 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     };
   
     // calculateTotalAndCft();
+    // console.log("updated items :", updatedItems);
     setSelectedItems(updatedItems);
-    calculateTotalAndCft();
+    // calculateTotalAndCft();
+
+
+    //------------calcuate CFT----------------------------------
+    let totalCount = 0; let totalCft = 0;
+    for (const category in updatedItems) {
+        for (const subCategory in updatedItems[category]) {
+            for (const item in updatedItems[category][subCategory]) {
+                const { cost, count } = updatedItems[category][subCategory][item];
+                totalCount += count;
+                totalCft += count * cost;
+            }
+        }
+    }
+    setTotalItemCount(totalCount); setCft(totalCft);
+    //------------calcuate CFT----------------------------------
+
   };
   
   
@@ -180,7 +203,21 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
           count: currentCount - 1,
         };
       }
-  
+
+      console.log("after minus ", updatedSelectedItems);
+      //------------calcuate CFT----------------------------------
+      let totalCount = 0; let totalCft = 0;
+      for (const category in updatedSelectedItems) {
+          for (const subCategory in updatedSelectedItems[category]) {
+              for (const item in updatedSelectedItems[category][subCategory]) {
+                  const { cost, count } = updatedSelectedItems[category][subCategory][item];
+                  totalCount += count;
+                  totalCft += count * cost;
+              }
+          }
+      }
+      setTotalItemCount(totalCount); setCft(totalCft);
+      //------------calcuate CFT----------------------------------
       return updatedSelectedItems;
     });
   

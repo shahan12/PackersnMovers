@@ -24,7 +24,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   // let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
   
-  console.log(totalCostRedux, "totalCostRedux");
+  console.log("totalCostRedux", totalCostRedux);
   useEffect(() => {
     let calculatedTotalPrice = 0;
 

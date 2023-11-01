@@ -47,9 +47,9 @@ const TotalDTReducer = (state = initialState, action) => {
 
 const initialState2 = {
   requirements: {
-    familyType: '',
+    familyType: 'Family',
     houseType: '',
-    familyNumber: 2,
+    familyNumber: 4,
     floorNumber: '',
     fromLift: '',
     toFloor: '',
