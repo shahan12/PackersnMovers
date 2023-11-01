@@ -376,7 +376,7 @@ function Requirement({progress, setProgress}) {
             !distance
           }
           className="cta-button"
-          onClick={performInspection}
+          onClick={setProgress('inventory')}
         >
           NEXT
         </button>

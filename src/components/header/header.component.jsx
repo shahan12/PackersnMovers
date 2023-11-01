@@ -55,9 +55,8 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
 
   return (
     <article
-      className={`header-container space-between ${
-        showfillHeader && "add-box-shadow"
-      }`}
+      className={`header-container space-between ${showfillHeader && "add-box-shadow"
+        }`}
     >
       {loginModal && (
         <RegisterModal
@@ -97,31 +96,33 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               alt="down-Arrow"
               className="flex width-100 header-profile-img"
             ></img>
+            {showMoreOption && (
+              <div className="header-more-option-dropdown"> 
+                <div
+                  // className="header-more-option-dropdown"
+                  onClick={handleProfile}
+                >
+                  Profile
+                </div>
+                <div className="profile-btn" onClick={handleBooking}>
+                  Booking
+                </div>
+                <div
+                  // className="header-more-option-dropdown"
+                  onClick={hanleLogOut}
+                >
+                  Log out
+                </div>
+              </div>
+            )}
           </div>
-          {showMoreOption && (
-            <>
-              <div
-                className="header-more-option-dropdown"
-                onClick={handleProfile}
-              >
-                Profile
-              </div>
-              <div
-                className="header-more-option-dropdown"
-                onClick={hanleLogOut}
-              >
-                Log out
-              </div>
-            </>
-          )}
-
           {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
-          <div className="profile-btn" onClick={handleProfile}>
+          {/* <div className="profile-btn" onClick={handleProfile}>
             Profile
-          </div>
-          <div className="profile-btn" onClick={handleBooking}>
+          </div> */}
+          {/* <div className="profile-btn" onClick={handleBooking}>
             Booking
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="header-cta-container align-center space-between grey-600">
