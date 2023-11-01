@@ -150,7 +150,7 @@ function Relocate({setLoginModal}) {
       {activeTab === "Within City" && (
         <div className="relocate-select-city">
           <div className="relocate-input">
-            <p className="small-desc">Select City</p>
+            <p className="small-desc">Search From</p>
             <div className="relocate-drop-down-container">
               <DropDown
                 value={wCity}
@@ -166,8 +166,8 @@ function Relocate({setLoginModal}) {
               <StandaloneSearchBox 
               onLoad={ref => (inputRefFrom.current = ref)} 
               onPlacesChanged={handleFromPlaceChanged} 
-              options={searchOptions}className="relocate-input-box">
-                <input type="text" className="form-control  relocate-input-box"placeholder="From Address" />
+              options={searchOptions}>
+                <input type="text" className="relocate-input-box"placeholder="From Address" />
               </StandaloneSearchBox>
               )}
             </div>
@@ -179,7 +179,7 @@ function Relocate({setLoginModal}) {
                 onPlacesChanged={handleToPlaceChanged} 
                 options={searchOptions}
                 >
-                  <input type="text" className="form-control  relocate-input-box" placeholder="To Address" />
+                  <input type="text" className="relocate-input-box" placeholder="To Address" />
                 </StandaloneSearchBox>
               )}
             </div>
@@ -188,14 +188,16 @@ function Relocate({setLoginModal}) {
       )}
       {activeTab === "Between City" && (
         <div className="relocate-select-city">
+          
+          <div className="relocate-input">
           <p className="small-desc">Which city you want to move from?</p>
-
           <div className="relocate-drop-down-container margin-bottom-40">
             <DropDown
               value={fromCity}
               setValue={setFromCity}
               option={Data.IndianCitiesPinCode}
             />
+          </div>
           </div>
           <p className="small-desc">Destination city</p>
           <div className="relocate-drop-down-container">
@@ -209,6 +211,8 @@ function Relocate({setLoginModal}) {
       )}
       {activeTab === "International" && (
         <div className="relocate-select-city">
+          
+          <div className="relocate-input">
           <p className="small-desc">Source?</p>
 
           <div className="relocate-drop-down-container margin-bottom-40">
@@ -217,6 +221,7 @@ function Relocate({setLoginModal}) {
               setValue={setFromCoun}
               option={Data.International}
             />
+          </div>
           </div>
           <p className="small-desc">Destination Country</p>
           <div className="relocate-drop-down-container">

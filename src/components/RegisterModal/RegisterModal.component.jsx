@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import "./Modal.css";
 import loginModalImg from "../../images/price-start.png";
-import loginModalImg1 from "../../images/movers 2 1.png";
+import loginModalImg1 from "../../images/movers11.jpg";
 import companyLogo from "../../images/SHIFTKART-LOGO.png";
 import { AppContext } from "../../context/context";
 import { saveData } from "../../network/saveData";
@@ -100,7 +100,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   return (
     <div className="login-modal-overlay">
       <div className="login-modal">
-        <button className="login-modal-close" onClick={onClose}>
+        <button className="login-modal-close" onClick={onClose}   style={{ color: 'white' }}> 
           &times;
         </button>
         <div className="login-modal-content">
@@ -111,7 +111,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
               className="login-modal-company-logo"
             ></img>
             {/* Replace with your image */}
-            <h4>Free Inspection Of Your Home Or Office</h4>
+            <h4 style={{fontSize: '1.8rem'}}>Free Inspection Of Your Home Or Office</h4>
             <img src={loginModalImg} alt="Login" />
           </div>
           <div className="login-modal-form">
@@ -122,8 +122,9 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 className="login-modal-form-image"
               ></img>
             </div>
-            {flow === "register" && <h2>Let us get in touch with you!</h2>}
-            {flow === "login" && <h2>Enter Number to Continue</h2>}
+            <div>
+            {flow === "register" && <p className="small-desc" style={{color: '#FDFDFDC9'}}> Let us get in touch with you!</p>}
+            {flow === "login" && <p className="small-desc" style={{color: '#FDFDFDC9', marginBottom: '0.3rem'}}>Enter Number to Continue</p>}
             {!thankYou && !otpPage && (
               <form>
                 <input
@@ -150,6 +151,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 </button>
               </form>
             )}
+            </div>
             {thankYou && flow === "register" && (
               <h3>We will connect with you shortly!</h3>
             )}
@@ -238,6 +240,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 )}
               </>
             )}
+            <p className="small-desc" style={{color: '#FDFDFDC9', marginBottom: '1rem'}}>By continuing, you agree to our <span style={{textDecoration: 'underline', color: 'white'}}>Terms & Conditions</span></p>
           </div>
         </div>
       </div>

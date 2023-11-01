@@ -71,11 +71,7 @@ code {
   cursor: pointer;
   text-align: center;
 }
-@media (max-width: 1000px) {
-  .cta-button {
-    padding: 0.5rem 2rem;
-  }
-}
+
 .disabled {
   opacity: 0.5 !important;
   pointer-events: none !important;

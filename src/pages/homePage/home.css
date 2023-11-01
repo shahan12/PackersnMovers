@@ -71,7 +71,6 @@
     position: absolute;
     top: 0; 
     left: 0;
-    z-index: 1;
 }
 .img-right-sticky {
     position: absolute;
@@ -108,7 +107,6 @@
 .process-img {
     width: 43rem;
     margin-top: 3rem;
-    z-index: 1;
 }
 .process-row-one{
     gap: 4rem;
