@@ -118,7 +118,7 @@ app.put('/updatePassword', (req, res) => {
 app.get('/logout', (req, res) => {
     try {
         if (error) throw error;
-        res.clearCookie('mobile');
+        // res.clearCookie('mobile');
         res.redirect('./homepage.html');
     }
     catch (error) {
@@ -149,7 +149,6 @@ app.put('/totalNoBoxes', (req, res) => {
                 global.additionalBox = (members - 1) * 4;
                 // var totalBachelorBox = flag + check;
                 // global.totalCarton = totalBachelorBox;
-                res.status(200).json(global.additionalBox);
             }
             // else if (members == 1) {
             //     // res.setHeader('Content-Type', 'application/json');
@@ -161,7 +160,6 @@ app.put('/totalNoBoxes', (req, res) => {
                 //var totalFamilyBox = flag + check;
                 // res.setHeader('Content-Type', 'application/json');
                 //global.totalCarton = totalFamilyBox;
-                res.status(200).json(global.additionalBox);
             }
             // else if (members == 4) {
             //     // res.setHeader('Content-Type', 'application/json');
@@ -169,7 +167,8 @@ app.put('/totalNoBoxes', (req, res) => {
             //     res.status(200).json(flag);
             // }
             else {
-                res.json(0);
+                global.additionalBox = 0;
+                res.status(200).json(global.additionalBox);
             }
             console.log("Total carton: ", global.totalCarton);
             var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
@@ -182,7 +181,6 @@ app.put('/totalNoBoxes', (req, res) => {
     catch (error) {
         console.error(error.message);
     }
-
 });
 
 // This api calculate base price based on house type and total distance
@@ -693,9 +691,10 @@ app.put('/inventory', (req, res) => {
 
         global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
         console.log(global.orderID);
-        const intvalue = parseInt(global.additionalBox);
-
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + intvalue + "' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
+        const value = parseInt(global.additionalBox);
+        if(isNaN(value)){
+            value = 0;
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
         con.query(q21, (error, result) => {
             if (error) throw error;
             console.log(result.rows);
@@ -703,6 +702,7 @@ app.put('/inventory', (req, res) => {
         })
         res.status(200); // comment this when the above query runs
     }
+}
 
     catch (error) {
         console.error(error.messaege);
