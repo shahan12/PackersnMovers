@@ -15,7 +15,7 @@
     justify-content: space-between;
     padding: 0.5rem;
     border-radius: 0.625rem;
-    background-color: white;
+    background-color: #F1F1F1;
 
 }
 .relocate-select-city{
@@ -28,7 +28,7 @@
     font-size: 0.75rem;
     font-weight: bold;
     border-radius: 0.5rem;
-    background-color: white;
+    background-color: #F1F1F1;
 }
 @keyframes slide-down {
     0% {
@@ -62,18 +62,15 @@
     font-size: 0.8rem;
     font-weight: 500;
     color: white;
-    padding: 0.5rem 0;
-}
-.relocate-drop-down-container{
-    height: 3.125rem;
 }
 .relocate-input{
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 .relocate-input-box{
     padding: 1rem 0.5rem;
     width: 100%; 
     border-radius: 0.3rem;
+    background-color: #FDFDFDE5;
 }
 
 .cta-container{
