@@ -1,4 +1,4 @@
-.header-container{
+.header-container {
     padding: 1rem 8rem;
     padding-top: 3rem;
     background: transparent;
@@ -6,88 +6,100 @@
     top: 0rem;
     z-index: 1;
 }
+
 @media (max-width: 600px) {
     .header-container {
-      flex-direction: column;
-      padding: 0;
+        flex-direction: column;
+        padding: 0;
     }
-    .header-cta-container{
+
+    .header-cta-container {
         gap: 0;
         flex-direction: column;
     }
-  }
-.header-cta-container{
+}
+
+.header-cta-container {
     gap: 1rem;
 }
-.header-logo-img{
+
+.header-logo-img {
     width: 9rem;
     height: 4.6rem;
     cursor: pointer;
 }
-.header-CTA-item{
+
+.header-CTA-item {
     text-decoration: none;
     color: #363636;
     font-weight: 600;
 }
-.header-user-wrapper{
+
+.header-user-wrapper {
     display: flex;
     padding: 0.5rem 1rem;
     justify-content: center;
     align-items: center;
-    gap: 10px;border-radius: 24px;
+    gap: 10px;
+    border-radius: 24px;
     background: var(--Primary, #550EC5);
     cursor: pointer;
     color: #FDFDFD;
 }
+
 .header-user-wrapper-btn {
     background-color: transparent;
     color: white;
     cursor: pointer;
     margin: 0 auto;
 }
-.header-item-phoneNumber-container{
+
+.header-item-phoneNumber-container {
     color: #248B04;
     font-size: 1rem;
     font-weight: 400;
     margin-right: 2.6rem;
 }
 
-.header-item-phoneNumber-container span{
+.header-item-phoneNumber-container span {
     padding-left: 0.5rem;
 }
 
-.header-profile-picture-container{
+.header-profile-picture-container {
     border-radius: 50%;
     width: 2rem;
 }
 
-.header-more-option-container{
+.header-more-option-container {
     cursor: pointer;
+    position: relative;
 }
-.header-more-option-dropdown{
+
+.header-more-option-dropdown {
     position: absolute;
     background-color: white;
     opacity: 1;
-    right: 9rem;
-    top: 4rem;
+    right: 6%;
+    top: 128%;
     border-radius: 6px;
     box-shadow: -4px 0px 11px 0px rgba(54, 54, 54, 0.24) inset;
     padding: 1rem;
     cursor: pointer;
 }
-.header-profile-img{
+
+.header-profile-img {
     position: relative;
 }
 
-.add-box-shadow{
+.add-box-shadow {
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
-    box-shadow:  -1px 1px 0px rgba(0, 0, 0, 0.10) inset;
+    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10) inset;
 }
 
-.profile-btn{
+.profile-btn {
     cursor: pointer;
 }
 
-.header-sign-in-btn{
+.header-sign-in-btn {
     cursor: pointer;
 }
