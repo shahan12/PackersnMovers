@@ -168,14 +168,15 @@ app.put('/totalNoBoxes', (req, res) => {
             // }
             else {
                 global.additionalBox = 0;
-                res.status(200).json(global.additionalBox);
             }
+            
             console.log("Total carton: ", global.totalCarton);
             var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
             con.query(q13, (error, result) => {
                 if (error) throw error;
                 console.log("ADDITIONAL BOXES: ", global.additionalBox);
             });
+            res.status(200).json(global.additionalBox);
         });
     }
     catch (error) {
@@ -585,8 +586,12 @@ app.get('/myBooking', (req, res) => {
         const userMobile = global.mobile;
         con.query(q17, [userMobile], (error, results) => {
             if (error) throw error;
-            console.log('Query results:', results.rows);
-            res.send(results.rows);
+            if(results.rows.length>1){
+                let books=results.rows;
+                books=books.slice(1);
+                res.send(books);
+            }
+            else res.send([]); 
         });
     }
     catch (error) {
@@ -658,6 +663,9 @@ app.put('/inventory', (req, res) => {
         console.log("total items ")
         console.log(req.body.totalCost?.totalItemCount)
 
+        console.log("additional box ")
+        console.log(req.body.totalCost?.totalBox);
+
         var addons = JSON.stringify(req.body.addons);
         var user_inventory = JSON.stringify(req.body.user_inventory);
 
@@ -691,17 +699,22 @@ app.put('/inventory', (req, res) => {
 
         global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
         console.log(global.orderID);
-        const value = parseInt(global.additionalBox);
-        if(isNaN(value)){
-            value = 0;
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + global.mobile + "' )";
+        let value = req.body.totalCost.totalBox;
+        // console.log("value -> ",value);
+        if(isNaN(value) || value===undefined){
+            value=0;
+        }
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '"+ value +"' ,'" + req.body.totalCost.totalItemCount + "','" + req.body.mobile + "' )";
+
         con.query(q21, (error, result) => {
-            if (error) throw error;
+            if(error) throw error;
             console.log(result.rows);
+            // if(result.rows.length > 0) {
+            //     console.log("inventory data saved successfully");
+            // }
             res.send(result.rows);
         })
-        res.status(200); // comment this when the above query runs
-    }
+        // res.status(200); // comment this when the above query runs
 }
 
     catch (error) {
