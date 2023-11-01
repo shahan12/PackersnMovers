@@ -38,6 +38,9 @@
     top: 10rem;
     right: 12rem;
     z-index: 10;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 /* service Containers */
 
@@ -71,7 +74,6 @@
     position: absolute;
     top: 0; 
     left: 0;
-    z-index: 1;
 }
 .img-right-sticky {
     position: absolute;
@@ -108,7 +110,6 @@
 .process-img {
     width: 43rem;
     margin-top: 3rem;
-    z-index: 1;
 }
 .process-row-one{
     gap: 4rem;
@@ -230,11 +231,12 @@
 @media (max-width: 1100px) {
     .home-relocate-wrapper {
       top: 80px; 
+      width: 100%;
       position: sticky;
       top: 0; /* Adjust this value based on your desired spacing from the top */
       z-index: 10; /* Adjust the z-index as needed */
       background-color: #fff; /* Background color for the sticky area */
-      padding: 20px; /* Add padding to create space around the content */
+      padding: 1rem 0.5rem; /* Add padding to create space around the content */
       
     }
     .section-container {
@@ -270,5 +272,17 @@
     }
     .img-right-sticky {
         width: 30%;
+    }
+    .home-relocate-wrapper {
+        align-items: center;
+      
+    }.relocate-input-box{
+        padding: 0.5rem 0.5rem;
+        width: 100%; 
+        border-radius: 0.3rem;
+        background-color: #FDFDFDE5;
+    }
+    .cta-button {
+        padding: 0.5rem 0;
     }
 }
