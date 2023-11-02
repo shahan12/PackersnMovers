@@ -1,10 +1,9 @@
 .retractable-table {
     border-collapse: collapse;
     transition: transform 1s ease-in-out;
-    margin: 2rem;
+    margin: 1rem;
   }
   .retractable-table {
-    width: 100%;
     border-collapse: collapse;
   }
   

@@ -1,7 +1,8 @@
 .custom-table {
   border-collapse: collapse;
   border-radius: 0.5rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
+  font-size: 1rem;
 }
 
 tr {
@@ -69,3 +70,13 @@ td {
       width: 2rem;
     }
   }
+
+
+  @media (max-width: 1200px) {
+    .custom-table {
+      font-size: 0.8rem;
+    }
+    .checkmarkTH img {
+      width: 25%;
+    }
+}
