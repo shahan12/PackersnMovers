@@ -115,12 +115,12 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               </div>
               <div className="flex services-row-one">
                 <Services img={storageShift} text={"Storage Shifting"} />
-                <Services img={industrialShift} text={"Industrial Shifting"} />
+                <Services img={petservice} text={"Pet Shifting"} />
                 <Services img={corpservice} text={"Corporate Shifting"} />
               </div>
               <div className="flex services-row-one">
                 <Services img={vehicleservice} text={"Vehicle Shifting"} />
-                <Services img={petservice} text={"Pet Shifting"} />
+                <Services img={industrialShift} text={"Industrial Shifting"} />
                 <Services img={vehicleconservice} text={"Vehicle Contracts"} />
               </div>
             </div>
@@ -206,7 +206,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             </div>
           </div>
 
-          <div className="section-container aboutUs" id="process">
+          <div className="section-container" id="process">
             <img
               className="img-left-sticky"
               src={orangeCircle2}
@@ -217,7 +217,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               src={purpleCircle3}
               alt="process-icon"
             />
-            <div style={{padding: '5rem'}} className="container-item-full">
+            <div className="container-item-full">
               <AboutUs />
             </div>
           </div>
