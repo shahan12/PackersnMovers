@@ -15,13 +15,3 @@
     font-size: 1.125rem;
     color: black;
 }
-
-.aboutUs {
-    padding: 0rem 15rem 20rem 15rem;
-}
-
-@media (max-width: 600px) {
-    .aboutUs {
-        padding: 5rem 2rem 2rem 2rem
-    }
-}

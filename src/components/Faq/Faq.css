@@ -82,13 +82,13 @@
   @media (max-width: 600px) {
     .header-row td {
       font-size: 1rem;
-      width: 17rem;
+      width: max-content;
     }
     .data-row{
       font-size: 0.75rem;
     }
     .data-row td {
-        width: 17rem;
+        width: max-content;
     }
     .retractable-table {
       margin: 0;

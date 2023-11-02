@@ -65,7 +65,18 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           flow={"login"}
         />
       )}
-      <div className="align-center">
+      
+      {/* the logo */}
+
+      
+
+      {/* the logo */}
+
+      {showfillHeader ? (
+        
+        // Header inside
+        <div className="header-cta-container align-center space-between grey-600">
+          <div className="align-center">
         <img
           src={logo}
           alt="logo"
@@ -73,8 +84,6 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           onClick={handleLogoToHome}
         ></img>
       </div>
-      {showfillHeader ? (
-        <div className="header-cta-container align-center space-between grey-600">
           <span className="header-item-phoneNumber-container">
             <img src={PhoneIcon} alt={"phone"}></img>
             <span>+91 8847885671</span>
@@ -116,16 +125,19 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               </div>
             )}
           </div>
-          {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
-          {/* <div className="profile-btn" onClick={handleProfile}>
-            Profile
-          </div> */}
-          {/* <div className="profile-btn" onClick={handleBooking}>
-            Booking
-          </div> */}
         </div>
       ) : (
+        // Header outside
+
         <div className="header-cta-container align-center space-between grey-600">
+          <div className="align-center">
+        <img
+          src={logo}
+          alt="logo"
+          className="header-logo-img"
+          onClick={handleLogoToHome}
+        ></img>
+      </div>
           <div className="header-sign-in-btn">
             <Link to="/about-us" className="header-CTA-item">
               About Us
