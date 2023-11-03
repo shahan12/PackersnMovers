@@ -10,10 +10,20 @@ import "./Inventory.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSelectedItems } from "../../redux/actions";
 
+const houseLimit={
+  "1 RK" : 200,
+  "1 BHK" : 400,
+  "2 BHK" : 600
+}
+
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
 
   let TotalCostItems = useSelector((state) => state.TotalCostItems);
   // console.log("->>>>>>",TotalCostItems);
+
+  let {houseType} = useSelector((state) => state.RequirementsItems.requirements);
+  // console.log("---house type",RequirementsItems.requirements.houseType);
+
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
   const [itemCount, setItemCount] = useState(0);
@@ -22,7 +32,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
 
-  console.log("selected items", selectedItems);
+  // console.log("selected items", selectedItems);
 
   const handleItemClick = (item) => {
     setExpandedItem(item);
@@ -32,9 +42,29 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     setSelectedItems(selectedItemsRedux);
   }, [setSelectedItems]);
 
+  const checkHouseLimit=(totalCftValue)=>{
+    console.log("rcvd cft", totalCftValue);
+    if(totalCftValue>houseLimit[houseType]){
+      if(window.confirm(`you have exceeded the limit of ${houseLimit[houseType]} for a ${houseType} room.
+      confirm Ok, if you want to promote to a different category house or else reduce the items`)){
+        setProgress("requirement");
+      } 
+      else {
+        // do nothing as the user chooses to reduce items
+      }
+    }
+  }
+
   const handleNext = () => {
     dispatch(updateSelectedItems(selectedItems));
-    setProgress('dateselection');
+    console.log("final cft isssssssss", TotalCostItems.cft);
+    if(TotalCostItems.cft>houseLimit[houseType]){
+      console.log("should alert");
+      checkHouseLimit(TotalCostItems.cft)
+    }
+    else{
+      setProgress('dateselection');
+    }
   };
 
   const handlePrevious = () => {
@@ -122,6 +152,8 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
         }
     }
     setTotalItemCount(totalCount); setCft(totalCft);
+    console.log("-------cft after adding", totalCft);
+    checkHouseLimit(totalCft);
     //------------calcuate CFT----------------------------------
 
   };
@@ -217,6 +249,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
           }
       }
       setTotalItemCount(totalCount); setCft(totalCft);
+      console.log("-------cft after reducing", totalCft);
       //------------calcuate CFT----------------------------------
       return updatedSelectedItems;
     });
