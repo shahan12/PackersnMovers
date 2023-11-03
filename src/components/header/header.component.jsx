@@ -67,7 +67,14 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
       )}
       
       {/* the logo */}
-
+<div className="align-center">
+        <img
+          src={logo}
+          alt="logo"
+          className="header-logo-img"
+          onClick={handleLogoToHome}
+        ></img>
+      </div>
       
 
       {/* the logo */}
@@ -130,14 +137,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         // Header outside
 
         <div className="header-cta-container align-center space-between grey-600">
-          <div className="align-center">
-        <img
-          src={logo}
-          alt="logo"
-          className="header-logo-img"
-          onClick={handleLogoToHome}
-        ></img>
-      </div>
+          
           <div className="header-sign-in-btn">
             <Link to="/about-us" className="header-CTA-item">
               About Us
