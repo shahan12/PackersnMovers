@@ -338,58 +338,59 @@
 			}
 		},
 		"Other Furnitures": {
-			"TV Cabinet": {
+			"TV Cabinet with glass": {
 				"base": 6,
 				"material": {
 					"Not Applicable": 0,
-					"With Glass": 0,
-					"Without Glass": 0
+					"With Glass": 6,
+					"Without Glass": 8
+
 				},
 				"type": {
 					"Not Applicable": 0,
-					"<2ft X 2ft": 0,
-					"<2ft X 2-4ft": 11,
-					"<2ft X 4-6ft": 12,
-					"<2ft X >6ft": 24,
-					"2-4ft X <2ft": 6,
-					"2-4ft X 2-4ft": 19,
-					"2-4ft X 4-6ft": 30,
-					"2-4ft X >6ft": 44,
-					"4-6ft X <2ft": 16,
-					"4-6ft X 2-4ft": 30,
-					"4-6ft X 4-6ft": 48,
-					"4-6ft X >6ft": 44,
-					">6ft X <2ft": 19,
-					">6ft X 2-4ft": 42,
-					">6ft X 4-6ft": 69,
-					">6ft X >6ft": 94
+					"<2ft X 2ft": [0,0],
+					"<2ft X 2-4ft": [11,19],
+					"<2ft X 4-6ft": [12,14],
+					"<2ft X >6ft": [24,22],
+					"2-4ft X <2ft":[6,7],
+					"2-4ft X 2-4ft": [19,26],
+					"2-4ft X 4-6ft": [30,32],
+					"2-4ft X >6ft": [44,52],
+					"4-6ft X <2ft": [12,14],
+					"4-6ft X 2-4ft": [30,32],
+					"4-6ft X 4-6ft": [48,60],
+					"4-6ft X >6ft": [44,82],
+					">6ft X <2ft": [19,22],
+					">6ft X 2-4ft": [42,52],
+					">6ft X 4-6ft": [69,82],
+					">6ft X >6ft": [94,112]
 				}
 			},
 			"Showcase": {
 				"base": 8,
 				"material": {
 					"Not Applicable": 0,
-					"With Glass": 0,
-					"Without Glass": 0
+					"With Glass": 8,
+					"Without Glass": 6
 				},
 				"type": {
 					"Not Applicable": 0,
-					"2ft X 2ft": 0,
-					"<2ft X 2-4ft": 9,
-					"<2ft X 4-6ft": 14,
-					"<2ft X >6ft": 22,
-					"2-4ft X <2ft": 7,
-					"2-4ft X 2-4ft": 26,
-					"2-4ft X 4-6ft": 32,
-					"2-4ft X >6ft": 52,
-					"4-6ft X <2ft": 14,
-					"4-6ft X 2-4ft": 32,
-					"4-6ft X 4-6ft": 60,
-					"4-6ft X >6ft": 82,
-					">6ft X <2ft": 22,
-					">6ft X 2-4ft": 52,
-					">6ft X 4-6ft": 82,
-					">6ft X >6ft": 112
+					"<2ft X 2ft": [0,0],
+					"<2ft X 2-4ft": [9,6],
+					"<2ft X 4-6ft": [14,12],
+					"<2ft X >6ft": [22,14],
+					"2-4ft X <2ft":[7,6],
+					"2-4ft X 2-4ft": [26,14],
+					"2-4ft X 4-6ft": [32,30],
+					"2-4ft X >6ft": [52,44],
+					"4-6ft X <2ft": [14,12],
+					"4-6ft X 2-4ft": [32,30],
+					"4-6ft X 4-6ft": [60,30],
+					"4-6ft X >6ft": [82,94],
+					">6ft X <2ft": [22,14],
+					">6ft X 2-4ft": [52,42],
+					">6ft X 4-6ft": [52,69],
+					">6ft X >6ft": [112,94]
 				}
 			},
 			"Cupboard": {
@@ -414,34 +415,60 @@
 					">6ft X >6ft": 112
 				},
 				"material": {
-					"Not Applicable": 0
+					"Not Applicable": 0,
+					"Wooden":0
 				}
 			}
 		}
 	},
 	"Electronics": {
 		"Small Electronics" : {
-			"TV": {
+			"LED TV": {
 				"base": 7,
 				"type": {
 					"Not Applicable": 0,
-					"LED": 0,
-					"LCD": 0,
-					"CRT": 10
+					"LED": 0
 				},
-				"material": {
+				"Size": {
 					"Not Applicable": 0,
-					"less than 24 inch": 0,
+					"< 24 inch": 0,
 					"24 to 31 inch": 1,
 					"32 inch": 1,
 					"33 to 39 inch": 3,
 					"40 to 42 inch": 3,
 					"43 to 54 inch": 4,
-					"greater than 54": 5,
-					"less than 14 inch": 0,
+					"> 54 inch": 5
+				}
+			},
+			"LCD TV": {
+				"base": 7,
+				"type": {
+					"Not Applicable": 0,
+					"LCD": 0
+				},
+				"Size": {
+					"Not Applicable": 0,
+					"< 24 inch": 0,
+					"24 to 31 inch": 1,
+					"32 inch": 1,
+					"33 to 39 inch": 3,
+					"40 to 42 inch": 3,
+					"43 to 54 inch": 4,
+					"> 54 inch": 5
+				}
+			},
+			"CRT TV": {
+				"base": 10,
+				"type": {
+					"Not Applicable": 0,
+					"CRT": 0
+				},
+				"Size": {
+					"Not Applicable": 0,
+					"< 14 inch": 0,
 					"15 to 21 inch": 0,
 					"22 to 28 inch": 3,
-					"greater than 28 inch": 10
+					"> 28 inch": 10
 				}
 			},
 			"Fans": {
@@ -455,7 +482,10 @@
 					"wall mounted fan": 0
 				},
 				"material": {
-					"Not Applicable": 0
+					"Not Applicable": 0,
+					"Steel": 0,
+					"Metal":0,
+					"Plastic":0
 				}
 			},
 			"Ovens": {
@@ -518,24 +548,27 @@
 		"Bikes": {
 			"base": 0,
 			"type": {
+				"Not available": 0,
 				"under 150CC": 0,
 				"under 500CC": 0,
 				"under 800CC": 0,
 				"Superbike": 0
 			},
-			"material": {
-				"neither": 0
+			"Modal": {
+				"Not available": 0
 			}
 		},
 		"Cars": {
 			"base": 0,
 			"type": {
+				"Not available": 0,
 				"SUV": 0,
 				"Sedan": 0,
 				"Hatchback": 0,
 				"MPV": 0
 			},
-			"material": {
+			"Modal": {
+				"Not available": 0,
 				"Full size": 0,
 				"Compact": 0
 			}
