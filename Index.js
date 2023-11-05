@@ -4,6 +4,7 @@ const multer = require('multer');
 const moment = require('moment-timezone');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
+const axios = require('axios');
 var app = express();
 var port = 3001;
 
@@ -13,6 +14,7 @@ global.basePrice;
 global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
+global.base64UrlKey, global.sha256Hash, global.base64; 
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -721,6 +723,83 @@ app.put('/inventory', (req, res) => {
         console.error(error.messaege);
     }
 });
+
+
+// Demo Data
+const dummyData = {
+    amount: 100,
+    mobile: 9911791780
+}
+
+app.get('/paymentInfo',(req,res)=>{
+    try{
+
+        const key = '2703f196-4543-4735-8155-dfc968998051';
+        const endPoint = '/pg/v1/pay';
+        const requestData = {
+            "merchantId": "M13CMFUCVPKM",
+            "merchantTransactionId": generateMerchantTransactionId(),
+            "merchantUserId": "IDSK3777",
+            "amount": dummyData.amount, // from front-end amount would be get
+            "redirectUrl": "https://www.google.com/",
+            "redirectMode": "REDIRECT",
+            "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+            "mobileNumber": dummyData.mobile,  //'global.mobile' need to be use
+            "paymentInstrument": {
+              "type": "PAY_PAGE"
+            }
+          }
+
+        //const rupees = Math.floor(requestData.amount * 100);
+
+        function generateMerchantTransactionId() {
+            const prefix = 'SHFTKT';
+            const randomDigits = Math.floor(100000 + Math.random() * 900000); 
+            return prefix + randomDigits.toString();
+        }
+
+        const jsonStringData = JSON.stringify(requestData);
+        global.base64 = Buffer.from(jsonStringData).toString('base64');
+        console.log("BASE64: " + global.base64,`\n`);
+        global.base64UrlKey = global.base64 + endPoint + key;
+
+        const hash = crypto.createHash('sha256');
+        hash.update(base64UrlKey);
+        global.sha256Hash = hash.digest('hex') + '###1';
+        console.log("BASE64 + Key + Endpoint: " + base64UrlKey,`\n`);
+        console.log("SHA256: " + sha256Hash,`\n`);
+        console.log("Merchant Transaction ID: " + requestData.merchantTransactionId,`\n`);
+        //console.log(amount);
+        res.send(base64UrlKey);
+        
+
+    }
+    catch(error){
+        console.error(error);
+    }
+});
+
+
+const endPoint = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
+const requestBody = {
+    request: global.base64
+}   
+
+const header = {
+    'x-verify': global.sha256Hash
+}
+
+
+// BELOW API GETTING ERROR TRY TO FIX IT
+
+// app.post(endPoint, requestBody, {header},(req,res)=>{
+//     try{
+//         console.log("API response: ",res.data);
+//     }
+//     catch(error){
+//         console.error(error.message);
+//     }
+// });
 
 app.listen(port, () => {
     console.log("Server running on", port);
