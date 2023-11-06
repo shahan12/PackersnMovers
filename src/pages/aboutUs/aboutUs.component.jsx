@@ -5,7 +5,7 @@ import { data1, data2 } from "./data";
 function AboutUs(props) {
   return (
     <div className="container">
-      <div className="row px-4">
+      <div className="row px-4 about-top">
       <div className="about-us-section-1">
         <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>
         <p className="about-us-para-text">{data1.para1}</p>

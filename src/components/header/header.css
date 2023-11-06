@@ -1,23 +1,12 @@
 .header-container {
     padding: 1rem 8rem;
-    padding-top: 3rem;
     background: transparent;
     position: sticky;
     top: 0rem;
     z-index: 1;
 }
 
-@media (max-width: 600px) {
-    .header-container {
-        flex-direction: column;
-        padding: 0;
-    }
 
-    .header-cta-container {
-        gap: 0;
-        flex-direction: column;
-    }
-}
 
 .header-cta-container {
     gap: 1rem;
@@ -27,6 +16,7 @@
     width: 9rem;
     height: 4.6rem;
     cursor: pointer;
+    z-index: inherit;
 }
 
 .header-CTA-item {
@@ -75,6 +65,7 @@
     position: relative;
 }
 
+
 .header-more-option-dropdown {
     position: absolute;
     background-color: white;
@@ -102,4 +93,49 @@
 
 .header-sign-in-btn {
     cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .header-container {
+    padding: 1rem 2rem;
+    background: transparent;
+    top: 0rem;
+    z-index: 1;
+    position: fixed;
+    }
+
+    .header-cta-container {
+        gap: 0;
+        flex-direction: column;
+    }
+
+    .header-logo-img {
+        width: 6rem;
+        height: 4.6rem;
+        cursor: pointer;
+    }
+}
+.ggs{
+    z-index: 40;
+}
+
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none;
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        padding: 0;
+        background: transparent;
+        top: 0rem;
+        z-index: 1;
+        position: fixed;
+        }
+
+    .header-cta-container {
+        gap: 0;
+        flex-direction: column;
+    }
 }

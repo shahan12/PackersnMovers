@@ -11,6 +11,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [showMoreOption, setShowMoreOption] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     if (window.location.pathname.includes("fill-details") > 0) {
@@ -21,6 +22,10 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const closeModal = () => {
     setModalOpen(false);
     setLoginModal(false);
+  };
+
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
   };
 
   useEffect(() => {
@@ -65,23 +70,13 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           flow={"login"}
         />
       )}
-      
-      {/* the logo */}
-<div className="align-center">
-        <img
-          src={logo}
-          alt="logo"
-          className="header-logo-img"
-          onClick={handleLogoToHome}
-        ></img>
-      </div>
-      
 
-      {/* the logo */}
 
+      
       {showfillHeader ? (
         
         // Header inside
+        
         <div className="header-cta-container align-center space-between grey-600">
           <div className="align-center">
         <img
@@ -91,6 +86,8 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           onClick={handleLogoToHome}
         ></img>
       </div>
+
+          
           <span className="header-item-phoneNumber-container">
             <img src={PhoneIcon} alt={"phone"}></img>
             <span>+91 8847885671</span>
@@ -136,81 +133,72 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
       ) : (
         // Header outside
 
-        <div className="header-cta-container align-center space-between grey-600">
-          
-          <div className="header-sign-in-btn">
-            <Link to="/about-us" className="header-CTA-item">
-              About Us
-            </Link>
-          </div>
-          <div className="header-cta-container align-center space-between grey-600">
-            {!isAuthenticated ? (
-              <div
-                className="header-sign-in-btn"
-                onClick={() => {
-                  setLoginModal(true);
-                }}
-              >
-                Corporate
-              </div>
-            ) : (
-              <div className="header-sign-in-btn">
-                Corporate
-              </div>
-            )}
-          </div>
-          <div className="header-cta-container align-center space-between grey-600">
-            {!isAuthenticated ? (
-              <div
-                className="header-sign-in-btn"
-                onClick={() => {
-                  setLoginModal(true);
-                }}
-              >
-                Commercial
-              </div>
-            ) : (
-              <div className="header-sign-in-btn">
-                Commercial
-              </div>
-            )}
-          </div>
+        <nav className="navbar navbar-expand-md navbar-light bg-light bg-opacity-75 fixed-top ggs">
+        <div className="container">
+        <Link to="/" className="navbar-brand mr-3">
+          <img src={logo} alt="logo" className="header-logo-img" />
+        </Link>
+        <span className="header-item-phoneNumber-container">
+            <img src={PhoneIcon} alt={"phone"}></img>
+            <span>+91 88847-84888</span>
+          </span>
+        <button
+          className="navbar-toggler border-0 shadow-none"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarToggle"
+          aria-controls="navbarToggle"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleNav}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className={`collapse navbar-collapse  ${isNavOpen ? 'show' : ''}`} id="navbarToggle">
+          <ul className="navbar-nav container justify-content-end align-items-end">
 
-          {/* <div className="header-user-wrapper">
-          <button
-            className="header-user-wrapper-btn"
-            onClick={() => setModalOpen(true)}
-          >
-            Get in touch with us!
-          </button>
-          {modalOpen && (
-            <RegisterModal
-              isOpen={modalOpen}
-              onClose={closeModal}
-              flow={"register"}
-            />
-          )}
-        </div> */}
-          {!isAuthenticated ? (
-            <div
-              className="header-sign-in-btn"
-              onClick={() => {
-                setLoginModal(true);
-              }}
-            >
-              Login
-            </div>
-          ) : (
-            <div className="header-sign-in-btn" onClick={hanleLogOut}>
-              <span>Log Out</span>
-            </div>
-          )}
-          <div className="header-cta-container align-center space-between grey-600">
-            <div className="header-user-wrapper">
-              +91 88847-84888
-            </div>
-          </div>
+            <li className="nav-item ">
+              <Link to="/about-us" className="nav-link" onClick={toggleNav}>
+                About Us
+              </Link>
+            </li>
+            <li className="nav-item ">
+              <Link className="nav-link" onClick={() => {
+                if (!isAuthenticated) {
+                  setLoginModal(true);
+                  toggleNav()
+                }
+              }}>
+                Corporate
+              </Link>
+            </li>
+            <li className="nav-item ">
+              <Link className="nav-link" onClick={() => {
+                if (!isAuthenticated) {
+                  setLoginModal(true);
+                  toggleNav();
+                }
+              }}>
+                Commercial
+              </Link>
+            </li>
+            <li className="nav-item ">
+            {!isAuthenticated?(<Link className="nav-link" onClick={() => {
+                if (!isAuthenticated) {
+                  setLoginModal(true);
+                  toggleNav();
+                }
+              }}>
+                Login
+              </Link>):(
+                <Link className="nav-link" onClick={hanleLogOut}>
+                </Link>
+              )}
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
       )}
     </article>
   );

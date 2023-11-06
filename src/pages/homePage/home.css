@@ -31,7 +31,8 @@
 .landing-img {
     width: 50rem;
     margin-top: 10rem;
-    z-index: 3;
+    padding-top: 3rem;
+    z-index: 0;
 }
 .home-relocate-wrapper{
     position: fixed;
@@ -295,8 +296,11 @@
     .img-right-sticky {
         width: 30%;
     }
+    .landing-img {
+        width: 100%;
+        padding-top: 7rem;
+    }
     .relocate-input-box{
-        padding: 0.5rem 0.5rem;
         width: 100%; 
         border-radius: 0.3rem;
         background-color: #FDFDFDE5;
@@ -304,4 +308,8 @@
     .cta-button {
         padding: 0.5rem 0;
     }
+}
+
+.about-top{
+    padding-top: 7rem;
 }
