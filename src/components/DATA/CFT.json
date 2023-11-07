@@ -1,0 +1,577 @@
+{
+	"Furniture": {
+		"Sofa": {
+			"1 Seater Sofa": {
+				"base": 20,
+				"material": {
+					"Not Applicable": 0,
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 0
+				},
+				"type": {
+					"Not Applicable": 0,
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 0
+				}
+			},
+			"2 Seater Sofa": {
+				"base": 20,
+				"material": {
+					"Not Applicable": 0,
+					"leather": 15,
+					"wooden": 10,
+					"fabric": 5,
+					"cane": 0
+				},
+				"type": {
+					"Not Applicable": 0,
+					"recliner": 15,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 5
+				}
+			},
+			"3 Seater Sofa": {
+				"base": 45,
+				"material": {
+					"Not Applicable": 0,
+					"leather": 15,
+					"wooden": 5,
+					"fabric": 15,
+					"cane": 0
+				},
+				"type": {
+					"Not Applicable": 0,
+					"recliner": 5,
+					"non-recliner": 0,
+					"storage": 5,
+					"non-storage": 0
+				}
+			},
+			"4 Seater Sofa": {
+				"base": 45,
+				"material": {
+					"Not Applicable": 0,
+					"leather": 20,
+					"wooden": 10,
+					"fabric": 20,
+					"cane": 0
+				},
+				"type": {
+					"Not Applicable": 0,
+					"recliner": 10,
+					"non-recliner": 0,
+					"storage": 5,
+					"non-storage": 0
+				}
+			}
+		},
+		"Tables & Chairs": {
+			"coffee table": {
+				"base": 10,
+				"material": {
+					"Not Applicable": 0,
+					"glass top": 0,
+					"wooden top": 2
+				},
+				"type": {
+					"Not Applicable": 0
+				}
+			},
+			"centre table": {
+				"base": 10,
+				"material": {
+					"Not Applicable": 0,
+					"glass top": 0,
+					"wooden top": 2
+				},
+				"type": {
+					"Not Applicable": 0
+				}
+			},
+			"side table": {
+				"base": 7,
+				"material": {
+					"Not Applicable": 0,
+					"glass top": 3,
+					"wooden": 0
+				},
+				"type": {
+					"Not Applicable": 0
+				}
+			},
+			"Other tables": {
+				"base": 5,
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 5,
+					"non-dismental": 15
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Plastic": 10,
+					"Iron": 0,
+					"dressing table": 20
+				}
+			},
+			"computer table": {
+				"base": 25,
+				"material": {
+					"Not Applicable": 0,
+					"wooden": 0
+				},
+				"type": {
+					"Not Applicable": 0,
+					"with storage": 5,
+					"without storage": 0
+				}
+			},
+			"chairs": {
+				"base": 4,
+				"type": {
+					"Not Applicable": 0,
+					"office chair": 4,
+					"kids chair": 0,
+					"dining chair": 4,
+					"executive chair": 6,
+					"rocking chair": 6
+				},
+				"material": {
+					"Not Applicable": 0,
+					"wooden": 5,
+					"steel": 5,
+					"plastic chair": 4
+				}
+			}
+		},
+		"Dining Table": {
+			"2 seater dining table": {
+				"base": 10,
+				"material": {
+					"Not Applicable": 0,
+					"wooden ": 0,
+					"metal ": 0,
+					"glass": 2
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non dismental": 0,
+					"foldable": 0,
+					"non foldable": 2
+		        }
+			},
+			"3 seater dining table": {
+				"base": 20,
+				"material": {
+					"Not Applicable": 0,
+					"wooden ": 5,
+					"metal": 0,
+					"glass top": 5
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non dismental":5,
+					"foldable": 0,
+					"non foldable": 5
+				}
+			},
+			"4 seater dining table": {
+				"base": 30,
+				"material": {
+					"Not Applicable": 0,
+					"wooden": 0,
+					"metal": 0,
+					"glass top": 4
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non dismental": 4,
+					"foldable": 0,
+					"non foldable": 4
+				}
+			},
+			"5 seater dining table": {
+				"base": 36,
+				"material": {
+					"Not Applicable": 0,
+					"wooden": 0,
+					"metal": 0,
+					"glass top": 4
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non dismental": 4,
+					"foldable": 0,
+					"non foldable": 4
+				}
+			},
+			"6 seater dining table": {
+				"base": 48,
+				"material": {
+					"Not Applicable": 0,
+					"wooden": 0,
+					"metal": 0,
+					"glass top": 12
+				},
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non dismental": 0,
+					"foldable": 0,
+					"non foldable": 0
+				}
+			}
+		},
+		"Beds & Mattress": {
+			"Single Mattress": {
+				"base": 10,
+				"type": {
+					"Not Applicable": 0,
+					"single": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"< 4 inch": 0,
+					"4 to 8 inch": 5,
+					"> 8 inch": 10
+				}
+			},
+			"Double Mattress": {
+				"base": 10,
+				"type": {
+					"Not Applicable": 0,
+					"double": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"< 4 inch": 0,
+					"4 to 8 inch": 10,
+					"> 8 inch": 20
+				}
+			},
+			"King size Bed": {
+				"base": 71,
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non-dismental": 0,
+					"foldable": 0,
+					"non foldable": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			},
+			"Queen size Bed": {
+				"base": 66,
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non-dismental": 0,
+					"foldable": 0,
+					"non foldable": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			},
+			"Double Bed": {
+				"base": 55,
+				"type": {
+					"Not Applicable": 0,
+					"dismental": 0,
+					"non-dismental": 0,
+					"foldable": 0,
+					"non foldable": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			},
+			"Single Bed": {
+				"base": 36,
+				"type": {
+					"Not Applicable": 0,
+					"Dismental Storage": 19,
+					"Dismental Non-Storage": 0,
+					"foldable": 0,
+					"non foldable": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			},
+			"Bunk bed": {
+				"base": 72,
+				"type": {
+					"Not Applicable": 0,
+					"normal": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			},
+			"Diwan": {
+				"base": 35,
+				"type": {
+					"Not Applicable": 0,
+					"storage": 0,
+					"without storage": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden": 0
+				}
+			}
+		},
+		"Other Furnitures": {
+			"TV Cabinet with glass": {
+				"base": 6,
+				"material": {
+					"Not Applicable": 0,
+					"With Glass": 6,
+					"Without Glass": 8
+
+				},
+				"type": {
+					"Not Applicable": 0,
+					"<2ft X 2ft": [0,0],
+					"<2ft X 2-4ft": [11,19],
+					"<2ft X 4-6ft": [12,14],
+					"<2ft X >6ft": [24,22],
+					"2-4ft X <2ft":[6,7],
+					"2-4ft X 2-4ft": [19,26],
+					"2-4ft X 4-6ft": [30,32],
+					"2-4ft X >6ft": [44,52],
+					"4-6ft X <2ft": [12,14],
+					"4-6ft X 2-4ft": [30,32],
+					"4-6ft X 4-6ft": [48,60],
+					"4-6ft X >6ft": [44,82],
+					">6ft X <2ft": [19,22],
+					">6ft X 2-4ft": [42,52],
+					">6ft X 4-6ft": [69,82],
+					">6ft X >6ft": [94,112]
+				}
+			},
+			"Showcase": {
+				"base": 8,
+				"material": {
+					"Not Applicable": 0,
+					"With Glass": 8,
+					"Without Glass": 6
+				},
+				"type": {
+					"Not Applicable": 0,
+					"<2ft X 2ft": [0,0],
+					"<2ft X 2-4ft": [9,6],
+					"<2ft X 4-6ft": [14,12],
+					"<2ft X >6ft": [22,14],
+					"2-4ft X <2ft":[7,6],
+					"2-4ft X 2-4ft": [26,14],
+					"2-4ft X 4-6ft": [32,30],
+					"2-4ft X >6ft": [52,44],
+					"4-6ft X <2ft": [14,12],
+					"4-6ft X 2-4ft": [32,30],
+					"4-6ft X 4-6ft": [60,30],
+					"4-6ft X >6ft": [82,94],
+					">6ft X <2ft": [22,14],
+					">6ft X 2-4ft": [52,42],
+					">6ft X 4-6ft": [52,69],
+					">6ft X >6ft": [112,94]
+				}
+			},
+			"Cupboard": {
+				"base": 8,
+				"type": {
+					"Not Applicable": 0,
+					"<2ft X <2ft": 0,
+					"<2ft X 2-4ft": 9,
+					"<2ft X 4-6ft": 14,
+					"<2ft X >6ft": 22,
+					"2-4ft X <2ft": 7,
+					"2-4ft X 2-4ft": 26,
+					"2-4ft X 4-6ft": 32,
+					"2-4ft X >6ft": 52,
+					"4-6ft X <2": 14,
+					"4-6ft X 2-4ft": 32,
+					"4-6ft X 4-6ft": 60,
+					"4-6ft X 6ft": 82,
+					">6ft X <2ft": 22,
+					">6ft X 2-4ft": 52,
+					">6ft X 4-6ft": 82,
+					">6ft X >6ft": 112
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Wooden":0
+				}
+			}
+		}
+	},
+	"Electronics": {
+		"Small Electronics" : {
+			"LED TV": {
+				"base": 7,
+				"type": {
+					"Not Applicable": 0,
+					"LED": 0
+				},
+				"Size": {
+					"Not Applicable": 0,
+					"< 24 inch": 0,
+					"24 to 31 inch": 1,
+					"32 inch": 1,
+					"33 to 39 inch": 3,
+					"40 to 42 inch": 3,
+					"43 to 54 inch": 4,
+					"> 54 inch": 5
+				}
+			},
+			"LCD TV": {
+				"base": 7,
+				"type": {
+					"Not Applicable": 0,
+					"LCD": 0
+				},
+				"Size": {
+					"Not Applicable": 0,
+					"< 24 inch": 0,
+					"24 to 31 inch": 1,
+					"32 inch": 1,
+					"33 to 39 inch": 3,
+					"40 to 42 inch": 3,
+					"43 to 54 inch": 4,
+					"> 54 inch": 5
+				}
+			},
+			"CRT TV": {
+				"base": 10,
+				"type": {
+					"Not Applicable": 0,
+					"CRT": 0
+				},
+				"Size": {
+					"Not Applicable": 0,
+					"< 14 inch": 0,
+					"15 to 21 inch": 0,
+					"22 to 28 inch": 3,
+					"> 28 inch": 10
+				}
+			},
+			"Fans": {
+				"base": 2,
+				"type": {
+					"Not Applicable": 0,
+					"tower cooler": 12,
+					"ceeling fan": 1,
+					"table fan": 0,
+					"pedstal fan": 8,
+					"wall mounted fan": 0
+				},
+				"material": {
+					"Not Applicable": 0,
+					"Steel": 0,
+					"Metal":0,
+					"Plastic":0
+				}
+			},
+			"Ovens": {
+				"base": 6,
+				"type": {
+					"Not Applicable": 0,
+					"microwave": 0,
+					"org": 0,
+					"cooking range": 4
+				},
+				"material": {
+					"Not Applicable": 0
+				}
+			}
+		},
+		"Large Electronics": {
+			"Fridge": {
+				"base": 18,
+				"type": {
+					"Not Applicable": 0,
+					"single door": 0,
+					"double door": 6,
+					"side by side": 27,
+					"triple door": 9
+				},
+				"material": {
+					"Not Applicable": 0
+				}
+			},
+			"washing machine": {
+				"base": 11,
+				"type": {
+					"Not Applicable": 0,
+					"top loading and automatic": 4,
+					"top loading and semi automatic": 0,
+					"front loading": 4
+				},
+				"material": {
+					"Not Applicable": 0
+				}
+			},
+			"Air Conditioner": {
+				"base": 8,
+				"type": {
+					"Not Applicable": 0,
+					"1 ton and window": 0,
+					"1 ton and split": 2,
+					"1 to 1.5 ton and window": 0,
+					"1 to 1.5 ton and split": 2,
+					"1.5 to 2 ton and window": 0,
+					"1.5 to 2 ton and split": 2
+				},
+				"material": {
+					"Not Applicable": 0
+				}
+			}
+		}
+	},
+	"Vehicle": {
+		"Bikes": {
+			"base": 0,
+			"type": {
+				"Not available": 0,
+				"under 150CC": 0,
+				"under 500CC": 0,
+				"under 800CC": 0,
+				"Superbike": 0
+			},
+			"Modal": {
+				"Not available": 0
+			}
+		},
+		"Cars": {
+			"base": 0,
+			"type": {
+				"Not available": 0,
+				"SUV": 0,
+				"Sedan": 0,
+				"Hatchback": 0,
+				"MPV": 0
+			},
+			"Modal": {
+				"Not available": 0,
+				"Full size": 0,
+				"Compact": 0
+			}
+		}
+	}
+}
