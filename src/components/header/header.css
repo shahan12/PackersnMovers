@@ -6,17 +6,13 @@
     z-index: 1;
 }
 
-
-
-.header-cta-container {
-    gap: 1rem;
+.fixed-position{
+position: fixed;
 }
-
 .header-logo-img {
     width: 9rem;
     height: 4.6rem;
     cursor: pointer;
-    z-index: inherit;
 }
 
 .header-CTA-item {
@@ -35,6 +31,7 @@
     background: var(--Primary, #550EC5);
     cursor: pointer;
     color: #FDFDFD;
+    font-size: small;
 }
 
 .header-user-wrapper-btn {
@@ -48,7 +45,6 @@
     color: #248B04;
     font-size: 1rem;
     font-weight: 400;
-    margin-right: 2.6rem;
 }
 
 .header-item-phoneNumber-container span {
@@ -64,7 +60,6 @@
     cursor: pointer;
     position: relative;
 }
-
 
 .header-more-option-dropdown {
     position: absolute;
@@ -93,49 +88,103 @@
 
 .header-sign-in-btn {
     cursor: pointer;
+    background-color: transparent;
 }
 
-@media (max-width: 900px) {
+.header-cta-container {
+    gap: 1rem;
+}
+
+.navigation-menu{
+    gap: 1rem;
+}
+
+.navigation-menu ul {
+    display: flex;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  .navigation-menu li {
+    list-style-type: none;
+    margin: 0 1rem;
+  }
+  .hamburger {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+  }
+
+  .ham-icon{
+
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    display: none;
+
+}
+
+
+@media screen and (max-width: 990px) {
     .header-container {
-    padding: 1rem 2rem;
-    background: transparent;
-    top: 0rem;
-    z-index: 1;
-    position: fixed;
+        padding: 1rem 4rem;
+        
     }
+    .ham-icon {
+        display: block;
+      }
 
-    .header-cta-container {
-        gap: 0;
+    .navigation-menu ul {
+        position: absolute;
+        top: 6rem;
+        left: 0;
         flex-direction: column;
-    }
+        width: 100%;
+        height: calc(100vh - 6rem);
+        background-color: white ;
+        border-top: 1px solid black;
+        display: none;
+      }
+      .navigation-menu li {
+        text-align: center;
+        margin: 0;
+      }
+      .navigation-menu li > .hamburger {
+        color: black;
+        width: 100%;
+        padding: 1.5rem 0;
+        text-align: right;
+        padding-right: 5rem;
+      }
+      .navigation-menu li:hover {
+        background-color: #eee;
+      }
+      .navigation-menu.expanded ul {
+        display: block;
+      }
+}
 
+
+
+
+/* the queries below may change */
+@media (max-width: 678px) {
+
+    .header-container {
+        padding: 1rem 1rem;
+        
+    }
     .header-logo-img {
         width: 6rem;
-        height: 4.6rem;
+        height: 3.6rem;
         cursor: pointer;
     }
-}
-.ggs{
-    z-index: 40;
-}
-
-.navbar-toggler:focus {
-    text-decoration: none;
-    outline: 0;
-    box-shadow: none;
-}
-
-@media (max-width: 600px) {
-    .header-container {
-        padding: 0;
-        background: transparent;
-        top: 0rem;
-        z-index: 1;
-        position: fixed;
-        }
-
-    .header-cta-container {
-        gap: 0;
-        flex-direction: column;
+    .navigation-menu ul{
+        gap: 0rem;
     }
+    
 }
+
+

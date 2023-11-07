@@ -102,6 +102,7 @@ h3{
 }
 .house-type-row-one {
    gap: 0.77rem;
+   flex-flow: wrap;
 }
 .more-house-info{
     margin-bottom: 1.875rem;
