@@ -224,16 +224,46 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     return base + materialValue + typeValue;
   };
 
+  //----------- handle Minus old function (issue of removing two items at a time)
+  // const handleMinusClick = (name, category, subItem) => {
+  //   setSelectedItems((prevSelectedItems) => {
+  //     const updatedSelectedItems = { ...prevSelectedItems };
+  //     const currentCount = updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
+  
+  //     if (currentCount > 0) {
+  //       updatedSelectedItems[category][subItem][name] = {
+  //         ...updatedSelectedItems[category][subItem][name],
+  //         count: currentCount - 1,
+  //       };
+  //     }
+
+  //     console.log("after minus ", updatedSelectedItems);
+  //     //------------calcuate CFT----------------------------------
+  //     let totalCount = 0; let totalCft = 0;
+  //     for (const category in updatedSelectedItems) {
+  //         for (const subCategory in updatedSelectedItems[category]) {
+  //             for (const item in updatedSelectedItems[category][subCategory]) {
+  //                 const { cost, count } = updatedSelectedItems[category][subCategory][item];
+  //                 totalCount += count;
+  //                 totalCft += count * cost;
+  //             }
+  //         }
+  //     }
+  //     setTotalItemCount(totalCount); setCft(totalCft);
+  //     console.log("-------cft after reducing", totalCft);
+  //     //------------calcuate CFT----------------------------------
+  //     return updatedSelectedItems;
+  //   });
+  
+  //   calculateTotalAndCft();
+  // };
+
   const handleMinusClick = (name, category, subItem) => {
-    setSelectedItems((prevSelectedItems) => {
-      const updatedSelectedItems = { ...prevSelectedItems };
+    let updatedSelectedItems={...selectedItems};
       const currentCount = updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
   
       if (currentCount > 0) {
-        updatedSelectedItems[category][subItem][name] = {
-          ...updatedSelectedItems[category][subItem][name],
-          count: currentCount - 1,
-        };
+        updatedSelectedItems[category][subItem][name] = {...updatedSelectedItems[category][subItem][name], count: currentCount - 1,};
       }
 
       console.log("after minus ", updatedSelectedItems);
@@ -251,10 +281,9 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
       setTotalItemCount(totalCount); setCft(totalCft);
       console.log("-------cft after reducing", totalCft);
       //------------calcuate CFT----------------------------------
-      return updatedSelectedItems;
-    });
-  
-    calculateTotalAndCft();
+      
+    setSelectedItems(updatedSelectedItems);
+    // calculateTotalAndCft();
   };
   
   const renderSubItems = (subItems, category) => {
