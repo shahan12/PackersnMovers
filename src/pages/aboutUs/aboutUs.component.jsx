@@ -2,10 +2,10 @@ import React from "react";
 import "./aboutUs.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { data1, data2 } from "./data";
-function AboutUs(props) {
+function AboutUs({ isHomePage }) {
   return (
-    <div className="container">
-      <div className="row px-4 about-top">
+    <div className={`container ${isHomePage ? '' : 'about-top'}`}>
+      <div className="row px-4 ">
       <div className="about-us-section-1">
         <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>
         <p className="about-us-para-text">{data1.para1}</p>

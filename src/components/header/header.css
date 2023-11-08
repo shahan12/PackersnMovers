@@ -1,7 +1,8 @@
 .header-container {
     padding: 1rem 8rem;
     background: transparent;
-    position: sticky;
+    position: fixed;
+    width: 100%;
     top: 0rem;
     z-index: 1;
 }
@@ -140,11 +141,12 @@ position: fixed;
         position: absolute;
         top: 6rem;
         left: 0;
+        margin: 0rem 2rem;
         flex-direction: column;
-        width: 100%;
-        height: calc(100vh - 6rem);
+        width: -webkit-fill-available;
         background-color: white ;
-        border-top: 1px solid black;
+        border: 1px solid black;
+        border-radius: 1rem;
         display: none;
       }
       .navigation-menu li {
@@ -154,8 +156,7 @@ position: fixed;
       .navigation-menu li > .hamburger {
         color: black;
         width: 100%;
-        padding: 1.5rem 0;
-        text-align: right;
+        padding: 1.5rem;
         padding-right: 5rem;
       }
       .navigation-menu li:hover {

@@ -217,8 +217,8 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               src={purpleCircle3}
               alt="process-icon"
             />
-            <div className="container-item-full">
-              <AboutUs />
+            <div className="container-item-full ">
+              <AboutUs isHomePage={true}/>
             </div>
           </div>
         </div>
