@@ -67,11 +67,17 @@ position: fixed;
     background-color: white;
     opacity: 1;
     right: 6%;
-    top: 128%;
-    border-radius: 6px;
-    box-shadow: -4px 0px 11px 0px rgba(54, 54, 54, 0.24) inset;
+    top: 4rem;
+    border-radius: 1rem;
     padding: 1rem;
     cursor: pointer;
+display: flex;
+flex-direction: column;
+border: 1px solid black;
+}
+.header-option{
+    gap: 1rem;
+    padding: 1rem 2rem;
 }
 
 .header-profile-img {
@@ -81,6 +87,7 @@ position: fixed;
 .add-box-shadow {
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10) inset;
+    background-color: #FDFDFD;
 }
 
 .profile-btn {
@@ -126,6 +133,7 @@ position: fixed;
     display: none;
 
 }
+
 
 
 @media screen and (max-width: 990px) {
