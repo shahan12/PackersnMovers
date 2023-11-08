@@ -6,11 +6,13 @@ import RegisterModal from "../RegisterModal/RegisterModal.component";
 import PhoneIcon from "../../images/phone.svg";
 import ProfilePic from "../../images/defaultPic.svg";
 import DownArrow from "../../images/downarrow.png";
+import hamMenu from "../../images/hamburger icon.svg";
 
 function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [showMoreOption, setShowMoreOption] = useState(false);
+  const [isNavExpanded, setIsNavExpanded] = useState(false)
 
   useEffect(() => {
     if (window.location.pathname.includes("fill-details") > 0) {
@@ -28,7 +30,6 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
       setLoginModal(true);
     }
   }, [showPopUp]);
-  let logedIn = false;
 
   const hanleLogOut = () => {
     sessionStorage.removeItem("loggedIn");
@@ -65,6 +66,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           flow={"login"}
         />
       )}
+      
+      {/* the logo */}
+
       <div className="align-center">
         <img
           src={logo}
@@ -73,8 +77,14 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           onClick={handleLogoToHome}
         ></img>
       </div>
+
+      {/* the logo */}
+
       {showfillHeader ? (
+        
+        // Header inside
         <div className="header-cta-container align-center space-between grey-600">
+         
           <span className="header-item-phoneNumber-container">
             <img src={PhoneIcon} alt={"phone"}></img>
             <span>+91 8847885671</span>
@@ -116,88 +126,89 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               </div>
             )}
           </div>
-          {/* remove this div.profile-btn, after showMoreOptions UI is fixed as there we will find both Logout and Profie option*/}
-          {/* <div className="profile-btn" onClick={handleProfile}>
-            Profile
-          </div> */}
-          {/* <div className="profile-btn" onClick={handleBooking}>
-            Booking
-          </div> */}
         </div>
       ) : (
+        // Header outside
+
         <div className="header-cta-container align-center space-between grey-600">
-          <div className="header-sign-in-btn">
-            <Link to="/about-us" className="header-CTA-item">
+            <div className="header-user-wrapper">
+              +91 88847-84888
+            </div>
+            <button className="header-sign-in-btn"
+        onClick={() => {
+          setIsNavExpanded(!isNavExpanded);
+        }}><img
+              src={hamMenu}
+              alt="ham-menu"
+              className="ham-icon"
+            ></img></button>
+            <div className={
+          isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
+        }>
+            <ul>
+              <li>
+          <div className="header-sign-in-btn hamburger" onClick={() => {
+          setIsNavExpanded(false);
+        }}>
+            <Link to="/about-us" className="header-CTA-item" >
               About Us
             </Link>
           </div>
-          <div className="header-cta-container align-center space-between grey-600">
+          </li>
+          <li>
             {!isAuthenticated ? (
               <div
-                className="header-sign-in-btn"
+                className="header-sign-in-btn hamburger "
                 onClick={() => {
                   setLoginModal(true);
-                }}
-              >
-                Corporate
-              </div>
-            ) : (
-              <div className="header-sign-in-btn">
-                Corporate
-              </div>
-            )}
-          </div>
-          <div className="header-cta-container align-center space-between grey-600">
-            {!isAuthenticated ? (
-              <div
-                className="header-sign-in-btn"
-                onClick={() => {
-                  setLoginModal(true);
-                }}
-              >
-                Commercial
-              </div>
-            ) : (
-              <div className="header-sign-in-btn">
-                Commercial
-              </div>
-            )}
-          </div>
+                  setIsNavExpanded(false);
 
-          {/* <div className="header-user-wrapper">
-          <button
-            className="header-user-wrapper-btn"
-            onClick={() => setModalOpen(true)}
-          >
-            Get in touch with us!
-          </button>
-          {modalOpen && (
-            <RegisterModal
-              isOpen={modalOpen}
-              onClose={closeModal}
-              flow={"register"}
-            />
-          )}
-        </div> */}
+                }}
+              >
+                Corporate
+              </div>
+            ) : (
+              <div className="header-sign-in-btn hamburger">
+                Corporate
+              </div>
+            )}
+          </li>
+          <li>
+            {!isAuthenticated ? (
+              <div
+                className="header-sign-in-btn hamburger"
+                onClick={() => {
+                  setLoginModal(true);
+                  setIsNavExpanded(false);
+                }}
+              >
+                Commercial
+              </div>
+            ) : (
+              <div className="header-sign-in-btn hamburger">
+                Commercial
+              </div>
+            )}
+          </li>
+          <li>
           {!isAuthenticated ? (
             <div
-              className="header-sign-in-btn"
+              className="header-sign-in-btn hamburger"
               onClick={() => {
                 setLoginModal(true);
+                setIsNavExpanded(false);
               }}
             >
               Login
             </div>
           ) : (
-            <div className="header-sign-in-btn" onClick={hanleLogOut}>
+            <div className="header-sign-in-btn hamburger" onClick={hanleLogOut}>
               <span>Log Out</span>
             </div>
           )}
-          <div className="header-cta-container align-center space-between grey-600">
-            <div className="header-user-wrapper">
-              +91 88847-84888
-            </div>
-          </div>
+          </li>
+          </ul>
+        </div>
         </div>
       )}
     </article>

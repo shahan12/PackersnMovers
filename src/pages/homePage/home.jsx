@@ -64,7 +64,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
       document.body.scrollTop || document.documentElement.scrollTop;
     setHeight(winScroll);
 
-    if (winScroll > heightToHideFrom) {
+    if (winScroll > heightToHideFrom && window.innerWidth > 600) {
       visible && setVisible(false);
     } else {
       setVisible(true);

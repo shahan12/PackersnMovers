@@ -1,11 +1,13 @@
 import React from "react";
 import "./aboutUs.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { data1, data2 } from "./data";
 function AboutUs(props) {
   return (
-    <div className="about-usWrapper">
+    <div className="container">
+      <div className="row px-4 about-top">
       <div className="about-us-section-1">
-        <h2 className="about-us-heading" style={{paddingTop: '0rem'}}>Best Packers and Movers in Bangalore</h2>
+        <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>
         <p className="about-us-para-text">{data1.para1}</p>
         <p className="about-us-para-text">{data1.para2}</p>
         <p className="about-us-para-text">{data1.para3}</p>
@@ -26,6 +28,7 @@ function AboutUs(props) {
             </p>
           );
         })}
+      </div>
       </div>
     </div>
   );
