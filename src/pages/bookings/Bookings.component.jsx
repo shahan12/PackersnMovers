@@ -71,7 +71,7 @@ function Bookings({}) {
               </div>
               <div className="bookings-deatils-option">
                 <img src={Box} alt="Box" />
-                <span>{data?.total_box} Cartons</span>
+                <span>{data?.additional_box} Cartons</span>
               </div>
               <div className="bookings-deatils-option">
                 <img src={Electic}  alt="Box" />
