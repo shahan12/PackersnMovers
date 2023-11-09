@@ -26,7 +26,6 @@ import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Popper from "popper.js";
 
 function Home({ setShowPopUp, loginModal, setLoginModal }) {
   const { ref, inView } = useInView({
@@ -58,6 +57,7 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
       setShow(true);
     }
   }, [loginModal]);
+  
   const listenToScroll = () => {
     let heightToHideFrom = 2900;
     const winScroll =
@@ -217,8 +217,8 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               src={purpleCircle3}
               alt="process-icon"
             />
-            <div className="container-item-full">
-              <AboutUs />
+            <div className="container-item-full ">
+              <AboutUs isHomePage={true}/>
             </div>
           </div>
         </div>

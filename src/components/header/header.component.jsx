@@ -109,16 +109,16 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
             {showMoreOption && (
               <div className="header-more-option-dropdown"> 
                 <div
-                  // className="header-more-option-dropdown"
+                  className="header-option"
                   onClick={handleProfile}
                 >
                   Profile
                 </div>
-                <div className="profile-btn" onClick={handleBooking}>
+                <div className="header-option" onClick={handleBooking}>
                   Booking
                 </div>
                 <div
-                  // className="header-more-option-dropdown"
+                  className="header-option"
                   onClick={hanleLogOut}
                 >
                   Log out

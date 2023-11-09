@@ -3,8 +3,8 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    margin-top: -10rem;
 }
+
 
 .home-elements-container {
     position: relative;
@@ -14,7 +14,9 @@
     align-items: center;
     width: 100%;
 }
-
+.about-top{
+    padding-top: 0rem;
+}
 
 .services-row-one{
     gap: 8rem;
@@ -81,7 +83,7 @@
     position: absolute;
     bottom: -4rem; 
     right: 0; 
-    z-index: 10;
+    z-index: 0;
     width: 20%;
 }
 
@@ -155,9 +157,7 @@
     height: 25rem;
 }
   @media (max-width: 600px) {
-    .home-landing-container{
-        margin-top: -13rem;
-    }
+   
     .container-process {
         height: 100%;
     }
@@ -303,5 +303,8 @@
         width: 100%; 
         border-radius: 0.3rem;
         background-color: #FDFDFDE5;
+    }
+    .home-landing-container{
+        margin-top: -10rem;
     }
 }

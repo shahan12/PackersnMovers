@@ -1,7 +1,8 @@
 .header-container {
     padding: 1rem 8rem;
     background: transparent;
-    position: sticky;
+    position: fixed;
+    width: 100%;
     top: 0rem;
     z-index: 1;
 }
@@ -66,11 +67,17 @@ position: fixed;
     background-color: white;
     opacity: 1;
     right: 6%;
-    top: 128%;
-    border-radius: 6px;
-    box-shadow: -4px 0px 11px 0px rgba(54, 54, 54, 0.24) inset;
+    top: 4rem;
+    border-radius: 1rem;
     padding: 1rem;
     cursor: pointer;
+display: flex;
+flex-direction: column;
+border: 1px solid black;
+}
+.header-option{
+    gap: 1rem;
+    padding: 1rem 2rem;
 }
 
 .header-profile-img {
@@ -80,6 +87,7 @@ position: fixed;
 .add-box-shadow {
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10) inset;
+    background-color: #FDFDFD;
 }
 
 .profile-btn {
@@ -127,6 +135,7 @@ position: fixed;
 }
 
 
+
 @media screen and (max-width: 990px) {
     .header-container {
         padding: 1rem 4rem;
@@ -140,11 +149,12 @@ position: fixed;
         position: absolute;
         top: 6rem;
         left: 0;
+        margin: 0rem 2rem;
         flex-direction: column;
-        width: 100%;
-        height: calc(100vh - 6rem);
+        width: -webkit-fill-available;
         background-color: white ;
-        border-top: 1px solid black;
+        border: 1px solid black;
+        border-radius: 1rem;
         display: none;
       }
       .navigation-menu li {
@@ -154,8 +164,7 @@ position: fixed;
       .navigation-menu li > .hamburger {
         color: black;
         width: 100%;
-        padding: 1.5rem 0;
-        text-align: right;
+        padding: 1.5rem;
         padding-right: 5rem;
       }
       .navigation-menu li:hover {
