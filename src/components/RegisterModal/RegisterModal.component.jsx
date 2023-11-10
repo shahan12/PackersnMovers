@@ -119,8 +119,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     if(resp.type==='error'){
       alert(resp.message);
     }
-    else console.log(resp);
-    handleSubmit("login");
+    else{
+      console.log(resp);
+      handleSubmit("login");
+    }
   }
 
   return (
