@@ -17,11 +17,33 @@ const instance = axios.create({
 //   }
 // };
 
+export const sendOTPRequestToBackend = async (data) => {
+  try {
+    console.log("send OTP backend call : ", data);
+    const response = await axios.post('http://localhost:3001/sendOTP', {mobileNumber: data});
+    return response.data;
+    // return "otp successfully sent";
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendOTPVerifyRequestToBackend = async (data) => {
+  try {
+    console.log("verify otp backend call : ", data);
+    const response = await axios.post('http://localhost:3001/verifyOTP', {data});
+    return response.data;
+    // return "otp matched";
+  } catch (error) {
+    throw error;
+  }
+  // return "Login Sucessfull...";
+};
+
 export const sendLoginRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
     const response = await axios.get('http://localhost:3001/login', {params :data});
-    
     return response.data;
   } catch (error) {
     throw error;

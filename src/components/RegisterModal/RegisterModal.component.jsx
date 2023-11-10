@@ -9,6 +9,8 @@ import OTPInput from "react18-input-otp";
 import {
   sendLoginRequestToBackend,
   sendRegisterRequestToBackend,
+  sendOTPRequestToBackend,
+  sendOTPVerifyRequestToBackend
 } from "../../API/apicalls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +34,9 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     setIsValidPhoneNumber(isValid);
   };
 
-  const handleSubmit = (e, flow) => {
-    e.preventDefault();
+  const handleSubmit = (flow) => {
+    console.log("calling handle submit")
+    // e.preventDefault();
     const loginData = {
       userMobile: phoneNumber,
       password: OTP,
@@ -50,7 +53,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
       if (phoneNumber.length > 0 && OTP.length > 0)
         sendRegisterRequest(loginData);
     } else if (flow === "login") {
-      setOtpPage(true);
+      // setOtpPage(true);
       if (phoneNumber.length > 0 && OTP.length > 0) sendLoginRequest(loginData);
     }
   };
@@ -85,7 +88,9 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
   const handleOtpInput = (e) => {
-    setOTP(e.target.value);
+    // console.log(e);
+    setOTP(e);
+    // setOTP(e.target.value);
   };
 
   const validateOTP = () => {
@@ -96,6 +101,27 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     // setInvalidOTP(true);
     // }
   };
+
+  const sendOTP=async(e)=>{
+    e.preventDefault();
+    setOtpPage(true);
+    console.log("send otp to this mobile number :", phoneNumber);
+    const resp=await sendOTPRequestToBackend(phoneNumber);
+    if(resp.type==='success'){
+      console.log(resp);
+    }
+    else console.log("failllled :",resp);
+  }
+  const verifyOTP=async()=>{
+    console.log("otp typed : ", OTP);
+    const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
+    console.log(resp);
+    if(resp.type==='error'){
+      alert(resp.message);
+    }
+    else console.log(resp);
+    handleSubmit("login");
+  }
 
   return (
     <div className="login-modal-overlay">
@@ -139,9 +165,8 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 />
                 <button
                   type="submit"
-                  onClick={(e) =>
-                    handleSubmit(e, flow === "register" ? "register" : "login")
-                  }
+                  // onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
+                  onClick={(e) => sendOTP(e)}
                   disabled={!isValidPhoneNumber || !phoneNumber}
                   className={`${
                     !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
@@ -157,7 +182,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
             )}
             {otpPage && flow === "login" && (
               <>
-                {isUserRegisterd ? (
+                {/* {isUserRegisterd ? (
                   <form onSubmit={handleSubmit}>
                     <input
                       type="passowrd"
@@ -208,12 +233,12 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                       Submit OTP
                     </button>
                   </form>
-                )}
+                )} */}
 
-                {/* <OTPInput
+                <OTPInput
                   onChange={handleOtpInput}
                   value={OTP}
-                  numInputs={6}
+                  numInputs={4}
                   separator={<span></span>}
                   inputStyle={{
                     width: "2.5rem",
@@ -226,13 +251,13 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 /> 
                  <button
                   className={`cta-button continue-OTP-enter ${
-                    OTP.length < 6 ? "disabled" : ""
+                    OTP.length < 4 ? "disabled" : ""
                   }`}
-                  disabled={OTP.length < 6}
-                  onClick={() => validateOTP()}
+                  disabled={OTP.length < 4}
+                  onClick={verifyOTP}
                 >
                   Continue
-                </button> */}
+                </button>
                 {invalidOTP && (
                   <span className="error-msg">
                     OTP is invalid! Please try again
