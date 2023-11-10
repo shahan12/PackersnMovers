@@ -709,10 +709,12 @@ const Demo = {
 
 // This api is used for sending otp     
 app.post('/sendOTP', (req, res) => {
+    let {mobileNumber} = req.body;
+    console.log("send otp to : ", mobileNumber);
     try {
         const options = {
             method: 'POST',
-            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
@@ -735,11 +737,14 @@ app.post('/sendOTP', (req, res) => {
 
 
 // This api is used for verify OTP based on OTP and mobile number
-app.get('/verifyOTP', (req, res) => {
+app.post('/verifyOTP', (req, res) => {
+    console.log(req.body.data);
+    let {OTP: otp,phoneNumber: mobileNumber}=req.body.data;
+    console.log("to verify otp and mobileNumber ", otp,mobileNumber);
     try {
         const options = {
             method: 'GET',
-            url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
