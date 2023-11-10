@@ -47,7 +47,6 @@ app.get('/login', (req, res) => {
 
     try {
         global.mobile = req.query.userMobile;
-        var password = req.query.password;
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
 
         // global.encryptKey = crypto.randomBytes(32);
@@ -60,7 +59,7 @@ app.get('/login', (req, res) => {
             if (error) throw error;
             if (result.rows.length > 0) {
                 // console.log("user already exist");
-                q6 = "SELECT user_mobile,user_password FROM userInfo WHERE user_mobile = '" + mobile + "' AND user_password = '" + password + "'";
+                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
                     if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
@@ -71,7 +70,7 @@ app.get('/login', (req, res) => {
             else {
                 // console.log("new user to register");
                 var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile, user_password) VALUES ('" + mobile + "', '" + password + "');" +
+                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
                     "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
                     "INSERT INTO userBooking(user_mobile) VALUES ('" + mobile + "');" +
                     "COMMIT;";
@@ -91,41 +90,6 @@ app.get('/login', (req, res) => {
     catch (error) {
         console.error(error.message);
 
-    }
-});
-
-// This api is used to update password 
-app.put('/updatePassword', (req, res) => {
-
-    try {
-
-        var userNumber = updatePassword.userMobile;
-        var newPassword = updatePassword.newPass;
-        var cnfrmPassword = updatePassword.cnfrmPass;
-
-        // global.encryptKey = crypto.randomBytes(32);
-        // global.iv = crypto.randomBytes(16);
-        // const cipher = crypto.createCipheriv('aes-256-gcm', global.encryptKey, global.iv);
-        // global.encryptPass = cipher.update(cnfrmPassword, 'utf-8', 'hex');
-        // global.encryptPass += cipher.final('hex');
-        // const deCipher = crypto.createDecipheriv('aes-256-gcm', global.encryptKey, global.iv);
-        // let decryptPass = deCipher.update(global.encryptPass, 'hex', 'utf-8');
-        // decryptPass += deCipher.final('utf-8');
-        // console.log(decryptPass);
-
-        if (newPassword === cnfrmPassword) {
-            q7 = "UPDATE userInfo SET user_password = '" + cnfrmPassword + "' WHERE user_mobile = '" + userNumber + "'";
-            con.query(q7, (error, result) => {
-                if (error) throw error;
-                res.send("Password updated..." + result.rows);
-            });
-        }
-        else {
-            res.send("Password Mismatched...");
-        }
-    }
-    catch (error) {
-        console.error(error.message);
     }
 });
 
