@@ -1,9 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const con = require('./Connection');
 const multer = require('multer');
 const moment = require('moment-timezone');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
+const fetch = require('node-fetch');
+
+const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
+//const Msg91 = require('@msg91/msg91-v5');
+
+//const sdk = new Msg91('393980ANtnyjugl6540b81fP1');
+
 const axios = require('axios');
 var app = express();
 var port = 3001;
@@ -14,7 +22,13 @@ global.basePrice;
 global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
-global.base64UrlKey, global.sha256Hash, global.base64; 
+global.base64UrlKey, global.sha256Hash, global.base64;
+
+let mobileNumber = process.env.MOBILE_NUMBER;
+let templateId = process.env.template_id;
+let authKey = process.env.authkey;
+let otp = process.env.OTP;
+
 
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -171,7 +185,7 @@ app.put('/totalNoBoxes', (req, res) => {
             else {
                 global.additionalBox = 0;
             }
-            
+
             console.log("Total carton: ", global.totalCarton);
             var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
             con.query(q13, (error, result) => {
@@ -588,12 +602,12 @@ app.get('/myBooking', (req, res) => {
         const userMobile = global.mobile;
         con.query(q17, [userMobile], (error, results) => {
             if (error) throw error;
-            if(results.rows.length>1){
-                let books=results.rows;
-                books=books.slice(1);
+            if (results.rows.length > 1) {
+                let books = results.rows;
+                books = books.slice(1);
                 res.send(books);
             }
-            else res.send([]); 
+            else res.send([]);
         });
     }
     catch (error) {
@@ -703,13 +717,13 @@ app.put('/inventory', (req, res) => {
         console.log(global.orderID);
         let value = req.body.totalCost.totalBox;
         // console.log("value -> ",value);
-        if(isNaN(value) || value===undefined){
-            value=0;
+        if (isNaN(value) || value === undefined) {
+            value = 0;
         }
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '"+ value +"' ,'" + req.body.totalCost.totalItemCount + "','" + req.body.mobile + "' )";
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + req.body.mobile + "' )";
 
         con.query(q21, (error, result) => {
-            if(error) throw error;
+            if (error) throw error;
             console.log(result.rows);
             // if(result.rows.length > 0) {
             //     console.log("inventory data saved successfully");
@@ -717,90 +731,97 @@ app.put('/inventory', (req, res) => {
             res.send(result.rows);
         })
         // res.status(200); // comment this when the above query runs
-}
+    }
 
     catch (error) {
         console.error(error.messaege);
     }
 });
 
-
-// Demo Data
-const dummyData = {
-    amount: 100,
-    mobile: 9911791780
+// demoData 
+const Demo = {
+    mobileNumber:919911791780
 }
 
-app.get('/paymentInfo',(req,res)=>{
-    try{
-
-        const key = '2703f196-4543-4735-8155-dfc968998051';
-        const endPoint = '/pg/v1/pay';
-        const requestData = {
-            "merchantId": "M13CMFUCVPKM",
-            "merchantTransactionId": generateMerchantTransactionId(),
-            "merchantUserId": "IDSK3777",
-            "amount": dummyData.amount, // from front-end amount would be get
-            "redirectUrl": "https://www.google.com/",
-            "redirectMode": "REDIRECT",
-            "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
-            "mobileNumber": dummyData.mobile,  //'global.mobile' need to be use
-            "paymentInstrument": {
-              "type": "PAY_PAGE"
+// This api is used for sending otp     
+app.post('/sendOTP', (req, res) => {
+    try {
+        const options = {
+            method: 'POST',
+            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=${mobileNumber}`,
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authkey: `${authKey}`
             }
-          }
-
-        //const rupees = Math.floor(requestData.amount * 100);
-
-        function generateMerchantTransactionId() {
-            const prefix = 'SHFTKT';
-            const randomDigits = Math.floor(100000 + Math.random() * 900000); 
-            return prefix + randomDigits.toString();
-        }
-
-        const jsonStringData = JSON.stringify(requestData);
-        global.base64 = Buffer.from(jsonStringData).toString('base64');
-        console.log("BASE64: " + global.base64,`\n`);
-        global.base64UrlKey = global.base64 + endPoint + key;
-
-        const hash = crypto.createHash('sha256');
-        hash.update(base64UrlKey);
-        global.sha256Hash = hash.digest('hex') + '###1';
-        console.log("BASE64 + Key + Endpoint: " + base64UrlKey,`\n`);
-        console.log("SHA256: " + sha256Hash,`\n`);
-        console.log("Merchant Transaction ID: " + requestData.merchantTransactionId,`\n`);
-        //console.log(amount);
-        res.send(base64UrlKey);
-        
-
+        };
+        axios
+            .request(options)
+            .then(function (response) {
+                res.send(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
     }
-    catch(error){
-        console.error(error);
+    catch (error) {
+        console.error(error.message);
     }
 });
 
 
-const endPoint = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
-const requestBody = {
-    request: global.base64
-}   
+// This api is used for verify OTP based on OTP and mobile number
+app.get('/verifyOTP', (req, res) => {
+    try {
+        const options = {
+            method: 'GET',
+            url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=${mobileNumber}`,
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authkey: `${authKey}`
+            }
+        };
+        axios
+            .request(options)
+            .then(function (response) {
+                res.send(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+});
 
-const header = {
-    'x-verify': global.sha256Hash
-}
 
+app.get('/resendOTP', (req, res) => {
+    try {
+        const options = {
+            method: 'GET',
+            url: `https://control.msg91.com/api/v5/otp/retry?retrytype=${otp}&mobile=${mobileNumber}`,
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authkey: `${authKey}`
+            }
+        };
 
-// BELOW API GETTING ERROR TRY TO FIX IT
-
-// app.post(endPoint, requestBody, {header},(req,res)=>{
-//     try{
-//         console.log("API response: ",res.data);
-//     }
-//     catch(error){
-//         console.error(error.message);
-//     }
-// });
-
+        axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+})
 app.listen(port, () => {
     console.log("Server running on", port);
 })
