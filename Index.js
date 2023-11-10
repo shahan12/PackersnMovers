@@ -6,8 +6,9 @@ const moment = require('moment-timezone');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const fetch = require('node-fetch');
-
 const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
+const authenticateToken  = require('./authMiddelware');
+const jwt = require('jsonwebtoken');
 //const Msg91 = require('@msg91/msg91-v5');
 
 //const sdk = new Msg91('393980ANtnyjugl6540b81fP1');
@@ -29,7 +30,6 @@ let templateId = process.env.template_id;
 let authKey = process.env.authkey;
 let otp = process.env.OTP;
 
-
 // app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -40,25 +40,15 @@ con.connect((err) => {
     if (err) throw err;
 });
 
-
-
 // This api signup(post-> initially) the user and check password exist or not 
 app.get('/login', (req, res) => {
 
     try {
         global.mobile = req.query.userMobile;
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
-
-        // global.encryptKey = crypto.randomBytes(32);
-        // global.iv = crypto.randomBytes(16);
-        // const cipher = crypto.createCipheriv('aes-256-gcm',global.encryptKey,global.iv);
-        // global.encryptPass = cipher.update(password,'utf-8','hex');
-        // global.encryptPass += cipher.final('hex');
-
         con.query(q8, (error, result) => {
             if (error) throw error;
             if (result.rows.length > 0) {
-                // console.log("user already exist");
                 q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
@@ -68,7 +58,6 @@ app.get('/login', (req, res) => {
                 });
             }
             else {
-                // console.log("new user to register");
                 var q9 = "BEGIN;" +
                     "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
                     "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
@@ -76,11 +65,10 @@ app.get('/login', (req, res) => {
                     "COMMIT;";
                 con.query(q9, (error, result) => {
                     if (error) throw error;
-
                     mobileNo = mobile;
-                    // res.send("User logged in.." + result.rows);
-                    res.send("Login Sucessfull...");
-
+                    const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
+                    console.log("JWT Token: ",token);
+                    res.json({token});
                 });
 
 
@@ -109,7 +97,7 @@ app.get('/logout', (req, res) => {
 
 
 // This api calculate total no. of boxes
-app.put('/totalNoBoxes', (req, res) => {
+app.put('/totalNoBoxes', authenticateToken, (req, res) => {
 
     try {
 
@@ -165,7 +153,7 @@ app.put('/totalNoBoxes', (req, res) => {
 });
 
 // This api calculate base price based on house type and total distance
-app.put('/basePrice', (req, res) => {
+app.put('/basePrice', authenticateToken, (req, res) => {
 
     try {
         var fromAdd = req.body.fromAddress;
@@ -422,7 +410,7 @@ app.put('/basePrice', (req, res) => {
 })
 
 // This api calculate total floor charges w/o lift
-app.put('/floorCharges', function (req, res) {
+app.put('/floorCharges', authenticateToken, function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -453,7 +441,7 @@ const storage = multer({
         }
     })
 }).single("profile");
-app.put('/saveUserInfo', storage, (req, res) => {
+app.put('/saveUserInfo', authenticateToken, storage, (req, res) => {
 
     try {
         var fName = req.body.fName;
@@ -476,7 +464,7 @@ app.put('/saveUserInfo', storage, (req, res) => {
 });
 
 // This is for getting user info base on user's mobile number
-app.get('/getUserInfo', (req, res) => {
+app.get('/getUserInfo', authenticateToken, (req, res) => {
 
     try {
         var q4 = "SELECT * FROM " +
@@ -539,7 +527,7 @@ var addons = {
     }
 }
 
-app.put('/addons', (req, res) => {
+app.put('/addons', authenticateToken, (req, res) => {
     const insertData = {
         addons: addons,
     };
@@ -554,7 +542,7 @@ app.put('/addons', (req, res) => {
 });
 
 // This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
-app.get('/myBooking', (req, res) => {
+app.get('/myBooking', authenticateToken, (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
@@ -590,7 +578,7 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put('/updateUser', updateProfile, (req, res) => {
+app.put('/updateUser', updateProfile, authenticateToken, (req, res) => {
 
     try {
         var fName = req.body.firstName;
@@ -611,7 +599,7 @@ app.put('/updateUser', updateProfile, (req, res) => {
 });
 
 // This api update 'inventoryData' table based on user's inventory
-app.put('/inventory', (req, res) => {
+app.put('/inventory', authenticateToken, (req, res) => {
 
     try {
         var mobile = req.body.mobile;
