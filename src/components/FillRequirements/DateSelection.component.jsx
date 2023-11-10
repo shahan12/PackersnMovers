@@ -67,6 +67,7 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
           onSelect={handleTimeSelect}
           selectedTime={selectedTime}
           setSelectedTime={setSelectedTime}
+          selectedDayValue={selectedDay}
         />
       </div>
       <div className="date-type-wrapper">
