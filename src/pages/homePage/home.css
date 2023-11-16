@@ -154,7 +154,7 @@
     justify-content:center;
     flex-direction: row;
     align-items:center;
-    /* height: 25rem; */
+    height: 25rem;
 }
   @media (max-width: 600px) {
    

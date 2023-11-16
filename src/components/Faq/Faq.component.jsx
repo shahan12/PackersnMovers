@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./Faq.css";
-
+import data from "./faq.json";
 import arrow from "../../images/arrow-right.png";
 
-const RetractableTable = ({data}) => {
+const RetractableTable = () => {
   const [expandedRow, setExpandedRow] = useState(null);
 
   const toggleRow = (index) => {
@@ -17,7 +17,7 @@ const RetractableTable = ({data}) => {
   return (
     <table className="retractable-table">
       <tbody>
-        {data.map((row, index) => (
+        {data.data.map((row, index) => (
           <React.Fragment key={index}>
             <tr
               className={`header-row ${

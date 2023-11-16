@@ -193,7 +193,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           <li>
           {!isAuthenticated ? (
             <div
-              className="header-sign-in-btn hamburger logout-list"
+              className="header-sign-in-btn hamburger"
               onClick={() => {
                 setLoginModal(true);
                 setIsNavExpanded(false);
@@ -202,7 +202,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               Login
             </div>
           ) : (
-            <div className="header-sign-in-btn hamburger logout-list" onClick={hanleLogOut}>
+            <div className="header-sign-in-btn hamburger" onClick={hanleLogOut}>
               <span>Log Out</span>
             </div>
           )}
