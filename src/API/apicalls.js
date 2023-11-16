@@ -14,7 +14,7 @@ const instance = axios.create({
 export const sendOTPRequestToBackend = async (data) => {
   try {
     console.log("send OTP backend call : ", data);
-    const response = await axios.post(`${backendURL}/sendOTP`, { mobileNumber: data });
+    const response = await instance.post(`${backendURL}/sendOTP`, { mobileNumber: data });
     return response.data;
   } catch (error) {
     throw error;
@@ -24,7 +24,7 @@ export const sendOTPRequestToBackend = async (data) => {
 export const sendOTPVerifyRequestToBackend = async (data) => {
   try {
     console.log("verify otp backend call : ", data);
-    const response = await axios.post(`${backendURL}/verifyOTP`, { data });
+    const response = await instance.post(`${backendURL}/verifyOTP`, { data });
     return response.data;
   } catch (error) {
     throw error;
@@ -34,7 +34,7 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
 export const sendLoginRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
-    const response = await axios.get(`${backendURL}/login`, { params: data });
+    const response = await instance.get(`${backendURL}/login`, { params: data });
     return response.data;
   } catch (error) {
     throw error;
@@ -113,7 +113,7 @@ export const updateUserInfoToBackend = async (data) => {
 
 export const getUserBookingFromBackend = async (data) => {
   try {
-    const response = await axios.get(`${backendURL}/myBooking`);
+    const response = await instance.get(`${backendURL}/myBooking`);
     console.log("booking data : ", response.data);
     return response.data;
   } catch (error) {
