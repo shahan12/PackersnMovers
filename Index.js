@@ -16,6 +16,7 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios');
 var app = express();
 var port = 3001;
+const startUrl = 'https://www.shiftkart.co:3000';
 
 global.totalCarton;
 global.mobile;
@@ -41,7 +42,7 @@ con.connect((err) => {
 });
 
 // This api signup(post-> initially) the user and check password exist or not 
-app.get('/login', (req, res) => {
+app.get('${startUrl}/login', (req, res) => {
 
     try {
         global.mobile = req.query.userMobile;
@@ -83,7 +84,7 @@ app.get('/login', (req, res) => {
 
 
 // This api clear cookie(mobile) and redirect user to home page
-app.get('/logout', (req, res) => {
+app.get('${startUrl}/logout', (req, res) => {
     try {
         if (error) throw error;
         // res.clearCookie('mobile');
@@ -97,7 +98,7 @@ app.get('/logout', (req, res) => {
 
 
 // This api calculate total no. of boxes
-app.put('/totalNoBoxes', authenticateToken, (req, res) => {
+app.put('${startUrl}/totalNoBoxes', authenticateToken, (req, res) => {
 
     try {
 
@@ -153,7 +154,7 @@ app.put('/totalNoBoxes', authenticateToken, (req, res) => {
 });
 
 // This api calculate base price based on house type and total distance
-app.put('/basePrice', authenticateToken, (req, res) => {
+app.put('${startUrl}/basePrice', authenticateToken, (req, res) => {
 
     try {
         var fromAdd = req.body.fromAddress;
@@ -410,7 +411,7 @@ app.put('/basePrice', authenticateToken, (req, res) => {
 })
 
 // This api calculate total floor charges w/o lift
-app.put('/floorCharges', authenticateToken, function (req, res) {
+app.put('${startUrl}/floorCharges', authenticateToken, function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -441,7 +442,7 @@ const storage = multer({
         }
     })
 }).single("profile");
-app.put('/saveUserInfo', authenticateToken, storage, (req, res) => {
+app.put('${startUrl}/saveUserInfo', authenticateToken, storage, (req, res) => {
 
     try {
         var fName = req.body.fName;
@@ -464,7 +465,7 @@ app.put('/saveUserInfo', authenticateToken, storage, (req, res) => {
 });
 
 // This is for getting user info base on user's mobile number
-app.get('/getUserInfo', authenticateToken, (req, res) => {
+app.get('${startUrl}/getUserInfo', authenticateToken, (req, res) => {
 
     try {
         var q4 = "SELECT * FROM " +
@@ -527,7 +528,7 @@ var addons = {
     }
 }
 
-app.put('/addons', authenticateToken, (req, res) => {
+app.put('${startUrl}/addons', authenticateToken, (req, res) => {
     const insertData = {
         addons: addons,
     };
@@ -542,7 +543,7 @@ app.put('/addons', authenticateToken, (req, res) => {
 });
 
 // This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
-app.get('/myBooking', authenticateToken, (req, res) => {
+app.get('${startUrl}/myBooking', authenticateToken, (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
@@ -578,7 +579,7 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put('/updateUser', updateProfile, authenticateToken, (req, res) => {
+app.put('${startUrl}/updateUser', updateProfile, authenticateToken, (req, res) => {
 
     try {
         var fName = req.body.firstName;
@@ -599,7 +600,7 @@ app.put('/updateUser', updateProfile, authenticateToken, (req, res) => {
 });
 
 // This api update 'inventoryData' table based on user's inventory
-app.put('/inventory', authenticateToken, (req, res) => {
+app.put('${startUrl}/inventory', authenticateToken, (req, res) => {
 
     try {
         var mobile = req.body.mobile;
@@ -696,7 +697,7 @@ const Demo = {
 }
 
 // This api is used for sending otp     
-app.post('/sendOTP', (req, res) => {
+app.post('${startUrl}/sendOTP', (req, res) => {
     let {mobileNumber} = req.body;
     console.log("send otp to : ", mobileNumber);
     try {
@@ -725,7 +726,7 @@ app.post('/sendOTP', (req, res) => {
 
 
 // This api is used for verify OTP based on OTP and mobile number
-app.post('/verifyOTP', (req, res) => {
+app.post('${startUrl}/verifyOTP', (req, res) => {
     console.log(req.body.data);
     let {OTP: otp,phoneNumber: mobileNumber}=req.body.data;
     console.log("to verify otp and mobileNumber ", otp,mobileNumber);
@@ -754,7 +755,7 @@ app.post('/verifyOTP', (req, res) => {
 });
 
 
-app.get('/resendOTP', (req, res) => {
+app.get('${startUrl}/resendOTP', (req, res) => {
     try {
         const options = {
             method: 'GET',
