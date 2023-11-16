@@ -700,9 +700,9 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
 });
 
 // demoData 
-const Demo = {
-    mobileNumber:919911791780
-}
+// const Demo = {
+//     mobileNumber:919911791780
+// }
 
 // This api is used for sending otp     
 app.post('/api/sendOTP', (req, res) => {
@@ -711,7 +711,7 @@ app.post('/api/sendOTP', (req, res) => {
     try {
         const options = {
             method: 'POST',
-            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=91${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=${countryCode}${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
