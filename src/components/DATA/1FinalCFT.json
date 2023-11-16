@@ -1,0 +1,410 @@
+{
+	"FURNITURE": {
+		"sofa":{			
+			"1 seater": {
+				"base": 20,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				},
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 0,
+					"non-storage": 0
+				}
+			},
+			"2 seater": {
+				"base": 35,
+				"material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 1
+				}, 
+				"type": {
+					"recliner": 10,
+					"non-recliner": 5,
+					"storage": 5,
+					"non-storage": 5
+				}
+			},
+			"3 seater": {
+				"base": 45,
+				"Material": {
+					"leather": 5,
+					"wooden": 5,
+					"fabric": 5,
+					"cane": 5
+				},
+				"Type": {
+					"recliner": 15,
+					"non-recliner": 15,
+					"storage": 5,
+					"non-storage": 5
+				}
+			}
+		},
+		"tables": {
+			"coffee table": {
+				"base": 5,
+				"material": {
+					"glass top": 5,
+					"wooden top": 7
+				}
+			},
+			"Center table": {
+				"base": 5,
+				"material": {
+					"glass top": 5,
+					"wooden top": 7
+				}
+			},
+			"2 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 5,
+					"wooden non-dismental": 5,
+					"metal foldable": 5,
+					"metal no-foldable": 7,
+					"glass top": 7
+				}
+			},
+			"3 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 10,
+					"wooden non-dismental": 12,
+					"metal foldable": 10,
+					"metal no-foldable": 12,
+					"glass top": 12
+				}
+			},
+			"4 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 15,
+					"wooden non-dismental": 20,
+					"metal foldable": 15,
+					"metal no-foldable": 20,
+					"glass top": 20
+				}
+			},
+			"5 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 25,
+					"wooden non-dismental": 29,
+					"metal foldable": 25,
+					"metal no-foldable": 29,
+					"glass top": 29
+				}
+			},
+			"6 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 31,
+					"wooden non-dismental": 35,
+					"metal foldable": 31,
+					"metal no-foldable": 35,
+					"glass top": 35
+				}
+			},
+			"7 seater dining table": {
+				"base": 5,
+				"material": {
+					"wooden dismental": 43,
+					"wooden non-dismental": 43,
+					"metal foldable": 43,
+					"metal no-foldable": 43,
+					"glass top": 55
+				}
+			},
+			"side table": {
+				"base": 5,
+				"material": {
+					"glass top": 2,
+					"wooden": 1
+				}
+			},
+			"plastic table": {
+				"base": 15
+			},
+			"computer table": {
+				"base": 5,
+				"type": {
+					"with storage": 25,
+					"without storage": 20
+				}
+			},
+			"dressing table": {
+				"base": 5,
+				"type": {
+					"dismental": 25,
+					"non-dismental": 35
+				}
+			},
+			"iron table": {
+				"base": 5
+			}
+		
+		},
+		"chairs": {
+			"base": 4,
+			"type": {
+				"office chair": 4,
+				"kids chair": 0,
+				"dining chair": 4,
+				"executive chair": {
+					"rolling": 6,
+					"no-rolling": 4
+				},
+				"rocking chair": {
+					"wooden": 11,
+					"steel": 11
+				},
+				"plastic chair": 4
+			}
+		},
+		"cots": {
+			"base": 35,
+			"type": {
+				"king size": {
+					"dismental": {
+						"storage": 36,
+						"without storage": 36
+					},
+					"foldable": 36,
+					"neither": 36
+				},
+				"queen": {
+					"dismental": {
+						"storage": 31,
+						"without storage": 31
+					},
+					"foldable": 31,
+					"neither": 31
+				},
+				"double": {
+					"dismental": {
+						"storage": 20,
+						"without storage": 20
+					},
+					"foldable": 20,
+					"neither": 20
+				},
+				"single": {
+					"dismental": {
+						"storage": 20,
+						"without storage": 1
+					},
+					"foldable": 1,
+					"neither": 1
+				},
+				"bunk bed": 37,
+				"diwan": {
+					"storage": 0,
+					"without storage": 0
+				}
+			}
+		},
+		"mattress": {
+			"base": 10,
+			"size": {
+				"double": {
+					"less than 4 inch":0,
+					"4 to 8 inch": 10,
+					"greater than 8 inch": 20
+				},
+				"single": {
+					"less than 4 inch": 0,
+					"4 to 8 inch": 5,
+					"greater than 4 inch": 10
+				}
+			}
+		},
+		"cupboard": {
+			"base": 2,
+				"type": {
+					"wooden": {
+						"height less than 2 feet and width less than 2 feet": 6,
+						"height less than 2 feet and width less than 2 to 4 feet": 15,
+						"height less than 2 feet and width less than 4 to 6 feet": 20,
+						"height less than 2 feet and width greater than 6 feet": 28,
+
+						"height less than 2 to 4 feet and width less than 2 feet": 13,
+						"height less than 2 to 4 feet and width less than 2 to 4 feet": 32,
+						"height less than 2 to 4 feet and width less than 4 to 6 feet": 38,
+						"height less than 2 to 4 feet and width greater than 6 feet": 58,
+
+						"height less than 4 to 6 feet and width less than 2": 20,
+						"height less than 4 to 6 feet and width less than 2 to 4 feet": 38,
+						"height less than 4 to 6 feet and width less than 4 to 6 feet": 66,
+						"height less than 4 to 6 feet and width greater than 6 feet": 88,
+
+						"height greater than 6 feet and width less than 2 feet": 20,
+						"height greater than 6 feet and width less than 2 to 4 feet": 50,
+						"height greater than 6 feet and width less than 4 to 6 feet": 80,
+						"height greater than 6 feet and width greater than 6": 110
+							},
+					"steel": {
+						"height less than 5 feet": 30,
+						"height greater than 5 feet": 50
+						},
+					"plastic": 0
+					}
+				}
+		},
+		"tv_cabinet": { 
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"Measurement": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 22,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,
+				"2ft ≤ height < 4ft and width > 6ft": 44,         //266-281 part is for with glass tv-cabinet
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 6,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 12,
+				"2ft ≤ height < 4ft and width < 2ft": 19,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 6,     //283-298 part is for without glass tv-cabinet
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 19,
+				"2ft ≤ height < 4ft and width > 6ft": 30,
+				"4ft ≤ height < 6ft and width < 2ft": 44,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 12,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 30,
+				"4ft ≤ height < 6ft and width > 6ft": 94,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+
+			}
+		},
+		"showcase": {
+			"type": {
+				"With Glass": 8,
+				"Without Glass": 6
+			},
+			"Measurement": {
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 11,
+				"height < 2ft and 4ft ≤ width < 6ft": 12,
+				"height < 2ft and width > 6ft": 24,
+				"2ft ≤ height < 4ft and width < 2ft": 6,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 19,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 30,       //308-323 with glass
+				"2ft ≤ height < 4ft and width > 6ft": 44,
+				"4ft ≤ height < 6ft and width < 2ft": 12,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 30,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 48,
+				"4ft ≤ height < 6ft and width > 6ft": 44,
+				"height > 6ft and width < 2ft": 19,
+				"height > 6ft and 2ft ≤ width < 4ft": 42,
+				"height > 6ft and 4ft ≤ width < 6ft": 69,
+				"height > 6ft and width > 6ft": 94
+
+				"height < 2ft and width < 2ft": 0,
+				"height < 2ft and 2ft ≤ width < 4ft": 9,
+				"height < 2ft and 4ft ≤ width < 6ft": 14,            //325-340 without glass
+				"height < 2ft and width > 6ft": 22,
+				"2ft ≤ height < 4ft and width < 2ft": 7,
+				"2ft ≤ height < 4ft and 2ft ≤ width < 4ft": 26,
+				"2ft ≤ height < 4ft and 4ft ≤ width < 6ft": 32,
+				"2ft ≤ height < 4ft and width > 6ft": 52,
+				"4ft ≤ height < 6ft and width < 2ft": 14,
+				"4ft ≤ height < 6ft and 2ft ≤ width < 4ft": 32,
+				"4ft ≤ height < 6ft and 4ft ≤ width < 6ft": 60,
+				"4ft ≤ height < 6ft and width > 6ft": 82,
+				"height > 6ft and width < 2ft": 22,
+				"height > 6ft and 2ft ≤ width < 4ft": 52,
+				"height > 6ft and 4ft ≤ width < 6ft": 82,
+				"height > 6ft and width > 6ft": 112
+			}
+		}
+	},
+	"electronics":{
+		"TV": {
+			"Type": {
+				"LED": 7,
+				"LCD": 7
+			},
+			"Mount": {
+				"wall mounted": 0,
+				"Stand": 0
+			},
+			"Size": {
+				"less than 24 inch": 0,
+				"24 to 31 inch": 1,
+				"32 inch": 1,
+				"33 to 39 inch": 3,
+				"40 to 42 inch": 3,
+				"43 to 54 inch": 4,
+				"greater than 54": 5
+			}
+		},
+		"CRT":{
+			"less than 14 inch":10,
+			"15 to 21 inch":10,
+			"22 to 28 inch":13,
+			"greater than 28 inch":20
+		},
+		"fridge": {
+			"single door":18,
+			"double door":24,
+			"side by side":45,
+			"triple door":27
+		},
+		"washing_machine":{
+			"top loading and automatic":15,
+			"top loading and semi automatic":11,
+			"front loading":15
+		},
+
+		"ovens":{
+			"microwave":6,
+			"org":6,
+			"cooking range":10
+		},
+		"Air Conditioner": {
+				"1 ton and window":8,
+				"1 ton and split":10,
+				"1 to 1.5 ton and window":8,
+				"1 to 1.5 ton and split":10,
+				"1.5 to 2 ton and window":8,
+				"1.5 to 2 ton and split":10
+}
+		},
+		"fans":{
+			"tower cooler":14,
+			"ceeling fan":3,
+			"table fan":2,
+			"pedstal fan":10,
+			"wall mounted fan":2
+		}
+	},
+	"vehicle":{
+		"bikes":0,
+		"cars":0,
+		"cycle":0,
+		"others":0
+	}
+}

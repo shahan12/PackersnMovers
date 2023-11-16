@@ -3,11 +3,11 @@
     padding: 1rem 0.5rem;
     border-radius: 0.625rem;
     border: 1px solid rgba(209,213,219);
+    background-color: #FDFDFDE5;
 }
 .drop-down-options{
     padding: 0.625rem;
     margin: 1rem 0;
-    padding: 1rem 0.5rem;
 }
 
 .check-price{

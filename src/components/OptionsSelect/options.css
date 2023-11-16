@@ -2,6 +2,9 @@
     border-radius: 0.5rem;
     border: 1.27px solid #BABABA;
     padding: 0.875rem 2.31rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     flex-direction: column;
     margin-bottom: 1.875rem;
     cursor: pointer;
@@ -25,3 +28,215 @@
 .fixed-width{
     width: 9.125rem;
 }
+.day-box {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 7rem;
+    overflow-y: none;
+    overflow-x: scroll;
+}
+
+.day-box::-webkit-scrollbar {
+    height: 5px;
+}
+
+/* Track */
+.day-box::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px grey; 
+    border-radius: 1px;
+    background: #F1F0FC;
+}
+
+/* Handle */
+.day-box::-webkit-scrollbar-thumb {
+    background: #550EC5; 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.day-box::-webkit-scrollbar-thumb:hover {
+    background: #3b0791; 
+}
+
+
+
+.daybox-item {
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #BABABA;
+    display: flex;
+    height:6rem;
+    min-width: 6rem;
+    max-width: 6rem;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    margin-right: 1rem;
+}
+.daybox-item p{
+    margin: 0;
+}
+.dayboxselected {
+    color: #550EC5;
+    border: 1.27px solid var(--Primary, #550EC5);
+}.daybox-item.selected {
+    border: 2px solid #0074d9; /* Highlighted border color */
+  }
+
+  /* styles.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s;
+  }
+  
+  .modal {
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 400px;
+  }
+  
+  /* styles.css */
+.modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+.date-type-wrapper {
+    margin-top: 2rem;
+    
+}/* styles.css */
+.weekend-price {
+    color: #DD2A37;
+  }
+  
+  .weekday-price {
+    color: #5DAF6F;
+  }
+  .dayofweek {
+    font-weight: 500;
+    font-size: 1.3rem;
+  }
+
+  .time-range-selector {
+    width: 100%; 
+  }
+  
+
+  .row-select-time {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .time-range {
+    padding: 0.75rem;
+    margin: 0.4rem;
+    border-radius: 0.5rem;
+    flex:  1;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .time-range.selected {
+    background: rgba(238, 236, 251, 0.80);
+    color: #550EC5;
+    border: 1.27px solid var(--Primary, #550EC5);
+  }
+
+.addonbox-counter{
+    padding-top: 0.4rem;
+    border-top: 1px solid #BABABA;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content:space-around;
+}
+.parent-addon {
+    height: 9rem;
+}
+.addonBox {
+    padding-bottom: 0rem;
+    min-width: 8rem;
+    width: 8rem;
+    height: 8rem;
+
+}
+.addonBox:hover{
+  border-radius: 8px;
+border: 1.27px solid var(--Primary, #550EC5);
+background: rgba(238, 236, 251, 0.80);
+}
+.addonBox-hover{
+  border-radius: 8px;
+border: 1.27px solid var(--Primary, #550EC5);
+background: rgba(238, 236, 251, 0.80);
+}
+
+.addonbox-counter button {
+    margin: 0;
+
+    padding: 0.1rem;
+    background-color: transparent;
+    align-items: center;
+    display: flex;
+    justify-content:center;
+}
+.addonbox-counter img {
+    padding: 0 0.3rem;
+}
+
+.packageBox {
+    width: 40rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #550EC5;
+    border-radius: 8px;
+}
+.packageBox-title {
+    width: 40rem;
+    padding: 0.5rem;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background-color: #EEECFBCC;
+}
+.modal2 {
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 50rem;
+  }
+
+  .package-range {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .package-range p {
+    margin: 0;
+  }
+

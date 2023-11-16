@@ -1,0 +1,87 @@
+{
+    "Inventory": 
+    {
+        "FURNITURE": {
+            "sofa": {
+                "2 seater": {
+                    "type": "storage",
+                    "material": "fabric",
+                    "cost": 45,
+                    "count": 1
+                },
+                "3 seater": {
+                    "type": "storage",
+                    "material": "leather",
+                    "cost": 55,
+                    "count": 1
+                },
+                "1 seater": {
+                    "type": "storage",
+                    "material": "fabric",
+                    "cost": 25,
+                    "count": 1
+                },
+                "1 seater variation 1": {
+                    "material": "leather",
+                    "type": "storage",
+                    "cost": 25,
+                    "count": 1
+                }
+            }
+        },
+        "FURNITURE1": {
+            "sofa": {
+                "3 seater": {
+                    "type": "non-recliner",
+                    "material": "cane",
+                    "cost": 65,
+                    "count": 1
+                }
+            }
+        }
+    },
+    "Cost": {
+        'BasePrice':
+        'FloorCharges':
+        'TotalItemsAdded':
+        'CFT': 
+        'AddOns': 
+        'totalCost': 
+    },
+    "RequirementData": {
+        "familytype": familyType,
+        "houseType": houseType,
+        "familyNumber": familyNumber,
+        "current": {
+            "floorNumber": floorNumber,
+            "liftValue": liftValue
+        },
+        "moving": {
+            "movingFloorNumber": movingFloorNumber,
+            "movingToLiftValue": movingToLiftValue
+        }
+    },
+    Address: {
+        From:
+        To:
+        Distance:
+    },
+    dateSelection: {
+        Date:
+        timeSlot:
+    },
+    addOns: {
+        "carton": {
+            cost:
+            count:
+            totalPrice:
+
+        },
+        "Window AC": {
+            cost:
+            count:
+            totalPrice:
+            
+        }
+    }
+}

@@ -1,0 +1,35 @@
+.packaging-options {
+    width: 300px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .packaging-options h2 {
+    text-align: center;
+  }
+  
+  .packaging-options ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .packaging-options li {
+    margin-bottom: 10px;
+  }
+  
+  .packaging-options h3 {
+    font-size: 18px;
+  }
+  
+  .packaging-options p {
+    font-size: 14px;
+  }
+  
+  .packaging-options button {
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+  

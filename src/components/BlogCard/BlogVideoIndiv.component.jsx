@@ -21,14 +21,14 @@ const BlogVideoIndiv = ({ title, video, className, thumb }) => {
         <img src={thumbnail} alt={title} className="thumbnail" />
         {!showVideo && (
           <div className="play-button" onClick={handlePlayClick}>
-            <i className="fas fa-play"></i>
+            <i className="fa fas fa-play"></i>
           </div>
         )}
       </div>
       {showVideo && (
         <div className="video-modal">
           <div className="close-button" onClick={handleCloseClick}>
-            <i className="fas fa-times"></i>
+            <i className="fa fas fa-times"></i>
           </div>
           <iframe
             title={title}

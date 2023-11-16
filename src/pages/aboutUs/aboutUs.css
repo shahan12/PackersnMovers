@@ -1,7 +1,6 @@
 
 .about-us-heading {
  text-align: center;
- padding: 3rem 0rem;
 }
 
 .about-us-para-text{
@@ -17,12 +16,6 @@
     color: black;
 }
 
-.aboutUs {
-    padding: 0rem 15rem 20rem 15rem;
-}
-
-@media (max-width: 600px) {
-    .aboutUs {
-        padding: 5rem 2rem 2rem 2rem
-    }
+.about-top{
+    padding-top: 7rem;
 }

@@ -1,0 +1,52 @@
+{
+  "AddOns": [
+    {
+      "name": "Carton",
+      "price": 100,
+      "max item": 100,
+      "desc": "Add if you want to add more box."
+    },
+    {
+      "name": "Labour",
+      "price": 500,
+      "max item": 20,
+      "desc": "If you need extra hands apart from the usual 4-8 members assigned by your size of Home."
+    },
+    {
+      "name": "Split AC",
+      "price": 1400,
+      "max item": 50,
+      "desc": "For Split AC Installation."
+    },
+    {
+      "name": "Split AC U",
+      "price": 500,
+      "max item": 50,
+      "desc": "For Split AC UnInstallation."
+    },
+    {
+      "name": "Window AC ",
+      "price": 800,
+      "max item": 50,
+      "desc": "For Window AC Installation."
+    },
+    {
+      "name": "Window AC U",
+      "price": 300,
+      "max item": 50,
+      "desc": "For Window AC UnInstallation."
+    },
+    {
+      "name": "Electrician",
+      "price": 1200,
+      "max item": 1,
+      "desc": "If you need an Electrician."
+    },
+    {
+      "name": "Carpenter",
+      "price": 1200,
+      "max item": 1,
+      "desc": "For your Furniture needs."
+    }
+  ]
+}
