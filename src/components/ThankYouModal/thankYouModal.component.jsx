@@ -16,7 +16,10 @@ function ThankYouModal({ isModalOpen, setIsModalOpen }) {
           </div>
           <button
             className="modal-close-btn-container"
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => {
+              setIsModalOpen(false);
+              window.open("/bookings", "_self");
+            }}
           >
             X
           </button>

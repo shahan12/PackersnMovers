@@ -18,6 +18,7 @@ import { json } from "react-router-dom";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 
 function Requirement({progress, setProgress}) {
 
@@ -62,6 +63,11 @@ function Requirement({progress, setProgress}) {
   console.log(sessionStorage.getItem('distance'));
   // const[familyCount,setFamilyCount]=useState(4);
   // const[bachelorCount,setBachelorCount]=useState(1);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const openModal = () => {
+    setModalOpen(true);
+  };
 
     
   useEffect(() => {
@@ -205,7 +211,7 @@ function Requirement({progress, setProgress}) {
     if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
       // Show an alert message
       if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        
+        openModal();
       } else {
         // User dismissed the alert, do nothing
       }
@@ -380,6 +386,13 @@ function Requirement({progress, setProgress}) {
         >
           NEXT
         </button>
+        {
+          isModalOpen &&
+        <ThankYouModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setModalOpen}
+        />
+        }
         </div>
       </div>
   );
