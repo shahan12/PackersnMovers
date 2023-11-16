@@ -50,7 +50,7 @@ con.connect((err) => {
 
 
 // This api signup(post-> initially) the user and check password exist or not 
-app.get(`/login`, (req, res) => {
+app.get(`/api/login`, (req, res) => {
 
     try {
         
@@ -92,7 +92,7 @@ app.get(`/login`, (req, res) => {
 
 
 // This api clear cookie(mobile) and redirect user to home page
-app.get(`/logout`, (req, res) => {
+app.get(`/api/logout`, (req, res) => {
     try {
         if (error) throw error;
         // res.clearCookie('mobile');
@@ -473,7 +473,7 @@ app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
 });
 
 // This is for getting user info base on user's mobile number
-app.get(`/getUserInfo`, authenticateToken, (req, res) => {
+app.get(`/api/getUserInfo`, authenticateToken, (req, res) => {
 
     try {
         var q4 = "SELECT * FROM " +
@@ -551,7 +551,7 @@ app.put(`/api/addons`, authenticateToken, (req, res) => {
 });
 
 // This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
-app.get(`/myBooking`, authenticateToken, (req, res) => {
+app.get(`/api/myBooking`, authenticateToken, (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
@@ -763,7 +763,7 @@ app.post(`/api/verifyOTP`, (req, res) => {
 });
 
 
-app.get(`/resendOTP`, (req, res) => {
+app.get(`/api/resendOTP`, (req, res) => {
     try {
         const options = {
             method: 'GET',
