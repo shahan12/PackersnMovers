@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Use the actual domain or IP address where your backend is hosted
-const backendURL = 'https://www.shiftkart.co:3001';
+const backendURL = '178.16.139.203:3001';
 
 const instance = axios.create({
   baseURL: backendURL, 
