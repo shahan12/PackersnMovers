@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios');
 var app = express();
 var port = 3001;
-const startUrl = 'https://www.shiftkart.co:3000';
+const startUrl = 'https://178.16.139.203:3000';
 
 global.totalCarton;
 global.mobile;
