@@ -5,7 +5,7 @@ import axios from 'axios';
 // const backendURL = 'https://www.shiftkart.co:3001';
 
 const instance = axios.create({
-  baseURL: 'https://shiftkart.co/api', 
+  baseURL: 'https://skbootatrap.cloud/api', 
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
