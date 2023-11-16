@@ -16,7 +16,12 @@ const jwt = require('jsonwebtoken');
 
 const axios = require('axios');
 var app = express();
-app.use(cors());
+const corsOptions = {
+    origin: 'https://www.shiftkart.co', // Allow requests from this origin (frontend)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+  };
+  app.use(cors(corsOptions));
 var port = 3001;
 const startUrl = 'https://www.shiftkart.co:3000';
 
