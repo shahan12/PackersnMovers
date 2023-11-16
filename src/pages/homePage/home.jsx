@@ -41,7 +41,6 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
 
   const [visible, setVisible] = useState(true);
   const [show, setShow] = useState(true);
-  const [height, setHeight] = useState(0);
 
   /**
    * Use Effect and function to hide Relocate component on scroll to 1800 px
@@ -59,10 +58,8 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
   }, [loginModal]);
   
   const listenToScroll = () => {
-    let heightToHideFrom = 2900;
-    const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop;
-    setHeight(winScroll);
+    let heightToHideFrom = 3000;
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
     if (winScroll > heightToHideFrom && window.innerWidth > 600) {
       visible && setVisible(false);
@@ -200,8 +197,8 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             <div className="container-item-full">
               <h2>FAQs</h2>
               <div className="container-table-faq">
-                <RetractableTable data={data} />
-                <RetractableTable data={data} />
+                <RetractableTable data={data.data} />
+                <RetractableTable data={data.data} />
               </div>
             </div>
           </div>
