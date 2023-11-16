@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const con = require('./Connection');
 const multer = require('multer');
 const moment = require('moment-timezone');
@@ -15,6 +16,7 @@ const jwt = require('jsonwebtoken');
 
 const axios = require('axios');
 var app = express();
+app.use(cors());
 var port = 3001;
 const startUrl = 'https://www.shiftkart.co:3000';
 
