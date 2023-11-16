@@ -2,10 +2,10 @@
 import axios from 'axios';
 
 // Use the actual domain or IP address where your backend is hosted
-const backendURL = 'https://www.shiftkart.co:3001';
+// const backendURL = 'https://www.shiftkart.co:3001';
 
 const instance = axios.create({
-  baseURL: backendURL, 
+  baseURL: '/api', 
   headers: {
     'Content-Type': 'application/json',
   },
@@ -14,7 +14,7 @@ const instance = axios.create({
 export const sendOTPRequestToBackend = async (data) => {
   try {
     console.log("send OTP backend call : ", data);
-    const response = await instance.post(`${backendURL}/sendOTP`, { mobileNumber: data });
+    const response = await instance.post('/sendOTP', { mobileNumber: data });
     return response.data;
   } catch (error) {
     throw error;
@@ -24,7 +24,7 @@ export const sendOTPRequestToBackend = async (data) => {
 export const sendOTPVerifyRequestToBackend = async (data) => {
   try {
     console.log("verify otp backend call : ", data);
-    const response = await instance.post(`${backendURL}/verifyOTP`, { data });
+    const response = await instance.post('/verifyOTP', { data });
     return response.data;
   } catch (error) {
     throw error;
@@ -34,7 +34,7 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
 export const sendLoginRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
-    const response = await instance.get(`${backendURL}/login`, { params: data });
+    const response = await instance.get('/login', { params: data });
     return response.data;
   } catch (error) {
     throw error;
@@ -44,7 +44,7 @@ export const sendLoginRequestToBackend = async (data) => {
 export const sendRegisterRequestToBackend = async (data) => {
   try {
     console.log("final data to send backend : ", data);
-    const response = await instance.put(`${backendURL}/signup`, data);
+    const response = await instance.put('/signup', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -54,7 +54,7 @@ export const sendRegisterRequestToBackend = async (data) => {
 export const sendBasePriceRequestToBackend = async (data) => {
   try {
     console.log("final data to send basePrice backend : ", data);
-    const response = await instance.put(`${backendURL}/basePrice`, data);
+    const response = await instance.put('/basePrice', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -63,7 +63,7 @@ export const sendBasePriceRequestToBackend = async (data) => {
 
 export const sendFloorChargeRequestToBackend = async (data) => {
   try {
-    const response = await instance.put(`${backendURL}/floorCharges`, data);
+    const response = await instance.put('/floorCharges', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -72,7 +72,7 @@ export const sendFloorChargeRequestToBackend = async (data) => {
 
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {
-    const response = await instance.put(`${backendURL}/totalNoBoxes`, data);
+    const response = await instance.put('/totalNoBoxes', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -82,7 +82,7 @@ export const sendTotalBoxRequestToBackend = async (data) => {
 export const sendFinalItemsToBackend = async (data) => {
   try {
     console.log("final data............. : ", data);
-    const response = await instance.put(`${backendURL}/inventory`, data);
+    const response = await instance.put('/inventory', data);
     console.log("reply from backend :", response.data);
     return response.data;
   } catch (error) {
@@ -93,7 +93,7 @@ export const sendFinalItemsToBackend = async (data) => {
 export const getUserInfoFromBackend = async (data) => {
   try {
     console.log("sending to getUserInfo backend :", data);
-    const response = await instance.get(`${backendURL}/getUserInfo`, { params: data });
+    const response = await instance.get('/getUserInfo', { params: data });
     console.log("reply from user info backend :", response.data);
     return response.data;
   } catch (error) {
@@ -103,7 +103,7 @@ export const getUserInfoFromBackend = async (data) => {
 
 export const updateUserInfoToBackend = async (data) => {
   try {
-    const response = await instance.put(`${backendURL}/updateUser`, data);
+    const response = await instance.put('/updateUser', data);
     console.log("reply from update user info backend :", response.data);
     return response.data;
   } catch (error) {
@@ -113,7 +113,7 @@ export const updateUserInfoToBackend = async (data) => {
 
 export const getUserBookingFromBackend = async (data) => {
   try {
-    const response = await instance.get(`${backendURL}/myBooking`);
+    const response = await instance.get('/myBooking');
     console.log("booking data : ", response.data);
     return response.data;
   } catch (error) {
