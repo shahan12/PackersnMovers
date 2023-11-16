@@ -705,13 +705,13 @@ const Demo = {
 }
 
 // This api is used for sending otp     
-app.post(`/sendOTP`, (req, res) => {
-    global.mobile = req.query.userMobile;
+app.post('/sendOTP', (req, res) => {
+    let {mobileNumber} = req.body;
     console.log("send otp to : ", mobileNumber);
     try {
         const options = {
             method: 'POST',
-            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=91${global.mobile}`,
+            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
@@ -725,36 +725,6 @@ app.post(`/sendOTP`, (req, res) => {
             })
             .catch(function (error) {
                 console.error(error);
-            });
-            global.mobile = req.query.userMobile;
-            var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
-            con.query(q8, (error, result) => {
-                if (error) throw error;
-                if (result.rows.length > 0) {
-                    q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
-                    con.query(q6, (error, result) => {
-                        if (error) throw error;
-                        if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
-                        else { res.send("Mismatched data..."); }
-    
-                    });
-                }
-                else {
-                    var q9 = "BEGIN;" +
-                        "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
-                        "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
-                        "INSERT INTO userBooking(user_mobile) VALUES ('" + mobile + "');" +
-                        "COMMIT;";
-                    con.query(q9, (error, result) => {
-                        if (error) throw error;
-                        mobileNo = mobile;
-                        const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
-                        console.log("JWT Token: ",token);
-                        res.json({token});
-                    });
-    
-    
-                }
             });
     }
     catch (error) {
