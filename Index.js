@@ -746,9 +746,9 @@ app.post('/api/sendOTP', (req, res) => {
                 con.query(q9, (error, result) => {
                     if (error) throw error;
                     mobileNo = mobile;
-                    const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
-                    console.log("JWT Token: ",token);
-                    res.json({token});
+                    // const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
+                    // console.log("JWT Token: ",token);
+                    // res.json({token});
                 });
 
 
