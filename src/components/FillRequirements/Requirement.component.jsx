@@ -180,7 +180,15 @@ function Requirement({progress, setProgress}) {
       "totalCostBF": basePriceResponse+floorChargeResponse,
     }
     dispatch(updateTotalCost(totalcostData));
-    setProgress('inventory');
+
+    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
+      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
+        openModal();
+      } else {
+      }
+    } else {
+      setProgress('inventory');
+    }
   }
 
   useEffect(() => {
@@ -208,17 +216,7 @@ function Requirement({progress, setProgress}) {
   };
   
   function performInspection() {
-    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      // Show an alert message
-      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        openModal();
-      } else {
-        // User dismissed the alert, do nothing
-      }
-    } else {
-      // Call the FlatrequireMents function
-      FlatrequireMents();
-    }
+    FlatrequireMents();
   }
   return (
       <div className="requirements-section-1">
