@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import "./calendar.css";
-import { sendFinalItemsToBackend } from '../../API/apicalls';
+import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
 
 import Modal from "react-modal";
 import ThankYouModal from "../ThankYouModal/thankYouModal.component";
@@ -12,6 +12,8 @@ const Progress = ({ progress, setProgress }) => {
   let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
+
+  const [paymentURL, setPaymentURL]=useState("");
 
   console.log("total cost redux : ", totalCostRedux);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
@@ -31,6 +33,32 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
+  const fetchPaymentURL=async ()=>{
+    // let fullPayment=totalCostRedux.totalCost;
+    // var tries=3;
+    // while(tries>0){
+
+    // }
+    let fullPayment=1;
+    console.log("making payment of--->", fullPayment);
+    let paymentResponse=await makePaymentRequest(fullPayment);
+    if(paymentResponse==="failed"){
+      setPaymentURL("");
+      if (window.confirm("Payment has been failed, Please Try again!")) {
+        fetchPaymentURL();
+      } else {
+        // User dismissed the alert, do nothing
+        setProgress("dateselection");
+      }
+    }
+    else{
+      // redirect to this URL
+      // paymentResponse is the payment URL
+      // window.open(paymentResponse);
+      setPaymentURL(paymentResponse);
+    }
+  }
+
   const bookingConfirm = async () => {
     // console.log(AddOnsADDED)
     // console.log(ITEMADDED);
@@ -39,9 +67,7 @@ const Progress = ({ progress, setProgress }) => {
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
     console.log("final response :",response);
-    if (progress === "progress") {
-      openModal();
-    }
+    fetchPaymentURL();
   };
 
 
@@ -108,12 +134,13 @@ const Progress = ({ progress, setProgress }) => {
           Confirm Booking
         </button>
       </div>
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <ThankYouModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setModalOpen}
         />
-      )}
+      )} */}
+      {paymentURL}
     </div>
   );
 };

@@ -121,3 +121,16 @@ export const getUserBookingFromBackend = async (data) => {
     throw error;
   }
 };
+
+
+export const makePaymentRequest = async (data) => {
+  try {
+    // console.log("final data to send backend : ", data);
+     const response = await axios.post('/payment',{paymentAmount: data});
+    //  console.log("paymant resp frontend : ", response.data);
+    // return "Payment Sucessfull...";
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
