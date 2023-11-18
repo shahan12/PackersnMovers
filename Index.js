@@ -792,6 +792,139 @@ app.post(`/api/verifyOTP`, (req, res) => {
 });
 
 
+
+app.post(`/api/payment`,async(req,res)=>{
+    const paymentAmount=req.body.paymentAmount;
+
+    const paymentData={
+        "merchantId": process.env.MERCHANT_ID,
+        "merchantTransactionId": merchantTransition,
+        "merchantUserId": merchantUser,
+        "amount": (paymentAmount*100),
+        "redirectUrl": "https://www.google.com/",
+        "redirectMode": "REDIRECT",
+        "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+        "mobileNumber": "9901462439",
+        "paymentInstrument": {
+          "type": "PAY_PAGE"
+        }
+    }
+    const salt={
+        "keyIndex": process.env.SALT_INDEX,
+        "key": process.env.SALT_KEY
+    }
+
+    console.log("payment in backend : ", paymentAmount);
+    var minm6=100000;var maxm6=999999;
+    let randomNumSix=Math.floor(Math.random()*(maxm6-minm6+1))+minm6;
+
+    var minm4=1000;var maxm4=9999;
+    let randomNumFour=Math.floor(Math.random()*(maxm4-minm4+1))+minm4;
+
+    let merchantPrefix="SKART";
+    let merchantTransition=merchantPrefix+randomNumFour+randomNumSix;
+    let merchantUser=merchantPrefix+randomNumFour;
+
+    // console.log("merchant tarnsition :",merchantTransition)
+    // console.log("merchant user id :",merchantUser)
+    // console.log("payment amount :",paymentAmount*100);
+
+    const paymentAPI='https://api.phonepe.com/apis/hermes/pg/v1/pay';
+
+    let paymentDataBase64 = base64json.stringify(paymentData,null,1);
+    // console.log("payment data 64 : ", paymentDataBase64);
+    // let decoded = base64json.parse(paymentDataBase64);
+    // console.log(decoded);
+    let paymentDataBase64Xverify=paymentDataBase64+"/pg/v1/pay"+salt.key;
+    // console.log(paymentDataBase64Xverify);
+    let xverify=hash.sha256().update(paymentDataBase64Xverify).digest('hex');
+    // console.log(xverify);
+    xverify+="###1";
+
+    const paymentres = await axios.post(paymentAPI, { request: paymentDataBase64 }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify
+        }
+    });
+    let isSuccess=paymentres.data.success;
+    if(isSuccess){
+        const paymentURL=paymentres.data.data.instrumentResponse.redirectInfo.url
+        // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
+        res.status(200).json(paymentURL);
+    } else{
+        res.status(200).json("payment failed");
+    }
+})
+
+
+app.post("/api/paymentcallback",(req,res)=>{
+    console.log(req.body); // receive the payment status from PhonePe's server
+    // check status of payment
+    // update the "partial payment" as true if payment is done or else mark as false
+    // display the user booking page
+    res.status(200).json("payment callback");
+})
+
+
+app.get("/api/paymentstatus",(req,res)=>{
+
+    var minm6=100000;var maxm6=999999;
+    let randomNumSix=Math.floor(Math.random()*(maxm6-minm6+1))+minm6;
+
+    var minm4=1000;var maxm4=9999;
+    let randomNumFour=Math.floor(Math.random()*(maxm4-minm4+1))+minm4;
+
+    let merchantId="SKART";
+    let merchantTransactionId=merchantId+randomNumFour+randomNumSix;
+
+    const checkStatusAPi = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/{merchantId}/{merchantTransactionId}";
+    let xverify=hash.sha256("pg/v1/status/{paymentData.merchantId}/{paymentData.merchantTransactionId}"+ salt.key) + "###" + salt.keyIndex ;
+
+    // const paymentStatus = await axios.post(checkStatusAPi, {
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'X-VERIFY': xverify,
+    //         'X-MERCHANT-ID': merchantId
+    //     }
+    // });
+    let isSuccess = paymentStatus.data.success;
+    if(isSuccess)
+        res.status(200).json( paymentStatus.data);
+    else
+        res.status(200).json("payment callback");
+    // check status of payment using the merchant transition ID
+    // periodically check status untill we get response
+});
+
+
+
+app.post("/api/sendotp",async (req,res)=>{
+
+    const options = {
+      method: 'POST',
+      url: 'https://control.msg91.com/api/v5/otp?template_id=654dc715d6fc053346750722&mobile=919438775033',
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+        authkey: '393980ANtnyjugl6540b81fP1'
+      },
+    };
+    
+    axios
+    .request(options)
+    .then(function (response){
+        console.log("otp response--->",response.data);
+        res.status(200).json("otp sent");
+    })
+    .catch(function (error){
+        console.error(error);
+        res.status(400).json("otp failed");
+    });
+
+
+});
+
 app.get(`/api/resendOTP`, (req, res) => {
     try {
         const options = {
