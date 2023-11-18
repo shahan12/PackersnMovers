@@ -867,7 +867,7 @@ app.post("/api/paymentcallback",(req,res)=>{
 })
 
 
-app.get("/api/paymentstatus",(req,res)=>{
+app.get("/api/paymentstatus",async(req,res)=>{
 
     var minm6=100000;var maxm6=999999;
     let randomNumSix=Math.floor(Math.random()*(maxm6-minm6+1))+minm6;
@@ -881,13 +881,13 @@ app.get("/api/paymentstatus",(req,res)=>{
     const checkStatusAPi = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/{merchantId}/{merchantTransactionId}";
     let xverify=hash.sha256("pg/v1/status/{paymentData.merchantId}/{paymentData.merchantTransactionId}"+ salt.key) + "###" + salt.keyIndex ;
 
-    // const paymentStatus = await axios.post(checkStatusAPi, {
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'X-VERIFY': xverify,
-    //         'X-MERCHANT-ID': merchantId
-    //     }
-    // });
+    const paymentStatus = await axios.post(checkStatusAPi, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify,
+            'X-MERCHANT-ID': merchantId
+        }
+    });
     let isSuccess = paymentStatus.data.success;
     if(isSuccess)
         res.status(200).json( paymentStatus.data);
