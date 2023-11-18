@@ -81,6 +81,9 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   });
 
   const handleFromPlaceChanged = () => {
+    if(!inputRefFrom?.current?.getPlaces()){
+      return;
+    }
     const [place] = inputRefFrom.current.getPlaces();
     if (place) {
       setFromAddress(place.formatted_address);
@@ -88,6 +91,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   };
 
   const handleToPlaceChanged = () => {
+    if(!inputRefTo?.current?.getPlaces()) return;
     const [place] = inputRefTo.current.getPlaces();
     if (place) {
       setToAddress(place.formatted_address);
