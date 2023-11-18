@@ -899,31 +899,6 @@ app.get("/api/paymentstatus",(req,res)=>{
 
 
 
-app.post("/api/sendotp",async (req,res)=>{
-
-    const options = {
-      method: 'POST',
-      url: 'https://control.msg91.com/api/v5/otp?template_id=654dc715d6fc053346750722&mobile=919438775033',
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        authkey: '393980ANtnyjugl6540b81fP1'
-      },
-    };
-    
-    axios
-    .request(options)
-    .then(function (response){
-        console.log("otp response--->",response.data);
-        res.status(200).json("otp sent");
-    })
-    .catch(function (error){
-        console.error(error);
-        res.status(400).json("otp failed");
-    });
-
-
-});
 
 app.get(`/api/resendOTP`, (req, res) => {
     try {
