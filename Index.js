@@ -706,7 +706,7 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
 // This api is used for sending otp     
 app.post('/api/sendOTP', (req, res) => {
     let {mobileNumber} = req.body;
-    const mobile = mobileNumber;
+    global.mobile = mobileNumber;
     console.log("send otp to : ", mobileNumber);
     try {
         const options = {
@@ -721,16 +721,17 @@ app.post('/api/sendOTP', (req, res) => {
         axios
             .request(options)
             .then(function (response) {
-                res.send(response.data);
+                res.status(200).json(response.data);
             })
             .catch(function (error) {
                 console.error(error);
             });
-            var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
+            
+            var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
         con.query(q8, (error, result) => {
             if (error) throw error;
             if (result.rows.length > 0) {
-                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
+                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
                     if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
@@ -740,12 +741,12 @@ app.post('/api/sendOTP', (req, res) => {
             }
             else {
                 var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
-                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
+                    "INSERT INTO userInfo(user_mobile) VALUES ('" + global.mobile + "');" +
+                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + global.mobile + "');" +
                     "COMMIT;";
                 con.query(q9, (error, result) => {
                     if (error) throw error;
-                    mobileNo = mobile;
+                    mobileNo = global.mobile;
                     // const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
                     // console.log("JWT Token: ",token);
                     // res.json({token});
