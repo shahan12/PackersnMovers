@@ -18,7 +18,7 @@ const axios = require('axios');
 var app = express();
 app.use(cors({
     origin: 'https://shiftkart.co',
-    methods: 'GET, POST, OPTIONS',
+    methods: 'GET, POST, OPTIONS, PUT',
     credentials: true,
     allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
   }));
