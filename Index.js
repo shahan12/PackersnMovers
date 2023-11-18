@@ -105,7 +105,7 @@ app.get(`/api/logout`, (req, res) => {
 
 
 // This api calculate total no. of boxes
-app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
+app.put(`/api/totalNoBoxes`, (req, res) => {
 
     try {
 
@@ -161,7 +161,7 @@ app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
 });
 
 // This api calculate base price based on house type and total distance
-app.put(`/api/basePrice`, authenticateToken, (req, res) => {
+app.put(`/api/basePrice`, (req, res) => {
 
     try {
         var fromAdd = req.body.fromAddress;
@@ -418,7 +418,7 @@ app.put(`/api/basePrice`, authenticateToken, (req, res) => {
 })
 
 // This api calculate total floor charges w/o lift
-app.put(`/api/floorCharges`, authenticateToken, function (req, res) {
+app.put(`/api/floorCharges`, function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -449,7 +449,7 @@ const storage = multer({
         }
     })
 }).single("profile");
-app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
+app.put(`/api/saveUserInfo`, storage, (req, res) => {
 
     try {
         var fName = req.body.fName;
@@ -472,7 +472,7 @@ app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
 });
 
 // This is for getting user info base on user's mobile number
-app.get(`/api/getUserInfo`, authenticateToken, (req, res) => {
+app.get(`/api/getUserInfo`, (req, res) => {
 
     try {
         var q4 = "SELECT * FROM " +
@@ -535,7 +535,7 @@ var addons = {
     }
 }
 
-app.put(`/api/addons`, authenticateToken, (req, res) => {
+app.put(`/api/addons`, (req, res) => {
     const insertData = {
         addons: addons,
     };
@@ -550,7 +550,7 @@ app.put(`/api/addons`, authenticateToken, (req, res) => {
 });
 
 // This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
-app.get(`/api/myBooking`, authenticateToken, (req, res) => {
+app.get(`/api/myBooking`, (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
@@ -586,7 +586,7 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
+app.put(`/api/updateUser`, updateProfile, (req, res) => {
 
     try {
         var fName = req.body.firstName;
@@ -607,7 +607,7 @@ app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
 });
 
 // This api update 'inventoryData' table based on user's inventory
-app.put(`/api/inventory`, authenticateToken, (req, res) => {
+app.put(`/api/inventory`, (req, res) => {
 
     try {
         var mobile = req.body.mobile;
