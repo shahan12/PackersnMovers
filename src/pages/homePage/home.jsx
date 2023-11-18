@@ -26,7 +26,7 @@ import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ThankYouModal from "../../components/ThankYouModal/thankYouModal.component";
+
 
 
 function Home({ setShowPopUp, loginModal, setLoginModal }) {
@@ -77,7 +77,6 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
       <div className="home-landing-container">
         <div className="home-elements-container">
           <div className="section-container container-home" id="home">
-            <ThankYouModal/>
             <img
               className="img-left-sticky"
               src={purpleCircle}
