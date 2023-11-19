@@ -32,6 +32,7 @@ global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
 global.base64UrlKey, global.sha256Hash, global.base64;
+global.paymentStatus , global.merchantUser ; 
 
 let mobileNumber = process.env.MOBILE_NUMBER;
 let templateId = process.env.template_id;
@@ -796,19 +797,6 @@ app.post(`/api/verifyOTP`, (req, res) => {
 app.post(`/api/payment`,async(req,res)=>{
     const paymentAmount=req.body.paymentAmount;
 
-    const paymentData={
-        "merchantId": process.env.MERCHANT_ID,
-        "merchantTransactionId": merchantTransition,
-        "merchantUserId": merchantUser,
-        "amount": (paymentAmount*100),
-        "redirectUrl": "https://www.google.com/",
-        "redirectMode": "REDIRECT",
-        "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
-        "mobileNumber": "9901462439",
-        "paymentInstrument": {
-          "type": "PAY_PAGE"
-        }
-    }
     const salt={
         "keyIndex": process.env.SALT_INDEX,
         "key": process.env.SALT_KEY
@@ -823,8 +811,21 @@ app.post(`/api/payment`,async(req,res)=>{
 
     let merchantPrefix="SKART";
     let merchantTransition=merchantPrefix+randomNumFour+randomNumSix;
-    let merchantUser=merchantPrefix+randomNumFour;
+    global.merchantUser=merchantPrefix+randomNumFour;
 
+    const paymentData={
+        "merchantId": process.env.MERCHANT_ID,
+        "merchantTransactionId": merchantTransition,
+        "merchantUserId": merchantUser,
+        "amount": (paymentAmount*100),
+        "redirectUrl": "https://shiftkart.co/bookings",
+        "redirectMode": "REDIRECT",
+        "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+        "mobileNumber": global.mobile,
+        "paymentInstrument": {
+          "type": "PAY_PAGE"
+        }
+    }
     // console.log("merchant tarnsition :",merchantTransition)
     // console.log("merchant user id :",merchantUser)
     // console.log("payment amount :",paymentAmount*100);
@@ -851,7 +852,7 @@ app.post(`/api/payment`,async(req,res)=>{
     if(isSuccess){
         const paymentURL=paymentres.data.data.instrumentResponse.redirectInfo.url
         // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
-        res.status(200).json(paymentURL);
+        res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
     } else{
         res.status(200).json("payment failed");
     }
@@ -875,24 +876,27 @@ app.get("/api/paymentstatus",async(req,res)=>{
     var minm4=1000;var maxm4=9999;
     let randomNumFour=Math.floor(Math.random()*(maxm4-minm4+1))+minm4;
 
-    let merchantId="SKART";
-    let merchantTransactionId=merchantId+randomNumFour+randomNumSix;
 
-    const checkStatusAPi = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/{merchantId}/{merchantTransactionId}";
+    const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`;
     let xverify=hash.sha256("pg/v1/status/{paymentData.merchantId}/{paymentData.merchantTransactionId}"+ salt.key) + "###" + salt.keyIndex ;
 
-    const paymentStatus = await axios.post(checkStatusAPi, {
+    global.paymentStatus = await axios.post(checkStatusAPi, {
         headers: {
             'Content-Type': 'application/json',
             'X-VERIFY': xverify,
             'X-MERCHANT-ID': merchantId
         }
     });
-    let isSuccess = paymentStatus.data.success;
-    if(isSuccess)
-        res.status(200).json( paymentStatus.data);
-    else
-        res.status(200).json("payment callback");
+    if(paymentStatus != null){
+        q22 = "UPDATE inventorydata SET payment_response = '" + paymentStatus +"' WHERE user_mobile = '"+global.mobile +"' "; 
+        con.query(q22,(error,result)=>{
+            if(error)
+                throw error;
+            else
+                res.status(200).json(paymentStatus);
+        });
+        
+    }
     // check status of payment using the merchant transition ID
     // periodically check status untill we get response
 });
