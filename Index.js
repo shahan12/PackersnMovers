@@ -601,11 +601,11 @@ app.post('/api/sendOTP', (req, res) => {
     try {
         const options = {
             method: 'POST',
-            url: `https://control.msg91.com/api/v5/otp?template_id=${process.env.TEMPLATE_ID}&mobile=91${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp?template_id=${TEMPLATE_ID}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authkey: `${process.env.AUTH_KEY}`
+                authkey: `${AUTH_KEY}`
             }
         };
         axios
