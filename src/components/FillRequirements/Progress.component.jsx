@@ -16,7 +16,7 @@ const Progress = ({ progress, setProgress }) => {
 
   const [paymentURL, setPaymentURL]=useState("");
 
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
   useEffect(() => {
     if (RequirementsRedux) {
@@ -54,7 +54,7 @@ const Progress = ({ progress, setProgress }) => {
     const response=await sendFinalItemsToBackend(API_DATA);
     if (progress === "progress" && response) {
 
-      setLoader(true);
+      setLoader(false);
       openModal();
     }
 

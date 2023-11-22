@@ -19,6 +19,8 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
+import loaderIcon from '../../images/loader.gif';
+const [loader, setLoader] = useState(false);
 
 function Requirement({progress, setProgress}) {
 
@@ -163,6 +165,7 @@ function Requirement({progress, setProgress}) {
       } else {
       }
     } else {
+      setLoader(false);
       setProgress('inventory');
     }
   }
@@ -190,6 +193,7 @@ function Requirement({progress, setProgress}) {
   };
   
   function performInspection() {
+    setLoader(true);
     FlatrequireMents();
   }
   return (
@@ -356,7 +360,11 @@ function Requirement({progress, setProgress}) {
           className="cta-button"
           onClick={performInspection}
         >
-          NEXT
+          {loader ? (
+            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
+        ) : (
+          'NEXT'
+        )}
         </button>
         {
           isModalOpen &&
