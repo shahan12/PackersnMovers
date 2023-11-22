@@ -183,58 +183,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
             )}
             {otpPage && flow === "login" && (
               <>
-                {/* {isUserRegisterd ? (
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      type="passowrd"
-                      id="phoneNumber"
-                      pattern="\d*"
-                      maxLength="10"
-                      value={OTP}
-                      onChange={handleOtpInput}
-                      placeholder="Enter password"
-                      onClick={() => setInvalidOTP(false)}
-                    />
-                    <button
-                      type="submit"
-                      disabled={OTP.length < 6}
-                      onClick={(e) =>
-                        handleSubmit(
-                          e,
-                          flow === "register" ? "register" : "login"
-                        )
-                      }
-                      className={`${
-                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
-                      } cta-button`}
-                    >
-                      Submit OTP
-                    </button>
-                  </form>
-                ) : (
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      type="passowrd"
-                      id="phoneNumber"
-                      pattern="\d*"
-                      maxLength="10"
-                      value={OTP}
-                      onChange={handleOtpInput}
-                      placeholder="Enter New Password"
-                      onClick={() => setInvalidOTP(false)}
-                    />
-                    <button
-                      type="submit"
-                      disabled={OTP.length < 6}
-                      onClick={() => validateOTP()}
-                      className={`${
-                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
-                      } cta-button`}
-                    >
-                      Submit OTP
-                    </button>
-                  </form>
-                )} */}
+
 
                 <OTPInput
                   onChange={handleOtpInput}

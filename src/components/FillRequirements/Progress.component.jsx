@@ -28,32 +28,28 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  const fetchPaymentURL=async ()=>{
-    // let fullPayment=totalCostRedux.totalCost;
-    // var tries=3;
-    // while(tries>0){
+  // const fetchPaymentURL=async ()=>{
+  //   let fullPayment=1;
+  //   let paymentResponse=await makePaymentRequest(fullPayment); //url
 
-    // }
-    let fullPayment=1;
-    let paymentResponse=await makePaymentRequest(fullPayment);
-    if(paymentResponse==="failed"){
-      setPaymentURL("");
-      if (window.confirm("Payment has been failed, Please Try again!")) {
-        fetchPaymentURL();
-      } else {
-        setProgress("dateselection");
-      }
-    }
-    else{
-      window.open(paymentResponse);
-      setPaymentURL(paymentResponse);
-    }
-  }
+  //   if(paymentResponse==="failed"){
+  //     setPaymentURL("");
+  //     if (window.confirm("Payment has been failed, Please Try again!")) {
+  //       fetchPaymentURL();
+  //     } else {
+  //       setProgress("dateselection");
+  //     }
+  //   }
+  //   else{
+  //     window.open(paymentResponse);
+  //     setPaymentURL(paymentResponse);
+  //   }
+  // }
 
   const bookingConfirm = async () => {
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
-    fetchPaymentURL();
+    // fetchPaymentURL();
   };
 
 
@@ -120,12 +116,12 @@ const Progress = ({ progress, setProgress }) => {
           Confirm Booking
         </button>
       </div>
-      {/* {isModalOpen && (
+      {isModalOpen && (
         <ThankYouModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setModalOpen}
         />
-      )} */}
+      )}
       {paymentURL}
     </div>
   );
