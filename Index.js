@@ -676,7 +676,7 @@ app.post(`/api/verifyOTP`, (req, res) => {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authkey: `${process.env.AUTH_KEY}`
+                authkey: `${process.env.authKey}`
             }
         };
         axios
