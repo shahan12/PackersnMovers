@@ -610,7 +610,7 @@ app.post('/api/sendOTP', (req, res) => {
         axios
             .request(options)
             .then(function (response) {
-                res.send(response.data);
+                res.status(200).json(response.data);
             })
             .catch(function (error) {
                 console.error(error);
@@ -623,8 +623,8 @@ app.post('/api/sendOTP', (req, res) => {
                 q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
-                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
-                    else { res.send("Mismatched data..."); }
+                    if (result.rows.length > 0) { return res.send("Login Sucessfull..."); }
+                    else { return res.send("Mismatched data..."); }
                 });
             }
             else {
@@ -654,13 +654,13 @@ console.log("Verified Token: ",verified);
 function authenticateToken(req, res, next) {
 
     const token = req.headers['authorization'];
-    if (!token) return res.status(401);
+    if (!token) return res.sendStatus(401);
     try {
         const decoded = verifyToken(token);
         req.user = decoded;
         next();
     } catch (err) {
-        return res.status(403);
+        return res.sendStatus(403);
     }
 }
 
