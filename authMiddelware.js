@@ -1,21 +1,19 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
-let secretKey = process.env.secret_key;
 
-function authenticateToken(req, res, next) {
-    const token = req.header('Authorization');
-    if (!token) {
-        return res.status(401).json({ message: 'un-Authorized' });
-    }
-
-    jwt.verify(token, secretKey, (error, user) => {
-        if (error) {
-            return res.status(403).json({ message: 'Forbidden' });
-        }
-
-        req.user = user;
-        next();
-    });
+// Function to generate a JWT token
+function generateToken(payload) {
+    const token = jwt.sign(payload, 'SKART', { expiresIn: '1h' });
+    return token;
 }
 
-module.exports = authenticateToken
+// Function to verify a JWT token
+function verifyToken(token) {
+    try {
+        const decoded = jwt.verify(token, 'SKART');
+        return decoded;
+    } catch (err) {
+        throw new Error('Invalid token');
+    }
+}
+
+module.exports = generateToken, verifyToken;

@@ -8,22 +8,19 @@ const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const fetch = require('node-fetch');
 const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
-const authenticateToken  = require('./authMiddelware');
+const authenticateToken = require('./authMiddelware');
 const jwt = require('jsonwebtoken');
-//const Msg91 = require('@msg91/msg91-v5');
-
-//const sdk = new Msg91('393980ANtnyjugl6540b81fP1');
-
 const axios = require('axios');
 var app = express();
+
 app.use(cors({
-    origin: 'https://shiftkart.co',
-    methods: 'GET, POST, OPTIONS',
+    origin: process.env.BASE_URL,
+    methods: 'GET, POST, OPTIONS, PUT',
     credentials: true,
     allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
-  }));
-var port = 3001;
-// const startUrl = 'https://www.shiftkart.co:3000';
+}));
+
+var port = process.env.PORT;
 
 global.totalCarton;
 global.mobile;
@@ -32,70 +29,24 @@ global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
 global.base64UrlKey, global.sha256Hash, global.base64;
+global.paymentStatus, global.merchantUser;
 
 let mobileNumber = process.env.MOBILE_NUMBER;
 let templateId = process.env.template_id;
 let authKey = process.env.authkey;
 let otp = process.env.OTP;
 
-// app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-// This code is for checking connection
 con.connect((err) => {
     if (err) throw err;
 });
 
-
-// This api signup(post-> initially) the user and check password exist or not 
-app.get(`/api/login`, (req, res) => {
-
-    try {
-        
-        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
-        con.query(q8, (error, result) => {
-            if (error) throw error;
-            if (result.rows.length > 0) {
-                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
-                con.query(q6, (error, result) => {
-                    if (error) throw error;
-                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
-                    else { res.send("Mismatched data..."); }
-
-                });
-            }
-            else {
-                var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
-                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
-                    "INSERT INTO userBooking(user_mobile) VALUES ('" + mobile + "');" +
-                    "COMMIT;";
-                con.query(q9, (error, result) => {
-                    if (error) throw error;
-                    mobileNo = mobile;
-                    const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
-                    console.log("JWT Token: ",token);
-                    res.json({token});
-                });
-
-
-            }
-        });
-    }
-    catch (error) {
-        console.error(error.message);
-
-    }
-});
-
-
-// This api clear cookie(mobile) and redirect user to home page
 app.get(`/api/logout`, (req, res) => {
     try {
         if (error) throw error;
-        // res.clearCookie('mobile');
         res.redirect('./homepage.html');
     }
     catch (error) {
@@ -103,9 +54,6 @@ app.get(`/api/logout`, (req, res) => {
     }
 })
 
-
-
-// This api calculate total no. of boxes
 app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
 
     try {
@@ -113,9 +61,7 @@ app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
         var houseType = req.body.houseType.replace(' ', '').toLowerCase();
         var familyType = (req.body.familyType).toLowerCase();
         var members = parseInt(req.body.familyNumber);
-        // var mobile = req.body.phoneNumber;
         console.log("total box backend :", houseType, familyType, members, global.mobile);
-        // var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + updatePassword.userMobile + "'";
         var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
 
 
@@ -124,25 +70,10 @@ app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
             var flag = result.rows[0].boxes_qty;
             if (familyType == 'bachelor' && members > 1) {
                 global.additionalBox = (members - 1) * 4;
-                // var totalBachelorBox = flag + check;
-                // global.totalCarton = totalBachelorBox;
             }
-            // else if (members == 1) {
-            //     // res.setHeader('Content-Type', 'application/json');
-            //     global.totalCarton = flag;
-            //     res.status(200).json(flag);
-            // }
             if (familyType == 'family' && members > 4) {
                 global.additionalBox = (members - 4) * 4;
-                //var totalFamilyBox = flag + check;
-                // res.setHeader('Content-Type', 'application/json');
-                //global.totalCarton = totalFamilyBox;
             }
-            // else if (members == 4) {
-            //     // res.setHeader('Content-Type', 'application/json');
-            //     global.totalCarton = flag;
-            //     res.status(200).json(flag);
-            // }
             else {
                 global.additionalBox = 0;
             }
@@ -161,32 +92,20 @@ app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
     }
 });
 
-// This api calculate base price based on house type and total distance
-app.put(`/api/basePrice`, authenticateToken, (req, res) => {
-
+app.put(`/api/basePrice`, authenticateToken,(req, res) => {
     try {
         var fromAdd = req.body.fromAddress;
         var toAdd = req.body.toAddress;
         var totalDistance = Math.round(parseFloat(req.body.distance));
         var houseType = req.body.houseType.replace(' ', '').toLowerCase();;
-        // var phoneNumber=req.body.phoneNumber;
-        console.log("backend rcvd in base price :");
-        console.log("from address :", fromAdd);
-        console.log("to address :", toAdd);
-        console.log(totalDistance)
-        console.log(houseType)
-        console.log(global.mobile);
-
-        // var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + userSignup.userMobile + "'";
+        console.log("From Address: ", fromAdd);
+        console.log("To Address: ", toAdd);
+        console.log("Total Distance: ",totalDistance)
+        console.log("House Type: ",houseType)
+        console.log("User Mobile Number: ",global.mobile);
         var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + global.mobile + "'";
         con.query(q11, (error, result) => {
             if (error) throw error;
-
-
-            // var q12 = "SELECT * FROM userInfo WHERE house_type='"+houseType+"' AND user_mobile='"+userSignup.userMobile+"'";
-            // con.query(q12,(error,result)=>{
-            //     if(error) throw error;
-            // })
             if (true) {
                 if (houseType == "1rk") {
                     if (totalDistance <= 5) {
@@ -194,219 +113,213 @@ app.put(`/api/basePrice`, authenticateToken, (req, res) => {
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
                         global.basePrice = 2499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
                         global.basePrice = 2799;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 2999;
-                        // res.status(200).json(global.basePrice);
+                        global.basePrice = 2999;   
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
                         global.basePrice = 3349;
-                        // res.status(200).json(global.basePrice);
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
                         global.basePrice = 3699;
-                        // res.status(200).json(global.basePrice);
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
                         global.basePrice = 4099;
-                        // res.status(200).json(global.basePrice);
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
                         global.basePrice = 4499;
-                        // res.status(200).json(global.basePrice);
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
                         global.basePrice = 4849;
-                        // res.status(200).json(global.basePrice);
                     }
                     if (totalDistance >= 50) {
                         global.basePrice = 5199;
-                        // res.status(200).json(global.basePrice);
                     }
                 }
-                // res.send(global.basePrice);
+
                 if (houseType == "1bhk") {
                     if (totalDistance <= 5) {
                         global.basePrice = 3199;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
                         global.basePrice = 4499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
                         global.basePrice = 4999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
                         global.basePrice = 5299;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
                         global.basePrice = 6499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
                         global.basePrice = 6999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
                         global.basePrice = 7499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
                         global.basePrice = 7999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
                         global.basePrice = 8499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 50) {
                         global.basePrice = 8999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                 }
-                // res.send(global.basePrice);
+                
                 if (houseType == "1bhkHeavy") {
                     if (totalDistance <= 5) {
                         global.basePrice = 3899;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
                         global.basePrice = 4499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
                         global.basePrice = 5499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
                         global.basePrice = 5999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
                         global.basePrice = 6549;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
                         global.basePrice = 7099;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
                         global.basePrice = 7649;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
                         global.basePrice = 8199;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
                         global.basePrice = 8749;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 50) {
                         global.basePrice = 9299;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                 }
-                // res.send(global.basePrice);
+
                 if (houseType == "2bhk") {
                     if (totalDistance <= 5) {
                         global.basePrice = 7999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
                         global.basePrice = 12999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
                         global.basePrice = 13999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
                         global.basePrice = 13999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
                         global.basePrice = 14899;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
                         global.basePrice = 15799;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
                         global.basePrice = 16699;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
                         global.basePrice = 17599;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
                         global.basePrice = 18499;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 50) {
                         global.basePrice = 19399;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                 }
-                // res.send(global.basePrice);
+
                 if (houseType == "2bhkHeavy") {
                     if (totalDistance <= 5) {
                         global.basePrice = 8999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
                         global.basePrice = 14999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
                         global.basePrice = 16999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
                         global.basePrice = 17999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
                         global.basePrice = 18999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
                         global.basePrice = 19999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
                         global.basePrice = 20999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
                         global.basePrice = 21999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
                         global.basePrice = 22999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                     if (totalDistance >= 50) {
                         global.basePrice = 23999;
-                        // res.status(200).json(global.basePrice);
+                        
                     }
                 }
                 res.setHeader('Content-Type', 'application/json');
+                console.log("Base Price: ",global.basePrice);
                 res.json(global.basePrice).status(200);
             }
         });
@@ -418,15 +331,12 @@ app.put(`/api/basePrice`, authenticateToken, (req, res) => {
 
 })
 
-// This api calculate total floor charges w/o lift
-app.put(`/api/floorCharges`, authenticateToken, function (req, res) {
+app.put(`/api/floorCharges`, authenticateToken,function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
         var toFloor = RequirementData.toFloor;
         var toLift = RequirementData.toLift;
-        // var userPhone = updatePassword.userMobile
-
         var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + global.mobile + "'";
         con.query(q14, (error, result) => {
             if (error) throw error;
@@ -439,7 +349,6 @@ app.put(`/api/floorCharges`, authenticateToken, function (req, res) {
 
 });
 
-// This api is for save user info with profile picture in folder(./upload) and store path in table
 const storage = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -456,14 +365,13 @@ app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
         var fName = req.body.fName;
         var lName = req.body.lName;
         var email = req.body.email;
-        // var mobileNo = updatePassword.userMobile;
         var profile = req.file.path;
 
         var q3 = "UPDATE userInfo  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + global.mobile + "'";
 
         con.query(q3, (error, result) => {
             if (error) throw error;
-            console.log("Data uploded sucessfully");
+            console.log("User Data uploded sucessfully");
             res.send(result.rows);
         });
     }
@@ -472,7 +380,6 @@ app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
     }
 });
 
-// This is for getting user info base on user's mobile number
 app.get(`/api/getUserInfo`, authenticateToken, (req, res) => {
 
     try {
@@ -541,16 +448,13 @@ app.put(`/api/addons`, authenticateToken, (req, res) => {
         addons: addons,
     };
     var add_on = JSON.stringify(insertData);
-    //   var mobile = userSignup.userMobile;
-
     var q16 = "UPDATE inventoryData SET addons='" + add_on + "'::jsonb WHERE user_mobile='" + global.mobile + "'";
     con.query(q16, (error, result) => {
         if (error) throw error;
-        res.send("addons added..." + result.rows);
+        res.send("User added Addons: " + result.rows);
     })
 });
 
-// This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
 app.get(`/api/myBooking`, authenticateToken, (req, res) => {
 
     try {
@@ -559,7 +463,7 @@ app.get(`/api/myBooking`, authenticateToken, (req, res) => {
     FROM userInfo u INNER JOIN inventoryData i ON u.user_mobile = i.user_mobile 
     WHERE u.user_mobile = $1 `;
 
-        console.log(global.mobile);
+        console.log("User Mobile Number in myBooking API: ",global.mobile);
         const userMobile = global.mobile;
         con.query(q17, [userMobile], (error, results) => {
             if (error) throw error;
@@ -576,7 +480,6 @@ app.get(`/api/myBooking`, authenticateToken, (req, res) => {
     }
 });
 
-// This api is for update the user details  
 const updateProfile = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -598,7 +501,7 @@ app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
             "user_profile='" + profile + "' WHERE  user_mobile = '" + global.mobile + "'";
         con.query(q5, (err, result) => {
             if (err) throw err;
-            console.log(global.mobile);
+            console.log("User Mobile Number in Update User API: ",global.mobile);
             res.send("Rows updated" + result.rows);
         });
     }
@@ -607,46 +510,43 @@ app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
     }
 });
 
-// This api update 'inventoryData' table based on user's inventory
 app.put(`/api/inventory`, authenticateToken, (req, res) => {
 
     try {
         var mobile = req.body.mobile;
-        console.log("all inventory data: ", req.body);
-        console.log("addons : ");
+        console.log("All Inventory Data: ", req.body);
+        console.log("Addons: ");
         console.log(req.body.addons);
 
-        console.log("datatime : ");
+        console.log("Data Time: ");
         console.log(req.body.dataTime);
 
-        console.log("user_inventory : ");
+        console.log("User Inventory: ");
         console.log(req.body.user_inventory);
 
-        console.log("data :");
+        console.log("User Selected Date: ");
         console.log(req.body.dataTime?.selectedDay?.date);
 
-        console.log("label :");
+        console.log("User Selected Time: ");
         console.log(req.body.dataTime?.selectedTime?.label);
 
-        console.log("mobile :")
+        console.log("User Mobile in Inventory API: ")
         console.log(req.body.mobile);
 
-        console.log("current data ")
+        console.log("Current Date: ")
         console.log(req.body.dataTime?.selectedDay?.currentDate)
 
-        console.log("booking data ")
+        console.log("Booking Date: ")
         console.log(req.body.dataTime?.selectedDay?.bookingDate)
 
-        console.log("total items ")
+        console.log("Total Items: ")
         console.log(req.body.totalCost?.totalItemCount)
 
-        console.log("additional box ")
+        console.log("Additional boxes: ")
         console.log(req.body.totalCost?.totalBox);
 
         var addons = JSON.stringify(req.body.addons);
         var user_inventory = JSON.stringify(req.body.user_inventory);
-
-        // Function to get the current date in 'dd/mm/yyyy' format
         function getCurrentDate() {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
@@ -675,9 +575,8 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
         const last4Digits = getLast4Digitmobile(phone);
 
         global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
-        console.log(global.orderID);
+        console.log("User Order ID: ",global.orderID);
         let value = req.body.totalCost.totalBox;
-        // console.log("value -> ",value);
         if (isNaN(value) || value === undefined) {
             value = 0;
         }
@@ -685,13 +584,9 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
 
         con.query(q21, (error, result) => {
             if (error) throw error;
-            console.log(result.rows);
-            // if(result.rows.length > 0) {
-            //     console.log("inventory data saved successfully");
-            // }
+            console.log("Inventory Succefully Added: ",result.rows);
             res.send(result.rows);
         })
-        // res.status(200); // comment this when the above query runs
     }
 
     catch (error) {
@@ -699,33 +594,51 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
     }
 });
 
-// demoData 
-// const Demo = {
-//     mobileNumber:919911791780
-// }
-
-// This api is used for sending otp     
 app.post('/api/sendOTP', (req, res) => {
-    let {mobileNumber} = req.body;
-    console.log("send otp to : ", mobileNumber);
+    let { mobileNumber } = req.body;
+    global.mobile = mobileNumber;
+    console.log("Send OTP TO: ", mobileNumber);
     try {
         const options = {
             method: 'POST',
-            url: `https://control.msg91.com/api/v5/otp?template_id=${templateId}&mobile=91${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp?template_id=${process.env.TEMPLATE_ID}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authkey: `${authKey}`
+                authkey: `${process.env.AUTH_KEY}`
             }
         };
         axios
             .request(options)
             .then(function (response) {
-                res.send(response.data);
+                res.status(200).json(response.data);
             })
             .catch(function (error) {
                 console.error(error);
             });
+
+        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
+        con.query(q8, (error, result) => {
+            if (error) throw error;
+            if (result.rows.length > 0) {
+                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
+                con.query(q6, (error, result) => {
+                    if (error) throw error;
+                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
+                    else { res.send("Mismatched data..."); }
+                });
+            }
+            else {
+                var q9 = "BEGIN;" +
+                    "INSERT INTO userInfo(user_mobile) VALUES ('" + global.mobile + "');" +
+                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + global.mobile + "');" +
+                    "COMMIT;";
+                con.query(q9, (error, result) => {
+                    if (error) throw error;
+                    mobileNo = global.mobile;
+                });
+            }
+        });
     }
     catch (error) {
         console.error(error.message);
@@ -733,11 +646,29 @@ app.post('/api/sendOTP', (req, res) => {
 });
 
 
-// This api is used for verify OTP based on OTP and mobile number
+const mobileNo = global.mobile;
+const token = generateToken({ mobileNo });
+console.log("Token Generated: ",token);
+const verified = verifyToken(token);
+console.log("Verified Token: ",verified);
+
+function authenticateToken(req, res, next) {
+
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(401);
+    try {
+        const decoded = verifyToken(token);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.sendStatus(403);
+    }
+}
+
 app.post(`/api/verifyOTP`, (req, res) => {
-    console.log(req.body.data);
-    let {OTP: otp,phoneNumber: mobileNumber}=req.body.data;
-    console.log("to verify otp and mobileNumber ", otp,mobileNumber);
+    console.log("User Entered Data: ",req.body.data);
+    let { OTP: otp, phoneNumber: mobileNumber } = req.body.data;
+    console.log("To Verify OTP and Mobile Number: ", otp, mobileNumber);
     try {
         const options = {
             method: 'GET',
@@ -745,7 +676,7 @@ app.post(`/api/verifyOTP`, (req, res) => {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authkey: `${authKey}`
+                authkey: `${process.env.AUTH_KEY}`
             }
         };
         axios
@@ -767,7 +698,7 @@ app.get(`/api/resendOTP`, (req, res) => {
     try {
         const options = {
             method: 'GET',
-            url: `https://control.msg91.com/api/v5/otp/retry?retrytype=${otp}&mobile=${mobileNumber}`,
+            url: `https://control.msg91.com/api/v5/otp/retry?retrytype=${otp}&mobile=91${mobileNumber}`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
