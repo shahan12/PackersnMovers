@@ -608,20 +608,21 @@ app.post('/api/sendOTP', (req, res) => {
                 authkey: `${process.env.AUTH_KEY}`
             }
         };
-        // axios
-        //     .request(options)
-        //     .then(function (response) {
-        //         if(!headerSent){
-        //             headerSent = true;
-        //             res.status(200).json(response.data);
-        //         }
-        //     })
-        //     .catch(function (error) {
-        //         if(!headerSent){
-        //             headerSent = true;
-        //             console.error(error);
-        //         }
-        //     });
+        axios
+            .request(options)
+            .then(function (response) {
+                if(!headerSent){
+                    headerSent = true;
+                    console.log(response.data);
+                    res.status(200);
+                }
+            })
+            .catch(function (error) {
+                if(!headerSent){
+                    headerSent = true;
+                    console.error(error);
+                }
+            });
 
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
         con.query(q8, (error, result) => {
