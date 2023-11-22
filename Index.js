@@ -14,8 +14,8 @@ const axios = require('axios');
 var app = express();
 
 app.use(cors({
-    origin: process.env.BASE_URL,
-    methods: 'GET, POST, OPTIONS, PUT',
+    origin: 'https://shiftkart.co',
+    methods: 'GET, POST, OPTIONS',
     credentials: true,
     allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
 }));
@@ -29,7 +29,6 @@ global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
 global.base64UrlKey, global.sha256Hash, global.base64;
-global.paymentStatus, global.merchantUser;
 
 let mobileNumber = process.env.MOBILE_NUMBER;
 let templateId = process.env.template_id;
@@ -44,6 +43,50 @@ con.connect((err) => {
     if (err) throw err;
 });
 
+
+// This api signup(post-> initially) the user and check password exist or not 
+app.get(`/api/login`, (req, res) => {
+
+    try {
+        
+        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
+        con.query(q8, (error, result) => {
+            if (error) throw error;
+            if (result.rows.length > 0) {
+                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
+                con.query(q6, (error, result) => {
+                    if (error) throw error;
+                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
+                    else { res.send("Mismatched data..."); }
+
+                });
+            }
+            else {
+                var q9 = "BEGIN;" +
+                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
+                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
+                    "INSERT INTO userBooking(user_mobile) VALUES ('" + mobile + "');" +
+                    "COMMIT;";
+                con.query(q9, (error, result) => {
+                    if (error) throw error;
+                    mobileNo = mobile;
+                    const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
+                    console.log("JWT Token: ",token);
+                    res.json({token});
+                });
+
+
+            }
+        });
+    }
+    catch (error) {
+        console.error(error.message);
+
+    }
+});
+
+
+// This api clear cookie(mobile) and redirect user to home page
 app.get(`/api/logout`, (req, res) => {
     try {
         if (error) throw error;
@@ -54,6 +97,9 @@ app.get(`/api/logout`, (req, res) => {
     }
 })
 
+
+
+// This api calculate total no. of boxes
 app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
 
     try {
@@ -92,7 +138,9 @@ app.put(`/api/totalNoBoxes`, authenticateToken, (req, res) => {
     }
 });
 
-app.put(`/api/basePrice`, authenticateToken,(req, res) => {
+// This api calculate base price based on house type and total distance
+app.put(`/api/basePrice`, authenticateToken, (req, res) => {
+
     try {
         var fromAdd = req.body.fromAddress;
         var toAdd = req.body.toAddress;
@@ -331,7 +379,8 @@ app.put(`/api/basePrice`, authenticateToken,(req, res) => {
 
 })
 
-app.put(`/api/floorCharges`, authenticateToken,function (req, res) {
+// This api calculate total floor charges w/o lift
+app.put(`/api/floorCharges`, authenticateToken, function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -359,7 +408,7 @@ const storage = multer({
         }
     })
 }).single("profile");
-app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
+app.put(`/api/saveUserInfo`, storage, (req, res) => {
 
     try {
         var fName = req.body.fName;
@@ -380,6 +429,7 @@ app.put(`/api/saveUserInfo`, authenticateToken, storage, (req, res) => {
     }
 });
 
+// This is for getting user info base on user's mobile number
 app.get(`/api/getUserInfo`, authenticateToken, (req, res) => {
 
     try {
@@ -443,7 +493,7 @@ var addons = {
     }
 }
 
-app.put(`/api/addons`, authenticateToken, (req, res) => {
+app.put(`/api/addons`, (req, res) => {
     const insertData = {
         addons: addons,
     };
@@ -455,6 +505,7 @@ app.put(`/api/addons`, authenticateToken, (req, res) => {
     })
 });
 
+// This api is for show user booking from 2 tables 'userInfo' and 'inventoryData' based on mobile no 
 app.get(`/api/myBooking`, authenticateToken, (req, res) => {
 
     try {
@@ -490,7 +541,7 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
+app.put(`/api/updateUser`, updateProfile, (req, res) => {
 
     try {
         var fName = req.body.firstName;
@@ -510,6 +561,7 @@ app.put(`/api/updateUser`, updateProfile, authenticateToken, (req, res) => {
     }
 });
 
+// This api update 'inventoryData' table based on user's inventory
 app.put(`/api/inventory`, authenticateToken, (req, res) => {
 
     try {
@@ -595,9 +647,8 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
 });
 
 app.post('/api/sendOTP', (req, res) => {
-    let { mobileNumber } = req.body;
-    global.mobile = mobileNumber;
-    console.log("Send OTP TO: ", mobileNumber);
+    let {mobileNumber} = req.body;
+    console.log("send otp to : ", mobileNumber);
     try {
         const options = {
             method: 'POST',
@@ -616,29 +667,6 @@ app.post('/api/sendOTP', (req, res) => {
             .catch(function (error) {
                 console.error(error);
             });
-
-        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
-        con.query(q8, (error, result) => {
-            if (error) throw error;
-            if (result.rows.length > 0) {
-                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
-                con.query(q6, (error, result) => {
-                    if (error) throw error;
-                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
-                    else { res.send("Mismatched data..."); }
-                });
-            }
-            else {
-                var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile) VALUES ('" + global.mobile + "');" +
-                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + global.mobile + "');" +
-                    "COMMIT;";
-                con.query(q9, (error, result) => {
-                    if (error) throw error;
-                    mobileNo = global.mobile;
-                });
-            }
-        });
     }
     catch (error) {
         console.error(error.message);
@@ -692,6 +720,117 @@ app.post(`/api/verifyOTP`, (req, res) => {
         console.error(error.message);
     }
 });
+
+
+
+app.post(`/api/payment`,async(req,res)=>{
+    const paymentAmount=req.body.paymentAmount;
+
+    const salt={
+        "keyIndex": process.env.SALT_INDEX,
+        "key": process.env.SALT_KEY
+    }
+
+    console.log("payment in backend : ", paymentAmount);
+    var minm6=100000;var maxm6=999999;
+    let randomNumSix=Math.floor(Math.random()*(maxm6-minm6+1))+minm6;
+
+    var minm4=1000;var maxm4=9999;
+    let randomNumFour=Math.floor(Math.random()*(maxm4-minm4+1))+minm4;
+
+    let merchantPrefix="SKART";
+    let merchantTransition=merchantPrefix+randomNumFour+randomNumSix;
+    global.merchantUser=merchantPrefix+randomNumFour;
+
+    const paymentData={
+        "merchantId": process.env.MERCHANT_ID,
+        "merchantTransactionId": merchantTransition,
+        "merchantUserId": merchantUser,
+        "amount": (paymentAmount*100),
+        "redirectUrl": "https://shiftkart.co/bookings",
+        "redirectMode": "REDIRECT",
+        "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+        "mobileNumber": global.mobile,
+        "paymentInstrument": {
+          "type": "PAY_PAGE"
+        }
+    }
+    // console.log("merchant tarnsition :",merchantTransition)
+    // console.log("merchant user id :",merchantUser)
+    // console.log("payment amount :",paymentAmount*100);
+
+    const paymentAPI='https://api.phonepe.com/apis/hermes/pg/v1/pay';
+
+    let paymentDataBase64 = base64json.stringify(paymentData,null,1);
+    // console.log("payment data 64 : ", paymentDataBase64);
+    // let decoded = base64json.parse(paymentDataBase64);
+    // console.log(decoded);
+    let paymentDataBase64Xverify=paymentDataBase64+"/pg/v1/pay"+salt.key;
+    // console.log(paymentDataBase64Xverify);
+    let xverify=hash.sha256().update(paymentDataBase64Xverify).digest('hex');
+    // console.log(xverify);
+    xverify+="###1";
+
+    const paymentres = await axios.post(paymentAPI, { request: paymentDataBase64 }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify
+        }
+    });
+    let isSuccess=paymentres.data.success;
+    if(isSuccess){
+        const paymentURL=paymentres.data.data.instrumentResponse.redirectInfo.url
+        // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
+        res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
+    } else{
+        res.status(200).json("payment failed");
+    }
+})
+
+
+app.post("/api/paymentcallback",(req,res)=>{
+    console.log(req.body); // receive the payment status from PhonePe's server
+    // check status of payment
+    // update the "partial payment" as true if payment is done or else mark as false
+    // display the user booking page
+    res.status(200).json("payment callback");
+})
+
+
+app.get("/api/paymentstatus",async(req,res)=>{
+
+    var minm6=100000;var maxm6=999999;
+    let randomNumSix=Math.floor(Math.random()*(maxm6-minm6+1))+minm6;
+
+    var minm4=1000;var maxm4=9999;
+    let randomNumFour=Math.floor(Math.random()*(maxm4-minm4+1))+minm4;
+
+
+    const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`;
+    let xverify=hash.sha256("pg/v1/status/{paymentData.merchantId}/{paymentData.merchantTransactionId}"+ salt.key) + "###" + salt.keyIndex ;
+
+    global.paymentStatus = await axios.post(checkStatusAPi, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify,
+            'X-MERCHANT-ID': merchantId
+        }
+    });
+    if(paymentStatus != null){
+        q22 = "UPDATE inventorydata SET payment_response = '" + paymentStatus +"' WHERE user_mobile = '"+global.mobile +"' "; 
+        con.query(q22,(error,result)=>{
+            if(error)
+                throw error;
+            else
+                res.status(200).json(paymentStatus);
+        });
+        
+    }
+    // check status of payment using the merchant transition ID
+    // periodically check status untill we get response
+});
+
+
 
 
 app.get(`/api/resendOTP`, (req, res) => {
