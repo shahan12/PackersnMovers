@@ -1,3 +1,4 @@
+const authMiddelware  = require('./authMiddelware.js');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -645,9 +646,9 @@ app.post('/api/sendOTP', (req, res) => {
 
 
 const mobileNo = global.mobile;
-const token = generateToken({ mobileNo });
+const token = authMiddelware.generateToken({ mobileNo });
 console.log("Token Generated: ",token);
-const verified = verifyToken(token);
+const verified = authMiddelware.verifyToken(token);
 console.log("Verified Token: ",verified);
 
 function authenticateToken(req, res, next) {

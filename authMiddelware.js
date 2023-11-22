@@ -16,4 +16,6 @@ function verifyToken(token) {
     }
 }
 
-module.exports = generateToken, verifyToken;
+module.exports = {generateToken: generateToken, 
+    verifyToken: verifyToken
+};
