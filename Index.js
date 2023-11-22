@@ -652,7 +652,7 @@ app.post('/api/sendOTP', (req, res) => {
 });
 
 
-const mobileNo = global.mobile;
+let mobileNo = global.mobile;
 const token = authMiddelware.generateToken({ mobileNo });
 console.log("Token Generated: ",token);
 const verified = authMiddelware.verifyToken(token);
