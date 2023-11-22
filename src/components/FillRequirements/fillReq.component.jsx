@@ -8,6 +8,7 @@ import Requirement from "./Requirement.component";
 import Inventory from "./Inventory.component";
 import Dateselection from "./DateSelection.component";
 import Progress from "./Progress.component";
+import Payment from "./Payment.component";
 
 function FillRequrements(props) {
   const [progress, setProgress] = useState("requirement");
@@ -31,6 +32,8 @@ function FillRequrements(props) {
         <Dateselection setProgress={setProgress} packageSel={packageSel} setPackageSel={setPackageSel}/>
       ) : progress === 'progress' ? (
         <Progress progress={progress} setProgress={setProgress}/>
+      ) : progress === 'payment' ? (
+        <Payment progress={progress} setProgress={setProgress}/>
       ) : null}
         <AddressDetails progress={progress} packageSel={packageSel}   cft={cft} totalItemCount={totalItemCount} />
       </div>

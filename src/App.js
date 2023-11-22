@@ -58,6 +58,10 @@ function App() {
           exact 
           path="/bookings" 
           element={ isAuthenticated ? (<Bookings />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          <Route 
+            exact 
+            path="/payments" 
+            element={ isAuthenticated ? (<Payments />) : (<Navigate to="/?login-redirect=true" replace />)} />
       </Routes>
       <Footer />
     </AppProvider>
