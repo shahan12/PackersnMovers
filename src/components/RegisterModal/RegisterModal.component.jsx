@@ -33,58 +33,58 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     setIsValidPhoneNumber(isValid);
   };
 
-    // const handleSubmit = (flow) => {
-    // console.log("calling handle submit")
-    // // e.preventDefault();
-    // const loginData = {
-    //   userMobile: phoneNumber,
-    //   password: OTP,
-    // };
-  //   sessionStorage.setItem("phoneNumber", phoneNumber);
-  //   if (flow === "register") {
-  //     // Perform login logic with the phoneNumber
-  //     // For this example, let's just log the phone number
-  //     const data = { ...postData, mobile: phoneNumber };
-  //     const payload = { data };
-  //     setXData({ data });
-  //     // saveData(payload);
-  //     setThankYou(true);
-  //     if (phoneNumber.length > 0 && OTP.length > 0)
-  //       sendRegisterRequest(loginData);
-  //   } else if (flow === "login") {
-  //     // setOtpPage(true);
-  //     if (phoneNumber.length > 0 && OTP.length > 0) sendLoginRequest(loginData);
-  //   }
-  // };
+  const handleSubmit = (flow) => {
+    console.log("calling handle submit")
+    // e.preventDefault();
+    const loginData = {
+      userMobile: phoneNumber,
+      password: OTP,
+    };
+    sessionStorage.setItem("phoneNumber", phoneNumber);
+    if (flow === "register") {
+      // Perform login logic with the phoneNumber
+      // For this example, let's just log the phone number
+      const data = { ...postData, mobile: phoneNumber };
+      const payload = { data };
+      setXData({ data });
+      // saveData(payload);
+      setThankYou(true);
+      if (phoneNumber.length > 0 && OTP.length > 0)
+        sendRegisterRequest(loginData);
+    } else if (flow === "login") {
+      // setOtpPage(true);
+      if (phoneNumber.length > 0 && OTP.length > 0) sendLoginRequest(loginData);
+    }
+  };
 
-  // const sendLoginRequest = async (loginData) => {
-  //   // const API_Req_Data_JSON = JSON.stringify(loginData);
-  //   try {
-  //     console.log("sending : ", loginData);
-  //     const response = await sendLoginRequestToBackend(loginData);
-  //     console.log(response);
-  //     if (response === "Login Sucessfull...") {
-  //       window.sessionStorage.setItem("loggedIn", "true");
-  //       // navigate("/fill-details");
-  //       window.open("/fill-details", "_self");
-  //     }
-  //     if (response === "Mismatched data...") {
-  //       alert(response);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+  const sendLoginRequest = async (loginData) => {
+    // const API_Req_Data_JSON = JSON.stringify(loginData);
+    try {
+      console.log("sending : ", loginData);
+      const response = await sendLoginRequestToBackend(loginData);
+      console.log(response);
+      if (response === "Login Sucessfull...") {
+        window.sessionStorage.setItem("loggedIn", "true");
+        // navigate("/fill-details");
+        window.open("/fill-details", "_self");
+      }
+      if (response === "Mismatched data...") {
+        alert(response);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
-  // const sendRegisterRequest = async (API_Req_Data) => {
-  //   const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
-  //   try {
-  //     const response = await sendRegisterRequestToBackend(API_Req_Data_JSON);
-  //     window.open("/fill-details", "_self");
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+  const sendRegisterRequest = async (API_Req_Data) => {
+    const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
+    try {
+      const response = await sendRegisterRequestToBackend(API_Req_Data_JSON);
+      window.open("/fill-details", "_self");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleOtpInput = (e) => {
     // console.log(e);
@@ -108,11 +108,8 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     const resp=await sendOTPRequestToBackend(phoneNumber);
     if(resp.type==='success'){
       console.log(resp);
-      window.sessionStorage.setItem("loggedIn", "true");
-      // navigate("/fill-details");
-      window.open("/fill-details", "_self");
     }
-    else  alert(resp);
+    else console.log("failllled :",resp);
   }
   const verifyOTP=async()=>{
     console.log("otp typed : ", OTP);
@@ -123,7 +120,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     }
     else{
       console.log(resp);
-     // handleSubmit("login");
+      handleSubmit("login");
     }
   }
 
@@ -169,7 +166,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 />
                 <button
                   type="submit"
-                  // onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
+                  //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
                   onClick={(e) => sendOTP(e)}
                   disabled={!isValidPhoneNumber || !phoneNumber}
                   className={`${
