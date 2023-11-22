@@ -8,8 +8,6 @@ const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const fetch = require('node-fetch');
 const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
-const authenticateToken = require('./authMiddelware');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 var app = express();
 
