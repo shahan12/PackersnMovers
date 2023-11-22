@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import "./calendar.css";
 import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
+import loaderIcon from '../../images/loader.gif';
 
 import Modal from "react-modal";
 import ThankYouModal from "../ThankYouModal/thankYouModal.component";
@@ -15,6 +16,7 @@ const Progress = ({ progress, setProgress }) => {
 
   const [paymentURL, setPaymentURL]=useState("");
 
+  const [loader, setLoader] = useState(true);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
   useEffect(() => {
     if (RequirementsRedux) {
@@ -47,8 +49,15 @@ const Progress = ({ progress, setProgress }) => {
   // }
 
   const bookingConfirm = async () => {
+    setLoader(true);
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
+    if (progress === "progress" && response) {
+
+      setLoader(true);
+      openModal();
+    }
+
     // fetchPaymentURL();
   };
 
@@ -113,7 +122,11 @@ const Progress = ({ progress, setProgress }) => {
           &lt; Previous
         </div>
         <button className="cta-button" onClick={bookingConfirm}>
-          Confirm Booking
+        {loader ? (
+            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
+        ) : (
+          'Confirm Booking'
+        )}
         </button>
       </div>
       {isModalOpen && (
