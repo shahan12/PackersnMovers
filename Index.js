@@ -611,17 +611,11 @@ app.post('/api/sendOTP', (req, res) => {
         axios
             .request(options)
             .then(function (response) {
-                if(!headerSent){
-                    headerSent = true;
                     console.log(response.data);
                     res.status(200);
-                }
             })
             .catch(function (error) {
-                if(!headerSent){
-                    headerSent = true;
                     console.error(error);
-                }
             });
 
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
@@ -631,8 +625,8 @@ app.post('/api/sendOTP', (req, res) => {
                 q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
-                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
-                    else { res.send("Mismatched data..."); }
+                    if (result.rows.length > 0) { console.log("Login Sucessfull..."); }
+                    else { console.log("Mismatched data..."); }
                 });
             }
             else {
