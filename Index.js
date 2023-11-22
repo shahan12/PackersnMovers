@@ -654,13 +654,13 @@ console.log("Verified Token: ",verified);
 function authenticateToken(req, res, next) {
 
     const token = req.headers['authorization'];
-    if (!token) return res.sendStatus(401);
+    if (!token) return res.status(401);
     try {
         const decoded = verifyToken(token);
         req.user = decoded;
         next();
     } catch (err) {
-        return res.sendStatus(403);
+        return res.status(403);
     }
 }
 
