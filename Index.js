@@ -595,6 +595,7 @@ app.put(`/api/inventory`, authenticateToken, (req, res) => {
 
 app.post('/api/sendOTP', (req, res) => {
     let { mobileNumber } = req.body;
+    let headerSent = false;
     global.mobile = mobileNumber;
     console.log("Send OTP TO: ", mobileNumber);
     try {
@@ -607,14 +608,20 @@ app.post('/api/sendOTP', (req, res) => {
                 authkey: `${process.env.AUTH_KEY}`
             }
         };
-        axios
-            .request(options)
-            .then(function (response) {
-                res.status(200).json(response.data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
+        // axios
+        //     .request(options)
+        //     .then(function (response) {
+        //         if(!headerSent){
+        //             headerSent = true;
+        //             res.status(200).json(response.data);
+        //         }
+        //     })
+        //     .catch(function (error) {
+        //         if(!headerSent){
+        //             headerSent = true;
+        //             console.error(error);
+        //         }
+        //     });
 
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
         con.query(q8, (error, result) => {
@@ -623,8 +630,8 @@ app.post('/api/sendOTP', (req, res) => {
                 q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
-                    if (result.rows.length > 0) { return res.send("Login Sucessfull..."); }
-                    else { return res.send("Mismatched data..."); }
+                    if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
+                    else { res.send("Mismatched data..."); }
                 });
             }
             else {
