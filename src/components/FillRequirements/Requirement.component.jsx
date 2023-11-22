@@ -20,7 +20,6 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 import loaderIcon from '../../images/loader.gif';
-const [loader, setLoader] = useState(false);
 
 function Requirement({progress, setProgress}) {
 
@@ -34,6 +33,7 @@ function Requirement({progress, setProgress}) {
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const [totalCostBF, setTotalCostBF] = useState();
+  const [loader, setLoader] = useState(false);
 
   const houseTypes = [
     "1 RK",
