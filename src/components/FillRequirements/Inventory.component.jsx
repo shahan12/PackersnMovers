@@ -19,10 +19,8 @@ const houseLimit={
 const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, setCft }) => {
 
   let TotalCostItems = useSelector((state) => state.TotalCostItems);
-  // console.log("->>>>>>",TotalCostItems);
 
   let {houseType} = useSelector((state) => state.RequirementsItems.requirements);
-  // console.log("---house type",RequirementsItems.requirements.houseType);
 
   const dispatch = useDispatch();
   const selectedItemsRedux = useSelector((state) => state.selectedItems);
@@ -31,8 +29,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const [expandedItem, setExpandedItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(Object.keys(inventoryData)[0]);
-
-  // console.log("selected items", selectedItems);
 
   const handleItemClick = (item) => {
     setExpandedItem(item);
@@ -43,7 +39,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   }, [setSelectedItems]);
 
   const checkHouseLimit=(totalCftValue)=>{
-    console.log("rcvd cft", totalCftValue);
     if(totalCftValue>houseLimit[houseType]){
       if(window.confirm(`you have exceeded the limit of ${houseLimit[houseType]} for a ${houseType} room.
       confirm Ok, if you want to promote to a different category house or else reduce the items`)){
@@ -57,9 +52,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
 
   const handleNext = () => {
     dispatch(updateSelectedItems(selectedItems));
-    console.log("final cft isssssssss", TotalCostItems.cft);
     if(TotalCostItems.cft>houseLimit[houseType]){
-      console.log("should alert");
       checkHouseLimit(TotalCostItems.cft)
     }
     else{
@@ -76,17 +69,11 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
   const calculateTotalAndCft = () => {
     let totalCount = 0;
       let totalCft = 0;
-      console.log("calculating CFT");
-      console.log("calculating in : ", selectedItems);
 
       for (const category in selectedItems) {
-        console.log("category : ", category);
           for (const subCategory in selectedItems[category]) {
-            console.log("sub category :",subCategory);
               for (const item in selectedItems[category][subCategory]) {
-                console.log("item : ", item);
                   const { cost, count } = selectedItems[category][subCategory][item];
-                  console.log("cost , count :",cost,count);
                   totalCount += count;
                   totalCft += count * cost;
               }
@@ -134,13 +121,8 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
       cost: calculateCost(name, category, subItem, updatedItems[category][subItem][name].type, updatedItems[category][subItem][name].material),
     };
   
-    // calculateTotalAndCft();
-    // console.log("updated items :", updatedItems);
     setSelectedItems(updatedItems);
-    // calculateTotalAndCft();
 
-
-    //------------calcuate CFT----------------------------------
     let totalCount = 0; let totalCft = 0;
     for (const category in updatedItems) {
         for (const subCategory in updatedItems[category]) {
@@ -152,10 +134,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
         }
     }
     setTotalItemCount(totalCount); setCft(totalCft);
-    console.log("-------cft after adding", totalCft);
     checkHouseLimit(totalCft);
-    //------------calcuate CFT----------------------------------
-
   };
   
   
@@ -224,39 +203,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
     return base + materialValue + typeValue;
   };
 
-  //----------- handle Minus old function (issue of removing two items at a time)
-  // const handleMinusClick = (name, category, subItem) => {
-  //   setSelectedItems((prevSelectedItems) => {
-  //     const updatedSelectedItems = { ...prevSelectedItems };
-  //     const currentCount = updatedSelectedItems[category]?.[subItem]?.[name]?.count || 0;
-  
-  //     if (currentCount > 0) {
-  //       updatedSelectedItems[category][subItem][name] = {
-  //         ...updatedSelectedItems[category][subItem][name],
-  //         count: currentCount - 1,
-  //       };
-  //     }
-
-  //     console.log("after minus ", updatedSelectedItems);
-  //     //------------calcuate CFT----------------------------------
-  //     let totalCount = 0; let totalCft = 0;
-  //     for (const category in updatedSelectedItems) {
-  //         for (const subCategory in updatedSelectedItems[category]) {
-  //             for (const item in updatedSelectedItems[category][subCategory]) {
-  //                 const { cost, count } = updatedSelectedItems[category][subCategory][item];
-  //                 totalCount += count;
-  //                 totalCft += count * cost;
-  //             }
-  //         }
-  //     }
-  //     setTotalItemCount(totalCount); setCft(totalCft);
-  //     console.log("-------cft after reducing", totalCft);
-  //     //------------calcuate CFT----------------------------------
-  //     return updatedSelectedItems;
-  //   });
-  
-  //   calculateTotalAndCft();
-  // };
 
   const handleMinusClick = (name, category, subItem) => {
     let updatedSelectedItems={...selectedItems};
@@ -266,7 +212,6 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
         updatedSelectedItems[category][subItem][name] = {...updatedSelectedItems[category][subItem][name], count: currentCount - 1,};
       }
 
-      console.log("after minus ", updatedSelectedItems);
       //------------calcuate CFT----------------------------------
       let totalCount = 0; let totalCft = 0;
       for (const category in updatedSelectedItems) {
@@ -279,11 +224,7 @@ const Inventory = ({ progress, setProgress, setTotalItemCount, totalItemCount, s
           }
       }
       setTotalItemCount(totalCount); setCft(totalCft);
-      console.log("-------cft after reducing", totalCft);
-      //------------calcuate CFT----------------------------------
-      
     setSelectedItems(updatedSelectedItems);
-    // calculateTotalAndCft();
   };
   
   const renderSubItems = (subItems, category) => {

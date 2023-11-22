@@ -27,7 +27,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const [isUserRegisterd, setIsUserRegisterd] = useState(true);
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
-    // Remove any non-numeric characters
     const numericValue = inputPhoneNumber.replace(/\D/g, "");
     const isValid = numericValue.length === 10;
     setPhoneNumber(numericValue);

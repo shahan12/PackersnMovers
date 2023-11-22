@@ -15,17 +15,12 @@ const Progress = ({ progress, setProgress }) => {
 
   const [paymentURL, setPaymentURL]=useState("");
 
-  console.log("total cost redux : ", totalCostRedux);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
-  console.log("from redux total item ",RequirementsRedux);
   useEffect(() => {
     if (RequirementsRedux) {
     setTotalCost(totalCostRedux);
     }
   }, [totalCostRedux]);
-
-  console.log("items added are ", ITEMADDED);
-
 
   const prev = () => {
     if (progress === "progress") {
@@ -40,33 +35,24 @@ const Progress = ({ progress, setProgress }) => {
 
     // }
     let fullPayment=1;
-    console.log("making payment of--->", fullPayment);
     let paymentResponse=await makePaymentRequest(fullPayment);
     if(paymentResponse==="failed"){
       setPaymentURL("");
       if (window.confirm("Payment has been failed, Please Try again!")) {
         fetchPaymentURL();
       } else {
-        // User dismissed the alert, do nothing
         setProgress("dateselection");
       }
     }
     else{
-      // redirect to this URL
-      // paymentResponse is the payment URL
       window.open(paymentResponse);
       setPaymentURL(paymentResponse);
     }
   }
 
   const bookingConfirm = async () => {
-    // console.log(AddOnsADDED)
-    // console.log(ITEMADDED);
-    // console.log(DateTimeRedux);
-    // console.log("------->", RequirementsRedux.requirements.phoneNumber);
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
-    console.log("final response :",response);
     fetchPaymentURL();
   };
 

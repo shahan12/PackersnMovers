@@ -20,11 +20,8 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const inputRefFrom = React.useRef();
   const inputRefTo = React.useRef();
   const dispatch = useDispatch();
-  // let ITEMADDED = useSelector((state) => state.selectedItems);
-  // let Requirements = useSelector((state) => state.RequirementsItems);
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
   
-  // console.log("totalCostRedux", totalCostRedux);
   useEffect(() => {
     let calculatedTotalPrice = 0;
 

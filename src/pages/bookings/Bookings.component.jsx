@@ -7,10 +7,8 @@ import Box from "../../images/box.svg";
 import Electic from "../../images/appliance.svg";
 import Distance from "../../images/distance.svg";
 import Calemder from "../../images/calender.svg";
-// import bookingData from "./bookings.json";
 import { getUserBookingFromBackend } from "../../API/apicalls";
 
-// console.log(bookingData);
 function Bookings({}) {
   const [activeTab, setActiveTab] = useState(0);
   const [bookingDatas,setBookingDatas]=useState([]);
@@ -18,7 +16,6 @@ function Bookings({}) {
   useEffect(()=>{
     const getBooking=async()=>{
       const bookingDataRes=await getUserBookingFromBackend();
-      // console.log("in frontend booking data : ", bookingDataRes);
       setBookingDatas(bookingDataRes);
     }
 
@@ -88,10 +85,6 @@ function Bookings({}) {
             </div>
           </div>
           ))}
-
-
-
-
       </div>
     </div>
   );
