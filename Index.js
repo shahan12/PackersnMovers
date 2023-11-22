@@ -611,8 +611,7 @@ app.post('/api/sendOTP', (req, res) => {
         axios
             .request(options)
             .then(function (response) {
-                    console.log(response.data);
-                    res.status(200);
+                    res.status(200).json(response.data);
             })
             .catch(function (error) {
                     console.error(error);
