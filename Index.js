@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const fetch = require('node-fetch');
 const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
 const axios = require('axios');
+const hash = crypto.createHash('sha256');
 const jwt = require('jsonwebtoken');
 // const base64json = require('base64json');
 var app = express();
