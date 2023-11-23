@@ -2,13 +2,17 @@ import "./payments.css";
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import loaderIcon from '../../images/loader.gif';
+import { makePaymentStatusRequest } from '../../API/apicalls.js';
+import {useNavigate} from 'react-router-dom';
 
 function Payments(props) {
+  const navigate = useNavigate();
 
   useEffect(() => {
   const paymentResponse = async () => {
     const response = await makePaymentStatusRequest();
-    history.push('/bookings');
+    console.log("payment page ", response);
+    navigate('/bookings');
   };
 
   paymentResponse();

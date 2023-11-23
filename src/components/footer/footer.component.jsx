@@ -16,7 +16,7 @@ function Footer(props) {
   useEffect(() => {
     setPath(window.location.pathname);
     setHideFooter(path.includes("/payments") ? true : false);
-  }, []); 
+  }, [path]); 
   
 
   return (
@@ -26,16 +26,16 @@ function Footer(props) {
           <a href="about-us">About Us</a>
         </div>
         <div className="footer-list-wrapper">
-          <a>Customer Portal</a>
+          <a href="">Customer Portal</a>
         </div>
         <div className="footer-list-wrapper">
-          <a>Contact Us</a>
+          <a href="">Contact Us</a>
         </div>
         <div className="footer-list-wrapper">
-          <a>Write To Us</a>
+          <a href="">Write To Us</a>
         </div>
         <div className="footer-subsribe-action-container">
-          <a>Never miss an update</a>
+          <a href="">Never miss an update</a>
           <div className="center-div footer-subscriber">
             <input
               type="email"
