@@ -635,7 +635,7 @@ app.put(`/api/inventory`, (req, res) => {
     }
 });
 
-app.post('/api/sendOTP', (req, res) => {
+app.post('/sendOTP', (req, res) => {
     let { mobileNumber } = req.body;
     let headerSent = false;
     global.mobile = mobileNumber;
