@@ -1,4 +1,4 @@
-const authMiddelware = require('./authMiddelware.js');
+const authmiddleware = require('./authmiddleware');  // Assuming authmiddleware.js is in the same directory
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -19,7 +19,7 @@ app.use(cors({
     origin: process.env.BASE_URL,
     methods: 'GET, POST, OPTIONS, PUT',
     credentials: true,
-    allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
+    allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization',
 }));
 
 var port = process.env.PORT;
@@ -48,7 +48,12 @@ con.connect((err) => {
 });
 
 app.get(`/api/login`, (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
 
+    // Verify the token using the verifyToken function from authmiddleware
+    const decoded = authmiddleware.verifyToken(token);
+
+    if (decoded) {
     try {
 
         var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
@@ -84,6 +89,10 @@ app.get(`/api/login`, (req, res) => {
         console.error(error.message);
 
     }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 app.get(`/api/logout`, (req, res) => {
@@ -97,43 +106,52 @@ app.get(`/api/logout`, (req, res) => {
 })
 
 app.put(`/api/totalNoBoxes`, (req, res) => {
+const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+        try {
+            var houseType = req.body.houseType.replace(' ', '').toLowerCase();
+            var familyType = (req.body.familyType).toLowerCase();
+            var members = parseInt(req.body.familyNumber);
+            console.log("total box backend :", houseType, familyType, members, global.mobile);
+            var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
 
-    try {
-        var houseType = req.body.houseType.replace(' ', '').toLowerCase();
-        var familyType = (req.body.familyType).toLowerCase();
-        var members = parseInt(req.body.familyNumber);
-        console.log("total box backend :", houseType, familyType, members, global.mobile);
-        var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
 
-
-        con.query(q10, (error, result) => {
-            if (error) throw error;
-            var flag = result.rows[0].boxes_qty;
-            if (familyType == 'bachelor' && members > 1) {
-                global.additionalBox = (members - 1) * 4;
-            }
-            if (familyType == 'family' && members > 4) {
-                global.additionalBox = (members - 4) * 4;
-            }
-            else {
-                global.additionalBox = 0;
-            }
-
-            console.log("Total carton: ", global.totalCarton);
-            var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
-            con.query(q13, (error, result) => {
+            con.query(q10, (error, result) => {
                 if (error) throw error;
-                console.log("ADDITIONAL BOXES: ", global.additionalBox);
+                var flag = result.rows[0].boxes_qty;
+                if (familyType == 'bachelor' && members > 1) {
+                    global.additionalBox = (members - 1) * 4;
+                }
+                if (familyType == 'family' && members > 4) {
+                    global.additionalBox = (members - 4) * 4;
+                }
+                else {
+                    global.additionalBox = 0;
+                }
+
+                console.log("Total carton: ", global.totalCarton);
+                var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
+                con.query(q13, (error, result) => {
+                    if (error) throw error;
+                    console.log("ADDITIONAL BOXES: ", global.additionalBox);
+                });
+                res.status(200).json(global.additionalBox);
             });
-            res.status(200).json(global.additionalBox);
-        });
-    }
-    catch (error) {
-        console.error(error.message);
+        }
+        catch (error) {
+            console.error(error.message);
+        }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
     }
 });
 
 app.put(`/api/basePrice`, (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         var fromAdd = req.body.fromAddress;
         var toAdd = req.body.toAddress;
@@ -369,10 +387,17 @@ app.put(`/api/basePrice`, (req, res) => {
         console.error(error.message);
     }
 
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 
 })
 
 app.put(`/api/floorCharges`, function (req, res) {
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -387,7 +412,10 @@ app.put(`/api/floorCharges`, function (req, res) {
     catch (error) {
         console.error(error.message);
     }
-
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 const storage = multer({
@@ -400,8 +428,12 @@ const storage = multer({
         }
     })
 }).single("profile");
+
 app.put(`/api/saveUserInfo`, storage, (req, res) => {
 
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         var fName = req.body.fName;
         var lName = req.body.lName;
@@ -419,10 +451,17 @@ app.put(`/api/saveUserInfo`, storage, (req, res) => {
     catch (error) {
         console.log(error.messaege);
     }
+} else {
+    // Token verification failed
+    res.status(401).json({ type: 'error', message: 'Invalid token' });
+}
 });
 
 app.get(`/api/getUserInfo`, (req, res) => {
 
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         var q4 = "SELECT * FROM " +
             "userInfo WHERE user_mobile = '" + global.mobile + "'";
@@ -433,6 +472,10 @@ app.get(`/api/getUserInfo`, (req, res) => {
     }
     catch (error) {
         console.error(error.messaege);
+    }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
     }
 });
 
@@ -485,6 +528,10 @@ var addons = {
 }
 
 app.put(`/api/addons`, (req, res) => {
+    
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     const insertData = {
         addons: addons,
     };
@@ -494,6 +541,10 @@ app.put(`/api/addons`, (req, res) => {
         if (error) throw error;
         res.send("User added Addons: " + result.rows);
     })
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 app.get(`/api/myBooking`, (req, res) => {
@@ -635,11 +686,12 @@ app.put(`/api/inventory`, (req, res) => {
     }
 });
 
-app.post('/sendOTP', (req, res) => {
+app.post('/api/sendOTP', (req, res) => {
     let { mobileNumber } = req.body;
     let headerSent = false;
     global.mobile = mobileNumber;
     console.log("Send OTP TO: ", mobileNumber);
+    const token = authmiddleware.generateToken({ mobileNumber });
     try {
         const options = {
             method: 'POST',
@@ -651,102 +703,62 @@ app.post('/sendOTP', (req, res) => {
             }
         };
         axios
-            .request(options)
-            .then(function (response) {
-                res.status(200).json(response.data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
-
-        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "'";
-        con.query(q8, (error, result) => {
-            if (error) throw error;
-            if (result.rows.length > 0) {
-                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + global.mobile + "' ";
-                con.query(q6, (error, result) => {
-                    if (error) throw error;
-                    if (result.rows.length > 0) { console.log("Login Sucessfull..."); }
-                    else { console.log("Mismatched data..."); }
-                });
-            }
-            else {
-                var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile) VALUES ('" + global.mobile + "');" +
-                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + global.mobile + "');" +
-                    "COMMIT;";
-                con.query(q9, (error, result) => {
-                    if (error) throw error;
-                    else {
-
-                        mobileNo = global.mobile;
-                    }
-
-                });
-            }
+        .request(options)
+        .then(function (response) {
+            const responseData = {
+            status: response.status,
+            data: response.data,
+            // Add other relevant properties as needed
+            };
+            res.status(200).json({ response: responseData, token });
+        })
+        .catch(function (error) {
+            console.error(error);
         });
     }
     catch (error) {
         console.error(error.message);
     }
 });
-let mobileNo = global.mobile;
 
-const secretkey = process.env.secretKey;
-var payload = global.mobile;
-// Function to generate a JWT token
-function generateToken(payload) {
 
-    const token = jwt.sign(payload, secretkey, { expiresIn: '1h' });
-    if (payload != null){
-        console.log("generateToken Token value: ",token);
-        console.log("generateToken Secret Key: ",secretkey);
-        return token;
-    }
-    else
-        return "Invalid User, Because user information is not there";
-
-}
-// Function to verify a JWT token
-function verifyToken(token) {
-    jwt.verify(token, secretkey, (err, decode) => {
-        if (err)
-            return "Failed to authenticate user";
-            console.log("verifyToken Decode Value: ",decode);
-            console.log("verifyToken Token value: ",token);
-            console.log("verifyToken Secret Key value: ",secretkey);
-        req.payload = decode;
-        next();
-    });
-}
 
 
 app.post(`/api/verifyOTP`, (req, res) => {
     console.log("User Entered Data: ", req.body.data);
     let { OTP: otp, phoneNumber: mobileNumber } = req.body.data;
     console.log("To Verify OTP and Mobile Number: ", otp, mobileNumber);
-    try {
-        const options = {
-            method: 'GET',
-            url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=91${mobileNumber}`,
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                authkey: `${process.env.authKey}`
-            }
-        };
-        axios
-            .request(options)
-            .then(function (response) {
-                res.send(response.data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
+    
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+        try {
+            const options = {
+                method: 'GET',
+                url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=91${mobileNumber}`,
+                headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    authkey: `${process.env.authKey}`
+                }
+            };
+            axios
+                .request(options)
+                .then(function (response) {
+                    res.send(response.data);
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        }
+        catch (error) {
+            console.error(error.message);
+        }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
     }
-    catch (error) {
-        console.error(error.message);
-    }
+    
 });
 
 
