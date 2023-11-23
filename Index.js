@@ -830,7 +830,7 @@ app.post(`/api/payment`, async (req, res) => {
         // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
         res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
     } else {
-        res.status(200).json("payment failed");
+        res.status(200).json("Unable to generate payment url");
     }
 });
 
@@ -867,11 +867,11 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
                 if(error) throw error;
             });
         });
-        
-
+        res.status(200).json("OK");
     }
-    // check status of payment using the merchant transition ID
-    // periodically check status untill we get response
+    else
+        res.status(200).json("Payment Fauiler");
+
 });
 
 
