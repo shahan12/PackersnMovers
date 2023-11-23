@@ -365,7 +365,7 @@ function Requirement({progress, setProgress}) {
               className="cta-button"
               onClick={performInspection}
             >
-            'NEXT'
+            NEXT
           </button>
         </div>
       )}
