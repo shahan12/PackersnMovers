@@ -30,6 +30,7 @@ global.encryptKey, global.iv, global.encryptPass;
 global.additionalBox;
 global.base64UrlKey, global.sha256Hash, global.base64;
 global.paymentStatus, global.merchantUser;
+global.paymentResponse;
 
 let mobileNumber = process.env.MOBILE_NUMBER;
 let templateId = process.env.template_id;
@@ -96,7 +97,6 @@ app.get(`/api/logout`, (req, res) => {
 app.put(`/api/totalNoBoxes`, (req, res) => {
 
     try {
-
         var houseType = req.body.houseType.replace(' ', '').toLowerCase();
         var familyType = (req.body.familyType).toLowerCase();
         var members = parseInt(req.body.familyNumber);
@@ -773,6 +773,108 @@ app.get(`/api/resendOTP`, (req, res) => {
         console.error(error.message);
     }
 })
+
+app.post(`/api/payment`, async (req, res) => {
+    const paymentAmount = req.body.paymentAmount;
+
+    const salt = {
+        "keyIndex": process.env.SALT_KEY_INDEX,
+        "key": process.env.SALT_KEY
+    }
+
+    console.log("payment amount : ", paymentAmount);
+    var minm6 = 100000; var maxm6 = 999999;
+    let randomNumSix = Math.floor(Math.random() * (maxm6 - minm6 + 1)) + minm6;
+    var minm4 = 1000; var maxm4 = 9999;
+    let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
+    let merchantPrefix = process.env.MerchantPrefix;
+    global.merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
+    global.merchantUser = merchantPrefix + randomNumFour;
+
+    const paymentData = {
+        "merchantId": process.env.MerchantID,
+        "merchantTransactionId": global.merchantTransaction,
+        "merchantUserId": global.merchantUser,
+        "amount": (paymentAmount * 100),
+        "redirectUrl": "https://shiftkart.co/bookings",
+        "redirectMode": "REDIRECT",
+        "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
+        "mobileNumber": global.mobile,
+        "paymentInstrument": {
+            "type": "PAY_PAGE"
+        }
+    }
+    console.log("merchant tarnsaction :",merchantTransaction)
+    console.log("merchant user id :",merchantUser)
+    console.log("payment amount :",paymentAmount*100);
+
+    const paymentAPI = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
+
+    let paymentDataBase64 = base64json.stringify(paymentData, null, 1);
+    let paymentDataBase64Xverify = paymentDataBase64 + "/pg/v1/pay" + salt.key;
+    let xverify = hash.sha256().update(paymentDataBase64Xverify).digest('hex');
+    xverify += "###1";
+    const paymentres = await axios.post(paymentAPI, { request: paymentDataBase64 }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify
+        }
+    });
+    let isSuccess = paymentres.data.success;
+    if (isSuccess) {
+        const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
+        q23 = "UPDATE INTO inventorydata SET payment_url_response = '"+ paymentres.data+"' WHERE user_mobile = '"+global.mobile +"' ";
+        con.query(q23, (error,result)=>{
+            if(error) throw error;
+        });
+        // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
+        res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
+    } else {
+        res.status(200).json("payment failed");
+    }
+});
+
+
+
+app.get("/api/checkPaymentStatus", authenticateToken, async (req, res) => {
+
+    var minm6 = 100000; var maxm6 = 999999;
+    let randomNumSix = Math.floor(Math.random() * (maxm6 - minm6 + 1)) + minm6;
+    var minm4 = 1000; var maxm4 = 9999;
+    let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
+    const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${global.merchantTransactionId}`;
+    let xverify = hash.sha256("pg/v1/status/{process.env.MerchantID}/{global.merchantTransaction}" + process.env.SALT_KEY) + "###" + process.env.SALT_KEY_INDEX;
+    global.paymentStatus = await axios.post(checkStatusAPi, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-VERIFY': xverify,
+            'X-MERCHANT-ID': process.env.MerchantID
+        }
+    });
+    let isSuccess = paymentres.data.success;
+    if (isSuccess) {
+        const paymentStatus = paymentres.data;
+        q24 = "BEGIN ;" + 
+            "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+global.mobile +"' ;" +
+            "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+global.merchantTransaction+"', '"+ paymentres.data.data.amount +"', '"+ paymentres.data.code +"', '"+ paymentres.data +"') ;" +
+            "COMMIT ;";
+        con.query(q24, (error, result) => {
+            if (error)
+                throw error;
+            global.paymentResponse = result.rows;
+            q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ global.paymentResponse +"')";
+            con.query(q25,(error,result)=>{
+                if(error) throw error;
+            });
+        });
+        
+
+    }
+    // check status of payment using the merchant transition ID
+    // periodically check status untill we get response
+});
+
+
 app.listen(port, () => {
     console.log("Server running on", port);
-})
+});
