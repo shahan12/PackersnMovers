@@ -121,7 +121,7 @@ const Progress = ({ progress, setProgress }) => {
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
           <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
-            'Confirm Booking'
+            Confirm Booking
           </button>
         )}
       </div>
