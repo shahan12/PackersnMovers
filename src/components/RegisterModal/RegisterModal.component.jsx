@@ -166,7 +166,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 />
                 <button
                   type="submit"
-                  // onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
+                  //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
                   onClick={(e) => sendOTP(e)}
                   disabled={!isValidPhoneNumber || !phoneNumber}
                   className={`${
