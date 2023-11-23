@@ -15,7 +15,11 @@ function Footer(props) {
 
   useEffect(() => {
     setPath(window.location.pathname);
-    setHideFooter(path.includes("/payments") ? true : false);
+    if (path === "/bookings" || path === "/") {
+      setHideFooter(false);
+    } else {
+      setHideFooter(true);
+    }
   }, [path]); 
   
 

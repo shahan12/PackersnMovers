@@ -4,8 +4,6 @@ import "./calendar.css";
 import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
 import loaderIcon from '../../images/loader.gif';
 
-import Modal from "react-modal";
-import ThankYouModal from "../ThankYouModal/thankYouModal.component";
 const Progress = ({ progress, setProgress }) => {
 
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);        // all requirementData like floor, lift, family

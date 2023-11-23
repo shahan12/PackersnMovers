@@ -92,25 +92,27 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     // setOTP(e.target.value);
   };
 
-  const validateOTP = () => {
-    // if (OTP === "000000") {
-    // window.sessionStorage.setItem("loggedIn", "true");
-    // window.open("/fill-details", "_self");
-    // } else {
-    // setInvalidOTP(true);
-    // }
-  };
 
-  const sendOTP=async(e)=>{
+  const sendOTP = async (e) => {
     e.preventDefault();
     setOtpPage(true);
-    console.log("send otp to this mobile number :", phoneNumber);
-    const resp=await sendOTPRequestToBackend(phoneNumber);
-    if(resp.type==='success'){
+    console.log("send otp to this mobile number:", phoneNumber);
+
+    try {
+      const resp = await sendOTPRequestToBackend(phoneNumber);
       console.log(resp);
+
+      if (resp.type === 'success') {
+        console.log('Token:', localStorage.getItem('token'));
+      } else {
+        console.log('Failed:', resp.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-    else console.log("failllled :",resp);
-  }
+  };
+
+
   const verifyOTP=async()=>{
     console.log("otp typed : ", OTP);
     const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
