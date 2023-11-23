@@ -30,35 +30,32 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  // const fetchPaymentURL=async ()=>{
-  //   let fullPayment=1;
-  //   let paymentResponse=await makePaymentRequest(fullPayment); //url
+  const fetchPaymentURL=async ()=>{
+    let fullPayment=1;
+    let paymentResponse=await makePaymentRequest(fullPayment); //url
 
-  //   if(paymentResponse==="failed"){
-  //     setPaymentURL("");
-  //     if (window.confirm("Payment has been failed, Please Try again!")) {
-  //       fetchPaymentURL();
-  //     } else {
-  //       setProgress("dateselection");
-  //     }
-  //   }
-  //   else{
-  //     window.open(paymentResponse);
-  //     setPaymentURL(paymentResponse);
-  //   }
-  // }
+    if(paymentResponse==="failed"){
+      setPaymentURL("");
+      if (window.confirm("Payment has been failed, Please Try again!")) {
+        fetchPaymentURL();
+      } else {
+        setProgress("dateselection");
+      }
+    }
+    else{
+      window.open(paymentResponse);
+      setPaymentURL(paymentResponse);
+    }
+  }
 
   const bookingConfirm = async () => {
     setLoader(true);
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
     const response=await sendFinalItemsToBackend(API_DATA);
     if (progress === "progress" && response) {
-
-      setLoader(false);
-      openModal();
+      fetchPaymentURL();
     }
 
-    // fetchPaymentURL();
   };
 
 
@@ -121,9 +118,9 @@ const Progress = ({ progress, setProgress }) => {
         <div className="prevButton" onClick={prev}>
           &lt; Previous
         </div>
-        <button className="cta-button" onClick={bookingConfirm}>
+        <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
         {loader ? (
-            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
+            <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
         ) : (
           'Confirm Booking'
         )}
@@ -135,7 +132,6 @@ const Progress = ({ progress, setProgress }) => {
           setIsModalOpen={setModalOpen}
         />
       )}
-      {paymentURL}
     </div>
   );
 };

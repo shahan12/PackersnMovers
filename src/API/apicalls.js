@@ -116,3 +116,12 @@ export const makePaymentRequest = async (data) => {
     throw error;
   }
 };
+
+export const makePaymentStatusRequest = async (data) => {
+  try {
+    const response = await instance.get('/checkPaymentStatus');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

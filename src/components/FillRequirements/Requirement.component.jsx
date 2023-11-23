@@ -344,7 +344,9 @@ function Requirement({progress, setProgress}) {
           </div>
         </div>
         <div className="fill-req-CTA-container flex">
-        <div className='prevButton'></div><button
+        <div className='prevButton'></div>
+        <button 
+          style={{backgroundColor: 'white'}}
           disabled={
             !familyType ||
             !houseType ||
@@ -361,7 +363,7 @@ function Requirement({progress, setProgress}) {
           onClick={performInspection}
         >
           {loader ? (
-            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
+            <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
         ) : (
           'NEXT'
         )}

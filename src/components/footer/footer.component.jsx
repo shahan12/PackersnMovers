@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./footer.css";
 import arrow from "../../images/arrow.svg";
 import logo from "../../images/SHIFTKART-LOGO.png";
@@ -8,8 +8,19 @@ import x from "../../images/x.svg";
 import insta from "../../images/insta.svg";
 
 function Footer(props) {
+
+  const [path, setPath] = useState(window.location.pathname);
+  const [hideFooter, setHideFooter] = useState(false);
+
+
+  useEffect(() => {
+    setPath(window.location.pathname);
+    setHideFooter(path.includes("/payments") ? true : false);
+  }, []); 
+  
+
   return (
-    <div className="footer-wrapper">
+    <div style={{ display: hideFooter ? "none" : "flex" }} className="footer-wrapper">
       <div className="footer-upper-section-container align-center space-between">
         <div className="footer-list-wrapper">
           <a href="about-us">About Us</a>

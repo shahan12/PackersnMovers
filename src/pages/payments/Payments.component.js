@@ -1,27 +1,30 @@
 import "./payments.css";
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import loaderIcon from '../../images/loader.gif';
 
 function Payments(props) {
 
+  useEffect(() => {
+  const paymentResponse = async () => {
+    const response = await makePaymentStatusRequest();
+    history.push('/bookings');
+  };
+
+  paymentResponse();
+}, []);
 
   return (
     <>
-      <div className="edit-profile-wrapper">
-        <h2>Verifying Transaction</h2>
-        <div className="container">
-          <div className="d-flex justify-content-end mb-4">
-            <button type="button" className="col-5 col-md-2 btn btn-secondary mx-1">Cancel</button>
-            <button type="button" className="col-5 col-md-2 btn mx-1" style={{ backgroundColor: "#ff7800", borderColor: "#ff7800", color: "#fff" }}>
-              Save Changes
-            </button>
-          </div>
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="edit-profile-wrapper">
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}  className="container">
+          <h2>Redirecting in a moment</h2>
+          <img style={{width: '1rem', marginRight: '0.5rem'}} src={loaderIcon} alt="loader" />
         </div>
-        
-        
       </div>
     </>
   );
+  
 }
 
 export default Payments;
