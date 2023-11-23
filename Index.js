@@ -790,7 +790,6 @@ app.post(`/api/payment`, async (req, res) => {
     let merchantPrefix = process.env.MerchantPrefix;
     global.merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
     global.merchantUser = merchantPrefix + randomNumFour;
-
     const paymentData = {
         "merchantId": process.env.MerchantID,
         "merchantTransactionId": global.merchantTransaction,
@@ -823,11 +822,13 @@ app.post(`/api/payment`, async (req, res) => {
     let isSuccess = paymentres.data.success;
     if (isSuccess) {
         const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
+        console.log("Pay API Complete Response: ",paymentURL);
         q23 = "UPDATE INTO inventorydata SET payment_url_response = '"+ paymentres.data+"' WHERE user_mobile = '"+global.mobile +"' ";
         con.query(q23, (error,result)=>{
             if(error) throw error;
+            console.log("INserting whole response of PayAPI: ",result.rows);
         });
-        // console.log(paymentres.data.data.instrumentResponse.redirectInfo.url);
+        console.log("Generated URL: ",paymentres.data.data.instrumentResponse.redirectInfo.url);
         res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
     } else {
         res.status(200).json("Unable to generate payment url");
@@ -843,6 +844,8 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
     var minm4 = 1000; var maxm4 = 9999;
     let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
     const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${global.merchantTransactionId}`;
+    console.log("Merchant Transaction ID in checkPaymentStatus API: ",global.merchantTransactionId );
+    console.log("MerchantID in checkPaymentStatus API: ",global.MerchantID );
     let xverify = hash.sha256("pg/v1/status/{process.env.MerchantID}/{global.merchantTransaction}" + process.env.SALT_KEY) + "###" + process.env.SALT_KEY_INDEX;
     global.paymentStatus = await axios.post(checkStatusAPi, {
         headers: {
@@ -854,6 +857,7 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
     let isSuccess = paymentres.data.success;
     if (isSuccess) {
         const paymentStatus = paymentres.data;
+        console.log("Payment complete response: ",paymentStatus);
         q24 = "BEGIN ;" + 
             "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+global.mobile +"' ;" +
             "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+global.merchantTransaction+"', '"+ paymentres.data.data.amount +"', '"+ paymentres.data.code +"', '"+ paymentres.data +"') ;" +
@@ -862,6 +866,7 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
             if (error)
                 throw error;
             global.paymentResponse = result.rows;
+            console.log("Payment url complete response: ",global.paymentResponse);
             q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ global.paymentResponse +"')";
             con.query(q25,(error,result)=>{
                 if(error) throw error;
