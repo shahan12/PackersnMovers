@@ -110,7 +110,7 @@ export const getUserBookingFromBackend = async (data) => {
 
 export const makePaymentRequest = async (data) => {
   try {
-     const response = await axios.post('/payment',{paymentAmount: data});
+     const response = await instance.post('/payment',{paymentAmount: data});
     return response.data;
   } catch (error) {
     throw error;
