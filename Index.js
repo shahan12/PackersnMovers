@@ -836,7 +836,7 @@ app.post(`/api/payment`, async (req, res) => {
 
 
 
-app.get("/api/checkPaymentStatus", authenticateToken, async (req, res) => {
+app.get("/api/checkPaymentStatus", async (req, res) => {
 
     var minm6 = 100000; var maxm6 = 999999;
     let randomNumSix = Math.floor(Math.random() * (maxm6 - minm6 + 1)) + minm6;
