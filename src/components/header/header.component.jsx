@@ -87,7 +87,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
          
           <span className="header-item-phoneNumber-container">
             <img src={PhoneIcon} alt={"phone"}></img>
-            <span>+91 8847885671</span>
+            <span>+91 888 4784 888</span>
           </span>
           <div className="header-profile-picture-container">
             <img
