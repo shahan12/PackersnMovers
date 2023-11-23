@@ -11,6 +11,7 @@ const fetch = require('node-fetch');
 const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+const base64json = require('base64json');
 var app = express();
 
 app.use(cors({
@@ -795,7 +796,7 @@ app.post(`/api/payment`, async (req, res) => {
         "merchantTransactionId": global.merchantTransaction,
         "merchantUserId": global.merchantUser,
         "amount": (paymentAmount * 100),
-        "redirectUrl": "https://shiftkart.co/bookings",
+        "redirectUrl": "https://shiftkart.co/payments",
         "redirectMode": "REDIRECT",
         "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
         "mobileNumber": global.mobile,
@@ -809,7 +810,7 @@ app.post(`/api/payment`, async (req, res) => {
 
     const paymentAPI = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
 
-    let paymentDataBase64 = base64json.stringify(paymentData, null, 1);
+    let paymentDataBase64 = btoa(JSON.stringify(paymentData,null,1));
     let paymentDataBase64Xverify = paymentDataBase64 + "/pg/v1/pay" + salt.key;
     let xverify = hash.sha256().update(paymentDataBase64Xverify).digest('hex');
     xverify += "###1";
