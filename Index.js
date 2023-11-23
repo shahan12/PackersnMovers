@@ -93,7 +93,7 @@ app.get(`/api/logout`, (req, res) => {
     }
 })
 
-app.put(`/api/totalNoBoxes`, verifyToken, (req, res) => {
+app.put(`/api/totalNoBoxes`, (req, res) => {
 
     try {
 
@@ -131,7 +131,7 @@ app.put(`/api/totalNoBoxes`, verifyToken, (req, res) => {
     }
 });
 
-app.put(`/api/basePrice`, verifyToken, (req, res) => {
+app.put(`/api/basePrice`, (req, res) => {
     try {
         var fromAdd = req.body.fromAddress;
         var toAdd = req.body.toAddress;
@@ -370,7 +370,7 @@ app.put(`/api/basePrice`, verifyToken, (req, res) => {
 
 })
 
-app.put(`/api/floorCharges`, verifyToken, function (req, res) {
+app.put(`/api/floorCharges`, function (req, res) {
     try {
         var floorNumber = RequirementData.floorNumber;
         var fromLift = RequirementData.fromLift;
@@ -398,7 +398,7 @@ const storage = multer({
         }
     })
 }).single("profile");
-app.put(`/api/saveUserInfo`, verifyToken, storage, (req, res) => {
+app.put(`/api/saveUserInfo`, storage, (req, res) => {
 
     try {
         var fName = req.body.fName;
@@ -419,7 +419,7 @@ app.put(`/api/saveUserInfo`, verifyToken, storage, (req, res) => {
     }
 });
 
-app.get(`/api/getUserInfo`, verifyToken, (req, res) => {
+app.get(`/api/getUserInfo`, (req, res) => {
 
     try {
         var q4 = "SELECT * FROM " +
@@ -482,7 +482,7 @@ var addons = {
     }
 }
 
-app.put(`/api/addons`, verifyToken, (req, res) => {
+app.put(`/api/addons`, (req, res) => {
     const insertData = {
         addons: addons,
     };
@@ -494,7 +494,7 @@ app.put(`/api/addons`, verifyToken, (req, res) => {
     })
 });
 
-app.get(`/api/myBooking`, verifyToken, (req, res) => {
+app.get(`/api/myBooking`, (req, res) => {
 
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
@@ -529,7 +529,7 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
-app.put(`/api/updateUser`, updateProfile, verifyToken, (req, res) => {
+app.put(`/api/updateUser`, updateProfile, (req, res) => {
 
     try {
         var fName = req.body.firstName;
@@ -549,7 +549,7 @@ app.put(`/api/updateUser`, updateProfile, verifyToken, (req, res) => {
     }
 });
 
-app.put(`/api/inventory`, verifyToken, (req, res) => {
+app.put(`/api/inventory`, (req, res) => {
 
     try {
         var mobile = req.body.mobile;
@@ -696,8 +696,11 @@ var payload = global.mobile;
 function generateToken(payload) {
 
     const token = jwt.sign(payload, secretkey, { expiresIn: '1h' });
-    if (payload != null)
+    if (payload != null){
+        console.log("generateToken Token value: ",token);
+        console.log("generateToken Secret Key: ",secretkey);
         return token;
+    }
     else
         return "Invalid User, Because user information is not there";
 
@@ -707,6 +710,9 @@ function verifyToken(token) {
     jwt.verify(token, secretkey, (err, decode) => {
         if (err)
             return "Failed to authenticate user";
+            console.log("verifyToken Decode Value: ",decode);
+            console.log("verifyToken Token value: ",token);
+            console.log("verifyToken Secret Key value: ",secretkey);
         req.payload = decode;
         next();
     });
