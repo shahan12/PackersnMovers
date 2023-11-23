@@ -55,19 +55,18 @@ const Progress = ({ progress, setProgress }) => {
     if (progress === "progress" && response) {
       fetchPaymentURL();
     }
-
   };
 
 
-  const [isModalOpen, setModalOpen] = useState(false);
+  // const [isModalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setModalOpen(true);
+  // };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setModalOpen(false);
+  // };
 
   return (
     <div className="requirements-section-1">
@@ -118,20 +117,14 @@ const Progress = ({ progress, setProgress }) => {
         <div className="prevButton" onClick={prev}>
           &lt; Previous
         </div>
-        <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
         {loader ? (
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
-        ) : (
-          'Confirm Booking'
+          ) : (
+          <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
+            'Confirm Booking'
+          </button>
         )}
-        </button>
       </div>
-      {isModalOpen && (
-        <ThankYouModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setModalOpen}
-        />
-      )}
     </div>
   );
 };
