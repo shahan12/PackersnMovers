@@ -15,12 +15,12 @@ const jwt = require('jsonwebtoken');
 // const base64json = require('base64json');
 var app = express();
 
-app.use(cors({
-    origin: process.env.BASE_URL,
-    methods: 'GET, POST, OPTIONS, PUT',
-    credentials: true,
-    allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
-}));
+// app.use(cors({
+//     origin: process.env.BASE_URL,
+//     methods: 'GET, POST, OPTIONS, PUT',
+//     credentials: true,
+//     allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
+// }));
 
 var port = process.env.PORT;
 
