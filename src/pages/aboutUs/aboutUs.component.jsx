@@ -17,7 +17,7 @@ function AboutUs({ isHomePage }) {
           What are ShiftKart Packing And Moving Services In Bangalore
         </h2>
         <p className="about-us-para-text">
-          NoBroker provides the following facilities when you plan to shift
+          Shiftkart provides the following facilities when you plan to shift
           within Bangalore or outside
         </p>
         {data2.map((item, index) => {

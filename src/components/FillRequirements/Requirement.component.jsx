@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
+import loaderIcon from '../../images/loader.gif';
 
 function Requirement({progress, setProgress}) {
 
@@ -32,8 +33,8 @@ function Requirement({progress, setProgress}) {
   const [houseType, setHouseType] = useState("");
   const [phoneNumber,setPhoneNumber]=useState((sessionStorage.getItem('phoneNumber')) || '');
   const [totalCostBF, setTotalCostBF] = useState();
+  const [loader, setLoader] = useState(false);
 
-  console.log("<<<<<<<----",totalBoxFromAPI);
   const houseTypes = [
     "1 RK",
     "1 BHK",
@@ -60,9 +61,6 @@ function Requirement({progress, setProgress}) {
   const [distance, setDistance] = useState(sessionStorage.getItem('distance'));
   const [fromAddress, setFromAddress] = useState(sessionStorage.getItem('fromAddress'));
   const [toAddress, setToAddress] = useState(sessionStorage.getItem('toAddress'));
-  console.log(sessionStorage.getItem('distance'));
-  // const[familyCount,setFamilyCount]=useState(4);
-  // const[bachelorCount,setBachelorCount]=useState(1);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const openModal = () => {
@@ -85,10 +83,8 @@ function Requirement({progress, setProgress}) {
     }
   }, [RequirementsRedux]); 
 
-  console.log("--------------", RequirementsRedux);
 
   const FlatrequireMents = async () => {
-    console.log("clicked next");
     const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
         "houseType": houseType,
@@ -111,17 +107,11 @@ function Requirement({progress, setProgress}) {
       "phoneNumber":phoneNumber,
       distance, fromAddress, toAddress            //use this distance
   }
-      // console.log("comparing : ")
-      // console.log(RequirementsRedux.requirements);
-      // console.log("<-and->")
       const {phoneNumber: num, ...remainingInfo}=newRequirementData;
-      // console.log(remainingInfo);
       if(JSON.stringify(RequirementsRedux.requirements)!==JSON.stringify(remainingInfo)){
         dispatch(updateRequirements(newRequirementData));
-        console.log("distance :",distance);
         await sendRequestReq(forAPIRequirement);
       }
-      // setProgress('inventory');
   };
   function isEqual(objA, objB) {
     const keysA = Object.keys(objA);
@@ -140,14 +130,8 @@ function Requirement({progress, setProgress}) {
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      // console.log("finally sending to basePrice backend function 2:",API_Req_Data_JSON);
       const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      console.log("rcd from baseprice backend :", basePriceResponse);
       setBasePriceFromAPI(basePriceResponse);
-      //console.log("rcd from basePrice backend :", basePriceResponse);
-
-      // console.log("to calculate floor charges ");
-      // console.log(parseInt(API_Req_Data.floorNumber),API_Req_Data.fromLift,parseInt(API_Req_Data.toFloor),API_Req_Data.toLift);
       let floorChargeResponse = 0;
       if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
       floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
@@ -155,23 +139,17 @@ function Requirement({progress, setProgress}) {
       if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
       floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
       setFloorChargeFromAPI(floorChargeResponse);
-      // console.log("calculated floorPrice :", floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-      console.log("rcd from totalBox backend :", totalBoxResponse);
       setTotalBoxFromAPI(totalBoxResponse);
 
       saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
-      
-      // console.log("all prices from Backend :",basePriceResponse, floorChargeResponse, totalBoxResponse);
-      // store these values in redux
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   function saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse){
-    console.log("redux save function",basePriceResponse, totalBoxResponse, floorChargeResponse);
     let totalcostData = {
       "basePrice": basePriceResponse,
       "floorCharges": floorChargeResponse,
@@ -180,11 +158,19 @@ function Requirement({progress, setProgress}) {
       "totalCostBF": basePriceResponse+floorChargeResponse,
     }
     dispatch(updateTotalCost(totalcostData));
-    setProgress('inventory');
+
+    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
+      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
+        openModal();
+      } else {
+      }
+    } else {
+      setLoader(false);
+      setProgress('inventory');
+    }
   }
 
   useEffect(() => {
-    console.log("dispatch in useeffect values : ",basePriceFromAPI,floorChargeFromAPI,totalBoxFromAPI)
     setTotalCostBF(basePriceFromAPI +  floorChargeFromAPI);
     let totalcostData = {
       "basePrice": basePriceFromAPI,
@@ -195,7 +181,6 @@ function Requirement({progress, setProgress}) {
     }
     dispatch(updateTotalCost(totalcostData));
   }, [basePriceFromAPI, floorChargeFromAPI, totalCostBF,totalBoxFromAPI]);
-  // [basePriceFromAPI, floorChargeFromAPI, totalCostBF, ]
 
   const handleArrowClick = (action) => {
     if (action === 'increment' && familyNumber < 10) {
@@ -208,17 +193,8 @@ function Requirement({progress, setProgress}) {
   };
   
   function performInspection() {
-    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      // Show an alert message
-      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        openModal();
-      } else {
-        // User dismissed the alert, do nothing
-      }
-    } else {
-      // Call the FlatrequireMents function
-      FlatrequireMents();
-    }
+    setLoader(true);
+    FlatrequireMents();
   }
   return (
       <div className="requirements-section-1">
@@ -367,34 +343,33 @@ function Requirement({progress, setProgress}) {
             </div>
           </div>
         </div>
+        {loader ? (
+          <div className="fill-req-CTA-container flex">
+            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
+          </div>
+        ) : (
         <div className="fill-req-CTA-container flex">
-        <div className='prevButton'></div><button
-          disabled={
-            !familyType ||
-            !houseType ||
-            !familyNumber ||
-            !floorNumber ||
-            !liftValue ||
-            !movingFloorNumber ||
-            !movingToLiftValue ||
-            !fromAddress ||
-            !toAddress ||
-            !distance
-          }
-          className="cta-button"
-          onClick={performInspection}
-        >
-          NEXT
-        </button>
-        {
-          isModalOpen &&
-        <ThankYouModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setModalOpen}
-        />
-        }
+            <div className='prevButton'></div><button
+              disabled={
+                !familyType ||
+                !houseType ||
+                !familyNumber ||
+                !floorNumber ||
+                !liftValue ||
+                !movingFloorNumber ||
+                !movingToLiftValue ||
+                !fromAddress ||
+                !toAddress ||
+                !distance
+              }
+              className="cta-button"
+              onClick={performInspection}
+            >
+            NEXT
+          </button>
         </div>
-      </div>
+      )}
+    </div>
   );
 }
 

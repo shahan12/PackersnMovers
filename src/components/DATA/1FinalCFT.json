@@ -65,8 +65,8 @@
 			"2 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 5,
-					"wooden non-dismental": 5,
+					"wooden dismantel": 5,
+					"wooden non-dismantel": 5,
 					"metal foldable": 5,
 					"metal no-foldable": 7,
 					"glass top": 7
@@ -75,8 +75,8 @@
 			"3 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 10,
-					"wooden non-dismental": 12,
+					"wooden dismantel": 10,
+					"wooden non-dismantel": 12,
 					"metal foldable": 10,
 					"metal no-foldable": 12,
 					"glass top": 12
@@ -85,8 +85,8 @@
 			"4 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 15,
-					"wooden non-dismental": 20,
+					"wooden dismantel": 15,
+					"wooden non-dismantel": 20,
 					"metal foldable": 15,
 					"metal no-foldable": 20,
 					"glass top": 20
@@ -95,8 +95,8 @@
 			"5 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 25,
-					"wooden non-dismental": 29,
+					"wooden dismantel": 25,
+					"wooden non-dismantel": 29,
 					"metal foldable": 25,
 					"metal no-foldable": 29,
 					"glass top": 29
@@ -105,8 +105,8 @@
 			"6 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 31,
-					"wooden non-dismental": 35,
+					"wooden dismantel": 31,
+					"wooden non-dismantel": 35,
 					"metal foldable": 31,
 					"metal no-foldable": 35,
 					"glass top": 35
@@ -115,8 +115,8 @@
 			"7 seater dining table": {
 				"base": 5,
 				"material": {
-					"wooden dismental": 43,
-					"wooden non-dismental": 43,
+					"wooden dismantel": 43,
+					"wooden non-dismantel": 43,
 					"metal foldable": 43,
 					"metal no-foldable": 43,
 					"glass top": 55
@@ -142,8 +142,8 @@
 			"dressing table": {
 				"base": 5,
 				"type": {
-					"dismental": 25,
-					"non-dismental": 35
+					"dismantel": 25,
+					"non-dismantel": 35
 				}
 			},
 			"iron table": {
@@ -172,7 +172,7 @@
 			"base": 35,
 			"type": {
 				"king size": {
-					"dismental": {
+					"dismantel": {
 						"storage": 36,
 						"without storage": 36
 					},
@@ -180,7 +180,7 @@
 					"neither": 36
 				},
 				"queen": {
-					"dismental": {
+					"dismantel": {
 						"storage": 31,
 						"without storage": 31
 					},
@@ -188,7 +188,7 @@
 					"neither": 31
 				},
 				"double": {
-					"dismental": {
+					"dismantel": {
 						"storage": 20,
 						"without storage": 20
 					},
@@ -196,7 +196,7 @@
 					"neither": 20
 				},
 				"single": {
-					"dismental": {
+					"dismantel": {
 						"storage": 20,
 						"without storage": 1
 					},

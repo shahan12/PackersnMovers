@@ -27,7 +27,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const [isUserRegisterd, setIsUserRegisterd] = useState(true);
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
-    // Remove any non-numeric characters
     const numericValue = inputPhoneNumber.replace(/\D/g, "");
     const isValid = numericValue.length === 10;
     setPhoneNumber(numericValue);
@@ -93,25 +92,27 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     // setOTP(e.target.value);
   };
 
-  const validateOTP = () => {
-    // if (OTP === "000000") {
-    // window.sessionStorage.setItem("loggedIn", "true");
-    // window.open("/fill-details", "_self");
-    // } else {
-    // setInvalidOTP(true);
-    // }
-  };
 
-  const sendOTP=async(e)=>{
+  const sendOTP = async (e) => {
     e.preventDefault();
     setOtpPage(true);
-    console.log("send otp to this mobile number :", phoneNumber);
-    const resp=await sendOTPRequestToBackend(phoneNumber);
-    if(resp.type==='success'){
+    console.log("send otp to this mobile number:", phoneNumber);
+
+    try {
+      const resp = await sendOTPRequestToBackend(phoneNumber);
       console.log(resp);
+
+      if (resp.type === 'success') {
+        console.log('Token:', localStorage.getItem('token'));
+      } else {
+        console.log('Failed:', resp.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-    else console.log("failllled :",resp);
-  }
+  };
+
+
   const verifyOTP=async()=>{
     console.log("otp typed : ", OTP);
     const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
@@ -167,7 +168,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 />
                 <button
                   type="submit"
-                  // onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
+                  //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
                   onClick={(e) => sendOTP(e)}
                   disabled={!isValidPhoneNumber || !phoneNumber}
                   className={`${
@@ -184,58 +185,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
             )}
             {otpPage && flow === "login" && (
               <>
-                {/* {isUserRegisterd ? (
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      type="passowrd"
-                      id="phoneNumber"
-                      pattern="\d*"
-                      maxLength="10"
-                      value={OTP}
-                      onChange={handleOtpInput}
-                      placeholder="Enter password"
-                      onClick={() => setInvalidOTP(false)}
-                    />
-                    <button
-                      type="submit"
-                      disabled={OTP.length < 6}
-                      onClick={(e) =>
-                        handleSubmit(
-                          e,
-                          flow === "register" ? "register" : "login"
-                        )
-                      }
-                      className={`${
-                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
-                      } cta-button`}
-                    >
-                      Submit OTP
-                    </button>
-                  </form>
-                ) : (
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      type="passowrd"
-                      id="phoneNumber"
-                      pattern="\d*"
-                      maxLength="10"
-                      value={OTP}
-                      onChange={handleOtpInput}
-                      placeholder="Enter New Password"
-                      onClick={() => setInvalidOTP(false)}
-                    />
-                    <button
-                      type="submit"
-                      disabled={OTP.length < 6}
-                      onClick={() => validateOTP()}
-                      className={`${
-                        !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
-                      } cta-button`}
-                    >
-                      Submit OTP
-                    </button>
-                  </form>
-                )} */}
+
 
                 <OTPInput
                   onChange={handleOtpInput}

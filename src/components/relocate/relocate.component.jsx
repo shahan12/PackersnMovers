@@ -98,7 +98,6 @@ function Relocate({setLoginModal}) {
           
           if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
             setDistance(response.rows[0].elements[0].distance.text);
-            console.log(response);
             sessionStorage.setItem('fromAddress',fromAddress);
             sessionStorage.setItem('toAddress',toAddress);
             sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);

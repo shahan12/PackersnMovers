@@ -1,50 +1,79 @@
-// api.js
 import axios from 'axios';
 
-// Use the actual domain or IP address where your backend is hosted
-// const backendURL = 'https://www.shiftkart.co:3001';
-
 const instance = axios.create({
-  baseURL: 'https://skbootstrap.cloud/api', 
+  baseURL: 'https://skbootstrap.cloud/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
+
+instance.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+const handleApiError = (error) => {
+  if (error.response) {
+      console.error('API Error Status:', error.response.status);
+      console.error('API Error Data:', error.response.data);
+  } else if (error.request) {
+      console.error('API No Response:', error.request);
+  } else {
+      console.error('API Request Setup Error:', error.message);
+  }
+  throw error;
+};
+
+
 export const sendOTPRequestToBackend = async (data) => {
   try {
-    console.log("send OTP backend call : ", data);
     const response = await instance.post('/sendOTP', { mobileNumber: data });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   } catch (error) {
-    throw error;
+    console.error(error);
   }
 };
+
+
 
 export const sendOTPVerifyRequestToBackend = async (data) => {
   try {
-    console.log("verify otp backend call : ", data);
     const response = await instance.post('/verifyOTP', { data });
+    console.log("response",response);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
+
+
 
 export const sendLoginRequestToBackend = async (data) => {
   try {
-    console.log("final data to send backend : ", data);
-    const response = await instance.get('/login', { params: data });
-    return response.data;
+      const response = await instance.get('/login', { params: data });
+      return response.data;
   } catch (error) {
-    throw error;
+      handleApiError(error);
   }
 };
 
+
 export const sendRegisterRequestToBackend = async (data) => {
   try {
-    console.log("final data to send backend : ", data);
     const response = await instance.put('/signup', data);
     return response.data;
   } catch (error) {
@@ -54,7 +83,6 @@ export const sendRegisterRequestToBackend = async (data) => {
 
 export const sendBasePriceRequestToBackend = async (data) => {
   try {
-    console.log("final data to send basePrice backend : ", data);
     const response = await instance.put('/basePrice', data);
     return response.data;
   } catch (error) {
@@ -82,9 +110,7 @@ export const sendTotalBoxRequestToBackend = async (data) => {
 
 export const sendFinalItemsToBackend = async (data) => {
   try {
-    console.log("final data............. : ", data);
     const response = await instance.put('/inventory', data);
-    console.log("reply from backend :", response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -93,9 +119,7 @@ export const sendFinalItemsToBackend = async (data) => {
 
 export const getUserInfoFromBackend = async (data) => {
   try {
-    console.log("sending to getUserInfo backend :", data);
     const response = await instance.get('/getUserInfo', { params: data });
-    console.log("reply from user info backend :", response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -105,7 +129,6 @@ export const getUserInfoFromBackend = async (data) => {
 export const updateUserInfoToBackend = async (data) => {
   try {
     const response = await instance.put('/updateUser', data);
-    console.log("reply from update user info backend :", response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -115,7 +138,25 @@ export const updateUserInfoToBackend = async (data) => {
 export const getUserBookingFromBackend = async (data) => {
   try {
     const response = await instance.get('/myBooking');
-    console.log("booking data : ", response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const makePaymentRequest = async (data) => {
+  try {
+     const response = await instance.post('/payment',{paymentAmount: data});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const makePaymentStatusRequest = async (data) => {
+  try {
+    const response = await instance.get('/checkPaymentStatus');
     return response.data;
   } catch (error) {
     throw error;

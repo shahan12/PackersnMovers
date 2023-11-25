@@ -11,6 +11,7 @@ import Order from "./pages/order/orders.component";
 import EditProfile from "./pages/editProfile/edit-profile.component";
 import { useEffect, useState } from "react";
 import Bookings from "./pages/bookings/Bookings.component";
+import Payments from "./pages/payments/Payments.component";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -58,6 +59,10 @@ function App() {
           exact 
           path="/bookings" 
           element={ isAuthenticated ? (<Bookings />) : (<Navigate to="/?login-redirect=true" replace />)} />
+        <Route 
+          exact 
+          path="/payments" 
+          element={ isAuthenticated ? (<Payments />) : (<Navigate to="/?login-redirect=true" replace />)} />
       </Routes>
       <Footer />
     </AppProvider>
