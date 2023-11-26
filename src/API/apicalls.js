@@ -135,8 +135,9 @@ export const getUserBookingFromBackend = async (data) => {
 
 
 export const makePaymentRequest = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-     const response = await instance.post('/payment',{paymentAmount: data});
+     const response = await instance.post('/payment',{ encData });
     return response.data;
   } catch (error) {
     throw error;
@@ -144,8 +145,9 @@ export const makePaymentRequest = async (data) => {
 };
 
 export const makePaymentStatusRequest = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.get('/checkPaymentStatus');
+    const response = await instance.post('/checkPaymentStatus',{ encData });
     return response.data;
   } catch (error) {
     throw error;

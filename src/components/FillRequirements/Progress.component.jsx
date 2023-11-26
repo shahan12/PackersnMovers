@@ -14,8 +14,6 @@ const Progress = ({ progress, setProgress }) => {
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
 
-  const [paymentURL, setPaymentURL]=useState("");
-
   const [loader, setLoader] = useState(false);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
   useEffect(() => {
@@ -30,29 +28,32 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  const fetchPaymentURL=async ()=>{
-    let fullPayment=1;
-    let paymentResponse=await makePaymentRequest(fullPayment); //url
 
-    if(paymentResponse==="failed"){
-      setPaymentURL("");
-      if (window.confirm("Payment has been failed, Please Try again!")) {
-        fetchPaymentURL();
-      } else {
-        setProgress("dateselection");
-      }
-    }
-    else{
-      window.open(paymentResponse);
-      setPaymentURL(paymentResponse);
+  const fetchPaymentURL = async () => {
+    let fullPayment=1;
+    
+    let savedOrderID = sessionStorage.getItem('orderID');
+    let identifier = sessionStorage.getItem('identifier');
+    let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID}); //url
+
+    if(paymentResponse.type === 'URLResponseError'){
+      alert("Server Error, Your Order is completed, please try payment in your bookings again later to finalize your Order!");
+      window.open("/bookings", "_self");
+    } else if (paymentResponse.type === 'invalidToken') {
+      alert("Please Try later!");
+      performLogout();
+    } else {
+      let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptIdentifier(paymentResponse);
+      sessionStorage.setItem('merID', merID);
+      window.open(paymentURL);
     }
   }
 
   const bookingConfirm = async () => {
     setLoader(true);
-    const encData = authmiddleware.encryptData(RequirementsRedux.requirements.phoneNumber);
+    const savedIdentifier = sessionStorage.getItem('identifier');
 
-    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": encData};
+    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": savedIdentifier};
     const response=await sendFinalItemsToBackend(API_DATA);
 
     if (response.type === "invalidToken") {
@@ -62,12 +63,8 @@ const Progress = ({ progress, setProgress }) => {
       alert("Server Error, please try later!");
       performLogout();
     } else {
-      console.log("Response correct");
-      // setBasePriceFromAPI(response);
-    }
-
-    if (progress === "progress" && response) {
-      // fetchPaymentURL();
+      sessionStorage.setItem('orderID', response);
+      fetchPaymentURL();
     }
   };
 

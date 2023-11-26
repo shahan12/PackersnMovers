@@ -1,21 +1,33 @@
 import "./payments.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import loaderIcon from '../../images/loader.gif';
 import { makePaymentStatusRequest } from '../../API/apicalls.js';
-import {useNavigate} from 'react-router-dom';
 
 function Payments(props) {
-  const navigate = useNavigate();
 
   useEffect(() => {
-  const paymentResponse = async () => {
-    const response = await makePaymentStatusRequest();
-    console.log("payment page ", response);
-    navigate('/bookings');
+  const paymentResponseSync = async () => {
+
+    let savedOrderID = sessionStorage.getItem('orderID');
+    let identifier = sessionStorage.getItem('identifier');
+    let merTID = sessionStorage.getItem('merID');
+
+    const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID});
+
+    console.log("payment page ", paymentResponse);
+    if(paymentResponse.type === 'success'){
+      window.open("/bookings", "_self");
+    } else if (paymentResponse.type === 'invalidToken') {
+      alert("Please Try later!");
+      performLogout();
+    } else {
+      window.open("/bookings", "_self");
+    }
+    window.open("/bookings", "_self");
   };
 
-  paymentResponse();
+  paymentResponseSync();
 }, []);
 
   return (
