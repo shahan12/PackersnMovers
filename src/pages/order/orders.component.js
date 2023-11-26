@@ -3,8 +3,13 @@ import "./orders.css";
 import FillRequrements from "../../components/FillRequirements/fillReq.component";
 
 function Order(props) {
+  const {
+    isAuthenticated,
+    setIsAuthenticated,
+  } = props;
+
   return (
-      <FillRequrements />
+      <FillRequrements isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
   );
 }
 

@@ -10,7 +10,7 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendBasePriceRequestToBackend,sendFloorChargeRequestToBackend,sendTotalBoxRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend, sendTotalBoxRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements, updateTotalCost } from '../../redux/actions';
 import { useSelector } from 'react-redux';
@@ -20,8 +20,17 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 import loaderIcon from '../../images/loader.gif';
+import {useNavigate} from 'react-router-dom';
 
-function Requirement({progress, setProgress}) {
+function Requirement(props) {
+
+  const navigate = useNavigate();
+  const {
+    isAuthenticated,
+    setIsAuthenticated,
+    progress,
+    setProgress
+  } = props;
 
   const dispatch = useDispatch();
 
@@ -83,6 +92,15 @@ function Requirement({progress, setProgress}) {
     }
   }, [RequirementsRedux]); 
 
+  function performLogout() {
+    if(isAuthenticated) {
+      setIsAuthenticated(false);
+      sessionStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("identifier");
+      window.open("/", "_self");
+    }
+  }
 
   const FlatrequireMents = async () => {
     const newRequirementData  = {           // for just saving in redux state
@@ -96,6 +114,7 @@ function Requirement({progress, setProgress}) {
         "phoneNumber":phoneNumber
     }
     
+    const savedIdentifier = sessionStorage.getItem('identifier');
     const forAPIRequirement  = {          // for API CALL IT INCLUDES DISTANCE
       "familyType": familyType,
       "houseType": houseType,
@@ -104,7 +123,7 @@ function Requirement({progress, setProgress}) {
       "fromLift": liftValue,
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
-      "phoneNumber":phoneNumber,
+      "phoneNumber":savedIdentifier,
       distance, fromAddress, toAddress            //use this distance
   }
       const {phoneNumber: num, ...remainingInfo}=newRequirementData;
@@ -131,7 +150,17 @@ function Requirement({progress, setProgress}) {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
       const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      setBasePriceFromAPI(basePriceResponse);
+
+      if (basePriceResponse.type === "invalidToken") {
+        alert("Fishy");
+        performLogout();
+      } else if (basePriceResponse.type === "not found") {
+        alert("Server Error, please try later!");
+        performLogout();
+      } else {
+        setBasePriceFromAPI(basePriceResponse);
+      }
+
       let floorChargeResponse = 0;
       if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
       floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
@@ -141,6 +170,17 @@ function Requirement({progress, setProgress}) {
       setFloorChargeFromAPI(floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
+
+      if (totalBoxResponse.type === "invalidToken") {
+        alert("Fishy");
+        performLogout();
+      } else if (totalBoxResponse.type === "not found") {
+        alert("Server Error, please try later!");
+        performLogout();
+      } else {
+        setBasePriceFromAPI(totalBoxResponse);
+      }
+
       setTotalBoxFromAPI(totalBoxResponse);
 
       saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);

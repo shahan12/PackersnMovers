@@ -1,4 +1,5 @@
 import axios from 'axios';
+const authmiddleware = require('../authmiddleware');
 
 const instance = axios.create({
   baseURL: 'https://skbootstrap.cloud/api',
@@ -9,7 +10,7 @@ const instance = axios.create({
 });
 
 const getToken = () => {
-  return localStorage.getItem('token');
+  return sessionStorage.getItem('token');
 };
 
 
@@ -37,47 +38,42 @@ const handleApiError = (error) => {
 
 
 export const sendOTPRequestToBackend = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.post('/sendOTP', { mobileNumber: data });
+    const response = await instance.post('/sendOTP', { identifier: encData });
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
     }
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
-
 
 
 export const sendOTPVerifyRequestToBackend = async (data) => {
+  
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.post('/verifyOTP', { data });
-    console.log("response",response);
+    const response = await instance.post('/verifyOTP', { encData });
+    console.log("otp verify response",response);
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
-
 
 
 export const sendLoginRequestToBackend = async (data) => {
+  
+  const encData = authmiddleware.encryptData(data);
   try {
-      const response = await instance.get('/login', { params: data });
+      const response = await instance.post('/login', { encData });
       return response.data;
   } catch (error) {
       handleApiError(error);
-  }
-};
-
-
-export const sendRegisterRequestToBackend = async (data) => {
-  try {
-    const response = await instance.put('/signup', data);
-    return response.data;
-  } catch (error) {
-    throw error;
   }
 };
 
@@ -90,14 +86,6 @@ export const sendBasePriceRequestToBackend = async (data) => {
   }
 };
 
-export const sendFloorChargeRequestToBackend = async (data) => {
-  try {
-    const response = await instance.put('/floorCharges', data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {
