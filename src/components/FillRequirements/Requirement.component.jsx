@@ -21,6 +21,13 @@ import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 import loaderIcon from '../../images/loader.gif';
 
+export const  performLogout = ()=> {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("identifier");
+    window.open("/", "_self");
+}
+
 function Requirement(props) {
 
   const {
@@ -90,15 +97,7 @@ function Requirement(props) {
     }
   }, [RequirementsRedux]); 
 
-  function performLogout() {
-    if(isAuthenticated) {
-      setIsAuthenticated(false);
-      sessionStorage.removeItem("loggedIn");
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("identifier");
-      window.open("/", "_self");
-    }
-  }
+
 
   const FlatrequireMents = async () => {
     const newRequirementData  = {           // for just saving in redux state

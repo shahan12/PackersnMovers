@@ -39,13 +39,14 @@ export const sendOTPRequestToBackend = async (data) => {
   const encData = authmiddleware.encryptData(data);
   try {
     const response = await instance.post('/sendOTP', { identifier: encData });
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    if (response ) {
+      console.log(response && response.data && response.data.type === 'sucess', 'resp');
+      sessionStorage.setItem('token', response.data.token);
     }
     return response.data;
   } catch (error) {
-    console.error(error);
-    throw error;
+    alert(error.message)
+    return error
   }
 };
 
@@ -63,10 +64,12 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
 };
 
 export const sendLoginRequestToBackend = async (data) => {
-  
+  const savedToken = sessionStorage.getItem('token');
+  console.log(savedToken, "savedToken");
   const encData = authmiddleware.encryptData(data);
   try {
       const response = await instance.post('/login', { encData });
+      window.sessionStorage.setItem("loggedIn", savedToken);
       return response.data;
   } catch (error) {
       handleApiError(error);
@@ -74,8 +77,10 @@ export const sendLoginRequestToBackend = async (data) => {
 };
 
 export const sendBasePriceRequestToBackend = async (data) => {
+  
   try {
     const response = await instance.put('/basePrice', data);
+    console.log(response , 'base proce API');
     return response.data;
   } catch (error) {
     throw error;
@@ -85,6 +90,7 @@ export const sendBasePriceRequestToBackend = async (data) => {
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {
     const response = await instance.put('/totalNoBoxes', data);
+    console.log(response , 'total box');
     return response.data;
   } catch (error) {
     throw error;

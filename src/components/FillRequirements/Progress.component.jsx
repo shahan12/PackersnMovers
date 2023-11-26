@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import "./calendar.css";
 import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
 import loaderIcon from '../../images/loader.gif';
+import { performLogout } from "./Requirement.component";
 const authmiddleware = require('../../authmiddleware');
 
 const Progress = ({ progress, setProgress }) => {
-
+  
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);        // all requirementData like floor, lift, family
   let AddOnsADDED = useSelector((state) => state.addOnsItems);    // all add ons items
   let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
@@ -54,14 +55,15 @@ const Progress = ({ progress, setProgress }) => {
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": encData};
     const response=await sendFinalItemsToBackend(API_DATA);
 
-    if (basePriceResponse.type === "invalidToken") {
+    if (response.type === "invalidToken") {
       alert("Fishy");
       performLogout();
-    } else if (basePriceResponse.type === "not found") {
+    } else if (response.type === "not found") {
       alert("Server Error, please try later!");
       performLogout();
     } else {
-      setBasePriceFromAPI(basePriceResponse);
+      console.log("Response correct");
+      // setBasePriceFromAPI(response);
     }
 
     if (progress === "progress" && response) {
@@ -132,7 +134,7 @@ const Progress = ({ progress, setProgress }) => {
         {loader ? (
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
-          <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
+          <button className="cta-button" onClick={bookingConfirm}>
             Confirm Booking
           </button>
         )}

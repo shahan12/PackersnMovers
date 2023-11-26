@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-const authmiddleware = require('../../authmiddleware');
 import "./Modal.css";
 import loginModalImg from "../../images/price-start.png";
 import loginModalImg1 from "../../images/movers11.jpg";
@@ -14,8 +13,10 @@ import {
 } from "../../API/apicalls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
+  
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [xData, setXData] = useContext(AppContext);
@@ -42,7 +43,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
         const response = await sendLoginRequestToBackend(phoneNumber);
         console.log("savedToken response", response);
         if (response === "Login Sucessfull...") {
-          window.sessionStorage.setItem("loggedIn", savedToken);
+         
           window.open("/fill-details", "_self");
         }
         if (response === "Mismatched data...") {
@@ -66,16 +67,16 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     e.preventDefault();
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
-      console.log(resp.response);
 
-      if (resp.response.data.type === 'success') {
+      if (resp.type === 'success') {
         sessionStorage.setItem('token', resp.token);
         setOtpPage(true);
-      } else {
+      } else if (resp.type === "fail") {
         alert("Server Error, Please Try later!");
         console.log('Failed');
       }
     } catch (error) {
+      alert(error.message)
       console.error('Error:', error);
     }
   };

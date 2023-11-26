@@ -1,7 +1,7 @@
 
 const CryptoJS = require('crypto-js');
 
-const secretKey = 'ddecd7466d74@1290';
+const secretKey = process.env.REACT_APP_Secret_Key_Identifier;
 
 function encryptData(payload) {
     console.log("data", payload, secretKey);
