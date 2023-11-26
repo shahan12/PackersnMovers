@@ -50,7 +50,7 @@ app.post(`/api/login`, (req, res) => {                                          
     const decoded = authmiddleware.verifyToken(token);
 
     if (decoded) {
-    const mobileNumber = authmiddleware.decryptIdentifier(req.body.encData);
+    const mobileNumber = authmiddleware.decryptIdentifier(req.body.encData , "/login");
     console.log(" login ",mobileNumber);
     try {
 
@@ -104,6 +104,7 @@ app.get(`/api/logout`, (req, res) => {
 })
 
 app.put(`/api/totalNoBoxes`, (req, res) => {
+    console.log('in total box all');
 const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     let additionalBox;
@@ -151,7 +152,8 @@ const token = req.headers.authorization.split(' ')[1];
 });
 
 app.put(`/api/basePrice`, (req, res) => {
-    let basePrice;
+    console.log('in base proce all');
+    let basePrice = 0;
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
@@ -715,16 +717,19 @@ app.post('/api/sendOTP', (req, res) => {
         .then(function (response) {
             const responseData = {
             status: response.status,
-            data: response.data,
+            type: response.data.type,
+            token: token
             // Add other relevant properties as needed
             };
-            res.status(200).json({ response: responseData, token });
+            res.status(200).json(responseData );
         })
         .catch(function (error) {
+            res.status(401).json({data: error , status:"401" , type:"failed"})
             console.error(error);
         });
     }
     catch (error) {
+        res.status(500).json({response: "Internal Server Error" , type:"failed"})
         console.error(error.message);
     }
 });

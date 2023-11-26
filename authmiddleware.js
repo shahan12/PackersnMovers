@@ -29,8 +29,8 @@ function verifyToken(token) {
     }
 }
 
-function decryptIdentifier(token) {
-    console.log("token 111", token);
+function decryptIdentifier(token , callName) {
+    console.log("token 111", token , "Place" , callName);
     const decoded = CryptoJS.AES.decrypt(token, Secretkey_Identifier);
     const decryptedData = decoded.toString(CryptoJS.enc.Utf8);
     console.log("decryptedData", JSON.parse(decryptedData));
