@@ -24,12 +24,9 @@ app.use(cors({
 
 var port = process.env.PORT;
 
-global.totalCarton;
 global.mobile;
-global.basePrice;
 global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
-global.additionalBox;
 global.base64UrlKey, global.sha256Hash, global.base64;
 global.paymentStatus, global.merchantUser;
 global.paymentResponse;
@@ -47,20 +44,21 @@ con.connect((err) => {
     if (err) throw err;
 });
 
-app.get(`/api/login`, (req, res) => {
+app.post(`/api/login`, (req, res) => {                                                          //// DONE
     const token = req.headers.authorization.split(' ')[1];
 
-    // Verify the token using the verifyToken function from authmiddleware
     const decoded = authmiddleware.verifyToken(token);
 
     if (decoded) {
+    const mobileNumber = authmiddleware.decryptIdentifier(req.body.encData);
+    console.log(" login ",mobileNumber);
     try {
 
-        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "'";
+        var q8 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobileNumber + "'";
         con.query(q8, (error, result) => {
             if (error) throw error;
             if (result.rows.length > 0) {
-                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobile + "' ";
+                q6 = "SELECT user_mobile FROM userInfo WHERE user_mobile = '" + mobileNumber + "' ";
                 con.query(q6, (error, result) => {
                     if (error) throw error;
                     if (result.rows.length > 0) { res.send("Login Sucessfull..."); }
@@ -70,12 +68,12 @@ app.get(`/api/login`, (req, res) => {
             }
             else {
                 var q9 = "BEGIN;" +
-                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobile + "');" +
-                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobile + "');" +
+                    "INSERT INTO userInfo(user_mobile) VALUES ('" + mobileNumber + "');" +
+                    "INSERT INTO inventoryData(user_mobile) VALUES ('" + mobileNumber + "');" +
                     "COMMIT;";
                 con.query(q9, (error, result) => {
                     if (error) throw error;
-                    mobileNo = mobile;
+                    mobileNo = mobileNumber;
                     // const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
                     // console.log("JWT Token: ",token);
                     // res.json({token});
@@ -108,12 +106,16 @@ app.get(`/api/logout`, (req, res) => {
 app.put(`/api/totalNoBoxes`, (req, res) => {
 const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
+    let additionalBox;
     if (decoded) {
         try {
             var houseType = req.body.houseType.replace(' ', '').toLowerCase();
             var familyType = (req.body.familyType).toLowerCase();
             var members = parseInt(req.body.familyNumber);
-            console.log("total box backend :", houseType, familyType, members, global.mobile);
+            
+            let identifier = req.body.phoneNumber;
+            const mobileNumber = authmiddleware.decryptIdentifier(identifier);
+            console.log("total box backend :", houseType, familyType, members, mobileNumber);
             var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
 
 
@@ -121,25 +123,25 @@ const token = req.headers.authorization.split(' ')[1];
                 if (error) throw error;
                 var flag = result.rows[0].boxes_qty;
                 if (familyType == 'bachelor' && members > 1) {
-                    global.additionalBox = (members - 1) * 4;
+                    additionalBox = (members - 1) * 4;
                 }
                 if (familyType == 'family' && members > 4) {
-                    global.additionalBox = (members - 4) * 4;
+                    additionalBox = (members - 4) * 4;
                 }
                 else {
-                    global.additionalBox = 0;
+                    additionalBox = 0;
                 }
 
-                console.log("Total carton: ", global.totalCarton);
-                var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + global.mobile + "'";
+                var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobileNumber + "'";
                 con.query(q13, (error, result) => {
                     if (error) throw error;
-                    console.log("ADDITIONAL BOXES: ", global.additionalBox);
+                    console.log("ADDITIONAL BOXES: ", additionalBox);
                 });
-                res.status(200).json(global.additionalBox);
+                res.status(200).json(additionalBox);
             });
         }
         catch (error) {
+            res.status(401).json({ type: 'not found', message: 'Invalid' }); // added
             console.error(error.message);
         }
     } else {
@@ -149,6 +151,7 @@ const token = req.headers.authorization.split(' ')[1];
 });
 
 app.put(`/api/basePrice`, (req, res) => {
+    let basePrice;
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
@@ -156,267 +159,248 @@ app.put(`/api/basePrice`, (req, res) => {
         var fromAdd = req.body.fromAddress;
         var toAdd = req.body.toAddress;
         var totalDistance = Math.round(parseFloat(req.body.distance));
-        var houseType = req.body.houseType.replace(' ', '').toLowerCase();;
+        var houseType = req.body.houseType.replace(' ', '').toLowerCase();
+
+        let identifier = req.body.phoneNumber;
+        const mobileNumber = authmiddleware.decryptIdentifier(identifier);
+
+
         console.log("From Address: ", fromAdd);
         console.log("To Address: ", toAdd);
         console.log("Total Distance: ", totalDistance)
         console.log("House Type: ", houseType)
-        console.log("User Mobile Number: ", global.mobile);
-        var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + global.mobile + "'";
+        var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + mobileNumber + "'";
         con.query(q11, (error, result) => {
             if (error) throw error;
             if (true) {
                 if (houseType == "1rk") {
                     if (totalDistance <= 5) {
-                        global.basePrice = 2199;
+                        basePrice = 2199;
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
-                        global.basePrice = 2499;
+                        basePrice = 2499;
 
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
-                        global.basePrice = 2799;
+                        basePrice = 2799;
 
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 2999;
+                        basePrice = 2999;
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
-                        global.basePrice = 3349;
+                        basePrice = 3349;
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
-                        global.basePrice = 3699;
+                        basePrice = 3699;
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
-                        global.basePrice = 4099;
+                        basePrice = 4099;
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
-                        global.basePrice = 4499;
+                        basePrice = 4499;
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
-                        global.basePrice = 4849;
+                        basePrice = 4849;
                     }
                     if (totalDistance >= 50) {
-                        global.basePrice = 5199;
+                        basePrice = 5199;
                     }
                 }
 
                 if (houseType == "1bhk") {
                     if (totalDistance <= 5) {
-                        global.basePrice = 3199;
+                        basePrice = 3199;
 
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
-                        global.basePrice = 4499;
+                        basePrice = 4499;
 
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
-                        global.basePrice = 4999;
+                        basePrice = 4999;
 
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 5299;
+                        basePrice = 5299;
 
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
-                        global.basePrice = 6499;
+                        basePrice = 6499;
 
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
-                        global.basePrice = 6999;
+                        basePrice = 6999;
 
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
-                        global.basePrice = 7499;
+                        basePrice = 7499;
 
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
-                        global.basePrice = 7999;
+                        basePrice = 7999;
 
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
-                        global.basePrice = 8499;
+                        basePrice = 8499;
 
                     }
                     if (totalDistance >= 50) {
-                        global.basePrice = 8999;
+                        basePrice = 8999;
 
                     }
                 }
 
                 if (houseType == "1bhkHeavy") {
                     if (totalDistance <= 5) {
-                        global.basePrice = 3899;
+                        basePrice = 3899;
 
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
-                        global.basePrice = 4499;
+                        basePrice = 4499;
 
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
-                        global.basePrice = 5499;
+                        basePrice = 5499;
 
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 5999;
+                        basePrice = 5999;
 
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
-                        global.basePrice = 6549;
+                        basePrice = 6549;
 
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
-                        global.basePrice = 7099;
+                        basePrice = 7099;
 
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
-                        global.basePrice = 7649;
+                        basePrice = 7649;
 
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
-                        global.basePrice = 8199;
+                        basePrice = 8199;
 
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
-                        global.basePrice = 8749;
+                        basePrice = 8749;
 
                     }
                     if (totalDistance >= 50) {
-                        global.basePrice = 9299;
+                        basePrice = 9299;
 
                     }
                 }
 
                 if (houseType == "2bhk") {
                     if (totalDistance <= 5) {
-                        global.basePrice = 7999;
+                        basePrice = 7999;
 
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
-                        global.basePrice = 12999;
+                        basePrice = 12999;
 
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
-                        global.basePrice = 13999;
+                        basePrice = 13999;
 
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 13999;
+                        basePrice = 13999;
 
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
-                        global.basePrice = 14899;
+                        basePrice = 14899;
 
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
-                        global.basePrice = 15799;
+                        basePrice = 15799;
 
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
-                        global.basePrice = 16699;
+                        basePrice = 16699;
 
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
-                        global.basePrice = 17599;
+                        basePrice = 17599;
 
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
-                        global.basePrice = 18499;
+                        basePrice = 18499;
 
                     }
                     if (totalDistance >= 50) {
-                        global.basePrice = 19399;
+                        basePrice = 19399;
 
                     }
                 }
 
                 if (houseType == "2bhkHeavy") {
                     if (totalDistance <= 5) {
-                        global.basePrice = 8999;
+                        basePrice = 8999;
 
                     }
                     if (totalDistance >= 5 && totalDistance <= 10) {
-                        global.basePrice = 14999;
+                        basePrice = 14999;
 
                     }
                     if (totalDistance >= 10 && totalDistance <= 15) {
-                        global.basePrice = 16999;
+                        basePrice = 16999;
 
                     }
                     if (totalDistance >= 15 && totalDistance <= 20) {
-                        global.basePrice = 17999;
+                        basePrice = 17999;
 
                     }
 
                     if (totalDistance >= 20 && totalDistance <= 25) {
-                        global.basePrice = 18999;
+                        basePrice = 18999;
 
                     }
                     if (totalDistance >= 25 && totalDistance <= 30) {
-                        global.basePrice = 19999;
+                        basePrice = 19999;
 
                     }
                     if (totalDistance >= 30 && totalDistance <= 35) {
-                        global.basePrice = 20999;
+                        basePrice = 20999;
 
                     }
                     if (totalDistance >= 35 && totalDistance <= 40) {
-                        global.basePrice = 21999;
+                        basePrice = 21999;
 
                     }
                     if (totalDistance >= 40 && totalDistance <= 45) {
-                        global.basePrice = 22999;
+                        basePrice = 22999;
 
                     }
                     if (totalDistance >= 50) {
-                        global.basePrice = 23999;
+                        basePrice = 23999;
 
                     }
                 }
                 res.setHeader('Content-Type', 'application/json');
-                console.log("Base Price: ", global.basePrice);
-                res.json(global.basePrice).status(200);
+                console.log("Base Price: ", basePrice);
+                res.json(basePrice).status(200);
             }
         });
     }
     catch (error) {
+        res.status(401).json({ type: 'not found', message: 'Invalid' }); // added
         console.error(error.message);
     }
 
     } else {
         // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
+        res.status(401).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 
 })
-
-app.put(`/api/floorCharges`, function (req, res) {
-    const token = req.headers.authorization.split(' ')[1];
-    let  decoded = authmiddleware.verifyToken(token);
-    if (decoded) {
-    try {
-        var floorNumber = RequirementData.floorNumber;
-        var fromLift = RequirementData.fromLift;
-        var toFloor = RequirementData.toFloor;
-        var toLift = RequirementData.toLift;
-        var q14 = "UPDATE userInfo SET from_floor='" + floorNumber + "', from_lift='" + fromLift + "', to_floor='" + toFloor + "', to_lift='" + toLift + "' WHERE user_mobile='" + global.mobile + "'";
-        con.query(q14, (error, result) => {
-            if (error) throw error;
-            res.status(200).json("Will reach you shortly");
-        });
-    }
-    catch (error) {
-        console.error(error.message);
-    }
-    } else {
-        // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
-    }
-});
 
 const storage = multer({
     storage: multer.diskStorage({
@@ -549,6 +533,9 @@ app.put(`/api/addons`, (req, res) => {
 
 app.get(`/api/myBooking`, (req, res) => {
 
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
     i.book_date, i.book_slot_time, i.total_items, i.additional_box, i.order_id 
@@ -570,6 +557,10 @@ app.get(`/api/myBooking`, (req, res) => {
     catch (error) {
         console.error(error.message);
     }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 const updateProfile = multer({
@@ -582,8 +573,12 @@ const updateProfile = multer({
         }
     })
 }).single("profile");
+
 app.put(`/api/updateUser`, updateProfile, (req, res) => {
 
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
         var fName = req.body.firstName;
         var lName = req.body.lastName;
@@ -600,12 +595,21 @@ app.put(`/api/updateUser`, updateProfile, (req, res) => {
     catch (error) {
         console.error(error.message);
     }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 app.put(`/api/inventory`, (req, res) => {
-
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
     try {
-        var mobile = req.body.mobile;
+        
+        let identifier = req.body.mobile;
+        const mobile = authmiddleware.decryptIdentifier(identifier);
+
         console.log("All Inventory Data: ", req.body);
         console.log("Addons: ");
         console.log(req.body.addons);
@@ -672,7 +676,7 @@ app.put(`/api/inventory`, (req, res) => {
         if (isNaN(value) || value === undefined) {
             value = 0;
         }
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + req.body.mobile + "' )";
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + mobile + "' )";
 
         con.query(q21, (error, result) => {
             if (error) throw error;
@@ -684,13 +688,17 @@ app.put(`/api/inventory`, (req, res) => {
     catch (error) {
         console.error(error.messaege);
     }
+    } else {
+        // Token verification failed
+        res.status(401).json({ type: 'error', message: 'Invalid token' });
+    }
 });
 
 app.post('/api/sendOTP', (req, res) => {
-    let { mobileNumber } = req.body;
-    let headerSent = false;
-    global.mobile = mobileNumber;
-    console.log("Send OTP TO: ", mobileNumber);
+    let { identifier } = req.body;
+    
+    const mobileNumber = authmiddleware.decryptIdentifier(identifier);
+
     const token = authmiddleware.generateToken({ mobileNumber });
     try {
         const options = {
@@ -722,16 +730,12 @@ app.post('/api/sendOTP', (req, res) => {
 });
 
 
-
-
 app.post(`/api/verifyOTP`, (req, res) => {
-    console.log("User Entered Data: ", req.body.data);
-    let { OTP: otp, phoneNumber: mobileNumber } = req.body.data;
-    console.log("To Verify OTP and Mobile Number: ", otp, mobileNumber);
     
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
+        let { OTP: otp, phoneNumber: mobileNumber }  = authmiddleware.decryptIdentifier(req.body.encData);
         try {
             const options = {
                 method: 'GET',
@@ -756,37 +760,12 @@ app.post(`/api/verifyOTP`, (req, res) => {
         }
     } else {
         // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
+        console.error('Invalid token verifyOTP');
+        res.status(401).json({ type: 'invalidToken', message: 'Invalid token' });
     }
     
 });
 
-
-app.get(`/api/resendOTP`, (req, res) => {
-    try {
-        const options = {
-            method: 'GET',
-            url: `https://control.msg91.com/api/v5/otp/retry?retrytype=${otp}&mobile=91${mobileNumber}`,
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                authkey: `${authKey}`
-            }
-        };
-
-        axios
-            .request(options)
-            .then(function (response) {
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
-    }
-    catch (error) {
-        console.error(error.message);
-    }
-})
 
 app.post(`/api/payment`, async (req, res) => {
     const paymentAmount = req.body.paymentAmount;

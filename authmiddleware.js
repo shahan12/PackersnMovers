@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const CryptoJS = require('crypto-js');
 
 const secretKey = process.env.secretKey;
+const Secretkey_Identifier = process.env.Secretkey_Identifier;
 
 // Function to generate a JWT token
 function generateToken(payload) {
@@ -27,7 +29,16 @@ function verifyToken(token) {
     }
 }
 
+function decryptIdentifier(token) {
+    console.log("token 111", token);
+    const decoded = CryptoJS.AES.decrypt(token, Secretkey_Identifier);
+    const decryptedData = decoded.toString(CryptoJS.enc.Utf8);
+    console.log("decryptedData", JSON.parse(decryptedData));
+    return JSON.parse(decryptedData);
+}
+
 module.exports = {
     generateToken: generateToken,
-    verifyToken: verifyToken
+    verifyToken: verifyToken,
+    decryptIdentifier: decryptIdentifier,
 };
