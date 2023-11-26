@@ -37,8 +37,20 @@ function decryptIdentifier(token , callName) {
     return JSON.parse(decryptedData);
 }
 
+function encryptData(payload) {
+    console.log("data", payload, secretKey);
+    const data = CryptoJS.AES.encrypt(
+      JSON.stringify(payload),
+      secretKey
+    ).toString();
+
+    console.log("data", data);
+    return data;
+  };
+  
 module.exports = {
     generateToken: generateToken,
     verifyToken: verifyToken,
     decryptIdentifier: decryptIdentifier,
+    encryptData: encryptData
 };

@@ -25,7 +25,6 @@ app.use(cors({
 var port = process.env.PORT;
 
 global.mobile;
-global.orderID;
 global.encryptKey, global.iv, global.encryptPass;
 global.base64UrlKey, global.sha256Hash, global.base64;
 global.paymentStatus, global.merchantUser;
@@ -105,7 +104,7 @@ app.get(`/api/logout`, (req, res) => {
 
 app.put(`/api/totalNoBoxes`, (req, res) => {
     console.log('in total box all');
-const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     let additionalBox;
     if (decoded) {
@@ -513,26 +512,6 @@ var addons = {
     }
 }
 
-app.put(`/api/addons`, (req, res) => {
-    
-    const token = req.headers.authorization.split(' ')[1];
-    let  decoded = authmiddleware.verifyToken(token);
-    if (decoded) {
-    const insertData = {
-        addons: addons,
-    };
-    var add_on = JSON.stringify(insertData);
-    var q16 = "UPDATE inventoryData SET addons='" + add_on + "'::jsonb WHERE user_mobile='" + global.mobile + "'";
-    con.query(q16, (error, result) => {
-        if (error) throw error;
-        res.send("User added Addons: " + result.rows);
-    })
-    } else {
-        // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
-    }
-});
-
 app.get(`/api/myBooking`, (req, res) => {
 
     const token = req.headers.authorization.split(' ')[1];
@@ -608,40 +587,11 @@ app.put(`/api/inventory`, (req, res) => {
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
     try {
-        
+
         let identifier = req.body.mobile;
         const mobile = authmiddleware.decryptIdentifier(identifier);
 
         console.log("All Inventory Data: ", req.body);
-        console.log("Addons: ");
-        console.log(req.body.addons);
-
-        console.log("Data Time: ");
-        console.log(req.body.dataTime);
-
-        console.log("User Inventory: ");
-        console.log(req.body.user_inventory);
-
-        console.log("User Selected Date: ");
-        console.log(req.body.dataTime?.selectedDay?.date);
-
-        console.log("User Selected Time: ");
-        console.log(req.body.dataTime?.selectedTime?.label);
-
-        console.log("User Mobile in Inventory API: ")
-        console.log(req.body.mobile);
-
-        console.log("Current Date: ")
-        console.log(req.body.dataTime?.selectedDay?.currentDate)
-
-        console.log("Booking Date: ")
-        console.log(req.body.dataTime?.selectedDay?.bookingDate)
-
-        console.log("Total Items: ")
-        console.log(req.body.totalCost?.totalItemCount)
-
-        console.log("Additional boxes: ")
-        console.log(req.body.totalCost?.totalBox);
 
         var addons = JSON.stringify(req.body.addons);
         var user_inventory = JSON.stringify(req.body.user_inventory);
@@ -666,24 +616,27 @@ app.put(`/api/inventory`, (req, res) => {
         }
 
         // Concatenate the components to create the order ID
+        let orderID;
         const prefix = 'SK';
         const currentDate = getCurrentDate();
         const randomDigits = getRandNumber();
         const phone = mobile;
         const last4Digits = getLast4Digitmobile(phone);
 
-        global.orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
-        console.log("User Order ID: ", global.orderID);
+        orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
+        
+        const encOrderID = authmiddleware.encryptData(orderID);
+        console.log("User Order ID: ", orderID);
         let value = req.body.totalCost.totalBox;
         if (isNaN(value) || value === undefined) {
             value = 0;
         }
-        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + mobile + "' )";
+        q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + mobile + "' )";
 
         con.query(q21, (error, result) => {
             if (error) throw error;
-            console.log("Inventory Succefully Added: ", result.rows);
-            res.send(result.rows);
+            console.log("Inventory Succefully Added order ID generated: ", encOrderID);
+            res.send(encOrderID);
         })
     }
 
@@ -692,7 +645,7 @@ app.put(`/api/inventory`, (req, res) => {
     }
     } else {
         // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
+        res.status(401).json({ type: 'token error', message: 'Invalid token' });
     }
 });
 
@@ -734,7 +687,6 @@ app.post('/api/sendOTP', (req, res) => {
     }
 });
 
-
 app.post(`/api/verifyOTP`, (req, res) => {
     
     const token = req.headers.authorization.split(' ')[1];
@@ -771,11 +723,18 @@ app.post(`/api/verifyOTP`, (req, res) => {
     
 });
 
-
 app.post(`/api/payment`, async (req, res) => {
-    const paymentAmount = req.body.paymentAmount;
 
-    const salt = {
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+
+    let {fullPayment : fullPayment, identifier : identifier, savedOrderID : savedOrderID}  = authmiddleware.decryptIdentifier(req.body.encData);
+    const mobileNumber = authmiddleware.decryptIdentifier(identifier);
+    const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
+    const paymentAmount = fullPayment;
+
+    const salt = {  
         "keyIndex": process.env.SALT_KEY_INDEX,
         "key": process.env.SALT_KEY
     }
@@ -787,6 +746,7 @@ app.post(`/api/payment`, async (req, res) => {
     let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
     let merchantPrefix = process.env.MerchantPrefix;
     global.merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
+    let merID = global.merchantTransaction;
     global.merchantUser = merchantPrefix + randomNumFour;
     const paymentData = {
         "merchantId": process.env.MerchantID,
@@ -796,7 +756,7 @@ app.post(`/api/payment`, async (req, res) => {
         "redirectUrl": "https://shiftkart.co/payments",
         "redirectMode": "REDIRECT",
         "callbackUrl": "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
-        "mobileNumber": global.mobile,
+        "mobileNumber": mobileNumber,
         "paymentInstrument": {
             "type": "PAY_PAGE"
         }
@@ -821,59 +781,67 @@ app.post(`/api/payment`, async (req, res) => {
     if (isSuccess) {
         const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
         console.log("Pay API Complete Response: ",paymentURL);
-        q23 = "UPDATE INTO inventorydata SET payment_url_response = '"+ paymentres.data+"' WHERE user_mobile = '"+global.mobile +"' ";
+        q23 = "UPDATE INTO inventorydata SET payment_url_response = '"+ paymentres.data+"' WHERE user_mobile = '"+mobileNumber +"'  AND order_id =  '"+OrderID +"' ";
         con.query(q23, (error,result)=>{
             if(error) throw error;
-            console.log("INserting whole response of PayAPI: ",result.rows);
         });
-        console.log("Generated URL: ",paymentres.data.data.instrumentResponse.redirectInfo.url);
-        res.status(200).json(paymentURL, paymentData.merchantId, paymentData.merchantTransactionId);
+        const encOrderID = authmiddleware.encryptData({paymentURL, merID});
+        res.status(200).json(encOrderID);
     } else {
-        res.status(200).json("Unable to generate payment url");
+        res.status(500).json("URLResponseError");
+    }
+    } else {
+        // Token verification failed
+        console.error('Invalid token verifyOTP');
+        res.status(401).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
-
-
 app.get("/api/checkPaymentStatus", async (req, res) => {
 
-    var minm6 = 100000; var maxm6 = 999999;
-    let randomNumSix = Math.floor(Math.random() * (maxm6 - minm6 + 1)) + minm6;
-    var minm4 = 1000; var maxm4 = 9999;
-    let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
-    const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${global.merchantTransactionId}`;
-    console.log("Merchant Transaction ID in checkPaymentStatus API: ",global.merchantTransactionId );
-    console.log("MerchantID in checkPaymentStatus API: ",global.MerchantID );
-    let xverify = hash.sha256("pg/v1/status/{process.env.MerchantID}/{global.merchantTransaction}" + process.env.SALT_KEY) + "###" + process.env.SALT_KEY_INDEX;
-    global.paymentStatus = await axios.post(checkStatusAPi, {
+    const token = req.headers.authorization.split(' ')[1];
+    let  decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+    let {savedOrderID : savedOrderID, identifier : identifier, merTID : merTID}  = authmiddleware.decryptIdentifier(req.body.encData);
+    
+    const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
+    const mobileNumber = authmiddleware.decryptIdentifier(identifier , "/checkPaymentStatus");
+
+    const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${merTID}`;
+    console.log("Merchant Transaction ID in checkPaymentStatus API: ", merTID );
+    let xverify = hash.sha256("pg/v1/status/{process.env.MerchantID}/{merTID}" + process.env.SALT_KEY) + "###" + process.env.SALT_KEY_INDEX;
+    let paymentStatus = await axios.post(checkStatusAPi, {
         headers: {
             'Content-Type': 'application/json',
             'X-VERIFY': xverify,
             'X-MERCHANT-ID': process.env.MerchantID
         }
     });
-    let isSuccess = paymentres.data.success;
+    let isSuccess = paymentStatus.data.success;
     if (isSuccess) {
-        const paymentStatus = paymentres.data;
-        console.log("Payment complete response: ",paymentStatus);
+        const paymentStatusD = paymentStatus.data;
+        console.log("Payment complete response: ",paymentStatusD);
         q24 = "BEGIN ;" + 
-            "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+global.mobile +"' ;" +
-            "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+global.merchantTransaction+"', '"+ paymentres.data.data.amount +"', '"+ paymentres.data.code +"', '"+ paymentres.data +"') ;" +
+            "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+mobileNumber +"' AND order_id =  '"+OrderID +"' ;" +
+            "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+merTID+"', '"+ paymentStatus.data.data.amount +"', '"+ paymentStatus.data.code +"', '"+ paymentStatus.data +"') ;" +
             "COMMIT ;";
         con.query(q24, (error, result) => {
             if (error)
                 throw error;
-            global.paymentResponse = result.rows;
-            console.log("Payment url complete response: ",global.paymentResponse);
-            q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ global.paymentResponse +"')";
+            q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ paymentStatus +"')";
             con.query(q25,(error,result)=>{
                 if(error) throw error;
             });
         });
-        res.status(200).json("OK");
+        res.status(200).json({ type: 'success', message: 'success' });
     }
     else
-        res.status(200).json("Payment Fauiler");
+        res.status(500).json({ type: 'server Error', message: 'Error' });
+    } else {
+        // Token verification failed
+        console.error('Invalid token verifyOTP');
+        res.status(401).json({ type: 'invalidToken', message: 'Invalid token' });
+    }
 
 });
 
