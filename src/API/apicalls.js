@@ -13,7 +13,6 @@ const getToken = () => {
   return sessionStorage.getItem('token');
 };
 
-
 instance.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
@@ -36,7 +35,6 @@ const handleApiError = (error) => {
   throw error;
 };
 
-
 export const sendOTPRequestToBackend = async (data) => {
   const encData = authmiddleware.encryptData(data);
   try {
@@ -51,7 +49,6 @@ export const sendOTPRequestToBackend = async (data) => {
   }
 };
 
-
 export const sendOTPVerifyRequestToBackend = async (data) => {
   
   const encData = authmiddleware.encryptData(data);
@@ -64,7 +61,6 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
     throw error;
   }
 };
-
 
 export const sendLoginRequestToBackend = async (data) => {
   
@@ -85,7 +81,6 @@ export const sendBasePriceRequestToBackend = async (data) => {
     throw error;
   }
 };
-
 
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {

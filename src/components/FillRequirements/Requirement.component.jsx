@@ -20,11 +20,9 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 import loaderIcon from '../../images/loader.gif';
-import {useNavigate} from 'react-router-dom';
 
 function Requirement(props) {
 
-  const navigate = useNavigate();
   const {
     isAuthenticated,
     setIsAuthenticated,

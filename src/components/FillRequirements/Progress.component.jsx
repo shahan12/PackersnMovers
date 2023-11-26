@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import "./calendar.css";
 import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
 import loaderIcon from '../../images/loader.gif';
+const authmiddleware = require('../../authmiddleware');
 
 const Progress = ({ progress, setProgress }) => {
 
@@ -48,10 +49,23 @@ const Progress = ({ progress, setProgress }) => {
 
   const bookingConfirm = async () => {
     setLoader(true);
-    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
+    const encData = authmiddleware.encryptData(RequirementsRedux.requirements.phoneNumber);
+
+    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": encData};
     const response=await sendFinalItemsToBackend(API_DATA);
+
+    if (basePriceResponse.type === "invalidToken") {
+      alert("Fishy");
+      performLogout();
+    } else if (basePriceResponse.type === "not found") {
+      alert("Server Error, please try later!");
+      performLogout();
+    } else {
+      setBasePriceFromAPI(basePriceResponse);
+    }
+
     if (progress === "progress" && response) {
-      fetchPaymentURL();
+      // fetchPaymentURL();
     }
   };
 
