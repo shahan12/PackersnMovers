@@ -22,6 +22,7 @@ function App() {
   useEffect(() => {
     sessionStorage.setItem("auth", JSON.stringify(isAuthenticated));
   }, [isAuthenticated]);
+  
   return (
     <AppProvider>
       <Header
