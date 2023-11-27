@@ -25,7 +25,7 @@ function verifyToken(token) {
         const decoded = jwt.verify(token, secretKey);
         return decoded;
     } catch (err) {
-        return null; // Token verification failed
+        return ("Expired"); // Token verification failed
     }
 }
 

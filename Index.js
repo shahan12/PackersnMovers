@@ -12,6 +12,8 @@ const sdk = require('api')('@msg91api/v5.0#6n91xmlhu4pcnz');
 const axios = require('axios');
 const hash = crypto.createHash('sha256');
 const jwt = require('jsonwebtoken');
+const { log } = require('console');
+const e = require('express');
 // const base64json = require('base64json');
 var app = express();
 
@@ -43,6 +45,30 @@ con.connect((err) => {
     if (err) throw err;
 });
 
+//Global methods
+
+function getCurrentDate(format) {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const yyyy = today.getFullYear();
+    if(format){
+        return yyyy + '-'+ mm + '-' + dd;
+    }
+    else return dd + mm + yyyy;
+}
+
+ // Function to generate a random 6-digit number
+ function getRandNumber() {
+    return Math.floor(100000 + Math.random() * 900000);
+}
+
+// Function to extract the last 4 digits of a phone number 
+function getLast4Digitmobile(mobile) {
+    if (typeof mobile === 'string' && mobile.length >= 4) {
+        return mobile.slice(-4);
+    }
+}
 app.post(`/api/login`, (req, res) => {                                                          //// DONE
     const token = req.headers.authorization.split(' ')[1];
 
@@ -103,55 +129,82 @@ app.get(`/api/logout`, (req, res) => {
 })
 
 app.put(`/api/totalNoBoxes`, (req, res) => {
-    console.log('in total box all');
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
+    const houseTypes = [
+        "1 RK",
+        "1 BHK",
+        "2 BHK",
+      ];
     let additionalBox;
     if (decoded) {
         try {
             var houseType = req.body.houseType.replace(' ', '').toLowerCase();
             var familyType = (req.body.familyType).toLowerCase();
             var members = parseInt(req.body.familyNumber);
-            
+            console.log();
             let identifier = req.body.phoneNumber;
             const mobileNumber = authmiddleware.decryptIdentifier(identifier);
-            console.log("total box backend :", houseType, familyType, members, mobileNumber);
+            if(houseTypes.includes(req.body.houseType))
+            {
+                console.log("in if")
             var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
+                con.query(q10, (error, result) => {
+                    if (error) { additionalBox = 0 ; throw error;}
+                    var flag = result.rows[0].boxes_qty;
+                    if (familyType == 'bachelor' && members > 1) {
+                        additionalBox = (members - 1) * 4;
+                    }
+                    if (familyType == 'family' && members > 4) {
+                        additionalBox = (members - 4) * 4;
+                    }
+                    else {
+                        additionalBox = 0;
+                    }
 
-
-            con.query(q10, (error, result) => {
-                if (error) throw error;
-                var flag = result.rows[0].boxes_qty;
-                if (familyType == 'bachelor' && members > 1) {
-                    additionalBox = (members - 1) * 4;
-                }
-                if (familyType == 'family' && members > 4) {
-                    additionalBox = (members - 4) * 4;
-                }
-                else {
-                    additionalBox = 0;
-                }
-
-                var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobileNumber + "'";
-                con.query(q13, (error, result) => {
-                    if (error) throw error;
-                    console.log("ADDITIONAL BOXES: ", additionalBox);
+                    var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobileNumber + "'";
+                    con.query(q13, (error, result) => {
+                        if (error) throw error;
+                        console.log("ADDITIONAL BOXES: ", additionalBox);
+                    });
+                    res.status(200).json(additionalBox);
                 });
+            }
+            else {
+                console.log("in else");
+                additionalBox = 0
+                let orderID;
+                const prefix = 'SK';
+                const currentDate = getCurrentDate()
+                const currentDate1 = getCurrentDate(true);
+                const randomDigits = getRandNumber();
+                const last4Digits = getLast4Digitmobile(mobileNumber);
+                console.log(currentDate , 'date');
+                orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
+                
+                console.log("User Order ID: ", orderID);
+                q26 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + null + "','" + currentDate1 + "','" + null + "', '" + null + "', '" + orderID + "', '" + currentDate + "', '" + 0 + "' ,'" + 0 + "','" + mobileNumber + "' )";
+                con.query(q26, (error, result) => {
+                    if (error) throw error;
+                    else{
+                    console.log("Inventory Succefully Added order ID generated: " , orderID);
+                    }
+                })
                 res.status(200).json(additionalBox);
-            });
+            }
         }
         catch (error) {
-            res.status(401).json({ type: 'not found', message: 'Invalid' }); // added
+            
             console.error(error.message);
+            return res.status(401).json({ type: 'not found', message: 'Invalid' }); // added
         }
     } else {
         // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
+        res.status(500).json({ type: 'error', message: 'Invalid token' });
     }
 });
 
 app.put(`/api/basePrice`, (req, res) => {
-    console.log('in base proce all');
     let basePrice = 0;
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
@@ -164,16 +217,10 @@ app.put(`/api/basePrice`, (req, res) => {
 
         let identifier = req.body.phoneNumber;
         const mobileNumber = authmiddleware.decryptIdentifier(identifier);
-
-
-        console.log("From Address: ", fromAdd);
-        console.log("To Address: ", toAdd);
-        console.log("Total Distance: ", totalDistance)
-        console.log("House Type: ", houseType)
         var q11 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', total_distance = '" + totalDistance + "' WHERE user_mobile='" + mobileNumber + "'";
         con.query(q11, (error, result) => {
             if (error) throw error;
-            if (true) {
+            else {
                 if (houseType == "1rk") {
                     if (totalDistance <= 5) {
                         basePrice = 2199;
@@ -210,7 +257,7 @@ app.put(`/api/basePrice`, (req, res) => {
                     }
                 }
 
-                if (houseType == "1bhk") {
+                else if (houseType == "1bhk") {
                     if (totalDistance <= 5) {
                         basePrice = 3199;
 
@@ -254,7 +301,7 @@ app.put(`/api/basePrice`, (req, res) => {
                     }
                 }
 
-                if (houseType == "1bhkHeavy") {
+                else if (houseType == "1bhkHeavy") {
                     if (totalDistance <= 5) {
                         basePrice = 3899;
 
@@ -298,7 +345,7 @@ app.put(`/api/basePrice`, (req, res) => {
                     }
                 }
 
-                if (houseType == "2bhk") {
+                else if (houseType == "2bhk") {
                     if (totalDistance <= 5) {
                         basePrice = 7999;
 
@@ -342,7 +389,7 @@ app.put(`/api/basePrice`, (req, res) => {
                     }
                 }
 
-                if (houseType == "2bhkHeavy") {
+                else if (houseType == "2bhkHeavy") {
                     if (totalDistance <= 5) {
                         basePrice = 8999;
 
@@ -385,14 +432,14 @@ app.put(`/api/basePrice`, (req, res) => {
 
                     }
                 }
+                else basePrice = 0;
                 res.setHeader('Content-Type', 'application/json');
-                console.log("Base Price: ", basePrice);
                 res.json(basePrice).status(200);
             }
         });
     }
     catch (error) {
-        res.status(401).json({ type: 'not found', message: 'Invalid' }); // added
+        res.status(500).json({ type: 'Server Error', message: 'Something went wrong! PLease try again later' }); // added
         console.error(error.message);
     }
 
@@ -443,13 +490,12 @@ app.put(`/api/saveUserInfo`, storage, (req, res) => {
 });
 
 app.get(`/api/getUserInfo`, (req, res) => {
-
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
     try {
         var q4 = "SELECT * FROM " +
-            "userInfo WHERE user_mobile = '" + global.mobile + "'";
+            "userInfo WHERE user_mobile = '" + decoded.mobileNumber + "'";
         con.query(q4, (err, result) => {
             if (err) throw err;
             res.send(result.rows);
@@ -517,22 +563,24 @@ app.get(`/api/myBooking`, (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
+    const mobile = authmiddleware.decryptIdentifier(req.body.data);
+    console.log(mobile , 'mobile');
     try {
         const q17 = ` SELECT u.house_type, u.total_distance, u.from_address, u.to_address, 
     i.book_date, i.book_slot_time, i.total_items, i.additional_box, i.order_id 
     FROM userInfo u INNER JOIN inventoryData i ON u.user_mobile = i.user_mobile 
     WHERE u.user_mobile = $1 `;
-
-        console.log("User Mobile Number in myBooking API: ", global.mobile);
-        const userMobile = global.mobile;
-        con.query(q17, [userMobile], (error, results) => {
+        console.log("User Mobile Number in myBooking API: ", mobile);
+        con.query(q17, [mobile], (error, results) => {
             if (error) throw error;
             if (results.rows.length > 1) {
                 let books = results.rows;
                 books = books.slice(1);
-                res.send(books);
+                
+                const ebooks = authmiddleware.encryptData(books);
+                res.send(ebooks);
             }
-            else res.send([]);
+            else res.status(500).json({ type: 'servererror', message: 'Internal server Error!' });
         });
     }
     catch (error) {
@@ -540,7 +588,7 @@ app.get(`/api/myBooking`, (req, res) => {
     }
     } else {
         // Token verification failed
-        res.status(401).json({ type: 'error', message: 'Invalid token' });
+        res.status(401).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
@@ -564,12 +612,14 @@ app.put(`/api/updateUser`, updateProfile, (req, res) => {
         var fName = req.body.firstName;
         var lName = req.body.lastName;
         var email = req.body.email;
+        var phone = req.body.phoneNumber
+        console.log(phone , "phone");
         var profile = "";
         var q5 = "UPDATE userInfo SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
-            "user_profile='" + profile + "' WHERE  user_mobile = '" + global.mobile + "'";
+            "user_profile='" + profile + "' WHERE  user_mobile = '" + phone + "'";
         con.query(q5, (err, result) => {
             if (err) throw err;
-            console.log("User Mobile Number in Update User API: ", global.mobile);
+            console.log("User Mobile Number in Update User API: ", phone);
             res.send("Rows updated" + result.rows);
         });
     }
@@ -582,7 +632,7 @@ app.put(`/api/updateUser`, updateProfile, (req, res) => {
     }
 });
 
-app.put(`/api/inventory`, (req, res) => {
+app.post(`/api/inventory`, (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
@@ -595,25 +645,6 @@ app.put(`/api/inventory`, (req, res) => {
 
         var addons = JSON.stringify(req.body.addons);
         var user_inventory = JSON.stringify(req.body.user_inventory);
-        function getCurrentDate() {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-            const yyyy = today.getFullYear();
-            return dd + mm + yyyy;
-        }
-
-        // Function to generate a random 6-digit number
-        function getRandNumber() {
-            return Math.floor(100000 + Math.random() * 900000);
-        }
-
-        // Function to extract the last 4 digits of a phone number 
-        function getLast4Digitmobile(mobile) {
-            if (typeof mobile === 'string' && mobile.length >= 4) {
-                return mobile.slice(-4);
-            }
-        }
 
         // Concatenate the components to create the order ID
         let orderID;
@@ -797,7 +828,7 @@ app.post(`/api/payment`, async (req, res) => {
     }
 });
 
-app.get("/api/checkPaymentStatus", async (req, res) => {
+app.post("/api/checkPaymentStatus", async (req, res) => {
 
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
@@ -818,25 +849,25 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
         }
     });
     let isSuccess = paymentStatus.data.success;
-    if (isSuccess) {
-        const paymentStatusD = paymentStatus.data;
-        console.log("Payment complete response: ",paymentStatusD);
-        q24 = "BEGIN ;" + 
-            "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+mobileNumber +"' AND order_id =  '"+OrderID +"' ;" +
-            "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+merTID+"', '"+ paymentStatus.data.data.amount +"', '"+ paymentStatus.data.code +"', '"+ paymentStatus.data +"') ;" +
-            "COMMIT ;";
-        con.query(q24, (error, result) => {
-            if (error)
-                throw error;
-            q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ paymentStatus +"')";
-            con.query(q25,(error,result)=>{
-                if(error) throw error;
+        if (isSuccess) {
+            const paymentStatusD = paymentStatus.data;
+            console.log("Payment complete response: ",paymentStatusD);
+            q24 = "BEGIN ;" + 
+                "INSERT INTO payments (order_id, user_mobile) SELECT (order_id, user_mobile) FROM inventorydata WHERE user_mobile = '"+mobileNumber +"' AND order_id =  '"+OrderID +"' ;" +
+                "INSERT INTO payments (merchant_id, transaction_id, total_amount, payment_status, payment_response) VALUES ('"+process.env.MerchantID+"', '"+merTID+"', '"+ paymentStatus.data.data.amount +"', '"+ paymentStatus.data.code +"', '"+ paymentStatus.data +"') ;" +
+                "COMMIT ;";
+            con.query(q24, (error, result) => {
+                if (error)
+                    throw error;
+                q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('"+ paymentStatus +"')";
+                con.query(q25,(error,result)=>{
+                    if(error) throw error;
+                });
             });
-        });
-        res.status(200).json({ type: 'success', message: 'success' });
-    }
-    else
-        res.status(500).json({ type: 'server Error', message: 'Error' });
+            res.status(200).json({ type: 'success', message: 'success' });
+        }
+        else
+            res.status(500).json({ type: 'server Error', message: 'Error' });
     } else {
         // Token verification failed
         console.error('Invalid token verifyOTP');
@@ -844,7 +875,6 @@ app.get("/api/checkPaymentStatus", async (req, res) => {
     }
 
 });
-
 
 app.listen(port, () => {
     console.log("Server running on", port);
