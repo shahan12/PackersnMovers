@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import loaderIcon from '../../images/loader.gif';
 import { makePaymentStatusRequest } from '../../API/apicalls.js';
+import { performLogout } from "../../components/FillRequirements/Requirement.component";
 
 function Payments(props) {
 

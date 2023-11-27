@@ -64,7 +64,8 @@ const Progress = ({ progress, setProgress }) => {
       performLogout();
     } else {
       sessionStorage.setItem('orderID', response);
-      fetchPaymentURL();
+      //orderId
+      // fetchPaymentURL();
     }
   };
 

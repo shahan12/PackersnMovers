@@ -16,7 +16,7 @@ function encryptData(payload) {
 
 
   function decryptData(payload) {
-    const decoded = CryptoJS.AES.decrypt(payload, Secretkey_Identifier);
+    const decoded = CryptoJS.AES.decrypt(payload, secretKey);
     const decryptedData = decoded.toString(CryptoJS.enc.Utf8);
     console.log("decryptedData", JSON.parse(decryptedData));
     return JSON.parse(decryptedData);

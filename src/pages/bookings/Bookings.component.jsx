@@ -8,17 +8,31 @@ import Electic from "../../images/appliance.svg";
 import Distance from "../../images/distance.svg";
 import Calemder from "../../images/calender.svg";
 import { getUserBookingFromBackend } from "../../API/apicalls";
+import { performLogout } from "../../components/FillRequirements/Requirement.component";
+import authmiddleware from "../../authmiddleware";
 
 function Bookings({}) {
   const [activeTab, setActiveTab] = useState(0);
   const [bookingDatas,setBookingDatas]=useState([]);
 
-  useEffect(()=>{
-    const getBooking=async()=>{
-      const bookingDataRes=await getUserBookingFromBackend();
-      setBookingDatas(bookingDataRes);
-    }
+  let identifier = sessionStorage.getItem('identifier');
+  
+  const getBooking=async()=>{
+    const bookingDataE=await getUserBookingFromBackend(identifier);
 
+    if(bookingDataE.type === 'servererror'){
+      alert("Please Try later!");
+      window.open("/", "_self");
+    } else if (bookingDataE.type === 'invalidToken') {
+      alert("Please Try later!");
+      performLogout();
+    } else {
+      const bookingData = authmiddleware.decryptData(bookingDataE);
+      setBookingDatas(bookingData);
+    }
+  }
+
+  useEffect(()=>{
     getBooking();
   },[])
 

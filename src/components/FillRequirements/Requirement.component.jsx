@@ -145,11 +145,11 @@ function Requirement(props) {
   }
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
+    setLoader(false)
     try {
       const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-
       if (basePriceResponse.type === "invalidToken") {
-        alert("Fishy");
+        alert("Session Timed Out , Please Re Login!");
         performLogout();
       } else if (basePriceResponse.type === "not found") {
         alert("Server Error, please try later!");
@@ -167,7 +167,7 @@ function Requirement(props) {
       setFloorChargeFromAPI(floorChargeResponse);
       
       const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-
+      setLoader(false)
       if (totalBoxResponse.type === "invalidToken") {
         alert("Fishy");
         performLogout();
@@ -177,12 +177,17 @@ function Requirement(props) {
       } else {
         setBasePriceFromAPI(totalBoxResponse);
       }
-
       setTotalBoxFromAPI(totalBoxResponse);
 
       saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
     } catch (error) {
-      console.error('Error:', error);
+      if(error.response.type == 'invalidToken'){
+      alert("Session Timed Out , Please Re Login!");
+      }
+      else if (error.response.type !== 'invalidToken'){
+        alert("Something went wrong")
+      }
+      performLogout();
     }
   };
 
@@ -196,15 +201,6 @@ function Requirement(props) {
     }
     dispatch(updateTotalCost(totalcostData));
 
-    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        openModal();
-      } else {
-      }
-    } else {
-      setLoader(false);
-      setProgress('inventory');
-    }
   }
 
   useEffect(() => {
@@ -231,7 +227,20 @@ function Requirement(props) {
   
   function performInspection() {
     setLoader(true);
-    FlatrequireMents();
+    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
+      console.log("in if");
+      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
+        FlatrequireMents();
+        openModal();
+      } else {
+        window.open("/" , "_self")
+      }
+    } else {
+      console.log("in else");
+      FlatrequireMents();
+      setProgress("inventory")
+    }
+   
   }
   return (
       <div className="requirements-section-1">
@@ -380,11 +389,7 @@ function Requirement(props) {
             </div>
           </div>
         </div>
-        {loader ? (
-          <div className="fill-req-CTA-container flex">
-            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
-          </div>
-        ) : (
+         
         <div className="fill-req-CTA-container flex">
             <div className='prevButton'></div><button
               disabled={
@@ -402,10 +407,10 @@ function Requirement(props) {
               className="cta-button"
               onClick={performInspection}
             >
-            NEXT
+            {loader ? <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" /> :<span>Next</span>}
           </button>
         </div>
-      )}
+      
     </div>
   );
 }

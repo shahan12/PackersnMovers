@@ -10,12 +10,15 @@ const instance = axios.create({
 });
 
 const getToken = () => {
+  if( sessionStorage.getItem('token')){
   return sessionStorage.getItem('token');
+  }
+  else return "Not Found";
 };
 
 instance.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) {
+  if (token !== "Not Found") {
       config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -83,7 +86,8 @@ export const sendBasePriceRequestToBackend = async (data) => {
     console.log(response , 'base proce API');
     return response.data;
   } catch (error) {
-    throw error;
+    console.log(error , 'errrrrrr');
+    return(error.response.data);
   }
 };
 
@@ -106,9 +110,9 @@ export const sendFinalItemsToBackend = async (data) => {
   }
 };
 
-export const getUserInfoFromBackend = async (data) => {
+export const getUserInfoFromBackend = async (data , phone) => {
   try {
-    const response = await instance.get('/getUserInfo', { params: data });
+    const response = await instance.get('/getUserInfo', { params: {id :data} });
     return response.data;
   } catch (error) {
     throw error;
@@ -126,7 +130,7 @@ export const updateUserInfoToBackend = async (data) => {
 
 export const getUserBookingFromBackend = async (data) => {
   try {
-    const response = await instance.get('/myBooking');
+    const response = await instance.get('/myBooking', {data : data});
     return response.data;
   } catch (error) {
     throw error;

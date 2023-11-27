@@ -16,17 +16,34 @@ function EditProfile(props) {
   const [lastName,setlastName]=useState("");
   const [email,setEmail]=useState("");
   
+
+  let identifier = sessionStorage.getItem('identifier');
+
   const handleUpdataProfile=async()=>{
+    try{
     const updateUserInfoResponse=await updateUserInfoToBackend({firstName,lastName,email,phoneNumber});
     setDisabled(!disabled)
+    }
+    catch(err){
+      console.debug(err)
+      window.alert("User Data save error. Please re-try")
+    }
   }
 
   const getUserInfo=async()=>{
-    const userInfoResponse=await getUserInfoFromBackend({phoneNumber});
-    let{user_f_name,user_l_name,user_email}=userInfoResponse[0];
+    try{
+    const userInfoResponse=await getUserInfoFromBackend(identifier);
+    console.log(userInfoResponse , "data from ");
+    let{user_f_name,user_l_name,user_email,user_mobile}=userInfoResponse[0];
     setFirstName(user_f_name);
     setlastName(user_l_name);
     setEmail(user_email);
+    setPhoneNumber(user_mobile)
+    }
+    catch (err){
+      console.debug(err)
+      window.alert("User Data fetch error. Please re-try")
+    }
   }
 
   useEffect(()=>{
