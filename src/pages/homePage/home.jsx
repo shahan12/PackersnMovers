@@ -202,8 +202,8 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             <div className="container-item-full">
               <h2>FAQs</h2>
               <div className="container-table-faq">
-                <RetractableTable data={data} />
-                <RetractableTable data={data} />
+                <RetractableTable data={data.data1} />
+                <RetractableTable data={data.data2} />
               </div>
             </div>
           </div>
