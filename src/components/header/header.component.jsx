@@ -7,6 +7,7 @@ import PhoneIcon from "../../images/phone.svg";
 import ProfilePic from "../../images/defaultPic.svg";
 import DownArrow from "../../images/downarrow.png";
 import hamMenu from "../../images/hamburger icon.svg";
+import { performLogout } from "../FillRequirements/Requirement.component";
 
 function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
@@ -32,8 +33,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   }, [showPopUp]);
 
   const hanleLogOut = () => {
-    sessionStorage.clear();
-    window.open("/", "_self");
+    performLogout();
   };
   const handleProfile = () => {
     window.open("/edit-profile", "_self");

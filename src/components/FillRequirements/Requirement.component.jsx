@@ -97,6 +97,8 @@ function Requirement(props) {
 
 
 
+  const savedIdentifier = sessionStorage.getItem('identifier');
+  const token = sessionStorage.getItem('token');
   const orderSessionId = sessionStorage.getItem('orderSessionId');
   const FlatrequireMents = async () => {
     const newRequirementData  = {           // for just saving in redux state
@@ -110,7 +112,6 @@ function Requirement(props) {
         "phoneNumber":phoneNumber
     }
     
-    const savedIdentifier = sessionStorage.getItem('identifier');
     const forAPIRequirement  = {          // for API CALL IT INCLUDES DISTANCE
       "familyType": familyType,
       "houseType": houseType,
@@ -145,9 +146,8 @@ function Requirement(props) {
   }
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
-    setLoader(false);
     try {
-      if(orderSessionId) {
+      if(orderSessionId && savedIdentifier && token) {
         const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
         if (basePriceResponse.type === "invalidToken") {
           alert("Session Timed Out , Please Re Login!");
@@ -168,11 +168,11 @@ function Requirement(props) {
         setFloorChargeFromAPI(floorChargeResponse);
         
         const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-        setLoader(false)
+        console.log("response", totalBoxResponse);
         if (totalBoxResponse.type === "invalidToken") {
-          alert("Fishy");
+          alert("Please Login Again!");
           performLogout();
-        } else if (totalBoxResponse.type === "not found") {
+        } else if (totalBoxResponse.type === "serverError") {
           alert("Server Error, please try later!");
           performLogout();
         } else {
@@ -183,10 +183,11 @@ function Requirement(props) {
         saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
       }
       else {
+        alert("Please Login Again!");
         performLogout();
       }
     } catch (error) {
-      if(error.response.type == 'invalidToken'){
+      if(error.response.type === 'invalidToken'){
       alert("Session Timed Out , Please Re Login!");
       }
       else if (error.response.type !== 'invalidToken'){
@@ -206,6 +207,16 @@ function Requirement(props) {
     }
     dispatch(updateTotalCost(totalcostData));
 
+    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
+      console.log("in if");
+      setLoader(false);
+      alert("We will schedule a free inspection and give you a best quotation. someone will get back to you!");
+      window.open("/" , "_self"); 
+    } else {
+      console.log("in else");
+      setLoader(false);
+      setProgress("inventory");
+    }
   }
 
   useEffect(() => {
@@ -232,22 +243,7 @@ function Requirement(props) {
   
   function performInspection() {
     setLoader(true);
-    if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      console.log("in if");
-      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        FlatrequireMents();
-        openModal();
-        window.open("/" , "_self");
-      } else {
-        window.open("/" , "_self");
-      }
-    } else {
-      console.log("in else");
-      FlatrequireMents();
-      setLoader(false);
-      setProgress("inventory");
-    }
-   
+    FlatrequireMents();
   }
   return (
       <div className="requirements-section-1">

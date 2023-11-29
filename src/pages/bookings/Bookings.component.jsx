@@ -18,17 +18,22 @@ function Bookings({}) {
   let identifier = sessionStorage.getItem('identifier');
   
   const getBooking=async()=>{
-    const bookingDataE=await getUserBookingFromBackend(identifier);
+    if(identifier) {
+      
+      const bookingDataE=await getUserBookingFromBackend(identifier);
 
-    if(bookingDataE.type === 'servererror'){
-      alert("Please Try later!");
-      window.open("/", "_self");
-    } else if (bookingDataE.type === 'invalidToken') {
-      alert("Please Try later!");
-      performLogout();
+      if(bookingDataE.type === 'serverError'){
+        alert("Please Try later!");
+        window.open("/", "_self");
+      } else if (bookingDataE?.type === 'invalidToken') {
+        alert("Please Try later!");
+        performLogout();
+      } else {
+        const bookingData = authmiddleware.decryptData(bookingDataE);
+        setBookingDatas(bookingData);
+      }
     } else {
-      const bookingData = authmiddleware.decryptData(bookingDataE);
-      setBookingDatas(bookingData);
+      performLogout();
     }
   }
 

@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Popper from 'popper.js';
 import Edit from "../../images/location-edit.svg";
 import { getUserInfoFromBackend, updateUserInfoToBackend } from "../../API/apicalls";
+import { performLogout } from "../../components/FillRequirements/Requirement.component";
+import authmiddleware from "../../authmiddleware";
 
 function EditProfile(props) {
   const [profileImg, setProfileImg] = useState(DefaultImg);
@@ -20,36 +22,60 @@ function EditProfile(props) {
   let identifier = sessionStorage.getItem('identifier');
 
   const handleUpdataProfile=async()=>{
-    try{
-    const updateUserInfoResponse=await updateUserInfoToBackend({firstName,lastName,email,phoneNumber});
-    setDisabled(!disabled)
-    }
-    catch(err){
-      console.debug(err)
-      window.alert("User Data save error. Please re-try")
+    console.log(firstName,lastName,email,identifier);
+    if(identifier) {
+      try{
+      const updateUserInfoResponse=await updateUserInfoToBackend({firstName,lastName,email,identifier});
+      if (updateUserInfoResponse === 'updated') {
+        alert("Profile updated Successfully");
+      } else {
+        alert("Something went wrong, please try later!");
+        performLogout();
+      }
+      setDisabled(!disabled)
+      }
+      catch(err){
+        window.alert("User Data save error. Please re-try");
+      }
+
+    } else {
+      performLogout();
     }
   }
 
-  const getUserInfo=async()=>{
-    try{
-    const userInfoResponse=await getUserInfoFromBackend(identifier);
-    console.log(userInfoResponse , "data from ");
-    let{user_f_name,user_l_name,user_email,user_mobile}=userInfoResponse[0];
-    setFirstName(user_f_name);
-    setlastName(user_l_name);
-    setEmail(user_email);
-    setPhoneNumber(user_mobile)
-    }
-    catch (err){
-      console.debug(err)
-      window.alert("User Data fetch error. Please re-try")
-    }
-  }
+  const getUserInfo = async () => {
+    try {
+      const userInfoResponse = await getUserInfoFromBackend(identifier);
+  
+      if(userInfoResponse?.type === 'serverError') {
+        alert("Please Try later!");
+      } else if (userInfoResponse?.type === 'invalidToken') {
+        alert("Please Try later!");
+        performLogout();
+      } else {
+        const bookingData = authmiddleware.decryptData(userInfoResponse);
+        const { user_f_name, user_l_name, user_email, user_mobile } = bookingData[0];
+        setFirstName(user_f_name);
+        setlastName(user_l_name);
+        setEmail(user_email);
+        setPhoneNumber(user_mobile);
+      }
 
-  useEffect(()=>{
+    } catch (err) {
+      console.error(err);
+      window.alert("User Data fetch error. Please re-try");
+    }
+  };
+  
+  useEffect(() => {
+    
+    if(identifier) {
     getUserInfo();
-  },[])
-
+    }
+    else {
+      performLogout();
+    }
+  }, []);
 
   return (
     <>

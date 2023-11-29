@@ -104,7 +104,7 @@ export const sendFinalItemsToBackend = async (data) => {
   }
 };
 
-export const getUserInfoFromBackend = async (data , phone) => {
+export const getUserInfoFromBackend = async (data) => {
   try {
     const response = await instance.get('/getUserInfo', { params: {id :data} });
     return response.data;
@@ -114,8 +114,10 @@ export const getUserInfoFromBackend = async (data , phone) => {
 };
 
 export const updateUserInfoToBackend = async (data) => {
+  
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.put('/updateUser', data);
+    const response = await instance.put('/updateUser',{ encData });
     return response.data;
   } catch (error) {
     throw error;

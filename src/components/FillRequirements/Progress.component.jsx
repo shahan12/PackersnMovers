@@ -28,46 +28,52 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
+  let identifier = sessionStorage.getItem('identifier');
+  let orderSessionId = sessionStorage.getItem('orderSessionId');
+  let token = sessionStorage.getItem('token');
 
   const fetchPaymentURL = async () => {
     let fullPayment=1;
     
     let savedOrderID = sessionStorage.getItem('orderID');
-    let identifier = sessionStorage.getItem('identifier');
-    let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID}); //url
-
+    let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID, orderSessionId}); //url
+    
+    // sessionStorage.removeItem('orderSessionId');
     if(paymentResponse.type === 'URLResponseError'){
-      alert("Server Error, Your Order is completed, please try payment in your bookings again later to finalize your Order!");
+      alert("We are facing some server error in payment gateway! but your Order is completed, please try payments in your bookings again later to finalize your Order!");
       window.open("/bookings", "_self");
     } else if (paymentResponse.type === 'invalidToken') {
-      alert("Please Try later!");
+      alert("Please Login Again!");
       performLogout();
     } else {
       let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);
       sessionStorage.setItem('merID', merID);
-      window.open(paymentURL , "_self");
+      window.open(paymentURL);
     }
   }
 
   const bookingConfirm = async () => {
-    const savedIdentifier = sessionStorage.getItem('identifier');
 
-    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": savedIdentifier};
-    const response=await sendFinalItemsToBackend(API_DATA);
-
-    if (response.type === "invalidToken") {
-      setLoader(false);
-      alert("Fishy");
-      performLogout();
-    } else if (response.type === "not found") {
-      setLoader(false);
-      alert("Server Error, please try later!");
-      performLogout();
+    if(orderSessionId && identifier && token) {
+      const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": identifier, "orderSessionId": orderSessionId};
+      const response=await sendFinalItemsToBackend(API_DATA);
+      console.log("inventory response", response);
+      if (response.type === "invalidToken") {
+        setLoader(false);
+        alert("Please Login Again!");
+        performLogout();
+      } else if (response.type === "failed") {
+        setLoader(false);
+        alert("Server Error, please try later!");
+        performLogout();
+      } else {
+        setLoader(false);
+        sessionStorage.setItem('orderID', response);
+        fetchPaymentURL();
+      }
     } else {
-      setLoader(false);
-      sessionStorage.setItem('orderID', response);
-      //orderId
-      fetchPaymentURL();
+      alert("Please Login Again!");
+      performLogout();
     }
   };
 
@@ -131,14 +137,14 @@ const Progress = ({ progress, setProgress }) => {
         <div className="prevButton" onClick={prev}>
           &lt; Previous
         </div>
-        {loader ? (
+        {/* {loader ? (
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
-    
+     */}
           <button className="cta-button" onClick={()=>{bookingConfirm() ; setLoader(true);}}>
             Confirm Booking
           </button>
-        )}
+        {/* )} */}
       </div>
     </div>
   );
