@@ -13,7 +13,6 @@ const axios = require('axios');
 const hash = crypto.createHash('sha256');
 const jwt = require('jsonwebtoken');
 const { log } = require('console');
-const e = require('express');
 // const base64json = require('base64json');
 var app = express();
 
@@ -69,6 +68,24 @@ function getLast4Digitmobile(mobile) {
         return mobile.slice(-4);
     }
 }
+
+/**
+ * Circular Stringify
+ */
+
+function circularReplacer() {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return; // If circular reference, return undefined
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  }
+
 app.post(`/api/login`, (req, res) => {                                                          //// DONE
     const token = req.headers.authorization.split(' ')[1];
 
@@ -165,7 +182,6 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                     var q13 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobileNumber + "'";
                     con.query(q13, (error, result) => {
                         if (error) throw error;
-                        console.log("ADDITIONAL BOXES: ", additionalBox);
                     });
                     res.status(200).json(additionalBox);
                 });
@@ -183,11 +199,15 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
                 
                 console.log("User Order ID: ", orderID);
+                var q27 = "UPDATE userInfo SET house_type = '" + houseType + "' , family_type='" + familyType + "' WHERE user_mobile = '" + mobileNumber + "'";
+                    con.query(q27, (error, result) => {
+                        if (error) throw error;
+                        console.log("ADDITIONAL BOXES: ", additionalBox);
+                    });
                 q26 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile) VALUES ('" + null + "','" + currentDate1 + "','" + null + "', '" + null + "', '" + orderID + "', '" + currentDate + "', '" + 0 + "' ,'" + 0 + "','" + mobileNumber + "' )";
                 con.query(q26, (error, result) => {
                     if (error) throw error;
                     else{
-                    console.log("Inventory Succefully Added order ID generated: " , orderID);
                     }
                 })
                 res.status(200).json(additionalBox);
@@ -558,7 +578,7 @@ var addons = {
     }
 }
 
-app.get(`/api/myBooking`, (req, res) => {
+app.post(`/api/myBooking`, (req, res) => {
 
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
@@ -641,7 +661,6 @@ app.post(`/api/inventory`, (req, res) => {
         let identifier = req.body.mobile;
         const mobile = authmiddleware.decryptIdentifier(identifier);
 
-        console.log("All Inventory Data: ", req.body);
 
         var addons = JSON.stringify(req.body.addons);
         var user_inventory = JSON.stringify(req.body.user_inventory);
@@ -657,7 +676,6 @@ app.post(`/api/inventory`, (req, res) => {
         orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
         
         const encOrderID = authmiddleware.encryptData(orderID);
-        console.log("User Order ID: ", orderID);
         let value = req.body.totalCost.totalBox;
         if (isNaN(value) || value === undefined) {
             value = 0;
@@ -666,7 +684,6 @@ app.post(`/api/inventory`, (req, res) => {
 
         con.query(q21, (error, result) => {
             if (error) throw error;
-            console.log("Inventory Succefully Added order ID generated: ", encOrderID);
             res.send(encOrderID);
         })
     }
@@ -792,27 +809,24 @@ app.post(`/api/payment`, async (req, res) => {
             "type": "PAY_PAGE"
         }
     }
-    console.log("merchant tarnsaction :",merchantTransaction)
-    console.log("merchant user id :",merchantUser)
-    console.log("payment amount :",paymentAmount*100);
-
     const paymentAPI = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
 
     let paymentDataBase64 = btoa(JSON.stringify(paymentData,null,1));
     let paymentDataBase64Xverify = paymentDataBase64 + "/pg/v1/pay" + salt.key;
-    let xverify = hash.sha256().update(paymentDataBase64Xverify).digest('hex');
+    let xverify = hash.update(paymentDataBase64Xverify).digest('hex');
+    let payRes=""
     xverify += "###1";
-    const paymentres = await axios.post(paymentAPI, { request: paymentDataBase64 }, {
+    let paymentres = await axios.post(paymentAPI, { request: paymentDataBase64 }, {
         headers: {
             'Content-Type': 'application/json',
             'X-VERIFY': xverify
         }
-    });
+    })
+    payRes = JSON.stringify(paymentres.data , circularReplacer())
     let isSuccess = paymentres.data.success;
     if (isSuccess) {
         const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
-        console.log("Pay API Complete Response: ",paymentURL);
-        q23 = "UPDATE INTO inventorydata SET payment_url_response = '"+ paymentres.data+"' WHERE user_mobile = '"+mobileNumber +"'  AND order_id =  '"+OrderID +"' ";
+        q23 = "UPDATE inventorydata SET initial_payment_response = '"+ payRes+"' WHERE user_mobile = '"+ mobileNumber +"'  AND order_id =  '"+ OrderID +"' ";
         con.query(q23, (error,result)=>{
             if(error) throw error;
         });
@@ -829,7 +843,7 @@ app.post(`/api/payment`, async (req, res) => {
 });
 
 app.post("/api/checkPaymentStatus", async (req, res) => {
-
+    console.log('In check Paymnt');
     const token = req.headers.authorization.split(' ')[1];
     let  decoded = authmiddleware.verifyToken(token);
     if (decoded) {
@@ -837,10 +851,16 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
     
     const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
     const mobileNumber = authmiddleware.decryptIdentifier(identifier , "/checkPaymentStatus");
+    console.log('In check Paymnt value' , OrderID , mobileNumber , merTID);
 
     const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${merTID}`;
     console.log("Merchant Transaction ID in checkPaymentStatus API: ", merTID );
-    let xverify = hash.sha256("pg/v1/status/{process.env.MerchantID}/{merTID}" + process.env.SALT_KEY) + "###" + process.env.SALT_KEY_INDEX;
+    let xverify = hash.update(`pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`) + "###" + process.env.SALT_KEY_INDEX;
+
+    console.log(checkStatusAPi , "checkStatusAPi");
+    // let concatenatedString = `pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`;
+    // let xverify = hash.update(concatenatedString).digest('hex') + "###" + process.env.SALT_KEY_INDEX;
+
     let paymentStatus = await axios.post(checkStatusAPi, {
         headers: {
             'Content-Type': 'application/json',

@@ -30,21 +30,21 @@ function verifyToken(token) {
 }
 
 function decryptIdentifier(token , callName) {
-    console.log("token 111", token , "Place" , callName);
+    // console.log("token 111", token , "Place" , callName);
     const decoded = CryptoJS.AES.decrypt(token, Secretkey_Identifier);
     const decryptedData = decoded.toString(CryptoJS.enc.Utf8);
-    console.log("decryptedData", JSON.parse(decryptedData));
+    // console.log("decryptedData", JSON.parse(decryptedData));
     return JSON.parse(decryptedData);
 }
 
 function encryptData(payload) {
-    console.log("data", payload, secretKey);
+    // console.log("data", payload, Secretkey_Identifier);
     const data = CryptoJS.AES.encrypt(
       JSON.stringify(payload),
-      secretKey
+      Secretkey_Identifier
     ).toString();
 
-    console.log("data", data);
+    // console.log("data", data);
     return data;
   };
   
