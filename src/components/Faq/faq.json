@@ -11,10 +11,6 @@
     {
       "header1": "Can I customize the services offered by ShiftKart.com according to my specific needs?",
       "data": "Absolutely! ShiftKart.com understands that every move is unique. They offer customized solutions to tailor their services to your specific requirements, ensuring a personalized and efficient moving experience."
-    },
-    {
-      "header1": "Does ShiftKart.com have a track record of timely deliveries?",
-      "data": "Yes, ShiftKart.com has a proven track record of timely deliveries. Punctuality and reliability are key priorities for the company, ensuring that your belongings reach their destination on schedule."
     }
     
   ],
@@ -30,6 +26,10 @@
     {
       "header1": "Are there any hidden charges in ShiftKart.com's pricing?",
       "data": "No, ShiftKart.com is transparent about its pricing, and there are no hidden charges."
+    },
+    {
+      "header1": "Does ShiftKart.com have a track record of timely deliveries?",
+      "data": "Yes, ShiftKart.com has a proven track record of timely deliveries. Punctuality and reliability are key priorities for the company, ensuring that your belongings reach their destination on schedule."
     }
   ]
 }
