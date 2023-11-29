@@ -7,16 +7,15 @@ import { performLogout } from "../../components/FillRequirements/Requirement.com
 
 function Payments(props) {
 
-  useEffect(() => {
   const paymentResponseSync = async () => {
-
+    
     let savedOrderID = sessionStorage.getItem('orderID');
     let identifier = sessionStorage.getItem('identifier');
     let merTID = sessionStorage.getItem('merID');
 
+    console.log("payment page ");
     const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID});
 
-    console.log("payment page ", paymentResponse);
     if(paymentResponse.type === 'success'){
       window.open("/bookings", "_self");
     } else if (paymentResponse.type === 'invalidToken') {
@@ -28,6 +27,8 @@ function Payments(props) {
     window.open("/bookings", "_self");
   };
 
+
+  useEffect(() => {
   paymentResponseSync();
 }, []);
 

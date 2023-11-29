@@ -43,29 +43,31 @@ const Progress = ({ progress, setProgress }) => {
       alert("Please Try later!");
       performLogout();
     } else {
-      let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptIdentifier(paymentResponse);
+      let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);
       sessionStorage.setItem('merID', merID);
-      window.open(paymentURL);
+      window.open(paymentURL , "_self");
     }
   }
 
   const bookingConfirm = async () => {
-    setLoader(true);
     const savedIdentifier = sessionStorage.getItem('identifier');
 
     const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": savedIdentifier};
     const response=await sendFinalItemsToBackend(API_DATA);
 
     if (response.type === "invalidToken") {
+      setLoader(false);
       alert("Fishy");
       performLogout();
     } else if (response.type === "not found") {
+      setLoader(false);
       alert("Server Error, please try later!");
       performLogout();
     } else {
+      setLoader(false);
       sessionStorage.setItem('orderID', response);
       //orderId
-      // fetchPaymentURL();
+      fetchPaymentURL();
     }
   };
 
@@ -132,7 +134,8 @@ const Progress = ({ progress, setProgress }) => {
         {loader ? (
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
-          <button className="cta-button" onClick={bookingConfirm}>
+    
+          <button className="cta-button" onClick={()=>{bookingConfirm() ; setLoader(true);}}>
             Confirm Booking
           </button>
         )}

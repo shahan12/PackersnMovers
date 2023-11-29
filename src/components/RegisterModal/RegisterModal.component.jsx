@@ -13,6 +13,7 @@ import {
 } from "../../API/apicalls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { performLogout } from "../FillRequirements/Requirement.component";
 const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
@@ -37,18 +38,34 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const handleLogin = async () => {
     try {
       const savedToken = sessionStorage.getItem('token');
+      sessionStorage.setItem('loggedIn',savedToken);
       console.log(savedToken, "savedToken");
+      const response = await sendLoginRequestToBackend(phoneNumber);
+      console.log(response, "handleLogin response");
+      
       if(savedToken) {
-        
-        const response = await sendLoginRequestToBackend(phoneNumber);
-        console.log("savedToken response", response);
-        if (response === "Login Sucessfull...") {
-         
+
+        if(response?.type==='invalidToken') {
+          alert("Token Invalid, please refresh your page and try again");
+          performLogout();
+        }
+        else if(response?.type==='serverError') {
+          alert("Server Error!");
+          performLogout();
+        } 
+        else if (response?.type==='success'){
+          console.log('success', response);
+          sessionStorage.setItem("orderSessionId", response.data);
           window.open("/fill-details", "_self");
+        } else {
+          performLogout();
         }
-        if (response === "Mismatched data...") {
-          alert("Fishy");
-        }
+        
+
+      }
+      else {
+        console.log("Logging Out!");
+        performLogout();
       }
 
     } catch (error) {
@@ -67,13 +84,14 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     e.preventDefault();
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
-
-      if (resp.type === 'success') {
+      console.log("sendOTP",resp, resp.token );
+      if (resp?.token) {
         sessionStorage.setItem('token', resp.token);
         setOtpPage(true);
-      } else if (resp.type === "fail") {
+      } else if (resp.type === "failed") {
         alert("Server Error, Please Try later!");
         console.log('Failed');
+        performLogout();
       }
     } catch (error) {
       alert(error.message)
@@ -85,12 +103,16 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const verifyOTP=async()=>{
     console.log("otp typed : ", OTP);
     const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
+    console.log("verifyOTP",resp );
     console.log(resp);
-    if(resp.type==='invalidToken') {
+
+    if(resp?.type==='invalidToken') {
       alert("Token Invalid, please refresh your page and try again");
+      performLogout();
     }
-    if(resp.type==='error') {
+    if(resp?.type==='serverError') {
       alert("Please refresh your page and try again!");
+      performLogout();
     }
     else{
       const encData = authmiddleware.encryptData(phoneNumber);

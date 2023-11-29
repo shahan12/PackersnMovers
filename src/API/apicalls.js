@@ -43,10 +43,8 @@ export const sendOTPRequestToBackend = async (data) => {
   try {
     const response = await instance.post('/sendOTP', { identifier: encData });
     if (response ) {
-      console.log(response && response.data && response.data.type === 'sucess', 'resp');
-      sessionStorage.setItem('token', response.data.token);
+      return response.data;
     }
-    return response.data;
   } catch (error) {
     alert(error.message)
     return error
@@ -58,24 +56,20 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
   const encData = authmiddleware.encryptData(data);
   try {
     const response = await instance.post('/verifyOTP', { encData });
-    console.log("otp verify response",response);
     return response.data;
   } catch (error) {
     console.error(error);
-    throw error;
   }
 };
 
 export const sendLoginRequestToBackend = async (data) => {
-  const savedToken = sessionStorage.getItem('token');
-  console.log(savedToken, "savedToken");
   const encData = authmiddleware.encryptData(data);
   try {
       const response = await instance.post('/login', { encData });
-      window.sessionStorage.setItem("loggedIn", savedToken);
+      console.log(response, response.data,"handleLogin response");
       return response.data;
   } catch (error) {
-      handleApiError(error);
+      console.error(error);
   }
 };
 
@@ -103,7 +97,7 @@ export const sendTotalBoxRequestToBackend = async (data) => {
 
 export const sendFinalItemsToBackend = async (data) => {
   try {
-    const response = await instance.put('/inventory', data);
+    const response = await instance.post('/inventory', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -130,7 +124,7 @@ export const updateUserInfoToBackend = async (data) => {
 
 export const getUserBookingFromBackend = async (data) => {
   try {
-    const response = await instance.get('/myBooking', {data : data});
+    const response = await instance.post('/myBooking', {data : data});
     return response.data;
   } catch (error) {
     throw error;

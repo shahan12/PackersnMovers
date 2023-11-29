@@ -22,9 +22,7 @@ import ThankYouModal from "../ThankYouModal/thankYouModal.component";
 import loaderIcon from '../../images/loader.gif';
 
 export const  performLogout = ()=> {
-    sessionStorage.removeItem("loggedIn");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("identifier");
+    sessionStorage.clear();
     window.open("/", "_self");
 }
 
@@ -99,6 +97,7 @@ function Requirement(props) {
 
 
 
+  const orderSessionId = sessionStorage.getItem('orderSessionId');
   const FlatrequireMents = async () => {
     const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
@@ -121,6 +120,7 @@ function Requirement(props) {
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
       "phoneNumber":savedIdentifier,
+      orderSessionId,
       distance, fromAddress, toAddress            //use this distance
   }
       const {phoneNumber: num, ...remainingInfo}=newRequirementData;
@@ -145,41 +145,46 @@ function Requirement(props) {
   }
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
-    setLoader(false)
+    setLoader(false);
     try {
-      const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      if (basePriceResponse.type === "invalidToken") {
-        alert("Session Timed Out , Please Re Login!");
-        performLogout();
-      } else if (basePriceResponse.type === "not found") {
-        alert("Server Error, please try later!");
-        performLogout();
-      } else {
-        setBasePriceFromAPI(basePriceResponse);
-      }
+      if(orderSessionId) {
+        const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
+        if (basePriceResponse.type === "invalidToken") {
+          alert("Session Timed Out , Please Re Login!");
+          performLogout();
+        } else if (basePriceResponse.type === "not found") {
+          alert("Server Error, please try later!");
+          performLogout();
+        } else {
+          setBasePriceFromAPI(basePriceResponse);
+        }
 
-      let floorChargeResponse = 0;
-      if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
-      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
-      
-      if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
-      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
-      setFloorChargeFromAPI(floorChargeResponse);
-      
-      const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-      setLoader(false)
-      if (totalBoxResponse.type === "invalidToken") {
-        alert("Fishy");
-        performLogout();
-      } else if (totalBoxResponse.type === "not found") {
-        alert("Server Error, please try later!");
-        performLogout();
-      } else {
-        setBasePriceFromAPI(totalBoxResponse);
-      }
-      setTotalBoxFromAPI(totalBoxResponse);
+        let floorChargeResponse = 0;
+        if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
+        floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
+        
+        if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
+        floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
+        setFloorChargeFromAPI(floorChargeResponse);
+        
+        const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
+        setLoader(false)
+        if (totalBoxResponse.type === "invalidToken") {
+          alert("Fishy");
+          performLogout();
+        } else if (totalBoxResponse.type === "not found") {
+          alert("Server Error, please try later!");
+          performLogout();
+        } else {
+          setBasePriceFromAPI(totalBoxResponse);
+        }
+        setTotalBoxFromAPI(totalBoxResponse);
 
-      saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
+        saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
+      }
+      else {
+        performLogout();
+      }
     } catch (error) {
       if(error.response.type == 'invalidToken'){
       alert("Session Timed Out , Please Re Login!");
@@ -232,13 +237,15 @@ function Requirement(props) {
       if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
         FlatrequireMents();
         openModal();
+        window.open("/" , "_self");
       } else {
-        window.open("/" , "_self")
+        window.open("/" , "_self");
       }
     } else {
       console.log("in else");
       FlatrequireMents();
-      setProgress("inventory")
+      setLoader(false);
+      setProgress("inventory");
     }
    
   }
@@ -389,28 +396,32 @@ function Requirement(props) {
             </div>
           </div>
         </div>
-         
+        {loader ? (
         <div className="fill-req-CTA-container flex">
-            <div className='prevButton'></div><button
-              disabled={
-                !familyType ||
-                !houseType ||
-                !familyNumber ||
-                !floorNumber ||
-                !liftValue ||
-                !movingFloorNumber ||
-                !movingToLiftValue ||
-                !fromAddress ||
-                !toAddress ||
-                !distance
-              }
-              className="cta-button"
-              onClick={performInspection}
-            >
-            {loader ? <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" /> :<span>Next</span>}
-          </button>
+          <img style={{width: '2rem'}} src={loaderIcon} alt="loader" />
         </div>
-      
+          ) : (
+          <div className="fill-req-CTA-container flex">
+              <div className='prevButton'></div>
+              <button
+                disabled={
+                  !familyType ||
+                  !houseType ||
+                  !familyNumber ||
+                  !floorNumber ||
+                  !liftValue ||
+                  !movingFloorNumber ||
+                  !movingToLiftValue ||
+                  !fromAddress ||
+                  !toAddress ||
+                  !distance
+                }
+                className="cta-button"
+                onClick={performInspection}
+              >Next
+            </button>
+          </div>
+        )}
     </div>
   );
 }
