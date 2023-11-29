@@ -129,18 +129,20 @@ app.post(`/api/login`, (req, res) => {                                          
                         // res.json({token});
                     });
                 }
-                res.status(200).json({ type: 'success', message: 'Login Sucessfull...', data: orderSessionId });
+                
+                res.json({ type: 'success', message: 'Login Sucessfull...', data: orderSessionId }).status(200);
+                
 
             });
         }
         catch (error) {
             console.error(error.message);
-            res.status(200).json({ type: 'serverError', message: 'Server Error' });
+            res.json({ type: 'serverError', message: 'Server Error' }).status(200);
 
         }
     } else {
         // Token verification failed
-        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
+        res.json({ type: 'invalidToken', message: 'Invalid token' }).status(200);
     }
 });
 
@@ -181,8 +183,13 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
             const mobileNumber = authmiddleware.decryptIdentifier(identifier);
             const orderSessionId = req.body.orderSessionId;
 
-            var q13 = "UPDATE userInfo SET from_address = '"+ fromAdd+"', to_address = '"+ toAdd+"', from_floor = '"+fromFloorNum +"', to_floor = '"+ toFloorNum+"', from_lift = '"+fromLift+"', to_lift = '"+tolift+"', family_type = '"+familyType+"', house_type = '"+ houseType+"' WHERE user_mobile = '"+ mobileNumber+"' AND order_session_id = '"+orderSessionId +"' ";
+            var q13 = "UPDATE userInfo SET from_address = '"+ fromAdd+"', to_address = '"+ toAdd+"', from_floor = '"+fromFloorNum +"' "+
+            ", to_floor = '"+ toFloorNum+"', from_lift = '"+fromLift+"', to_lift = '"+tolift+"', family_type = '"+familyType+"', house_type = '"+ houseType+"' "+
+            ", total_distance= '"+totalDistance+"'  WHERE user_mobile = '"+ mobileNumber+"' AND order_session_id = '"+orderSessionId +"' ";
 
+            con.query(q13, (error, result) => {
+                if (error) throw error;
+            });
             if (houseTypes.includes(req.body.houseType)) {
                 console.log("in if")
                 var q10 = "SELECT boxes_qty FROM boxfixedprice WHERE family_type = '" + familyType + "' AND house_type = '" + houseType + "'";
@@ -198,19 +205,13 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                     else {
                         additionalBox = 0;
                     }
-               
-                    con.query(q13, (error, result) => {
-                    if (error) throw error;
-                });
-                    con.query(q13, (error, result) => {
-                        if (error) throw error;
-                    });
-                    res.status(200).json(additionalBox);
+                    
+                    res.json(additionalBox).status(200);
                 });
             }
             else {
                 console.log("in else");
-                additionalBox = 0
+                additionalBox = 0;
                 let orderID;
                 const prefix = 'SK';
                 const currentDate = getCurrentDate()
@@ -221,23 +222,28 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
 
                 console.log("User Order ID: ", orderID);
-                if(!valuesExist)
-                var q27 = "UPDATE inventorydata SET order_id = '"+orderID+"' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '"+ orderSessionId+"' ";
+                var q27 = "BEGIN ;" +
+                        "UPDATE userinfo SET order_id = '"+orderID+"' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '"+ orderSessionId+"' ;" +
+                        "UPDATE inventorydata SET order_id = '"+orderID+"' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '"+ orderSessionId+"'; "+
+                        "COMMIT ;" ;
                 con.query(q27, (error, result) => {
                     if (error) throw error;
                     console.log("ADDITIONAL BOXES IF FOR OFFICE/VILLAS/ETC : ", additionalBox);
+                    
+                    res.json(additionalBox).status(200);
                 });
-                res.status(200).json(additionalBox);
+                
             }
         }
+        
         catch (error) {
 
             console.error(error.message);
-            return res.status(200).json({ type: 'not found', message: 'Invalid' }); // added
+            return res.status(200).json({ type: 'serverError', message: 'Server Error' }); // added
         }
     } else {
         // Token verification failed
-        res.status(200).json({ type: 'error', message: 'Invalid token' });
+        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
@@ -248,7 +254,8 @@ app.put(`/api/basePrice`, (req, res) => {
     if (decoded) {
         try {
             var totalDistance = Math.round(parseFloat(req.body.distance));
-            var houseType = req.body.houseType.replace(' ', '').toLowerCase();
+            var houseType = req.body.houseType.replace(' ', '').toLowerCase()
+            console.log("House Type: ",houseType, totalDistance);
 
             if (houseType == "1rk") {
                 if (totalDistance <= 5) {
@@ -462,7 +469,6 @@ app.put(`/api/basePrice`, (req, res) => {
                 }
             }
             else basePrice = 0;
-            res.setHeader('Content-Type', 'application/json');
             res.json(basePrice).status(200);
         }
         catch (error) {
@@ -488,52 +494,29 @@ const storage = multer({
     })
 }).single("profile");
 
-app.put(`/api/saveUserInfo`, storage, (req, res) => {
-
-    const token = req.headers.authorization.split(' ')[1];
-    let decoded = authmiddleware.verifyToken(token);
-    if (decoded) {
-        try {
-            var fName = req.body.fName;
-            var lName = req.body.lName;
-            var email = req.body.email;
-            var profile = req.file.path;
-
-            var q3 = "UPDATE userprofile  SET user_f_name='" + fName + "', user_l_name= '" + lName + "', user_email='" + email + "',user_profile='" + profile + "' WHERE user_mobile='" + global.mobile + "'";
-
-            con.query(q3, (error, result) => {
-                if (error) throw error;
-                console.log("User Data uploded sucessfully");
-                res.send(result.rows);
-            });
-        }
-        catch (error) {
-            console.log(error.messaege);
-        }
-    } else {
-        // Token verification failed
-        res.status(200).json({ type: 'error', message: 'Invalid token' });
-    }
-});
-
 app.get(`/api/getUserInfo`, (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
+        
+        const mobileNumber = authmiddleware.decryptIdentifier(req.query.id);
         try {
             var q4 = "SELECT * FROM " +
-                "userInfo WHERE user_mobile = '" + decoded.mobileNumber + "'";
+                "userprofile WHERE user_mobile = '" + mobileNumber + "'";
             con.query(q4, (err, result) => {
                 if (err) throw err;
-                res.send(result.rows);
+                let books = result.rows;
+                const ebooks = authmiddleware.encryptData(books);
+                res.send(ebooks);
             });
         }
         catch (error) {
+            res.status(200).json({ type: 'serverError', message: 'server Error' });
             console.error(error.messaege);
         }
     } else {
         // Token verification failed
-        res.status(200).json({ type: 'error', message: 'Invalid token' });
+        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
@@ -607,7 +590,7 @@ app.post(`/api/myBooking`, (req, res) => {
                     const ebooks = authmiddleware.encryptData(books);
                     res.send(ebooks);
                 }
-                else res.status(200).json({ type: 'servererror', message: 'Internal server Error!' });
+                else res.status(200).json({ type: 'serverError', message: 'Internal server Error!' });
             });
         }
         catch (error) {
@@ -635,19 +618,15 @@ app.put(`/api/updateUser`, updateProfile, (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
+        let { firstName: fName, lastName: lName, email: email, identifier: identifier } = authmiddleware.decryptIdentifier(req.body.encData);
+        const mobileNumber = authmiddleware.decryptIdentifier(identifier);
         try {
-            var fName = req.body.firstName;
-            var lName = req.body.lastName;
-            var email = req.body.email;
-            var phone = req.body.phoneNumber
-            console.log(phone, "phone");
             var profile = "";
             var q5 = "UPDATE userprofile SET user_f_name = '" + fName + "', user_l_name='" + lName + "', user_email='" + email + "'," +
-                "user_profile='" + profile + "' WHERE  user_mobile = '" + phone + "'";
+                "user_profile='" + profile + "' WHERE  user_mobile = '" + mobileNumber + "'";
             con.query(q5, (err, result) => {
                 if (err) throw err;
-                console.log("User Mobile Number in Update User API: ", phone);
-                res.send("Rows updated" + result.rows);
+                res.json("updated").status(200);
             });
         }
         catch (error) {
@@ -655,7 +634,7 @@ app.put(`/api/updateUser`, updateProfile, (req, res) => {
         }
     } else {
         // Token verification failed
-        res.status(200).json({ type: 'error', message: 'Invalid token' });
+        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
@@ -671,7 +650,10 @@ app.post(`/api/inventory`, (req, res) => {
 
             var addons = JSON.stringify(req.body.addons);
             var user_inventory = JSON.stringify(req.body.user_inventory);
-
+            var dataTime = JSON.stringify(req.body.dataTime);
+            var totalCost = JSON.stringify(req.body.totalCost);
+            var orderSessionID = req.body.orderSessionId;
+            console.log("inventory",mobile,orderSessionID);
             // Concatenate the components to create the order ID
             let orderID;
             const prefix = 'SK';
@@ -684,25 +666,46 @@ app.post(`/api/inventory`, (req, res) => {
 
             const encOrderID = authmiddleware.encryptData(orderID);
             let value = req.body.totalCost.totalBox;
+            console.log(encOrderID, "new", orderSessionID, )
             if (isNaN(value) || value === undefined) {
                 value = 0;
             }
-            q21 = "INSERT INTO inventoryData (user_inventory, book_date, book_slot_time, addons,order_id, user_current_date, additional_box ,total_items, user_mobile)" +
-                "SELECT ('" + user_inventory + "','" + req.body.dataTime.selectedDay.bookingDate + "','" + req.body.dataTime.selectedTime.label + "', '" + addons + "', '" + global.orderID + "', '" + currentDate + "', '" + value + "' ,'" + req.body.totalCost.totalItemCount + "','" + req.body.mobile + "' )" +
-                "WHERE EXISTS (SELECT user_mobile FROM inventoryData WHERE user_mobile = '" + mobile + "')";
+            
+            var q21 = "UPDATE inventoryData SET user_inventory = '" + user_inventory + "', book_date = '" + req.body.dataTime.selectedDay.bookingDate + "', total_cost = '" + totalCost + "', book_slot_time = '" + req.body.dataTime.selectedTime.label + "', addons = '" + addons + "', order_id = '" + orderID + "', user_current_date = '" + currentDate + "', additional_box = '" + value + "', total_items = '" + req.body.totalCost.totalItemCount + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
+          
 
-            con.query(q21, (error, result) => {
-                if (error) throw error;
-                res.send(encOrderID);
-            })
+          con.query(q21, (error, result) => {
+            if (error) {
+              throw error;
+            } else {
+              console.log(encOrderID,result.rows, "encOrderID");
+          
+              var q22 = "UPDATE userinfo SET order_id = '" + orderID + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
+          
+              con.query(q22, (error, result) => {
+                if (error) {
+                  throw error;
+                } else {
+                    console.log(result.rows, "res");
+                  // Additional logic or response if needed
+                  res.json(encOrderID).status(200);
+                }
+              });
+            }
+          });
+          
+
         }
 
         catch (error) {
+            res.status(200).json({ response: "Internal Server Error", type: "failed" });
+            console.log( "error");
             console.error(error.messaege);
         }
     } else {
         // Token verification failed
-        res.status(200).json({ type: 'token error', message: 'Invalid token' });
+            console.log( "new error");
+        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
     }
 });
 
@@ -794,7 +797,7 @@ app.post(`/api/payment`, async (req, res) => {
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
 
-        let { fullPayment: fullPayment, identifier: identifier, savedOrderID: savedOrderID } = authmiddleware.decryptIdentifier(req.body.encData);
+        let { fullPayment: fullPayment, identifier: identifier, savedOrderID: savedOrderID, orderSessionId: orderSessionId } = authmiddleware.decryptIdentifier(req.body.encData);
         const mobileNumber = authmiddleware.decryptIdentifier(identifier);
         const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
         const paymentAmount = fullPayment;
@@ -810,13 +813,13 @@ app.post(`/api/payment`, async (req, res) => {
         var minm4 = 1000; var maxm4 = 9999;
         let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
         let merchantPrefix = process.env.MerchantPrefix;
-        global.merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
-        let merID = global.merchantTransaction;
-        global.merchantUser = merchantPrefix + randomNumFour;
+        let merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
+        let merID = merchantTransaction;
+        let merchantUser = merchantPrefix + randomNumFour;
         const paymentData = {
             "merchantId": process.env.MerchantID,
-            "merchantTransactionId": global.merchantTransaction,
-            "merchantUserId": global.merchantUser,
+            "merchantTransactionId": merchantTransaction,
+            "merchantUserId": merchantUser,
             "amount": (paymentAmount * 100),
             "redirectUrl": "https://shiftkart.co/payments",
             "redirectMode": "REDIRECT",
@@ -843,10 +846,13 @@ app.post(`/api/payment`, async (req, res) => {
         let isSuccess = paymentres.data.success;
         if (isSuccess) {
             const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
-            q23 = "UPDATE inventorydata SET initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "'  AND order_id =  '" + OrderID + "' ";
+            q23 = "UPDATE inventorydata SET initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' AND order_session_id = '" + orderSessionId + "'";
+
+            // q23 = "UPDATE inventorydata SET initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "'  AND order_id =  '" + OrderID + "' ";
             con.query(q23, (error, result) => {
                 if (error) throw error;
             });
+            console.log("in payment", paymentURL, merID);
             const encOrderID = authmiddleware.encryptData({ paymentURL, merID });
             res.status(200).json(encOrderID);
         } else {
@@ -864,19 +870,31 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
-        let { savedOrderID: savedOrderID, identifier: identifier, merTID: merTID } = authmiddleware.decryptIdentifier(req.body.encData);
+        let { savedOrderID: savedOrderID, identifier: identifier, merTID: merTID, orderSessionId: orderSessionId } = authmiddleware.decryptIdentifier(req.body.encData);
 
         const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
         const mobileNumber = authmiddleware.decryptIdentifier(identifier, "/checkPaymentStatus");
         console.log('In check Paymnt value', OrderID, mobileNumber, merTID);
 
-        const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${merTID}`;
-        console.log("Merchant Transaction ID in checkPaymentStatus API: ", merTID);
-        let xverify = hash.update(`pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`) + "###" + process.env.SALT_KEY_INDEX;
+        const checkStatusAPi = `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MerchantID}/${merTID}`;          //old
 
-        console.log(checkStatusAPi, "checkStatusAPi");
+
+       //  const checkStatusAPi = `https://mercury-uat.phonepe.com/v3/transaction/${process.env.MerchantID}/${merTID}/status`;
+        
+        console.log("Merchant Transaction ID  URL ", checkStatusAPi);
+
+
+        // let xverify = hash.update(`pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`) + "###" + process.env.SALT_KEY_INDEX;
+
         // let concatenatedString = `pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`;
         // let xverify = hash.update(concatenatedString).digest('hex') + "###" + process.env.SALT_KEY_INDEX;
+
+
+        const dataToHash = `pg/v1/status/${process.env.MerchantID}/${merTID}${process.env.SALT_KEY}`;
+
+        const hashedData = hash.update(dataToHash);
+
+        const xverify = hashedData + "###" + process.env.SALT_KEY_INDEX;
 
         let paymentStatus = await axios.post(checkStatusAPi, {
             headers: {
@@ -885,6 +903,7 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
                 'X-MERCHANT-ID': process.env.MerchantID
             }
         });
+        console.log("Payment complete response: ", paymentStatus);
         let isSuccess = paymentStatus.data.success;
         if (isSuccess) {
             const paymentStatusD = paymentStatus.data;
@@ -896,7 +915,8 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
             con.query(q24, (error, result) => {
                 if (error)
                     throw error;
-                q25 = "INSERT INTO inventorydata (payment_url_response) VALUES ('" + paymentStatus + "')";
+                q25 = "UPDATE inventorydata SET payment_url_response = '" + paymentStatus + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' AND order_session_id = '" + orderSessionId + "'";
+
                 con.query(q25, (error, result) => {
                     if (error) throw error;
                 });
