@@ -1,12 +1,16 @@
 export const data1 = {
   para1:
-    "Professionalism is essential if your possessions are to be relocated, stored, and delivered on time in a safe manner. Shiftkart packers and movers services in Bangalore utilise a broad range of coordinated, useful, and constantly monitored physical and non-physical technology to ensure the security of your products at all times while they are in transit. You can be confident that your possessions will always be handled with care since we use cutting-edge technology to connect our moving facilities throughout the nation and the world.",
-
+    "ShiftKart.Com Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
   para2:
-    "Since shifting is seldom simple, Shiftkart Packers and Movers in Bangalore provides the assistance of skilled movers to make the process easier. You may count on us to be steadfast and trustworthy guiding friends. We are able to relocate and settle into a new place quickly because of our many distinctive advantages and cutting-edge methods. To meet your demands and guarantee that your move goes well, our staff will go above and beyond. Many people have benefited from the house shifting services in Bangalore provided by Shiftkart over the years, and they are all quite happy with it. We want to give our users the same spirit of adventure via these first-person accounts as we do whenever we travel.",
-
+    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart.Com is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
   para3:
-    "We also benefit from our industry-wide reputation for reliability and promptness while providing local packers and movers services in Bangalore. If the free trial and absurdly cheap prices for these services don't pique your curiosity, nothing will. There are a lot of people who have told us they would use us again if they needed a dependable packing and moving business. We've only recruited drivers and handlers with extensive expertise in the field to make sure your product arrives safely. We are certain that once you choose us, your search for a dependable packing and moving service will end.",
+    "ShiftKart Packers And Movers in Bangalore offer an exceptional service. Our process is streamlined: When we receive your enquiry our sales expert contact you and if required we send our Field Relationship Manager to inspect your location for free of cost. Once the inspection is done, our sales expert give you the best quotation compared to the market. Post this we take a nominal booking charges to confirm your booking and we assign a dedicated shifting manager to handle your movement from scratch to the end.",
+  para4:
+    "The main reason for us to be affordable is we have our own vehicles and individual offices spread all major cities of India which brings down our cost of operation inturn making our services much affordable to you.",
+  para5:
+    "We not only transport your belongings in high-quality packing materials we also use modern technologies to shift your belongings. Our insurance policy keeps you in peace of mind and your belongings safety. We always maintain our corporate standards which differentiates us from local packers and movers.",
+  para6:
+    "Customer satisfaction is our company’s motto. All our staff are exceptionally thrilled to serve you. From the time of booking to the time of delivery you are our first priority.",
 };
 
 export const data2 = [

@@ -11,6 +11,9 @@ function AboutUs({ isHomePage }) {
         <p className="about-us-para-text">{data1.para1}</p>
         <p className="about-us-para-text">{data1.para2}</p>
         <p className="about-us-para-text">{data1.para3}</p>
+        <p className="about-us-para-text">{data1.para4}</p>
+        <p className="about-us-para-text">{data1.para4}</p>
+        <p className="about-us-para-text">{data1.para6}</p>
       </div>
       <div className="about-us-setion-2">
         <h2 className="about-us-heading">
