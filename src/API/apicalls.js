@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { performLogout } from '../components/FillRequirements/Requirement.component';
 const authmiddleware = require('../authmiddleware');
 
 const instance = axios.create({
@@ -31,7 +32,9 @@ const handleApiError = (error) => {
       console.error('API Error Status:', error.response.status);
       console.error('API Error Data:', error.response.data);
   } else if (error.request) {
-      console.error('API No Response:', error.request);
+      performLogout();
+  } else if (error.code === 'ERR_NETWORK'){
+      performLogout();
   } else {
       console.error('API Request Setup Error:', error.message);
   }
@@ -46,8 +49,7 @@ export const sendOTPRequestToBackend = async (data) => {
       return response.data;
     }
   } catch (error) {
-    alert(error.message)
-    return error
+    handleApiError(error);
   }
 };
 
@@ -58,7 +60,7 @@ export const sendOTPVerifyRequestToBackend = async (data) => {
     const response = await instance.post('/verifyOTP', { encData });
     return response.data;
   } catch (error) {
-    console.error(error);
+    handleApiError(error);
   }
 };
 
@@ -69,7 +71,7 @@ export const sendLoginRequestToBackend = async (data) => {
       console.log(response, response.data,"handleLogin response");
       return response.data;
   } catch (error) {
-      console.error(error);
+    handleApiError(error);
   }
 };
 
@@ -80,8 +82,7 @@ export const sendBasePriceRequestToBackend = async (data) => {
     console.log(response , 'base proce API');
     return response.data;
   } catch (error) {
-    console.log(error , 'errrrrrr');
-    return(error.response.data);
+    handleApiError(error);
   }
 };
 
@@ -91,7 +92,7 @@ export const sendTotalBoxRequestToBackend = async (data) => {
     console.log(response , 'total box');
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -100,7 +101,7 @@ export const sendFinalItemsToBackend = async (data) => {
     const response = await instance.post('/inventory', data);
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -109,7 +110,7 @@ export const getUserInfoFromBackend = async (data) => {
     const response = await instance.get('/getUserInfo', { params: {id :data} });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -120,7 +121,7 @@ export const updateUserInfoToBackend = async (data) => {
     const response = await instance.put('/updateUser',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -129,7 +130,7 @@ export const getUserBookingFromBackend = async (data) => {
     const response = await instance.post('/myBooking', {data : data});
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -140,7 +141,7 @@ export const makePaymentRequest = async (data) => {
      const response = await instance.post('/payment',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
@@ -150,6 +151,6 @@ export const makePaymentStatusRequest = async (data) => {
     const response = await instance.post('/checkPaymentStatus',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };

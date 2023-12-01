@@ -66,10 +66,12 @@ const Progress = ({ progress, setProgress }) => {
         setLoader(false);
         alert("Server Error, please try later!");
         performLogout();
+      } else if (!response) {
+        performLogout();
       } else {
-        setLoader(false);
-        sessionStorage.setItem('orderID', response);
-        fetchPaymentURL();
+      setLoader(false);
+      sessionStorage.setItem('orderID', response);
+      fetchPaymentURL();
       }
     } else {
       alert("Please Login Again!");

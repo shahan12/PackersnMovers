@@ -149,10 +149,10 @@ function Requirement(props) {
     try {
       if(orderSessionId && savedIdentifier && token) {
         const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-        if (basePriceResponse.type === "invalidToken") {
+         if (basePriceResponse?.type === "invalidToken") {
           alert("Session Timed Out , Please Re Login!");
           performLogout();
-        } else if (basePriceResponse.type === "not found") {
+        } else if (basePriceResponse?.type === "not found") {
           alert("Server Error, please try later!");
           performLogout();
         } else {
@@ -168,11 +168,12 @@ function Requirement(props) {
         setFloorChargeFromAPI(floorChargeResponse);
         
         const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-        console.log("response", totalBoxResponse);
-        if (totalBoxResponse.type === "invalidToken") {
+        console.log("response", totalBoxResponse.code);
+
+         if (totalBoxResponse?.type === "invalidToken") {
           alert("Please Login Again!");
           performLogout();
-        } else if (totalBoxResponse.type === "serverError") {
+        } else if (totalBoxResponse?.type === "serverError") {
           alert("Server Error, please try later!");
           performLogout();
         } else {

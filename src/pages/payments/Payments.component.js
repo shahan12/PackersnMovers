@@ -38,10 +38,7 @@ function Payments(props) {
     }
   };
 
-
-  useEffect(() => {
   paymentResponseSync();
-}, []);
 
   return (
     <>
