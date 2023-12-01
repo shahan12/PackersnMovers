@@ -1,9 +1,0 @@
-Server running on 5032
-In check Paymnt
-In check Paymnt value SK28112023-6074885007 9835225007 SKART3486316229
-Merchant Transaction ID in checkPaymentStatus API:  SKART3486316229
-https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/M13CMFUCVPKM/SKART3486316229 checkStatusAPi
-In check Paymnt
-In check Paymnt value SK28112023-6074885007 9835225007 SKART3486316229
-Merchant Transaction ID in checkPaymentStatus API:  SKART3486316229
-https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/M13CMFUCVPKM/SKART3486316229 checkStatusAPi

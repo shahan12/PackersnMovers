@@ -1,11 +1,11 @@
-var pg  = require("pg").Pool;
+const { Pool } = require('pg');
 
-var con = new pg({
-    host: '178.16.139.203',
-    user: 'postgres',
-    password: 'Shift@987',
-    database: 'shiftkartdb',
-    port:5432
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
-module.exports = con;
+module.exports = pool;
