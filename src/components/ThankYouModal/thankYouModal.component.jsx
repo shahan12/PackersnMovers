@@ -25,8 +25,10 @@ function ThankYouModal({ isModalOpen, setIsModalOpen }) {
           </button>
         </div>
         <div className="modal-main-content-wrapper">
+          <div className="modal-title-thank-you">
           <h1>Thank You</h1>
           <h3>For Submitting Your Request</h3>
+          </div>
           <p>One of our experts will get in touch with you shortly!</p>
         </div>
       </div>

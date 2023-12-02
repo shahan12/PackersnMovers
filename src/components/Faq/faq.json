@@ -1,8 +1,8 @@
 {
-  "data": [
+  "data1": [
     {
       "header1": "Is ShiftKart.com limited to local moves within Bangalore, or do they offer long-distance moving services as well?",
-      "data": " ShiftKart.com provides a range of moving services, catering local, domestic & international relocations. Whether you're moving within Bangalore or to another city or a different country, ShiftKart.com ensures a seamless and reliable moving experience."
+      "data": "ShiftKart.com provides a range of moving services, catering local, domestic & international relocations. Whether you're moving within Bangalore or to another city or a different country, ShiftKart.com ensures a seamless and reliable moving experience."
     },
     {
       "header1": "How does ShiftKart.com ensure the safety of belongings during the move?",
@@ -11,11 +11,10 @@
     {
       "header1": "Can I customize the services offered by ShiftKart.com according to my specific needs?",
       "data": "Absolutely! ShiftKart.com understands that every move is unique. They offer customized solutions to tailor their services to your specific requirements, ensuring a personalized and efficient moving experience."
-    },
-    {
-      "header1": "Does ShiftKart.com have a track record of timely deliveries?",
-      "data": "Yes, ShiftKart.com has a proven track record of timely deliveries. Punctuality and reliability are key priorities for the company, ensuring that your belongings reach their destination on schedule."
-    },
+    }
+    
+  ],
+  "data2":[
     {
       "header1": "How does ShiftKart.com incorporate eco-friendly practices into their moving services?",
       "data": "ShiftKart.com is committed to sustainability and incorporates eco-friendly practices into its operations. From packaging materials to transportation, the company takes steps to minimize its environmental impact, making it a responsible choice for eco-conscious movers."
@@ -27,6 +26,10 @@
     {
       "header1": "Are there any hidden charges in ShiftKart.com's pricing?",
       "data": "No, ShiftKart.com is transparent about its pricing, and there are no hidden charges."
+    },
+    {
+      "header1": "Does ShiftKart.com have a track record of timely deliveries?",
+      "data": "Yes, ShiftKart.com has a proven track record of timely deliveries. Punctuality and reliability are key priorities for the company, ensuring that your belongings reach their destination on schedule."
     }
   ]
 }

@@ -27,6 +27,8 @@ import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
+
 function Home({ setShowPopUp, loginModal, setLoginModal }) {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -199,9 +201,12 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             />
             <div className="container-item-full">
               <h2>FAQs</h2>
-              <div className="container-table-faq">
-                <RetractableTable data={data} />
-                <RetractableTable data={data} />
+              <div className="container">
+                <div className="row">
+                <div className='col-12 col-lg-6'><RetractableTable data={data.data1} /></div>
+                <div className='col-12 col-lg-6'><RetractableTable data={data.data2} /></div>
+                
+                </div>
               </div>
             </div>
           </div>

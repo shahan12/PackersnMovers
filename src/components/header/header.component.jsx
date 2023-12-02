@@ -77,8 +77,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         <div className="header-cta-container align-center space-between grey-600">
          
           <span className="header-item-phoneNumber-container">
-            <img src={PhoneIcon} alt={"phone"}></img>
-            <span>+91 888 4784 888</span>
+            <span className="header-user-wrapper">+91 888 4784 888</span>
           </span>
           <div className="header-profile-picture-container">
             <img
