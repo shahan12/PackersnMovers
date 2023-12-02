@@ -10,7 +10,7 @@ import FamilyImgSelected from "../../images/family-selected.svg";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendBasePriceRequestToBackend,sendFloorChargeRequestToBackend,sendTotalBoxRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend, sendTotalBoxRequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements, updateTotalCost } from '../../redux/actions';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,19 @@ import InfoIcon from '@mui/icons-material/Info';
 import ThankYouModal from "../ThankYouModal/thankYouModal.component"; 
 import loaderIcon from '../../images/loader.gif';
 
-function Requirement({progress, setProgress}) {
+export const  performLogout = ()=> {
+    sessionStorage.clear();
+    window.open("/", "_self");
+}
+
+function Requirement(props) {
+
+  const {
+    isAuthenticated,
+    setIsAuthenticated,
+    progress,
+    setProgress
+  } = props;
 
   const dispatch = useDispatch();
 
@@ -84,6 +96,10 @@ function Requirement({progress, setProgress}) {
   }, [RequirementsRedux]); 
 
 
+
+  const savedIdentifier = sessionStorage.getItem('identifier');
+  const token = sessionStorage.getItem('token');
+  const orderSessionId = sessionStorage.getItem('orderSessionId');
   const FlatrequireMents = async () => {
     const newRequirementData  = {           // for just saving in redux state
         "familyType": familyType,
@@ -104,7 +120,8 @@ function Requirement({progress, setProgress}) {
       "fromLift": liftValue,
       "toFloor": movingFloorNumber,
       "toLift": movingToLiftValue,
-      "phoneNumber":phoneNumber,
+      "phoneNumber":savedIdentifier,
+      orderSessionId,
       distance, fromAddress, toAddress            //use this distance
   }
       const {phoneNumber: num, ...remainingInfo}=newRequirementData;
@@ -130,22 +147,54 @@ function Requirement({progress, setProgress}) {
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
-      setBasePriceFromAPI(basePriceResponse);
-      let floorChargeResponse = 0;
-      if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
-      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
-      
-      if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
-      floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
-      setFloorChargeFromAPI(floorChargeResponse);
-      
-      const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-      setTotalBoxFromAPI(totalBoxResponse);
+      if(orderSessionId && savedIdentifier && token) {
+        const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
+         if (basePriceResponse?.type === "invalidToken") {
+          alert("Session Timed Out , Please Re Login!");
+          performLogout();
+        } else if (basePriceResponse?.type === "not found") {
+          alert("Server Error, please try later!");
+          performLogout();
+        } else {
+          setBasePriceFromAPI(basePriceResponse);
+        }
 
-      saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
+        let floorChargeResponse = 0;
+        if(API_Req_Data.fromLift==='No' && API_Req_Data.floorNumber!=="Ground Floor")
+        floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.floorNumber)-2)*250 ));
+        
+        if(API_Req_Data.toLift==='No' && API_Req_Data.toFloor!=="Ground Floor")
+        floorChargeResponse+=Math.max(0,( (parseInt(API_Req_Data.toFloor)-2)*250 ));
+        setFloorChargeFromAPI(floorChargeResponse);
+        
+        const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
+        console.log("response", totalBoxResponse.code);
+
+         if (totalBoxResponse?.type === "invalidToken") {
+          alert("Please Login Again!");
+          performLogout();
+        } else if (totalBoxResponse?.type === "serverError") {
+          alert("Server Error, please try later!");
+          performLogout();
+        } else {
+          setBasePriceFromAPI(totalBoxResponse);
+        }
+        setTotalBoxFromAPI(totalBoxResponse);
+
+        saveInRedux(basePriceResponse, totalBoxResponse, floorChargeResponse);
+      }
+      else {
+        alert("Please Login Again!");
+        performLogout();
+      }
     } catch (error) {
-      console.error('Error:', error);
+      if(error.response.type === 'invalidToken'){
+      alert("Session Timed Out , Please Re Login!");
+      }
+      else if (error.response.type !== 'invalidToken'){
+        alert("Something went wrong")
+      }
+      performLogout();
     }
   };
 
@@ -160,13 +209,14 @@ function Requirement({progress, setProgress}) {
     dispatch(updateTotalCost(totalcostData));
 
     if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      if (window.confirm("We will schedule a free inspection and give you a best quotation. Do you Wish to Proceed?")) {
-        openModal();
-      } else {
-      }
-    } else {
+      console.log("in if");
       setLoader(false);
-      setProgress('inventory');
+      alert("We will schedule a free inspection and give you a best quotation. someone will get back to you!");
+      window.open("/" , "_self"); 
+    } else {
+      console.log("in else");
+      setLoader(false);
+      setProgress("inventory");
     }
   }
 
@@ -344,31 +394,31 @@ function Requirement({progress, setProgress}) {
           </div>
         </div>
         {loader ? (
-          <div className="fill-req-CTA-container flex">
-            <img style={{width: '0.75rem'}} src={loaderIcon} alt="loader" />
-          </div>
-        ) : (
         <div className="fill-req-CTA-container flex">
-            <div className='prevButton'></div><button
-              disabled={
-                !familyType ||
-                !houseType ||
-                !familyNumber ||
-                !floorNumber ||
-                !liftValue ||
-                !movingFloorNumber ||
-                !movingToLiftValue ||
-                !fromAddress ||
-                !toAddress ||
-                !distance
-              }
-              className="cta-button"
-              onClick={performInspection}
-            >
-            NEXT
-          </button>
+          <img style={{width: '2rem'}} src={loaderIcon} alt="loader" />
         </div>
-      )}
+          ) : (
+          <div className="fill-req-CTA-container flex">
+              <div className='prevButton'></div>
+              <button
+                disabled={
+                  !familyType ||
+                  !houseType ||
+                  !familyNumber ||
+                  !floorNumber ||
+                  !liftValue ||
+                  !movingFloorNumber ||
+                  !movingToLiftValue ||
+                  !fromAddress ||
+                  !toAddress ||
+                  !distance
+                }
+                className="cta-button"
+                onClick={performInspection}
+              >Next
+            </button>
+          </div>
+        )}
     </div>
   );
 }
