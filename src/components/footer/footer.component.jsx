@@ -24,7 +24,7 @@ function Footer(props) {
   
 
   return (
-    <div style={{ display: hideFooter ? "none" : "flex" }} className="footer-wrapper">
+    <div style={{ display: hideFooter ? "none" : "" }} className="footer-wrapper">
       <div className="footer-upper-section-container align-center space-between">
         <div className="footer-list-wrapper">
           <a href="about-us">About Us</a>
