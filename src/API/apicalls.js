@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { performLogout } from '../components/FillRequirements/Requirement.component';
+const authmiddleware = require('../authmiddleware');
 
 const instance = axios.create({
   baseURL: 'https://skbootstrap.cloud/api',
@@ -9,13 +11,15 @@ const instance = axios.create({
 });
 
 const getToken = () => {
-  return localStorage.getItem('token');
+  if( sessionStorage.getItem('token')){
+  return sessionStorage.getItem('token');
+  }
+  else return "Not Found";
 };
-
 
 instance.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) {
+  if (token !== "Not Found") {
       config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -28,137 +32,125 @@ const handleApiError = (error) => {
       console.error('API Error Status:', error.response.status);
       console.error('API Error Data:', error.response.data);
   } else if (error.request) {
-      console.error('API No Response:', error.request);
+      performLogout();
+  } else if (error.code === 'ERR_NETWORK'){
+      performLogout();
   } else {
       console.error('API Request Setup Error:', error.message);
   }
   throw error;
 };
 
-
 export const sendOTPRequestToBackend = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.post('/sendOTP', { mobileNumber: data });
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    const response = await instance.post('/sendOTP', { identifier: encData });
+    if (response ) {
+      return response.data;
     }
-    return response.data;
   } catch (error) {
-    console.error(error);
+    handleApiError(error);
   }
 };
-
-
 
 export const sendOTPVerifyRequestToBackend = async (data) => {
+  
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.post('/verifyOTP', { data });
-    console.log("response",response);
+    const response = await instance.post('/verifyOTP', { encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
-
-
 
 export const sendLoginRequestToBackend = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-      const response = await instance.get('/login', { params: data });
+      const response = await instance.post('/login', { encData });
+      console.log(response, response.data,"handleLogin response");
       return response.data;
   } catch (error) {
-      handleApiError(error);
-  }
-};
-
-
-export const sendRegisterRequestToBackend = async (data) => {
-  try {
-    const response = await instance.put('/signup', data);
-    return response.data;
-  } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const sendBasePriceRequestToBackend = async (data) => {
+  
   try {
     const response = await instance.put('/basePrice', data);
+    console.log(response , 'base proce API');
     return response.data;
   } catch (error) {
-    throw error;
-  }
-};
-
-export const sendFloorChargeRequestToBackend = async (data) => {
-  try {
-    const response = await instance.put('/floorCharges', data);
-    return response.data;
-  } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {
     const response = await instance.put('/totalNoBoxes', data);
+    console.log(response , 'total box');
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const sendFinalItemsToBackend = async (data) => {
   try {
-    const response = await instance.put('/inventory', data);
+    const response = await instance.post('/inventory', data);
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const getUserInfoFromBackend = async (data) => {
   try {
-    const response = await instance.get('/getUserInfo', { params: data });
+    const response = await instance.get('/getUserInfo', { params: {id :data} });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const updateUserInfoToBackend = async (data) => {
+  
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.put('/updateUser', data);
+    const response = await instance.put('/updateUser',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const getUserBookingFromBackend = async (data) => {
   try {
-    const response = await instance.get('/myBooking');
+    const response = await instance.post('/myBooking', {data : data});
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 
 export const makePaymentRequest = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-     const response = await instance.post('/payment',{paymentAmount: data});
+     const response = await instance.post('/payment',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 
 export const makePaymentStatusRequest = async (data) => {
+  const encData = authmiddleware.encryptData(data);
   try {
-    const response = await instance.get('/checkPaymentStatus');
+    const response = await instance.post('/checkPaymentStatus',{ encData });
     return response.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };

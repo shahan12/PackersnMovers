@@ -8,14 +8,16 @@ import { saveData } from "../../network/saveData";
 import OTPInput from "react18-input-otp";
 import {
   sendLoginRequestToBackend,
-  sendRegisterRequestToBackend,
   sendOTPRequestToBackend,
   sendOTPVerifyRequestToBackend
 } from "../../API/apicalls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { performLogout } from "../FillRequirements/Requirement.component";
+const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
+  
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [xData, setXData] = useContext(AppContext);
@@ -33,54 +35,39 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     setIsValidPhoneNumber(isValid);
   };
 
-  const handleSubmit = (flow) => {
-    console.log("calling handle submit")
-    // e.preventDefault();
-    const loginData = {
-      userMobile: phoneNumber,
-      password: OTP,
-    };
-    sessionStorage.setItem("phoneNumber", phoneNumber);
-    if (flow === "register") {
-      // Perform login logic with the phoneNumber
-      // For this example, let's just log the phone number
-      const data = { ...postData, mobile: phoneNumber };
-      const payload = { data };
-      setXData({ data });
-      // saveData(payload);
-      setThankYou(true);
-      if (phoneNumber.length > 0 && OTP.length > 0)
-        sendRegisterRequest(loginData);
-    } else if (flow === "login") {
-      // setOtpPage(true);
-      if (phoneNumber.length > 0 && OTP.length > 0) sendLoginRequest(loginData);
-    }
-  };
-
-  const sendLoginRequest = async (loginData) => {
-    // const API_Req_Data_JSON = JSON.stringify(loginData);
+  const handleLogin = async () => {
     try {
-      console.log("sending : ", loginData);
-      const response = await sendLoginRequestToBackend(loginData);
-      console.log(response);
-      if (response === "Login Sucessfull...") {
-        window.sessionStorage.setItem("loggedIn", "true");
-        // navigate("/fill-details");
-        window.open("/fill-details", "_self");
-      }
-      if (response === "Mismatched data...") {
-        alert(response);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+      const savedToken = sessionStorage.getItem('token');
+      sessionStorage.setItem('loggedIn',savedToken);
+      console.log(savedToken, "savedToken");
+      const response = await sendLoginRequestToBackend(phoneNumber);
+      console.log(response, "handleLogin response");
+      
+      if(savedToken) {
 
-  const sendRegisterRequest = async (API_Req_Data) => {
-    const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
-    try {
-      const response = await sendRegisterRequestToBackend(API_Req_Data_JSON);
-      window.open("/fill-details", "_self");
+        if(response?.type==='invalidToken') {
+          alert("Token Invalid, please refresh your page and try again");
+          performLogout();
+        }
+        else if(response?.type==='serverError') {
+          alert("Server Error!");
+          performLogout();
+        } 
+        else if (response?.type==='success'){
+          console.log('success', response);
+          sessionStorage.setItem("orderSessionId", response.data);
+          window.open("/fill-details", "_self");
+        } else {
+          performLogout();
+        }
+        
+
+      }
+      else {
+        console.log("Logging Out!");
+        performLogout();
+      }
+
     } catch (error) {
       console.error("Error:", error);
     }
@@ -95,19 +82,19 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
   const sendOTP = async (e) => {
     e.preventDefault();
-    setOtpPage(true);
-    console.log("send otp to this mobile number:", phoneNumber);
-
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
-      console.log(resp);
-
-      if (resp.type === 'success') {
-        console.log('Token:', localStorage.getItem('token'));
-      } else {
-        console.log('Failed:', resp.message);
+      console.log("sendOTP",resp, resp.token );
+      if (resp?.token) {
+        sessionStorage.setItem('token', resp.token);
+        setOtpPage(true);
+      } else if (resp.type === "failed") {
+        alert("Server Error, Please Try later!");
+        console.log('Failed');
+        performLogout();
       }
     } catch (error) {
+      alert(error.message)
       console.error('Error:', error);
     }
   };
@@ -116,13 +103,21 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const verifyOTP=async()=>{
     console.log("otp typed : ", OTP);
     const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
+    console.log("verifyOTP",resp );
     console.log(resp);
-    if(resp.type==='error'){
-      alert(resp.message);
+
+    if(resp?.type==='invalidToken') {
+      alert("Token Invalid, please refresh your page and try again");
+      performLogout();
+    }
+    if(resp?.type==='serverError') {
+      alert("Please refresh your page and try again!");
+      performLogout();
     }
     else{
-      console.log(resp);
-      handleSubmit("login");
+      const encData = authmiddleware.encryptData(phoneNumber);
+      sessionStorage.setItem("identifier", encData);
+      handleLogin();
     }
   }
 

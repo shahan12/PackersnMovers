@@ -17,11 +17,15 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
     );
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem("loggedIn") && sessionStorage.getItem("loggedIn") || false);
+
   const [loginModal, setLoginModal] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
+  
   useEffect(() => {
     sessionStorage.setItem("auth", JSON.stringify(isAuthenticated));
   }, [isAuthenticated]);
+  
   return (
     <AppProvider>
       <Header
@@ -49,20 +53,20 @@ function App() {
         <Route
           exact
           path="/fill-details"
-          element={ isAuthenticated ? (<Order />) : (<Navigate to="/?login-redirect=true" replace />)}
+          element={ isAuthenticated ? (<Order isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)}
         />
         <Route
           exact 
           path="/edit-profile"
-          element={ isAuthenticated ? (<EditProfile />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          element={ isAuthenticated ? (<EditProfile isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
         <Route 
           exact 
           path="/bookings" 
-          element={ isAuthenticated ? (<Bookings />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          element={ isAuthenticated ? (<Bookings isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
         <Route 
           exact 
           path="/payments" 
-          element={ isAuthenticated ? (<Payments />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          element={ isAuthenticated ? (<Payments isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
       </Routes>
       <Footer />
     </AppProvider>

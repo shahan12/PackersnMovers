@@ -3,16 +3,16 @@ import { useSelector } from "react-redux";
 import "./calendar.css";
 import { sendFinalItemsToBackend, makePaymentRequest } from '../../API/apicalls';
 import loaderIcon from '../../images/loader.gif';
+import { performLogout } from "./Requirement.component";
+const authmiddleware = require('../../authmiddleware');
 
 const Progress = ({ progress, setProgress }) => {
-
+  
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);        // all requirementData like floor, lift, family
   let AddOnsADDED = useSelector((state) => state.addOnsItems);    // all add ons items
   let ITEMADDED = useSelector((state) => state.selectedItems);      // all selected inventory item
   let DateTimeRedux = useSelector((state) => state.DateTime);       // date and time selection 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);     //  total/cft/totalitems/base price/floor price/package selection/package price
-
-  const [paymentURL, setPaymentURL]=useState("");
 
   const [loader, setLoader] = useState(false);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
@@ -28,30 +28,54 @@ const Progress = ({ progress, setProgress }) => {
     }
   };
 
-  const fetchPaymentURL=async ()=>{
-    let fullPayment=1;
-    let paymentResponse=await makePaymentRequest(fullPayment); //url
+  let identifier = sessionStorage.getItem('identifier');
+  let orderSessionId = sessionStorage.getItem('orderSessionId');
+  let token = sessionStorage.getItem('token');
 
-    if(paymentResponse==="failed"){
-      setPaymentURL("");
-      if (window.confirm("Payment has been failed, Please Try again!")) {
-        fetchPaymentURL();
-      } else {
-        setProgress("dateselection");
-      }
-    }
-    else{
-      window.open(paymentResponse);
-      setPaymentURL(paymentResponse);
+  const fetchPaymentURL = async () => {
+    let fullPayment=1;
+    
+    let savedOrderID = sessionStorage.getItem('orderID');
+    let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID, orderSessionId}); //url
+    
+    // sessionStorage.removeItem('orderSessionId');
+    if(paymentResponse.type === 'URLResponseError'){
+      alert("We are facing some server error in payment gateway! but your Order is completed, please try payments in your bookings again later to finalize your Order!");
+      window.open("/bookings", "_self");
+    } else if (paymentResponse.type === 'invalidToken') {
+      alert("Please Login Again!");
+      performLogout();
+    } else {
+      let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);
+      sessionStorage.setItem('merID', merID);
+      window.open(paymentURL);
     }
   }
 
   const bookingConfirm = async () => {
-    setLoader(true);
-    const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": RequirementsRedux.requirements.phoneNumber};
-    const response=await sendFinalItemsToBackend(API_DATA);
-    if (progress === "progress" && response) {
+
+    if(orderSessionId && identifier && token) {
+      const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": identifier, "orderSessionId": orderSessionId};
+      const response=await sendFinalItemsToBackend(API_DATA);
+      console.log("inventory response", response);
+      if (response.type === "invalidToken") {
+        setLoader(false);
+        alert("Please Login Again!");
+        performLogout();
+      } else if (response.type === "failed") {
+        setLoader(false);
+        alert("Server Error, please try later!");
+        performLogout();
+      } else if (!response) {
+        performLogout();
+      } else {
+      setLoader(false);
+      sessionStorage.setItem('orderID', response);
       fetchPaymentURL();
+      }
+    } else {
+      alert("Please Login Again!");
+      performLogout();
     }
   };
 
@@ -115,13 +139,14 @@ const Progress = ({ progress, setProgress }) => {
         <div className="prevButton" onClick={prev}>
           &lt; Previous
         </div>
-        {loader ? (
+        {/* {loader ? (
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
-          <button style={{backgroundColor: 'white'}} className="cta-button" onClick={bookingConfirm}>
+     */}
+          <button className="cta-button" onClick={()=>{bookingConfirm() ; setLoader(true);}}>
             Confirm Booking
           </button>
-        )}
+        {/* )} */}
       </div>
     </div>
   );
