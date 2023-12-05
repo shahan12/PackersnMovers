@@ -45,12 +45,6 @@ if (cluster.isMaster) {
         // var port =  process.env.PORT;
         var port = 5031 + cluster.worker.id;
 
-        global.mobile;
-        global.encryptKey, global.iv, global.encryptPass;
-        global.base64UrlKey, global.sha256Hash, global.base64;
-        global.paymentStatus, global.merchantUser;
-        global.paymentResponse;
-
         app.use(express.urlencoded({ extended: false }));
         app.use(express.json());
         app.use(cookieParser());
@@ -59,7 +53,6 @@ if (cluster.isMaster) {
             if (err) throw err;
         });
 
-        //Global methods
 
         function getCurrentDate(format) {
             const today = new Date();
@@ -188,7 +181,7 @@ if (cluster.isMaster) {
             let decoded = authmiddleware.verifyToken(token);
             const houseTypes = [
                 "1 RK",
-                "1 BHK",
+                "1 BHK",    
                 "2 BHK",
             ];
             const requiredValues = ["1 RK", "1 BHK", "2 BHK"];
