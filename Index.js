@@ -192,9 +192,20 @@ if (cluster.isMaster) {
                     var houseType = req.body.houseType.replace(' ', '').toLowerCase();
                     var familyType = (req.body.familyType).toLowerCase();
                     var members = parseInt(req.body.familyNumber);
-                    var fromFloorNum = parseInt(req.body.floorNumber);
+                    var fromFloorNum ='';
+                    if (req.body.floorNumber === 'Ground Floor') {
+                        fromFloorNum = 0;
+                    } else {
+                        fromFloorNum = parseInt(req.body.floorNumber);
+                    }
                     var fromLift = req.body.fromLift;
-                    var toFloorNum = parseInt(req.body.toFloor);
+
+                    var toFloorNum = '';
+                    if (req.body.toFloor === 'Ground Floor') {
+                        toFloorNum = 0;
+                    } else {
+                        toFloorNum = parseInt(req.body.toFloor);
+                    }
                     var tolift = req.body.toLift;
                     var fromAdd = req.body.fromAddress;
                     var toAdd = req.body.toAddress;
