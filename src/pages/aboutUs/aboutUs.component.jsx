@@ -34,7 +34,7 @@ function AboutUs({ isHomePage }) {
         })} */}
         {data2.map((item, index) => (
           <div key={index} className="individual-box">
-            <span className="about-us-para-heading individual-item">{item.head} </span>
+            <span className="about-us-para-heading individual-item-2">{item.head} </span>
             {item.Value.split('|').map((text, i) => (
               <div key={i} className="individual-item">
                 {text.trim()}
