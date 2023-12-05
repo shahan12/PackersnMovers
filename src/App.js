@@ -20,8 +20,8 @@ function App() {
   //   () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
   //   );
   
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem("loggedIn") && sessionStorage.getItem("loggedIn") || false);
-
+  // const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem("loggedIn") && sessionStorage.getItem("loggedIn") || false);
+const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const [loginModal, setLoginModal] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
