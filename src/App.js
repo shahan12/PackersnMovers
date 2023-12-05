@@ -14,9 +14,9 @@ import Bookings from "./pages/bookings/Bookings.component";
 import Payments from "./pages/payments/Payments.component";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
-    );
+  // const [isAuthenticated, setIsAuthenticated] = useState(
+  //   () => JSON.parse(sessionStorage.getItem("loggedIn")) || false
+  //   );
   const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem("loggedIn") && sessionStorage.getItem("loggedIn") || false);
 
   const [loginModal, setLoginModal] = useState(false);

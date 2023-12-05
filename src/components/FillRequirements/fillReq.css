@@ -84,7 +84,7 @@ h2 {
 }
 
 .family-type-wrapper{
-    margin-top: 2.5rem;
+    margin-top: 1rem;
 }
 h3{
     color: #58595B;
@@ -99,6 +99,7 @@ h3{
 }
 .family-type-options-wrapper{
     gap: 0.875rem;
+    margin-top: 2rem;
 }
 .house-type-row-one {
    gap: 0.77rem;
@@ -108,10 +109,21 @@ h3{
     margin-bottom: 1.875rem;
 }
 .more-option-floor-input{
-    width: 48%;
+    flex:1;
 }
 .fill-req-CTA-container{
     justify-content: space-between;
+}
+.wrapalert {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.wrapalert img {
+    height: 1rem;
+    width: 1rem;
+    margin-right: 0.5rem;
 }
 .prevButton {
     margin-top: 0.75rem;
