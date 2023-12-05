@@ -201,10 +201,10 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
             />
             <div className="container-item-full">
               <h2>FAQs</h2>
-              <div className="container">
-                <div className="row">
-                <div className='col-12 col-lg-6'><RetractableTable data={data.data1} /></div>
-                <div className='col-12 col-lg-6'><RetractableTable data={data.data2} /></div>
+              <div className="container px-0">
+                <div className="row ">
+                <div className='col-12 col-lg-6 px-0'><RetractableTable data={data.data1} /></div>
+                <div className='col-12 col-lg-6 px-0'><RetractableTable data={data.data2} /></div>
                 
                 </div>
               </div>

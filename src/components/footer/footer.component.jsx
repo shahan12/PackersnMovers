@@ -68,10 +68,10 @@ function Footer(props) {
           <a href="https://www.instagram.com" className="flex">
             <img src={insta} atl="social-img"></img>
           </a>
-          <a className="flex">
+          <a href="#" className="flex">
             <img src={x} atl="social-img"></img>
           </a>
-          <a className="flex">
+          <a href="#" className="flex">
             <img src={be} atl="social-img"></img>
           </a>
         </div>
