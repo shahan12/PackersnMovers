@@ -5,16 +5,18 @@ import AddOns from '../OptionsSelect/AddOns.component';
 import TimeSelect from '../OptionsSelect/TimeSelect.component';
 import PackageSelect from '../OptionsSelect/PackageSelect.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateDateTime } from '../../redux/actions';
+import { updateDateTime, updateTotalCost } from '../../redux/actions';
 
 import "./calendar.css";
 
 const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
 
   let DateTimeRedux = useSelector((state) => state.DateTime);
+  let totalCostRedux = useSelector((state) => state.TotalCostItems);
   const [selectedDay, setSelectedDay] = useState(DateTimeRedux.selectedDay || "");
   const [selectedTime, setSelectedTime] = useState(DateTimeRedux.selectedTime || "");
   const [addOnItems, setAddOnItems] = useState({});
+  const [weekend, setWeekend] = useState(totalCostRedux.isWeekend || false);
   
   const dispatch = useDispatch();
   useEffect(() => {
@@ -24,9 +26,16 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
       "selectedTime": selectedTime
     }
     
-    dispatch(updateDateTime(dayTimeSelection));
+  dispatch(updateDateTime(dayTimeSelection));
+  }, [selectedDay, selectedTime])
   
-    }, [selectedDay, selectedTime])
+  useEffect(() => {
+    let totalcostData = {
+      "isWeekend": weekend,
+    }
+    dispatch(updateTotalCost(totalcostData));
+
+  }, [weekend]);
   
   const FlatrequireMents = () => {
    
@@ -34,6 +43,7 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
   }
 
   const handleDaySelect = (day) => {
+    setWeekend(day.isWeekend);
     setSelectedDay(day);
   };
   const handleTimeSelect = (time) => {

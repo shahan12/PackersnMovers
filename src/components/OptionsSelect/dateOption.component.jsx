@@ -29,7 +29,7 @@ function DateOption({ onSelect, selectedDayValue }) {
     const today = new Date();
     const days = [];
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 30; i++) {
       const bookingDate = new Date(today);
       bookingDate.setDate(today.getDate() + i);
 
@@ -73,7 +73,7 @@ function DateOption({ onSelect, selectedDayValue }) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  
+  console.log(generatedData)
   return (
     <div className="day-box">
       {generatedData.map((day, index) => (
