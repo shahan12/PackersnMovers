@@ -72,8 +72,31 @@
     align-items: center;
     flex-direction: column;
     margin: 1rem 0;
+    width: 100%;
+    position: relative;
+}
+.top-right-image-container {
+    position: absolute;
+    top: 10;
+    right: -2.7rem;
+    margin: 10px;
+    /* Adjust margin and other styling as needed */
 
 }
+.top-right-image-container img {min-width: 15rem;height: 2.5rem;
+    align-items: left;
+    justify-content: center;
+    display: flex;
+}
+
+    .top-right-text {
+      position: absolute;
+      top:35%; /* Adjust vertically as needed */
+      left: 20%; 
+      transform: translate(-50%, -50%);
+      color: white; /* Adjust text color as needed */
+    }
+
 .address {
     width: 100%;
     padding: 1rem;
@@ -112,7 +135,7 @@
     display: flex;
     flex-wrap: wrap; /* This allows elements to wrap as the viewport gets smaller */
     justify-content: flex-start;
-    background-color: #F6F6F6;
+    background-color: #f8f8f8;
     border-top: 1px solid #A1A1A1;
     width: 100%;
 }
@@ -127,6 +150,7 @@
 .bookings-deatils-option img {
     padding-right: 1rem;
     align-items: center;
+    width: 2.3rem;
 }
 
 .no-border {

@@ -543,35 +543,5 @@
 				}
 			}
 		}
-	},
-	"Vehicle": {
-		"Bikes": {
-			"base": 0,
-			"type": {
-				"Not available": 0,
-				"under 150CC": 0,
-				"under 500CC": 0,
-				"under 800CC": 0,
-				"Superbike": 0
-			},
-			"Modal": {
-				"Not available": 0
-			}
-		},
-		"Cars": {
-			"base": 0,
-			"type": {
-				"Not available": 0,
-				"SUV": 0,
-				"Sedan": 0,
-				"Hatchback": 0,
-				"MPV": 0
-			},
-			"Modal": {
-				"Not available": 0,
-				"Full size": 0,
-				"Compact": 0
-			}
-		}
 	}
 }

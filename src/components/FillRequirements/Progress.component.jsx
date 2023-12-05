@@ -33,6 +33,7 @@ const Progress = ({ progress, setProgress }) => {
   let token = sessionStorage.getItem('token');
 
   const fetchPaymentURL = async () => {
+    // let fullPayment = Math.round(totalCost?.surgedTotalCost*0.1);
     let fullPayment=1;
     
     let savedOrderID = sessionStorage.getItem('orderID');
@@ -125,13 +126,18 @@ const Progress = ({ progress, setProgress }) => {
           <span>Add Ons</span>
           <span>₹{totalCost?.addonsPrice}</span>
         </div>
+        
+        <div className="cost-details-child">
+          <span>Surge Price</span>
+          <span>₹{totalCost?.surgePrice}</span>
+        </div>
         <div className="cost-details-child">
           <span>Packaging Selected: {totalCost?.packaging}</span>
           <span>₹{totalCost?.packagingPrice}</span>
         </div>
         <div className="cost-details-child cost-line">
           <span>Total Cost: </span>
-          <span className="highlightcost">₹{totalCost?.totalCost}</span>
+          <span className="highlightcost">₹{totalCost?.surgedTotalCost}</span>
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { data1, data2 } from "./data";
 function AboutUs({ isHomePage }) {
   return (
-    <div className={`container ${isHomePage ? '' : 'about-top'}`}>
+    <div className={`${isHomePage ? '' : 'about-top'}`}>
       <div className="row px-4 ">
       <div className="about-us-section-1">
         <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>

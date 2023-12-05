@@ -5,6 +5,8 @@ import DownArrow from "../../images/downarrow2.png";
 import House from "../../images/house.svg";
 import Box from "../../images/box.svg";
 import Electic from "../../images/appliance.svg";
+import orderID from "../../images/orderID.png";
+import tag from "../../images/tag.png";
 import Distance from "../../images/distance.svg";
 import Calemder from "../../images/calender.svg";
 import { getUserBookingFromBackend } from "../../API/apicalls";
@@ -42,6 +44,7 @@ function Bookings({}) {
   },[])
 
 
+  console.log(bookingDatas);
   return (
     <div className="bookings-wrapper">
       <h2>Bookings</h2>
@@ -49,20 +52,19 @@ function Bookings({}) {
       <div className="bookings-content-wrapper center-div">
 
         <div className="inventory-selection-parent">
-          <span className={`bookings-tab ${activeTab === 0 ? "selected-inventory" : "non-selected-inventory"}`}
+          <span className={`${activeTab === 0 ? "selected-inventory" : "non-selected-inventory"}`}
             onClick={() => setActiveTab(0)}>
-            Ongoing Bookings
+            Ongoing
           </span>
-          <span className={`bookings-tab ${activeTab === 1 ? "selected-inventory" : "non-selected-inventory"}`}
+          <span className={`${activeTab === 1 ? "selected-inventory" : "non-selected-inventory"}`}
             onClick={() => setActiveTab(1)}>
-            Upcoming Bookings
+            Upcoming
           </span>
-          <span className={`bookings-tab ${activeTab === 2 ? "selected-inventory" : "non-selected-inventory"}`}
+          <span className={`${activeTab === 2 ? "selected-inventory" : "non-selected-inventory"}`}
             onClick={() => setActiveTab(2)}>
-            Previous Bookings
+            Previous
           </span>
         </div>
-
 
 
         {bookingDatas.map((data, index) => (
@@ -98,9 +100,17 @@ function Bookings({}) {
                 <span>{data?.total_distance} km</span>
               </div>
               <div className="bookings-deatils-option">
+                <img  src={tag} alt="Box" />
+                <span>{data?.totalCost}</span>
+              </div>
+              <div className="bookings-deatils-option">
                 <img src={Calemder}  alt="Box" />
                 <span>{new Date(data?.book_date).toDateString()} onwards {data?.book_slot_time}</span>
               </div>
+            </div>
+            <div className="top-right-image-container">
+              <img src={orderID} alt="top-right-image" />
+              <span className="top-right-text">Order ID: {data?.OrderID}</span>
             </div>
           </div>
           ))}
