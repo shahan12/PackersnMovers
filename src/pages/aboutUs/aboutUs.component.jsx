@@ -23,6 +23,7 @@ function AboutUs({ isHomePage }) {
           Shiftkart provides the following facilities when you plan to shift
           within Bangalore or outside
         </p>
+{/*         
         {data2.map((item, index) => {
           return (
             <p className="about-us-para-text">
@@ -30,7 +31,17 @@ function AboutUs({ isHomePage }) {
               <span>{item.Value}</span>
             </p>
           );
-        })}
+        })} */}
+        {data2.map((item, index) => (
+          <div key={index} className="individual-box">
+            <span className="about-us-para-heading individual-item-2">{item.head} </span>
+            {item.Value.split('|').map((text, i) => (
+              <div key={i} className="individual-item">
+                {text.trim()}
+              </div>
+            ))}
+        </div>
+      ))}
       </div>
       </div>
     </div>

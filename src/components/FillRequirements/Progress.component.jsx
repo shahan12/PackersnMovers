@@ -48,7 +48,7 @@ const Progress = ({ progress, setProgress }) => {
     } else {
       let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);
       sessionStorage.setItem('merID', merID);
-      window.open(paymentURL);
+      window.open(paymentURL, "_self");
     }
   }
 
