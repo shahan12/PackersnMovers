@@ -5,7 +5,7 @@
 }
 
 .footer-upper-section-container{
-    padding: 4.5rem 10rem;
+    padding: 4.5rem 8rem;
     height: calc(100% - 4.5rem);
 }
 
@@ -28,7 +28,7 @@
     width: 22.15rem;
 }
 .footer-lower-section-container {
-    padding: 1rem 10rem;
+    padding: 1rem 8rem;
     border-top: 1px solid #3F3B3B;
 }
 .footer-subscriber{
@@ -69,6 +69,16 @@
 .footer-company-socials-container img {
     cursor: pointer;
 }
+@media (max-width: 1100px){
+    .footer-upper-section-container{
+        padding: 4.5rem 4rem;
+        gap:2rem;
+    }
+    .footer-lower-section-container{
+        padding: 1rem 4rem;
+    
+    }
+}
 
 @media (max-width: 600px) {
     .footer-wrapper{
@@ -85,5 +95,9 @@
     }
     .footer-lower-section-container {
         padding: 1rem 1rem
+    }
+
+    .footer-company-socials-container{
+        gap: 1rem;
     }
 }

@@ -216,7 +216,7 @@
         flex-direction: column; 
         justify-content: center;
         align-items: center;
-        padding: 2rem 0rem;
+        padding: 2rem 2rem;
     }
     .section-container-1 {
         position: relative;
@@ -271,6 +271,9 @@
     }
     .home-landing-container{
         margin-top: -10rem;
+    }
+    .section-container {
+        padding: 2rem 1rem;
     }
 }
 

@@ -4,8 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { data1, data2 } from "./data";
 function AboutUs({ isHomePage }) {
   return (
-    <div className={`${isHomePage ? '' : 'about-top'}`}>
-      <div className="row px-4 ">
+    <div className={`container ${isHomePage ? '' : 'about-top'}`}>
+      <div className={`row ${isHomePage ? '' : 'px-4'}`}>
       <div className="about-us-section-1">
         <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>
         <p className="about-us-para-text">{data1.para1}</p>
@@ -34,11 +34,14 @@ function AboutUs({ isHomePage }) {
         })} */}
         {data2.map((item, index) => (
           <div key={index} className="individual-box">
-            <span className="about-us-para-heading individual-item-2">{item.head} </span>
+            <span className="about-us-para-heading ">{item.head} </span>
             {item.Value.split('|').map((text, i) => (
-              <div key={i} className="individual-item">
+              <div key={i} className="individual-item m-1">
                 {text.trim()}
               </div>
+            //    <div key={i} className="btn btn-secondary disabled m-1">
+            //    {text.trim()}
+            //  </div>
             ))}
         </div>
       ))}
