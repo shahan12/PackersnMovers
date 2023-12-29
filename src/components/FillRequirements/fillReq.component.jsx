@@ -25,18 +25,18 @@ function FillRequrements(props) {
 
   return (
     <div className="orders-compoennt-wrapper">
-      <Header progress={progress} />
+      {/* <Header progress={progress} /> */}
       <div className="fillReq-requirements-wrapper">
-      {progress === 'requirement' ? (
-        <Requirement progress={progress} setProgress={setProgress}  isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-      ) : progress === 'inventory' ? (
-        <Inventory progress={progress} setProgress={setProgress} setTotalItemCount={setTotalItemCount} totalItemCount={totalItemCount} setCft={setCft}/>
-      ) : progress === 'dateselection' ? (
-        <Dateselection setProgress={setProgress} packageSel={packageSel} setPackageSel={setPackageSel}/>
-      ) : progress === 'progress' ? (
-        <Progress progress={progress} setProgress={setProgress} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-      ) : null}
-        <AddressDetails progress={progress} packageSel={packageSel}   cft={cft} totalItemCount={totalItemCount} />
+        {progress === 'requirement' ? (
+          <Requirement progress={progress} setProgress={setProgress} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        ) : progress === 'inventory' ? (
+          <Inventory progress={progress} setProgress={setProgress} setTotalItemCount={setTotalItemCount} totalItemCount={totalItemCount} setCft={setCft} />
+        ) : progress === 'dateselection' ? (
+          <Dateselection setProgress={setProgress} packageSel={packageSel} setPackageSel={setPackageSel} />
+        ) : progress === 'progress' ? (
+          <Progress progress={progress} setProgress={setProgress} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        ) : null}
+        <AddressDetails progress={progress} packageSel={packageSel} cft={cft} totalItemCount={totalItemCount} />
       </div>
     </div>
   );

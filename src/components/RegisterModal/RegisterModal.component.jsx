@@ -14,6 +14,8 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { performLogout } from "../FillRequirements/Requirement.component";
+import { Link } from 'react-router-dom';
+
 const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
@@ -114,6 +116,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
       alert("Please refresh your page and try again!");
       performLogout();
     }
+    if(resp?.type==='error') {
+      alert("Invalid OTP!");
+      performLogout();
+    }
     else{
       const encData = authmiddleware.encryptData(phoneNumber);
       sessionStorage.setItem("identifier", encData);
@@ -170,7 +176,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
                   } cta-button`}
                 >
-                  Connect!
+                  Login
                 </button>
               </form>
             )}
@@ -186,6 +192,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                   onChange={handleOtpInput}
                   value={OTP}
                   numInputs={4}
+                  isInputNum={true}
                   separator={<span></span>}
                   inputStyle={{
                     width: "2.5rem",
@@ -212,7 +219,13 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 )}
               </>
             )}
-            <p className="small-desc" style={{color: '#FDFDFDC9', marginBottom: '1rem'}}>By continuing, you agree to our <span style={{textDecoration: 'underline', color: 'white'}}>Terms & Conditions</span></p>
+
+            <p className="small-desc" style={{ color: '#FDFDFDC9', marginBottom: '1rem' }}>
+              By continuing, you agree to our{' '}
+              <Link onClick={onClose} to="/TAC-policy" style={{ textDecoration: 'underline', color: 'white' }}>
+                Terms & Conditions
+              </Link>
+            </p>
           </div>
         </div>
       </div>

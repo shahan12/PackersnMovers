@@ -23,7 +23,12 @@ function DateOption({ onSelect, selectedDayValue }) {
     "Saturday",
   ];
 
-
+  const timeRanges = [
+    { id: 1, label: "6-8 AM" },
+    { id: 2, label: "8-10 AM" },
+    { id: 3, label: "1-3 PM" },
+    { id: 4, label: "4-6 PM" },
+  ];
   const generateDays = () => {
     
     const today = new Date();
@@ -32,8 +37,10 @@ function DateOption({ onSelect, selectedDayValue }) {
     for (let i = 0; i < 30; i++) {
       const bookingDate = new Date(today);
       bookingDate.setDate(today.getDate() + i);
-
+      console.log("bookingDate", bookingDate);
       const dayOfWeek = weekdays[bookingDate.getDay()];
+      
+      const hours = bookingDate.getHours();
       const date = bookingDate.getDate();
 
       let price = Number(priceRed); // Ensure price is a number
@@ -74,9 +81,13 @@ function DateOption({ onSelect, selectedDayValue }) {
     setModalOpen(false);
   };
   console.log(generatedData)
-  return (
-    <div className="day-box">
-      {generatedData.map((day, index) => (
+// ... (previous code)
+
+return (
+  <div className="day-box">
+    {generatedData.map((day, index) => {
+      const disableItem = index === 0 && day.bookingDate.getHours() >= 16; // Disable only for "Today" if hours are 4 PM or later
+      return (
         <div
           key={index}
           className={`daybox-item ${
@@ -85,27 +96,29 @@ function DateOption({ onSelect, selectedDayValue }) {
             selectedDay.dayOfWeek === day.dayOfWeek
               ? "selected"
               : ""
-          }`}
+          } ${disableItem ? "disabled" : ""}`}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
             handleDayClick(day);
           }}
         >
-          <p>{index === 0 ? "Tomorrow" : day.dayOfWeek}</p>
-          <p className="dayofweek"> {day.date}</p>
+          <p>{index === 0 ? "Today" : index === 1 ? "Tomorrow" : day.dayOfWeek}</p>
+          <p className="dayofweek">{day.date}</p>
           <p className={day.isWeekend ? "weekend-price" : "weekday-price"}>
             ₹{day.price.toFixed(0)}
           </p>
         </div>
-      ))}
-      {/* 
+      );
+    })}
+    {/* 
     <div onClick={openModal} className="daybox-item">
       <p>Calendar</p>
     </div>
     <CalendarModal isOpen={isModalOpen} onRequestClose={closeModal} date={date1} onDateChange={onDateChange} /> */}
-    </div>
-  );
+  </div>
+);
+
 }
 
 export default DateOption;

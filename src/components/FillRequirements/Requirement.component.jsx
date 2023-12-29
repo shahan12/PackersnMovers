@@ -254,7 +254,7 @@ function Requirement(props) {
         </div>
         {(!fromAddress || !toAddress) &&
           <div className='wrapalert'>
-            <img src={alerticon}/><span className="wrap">Please fill your address first!</span>
+            <img src={alerticon}/><span className="wrap-alert">Please fill your address first!</span>
           </div>
         }
         <div className="family-type-wrapper">

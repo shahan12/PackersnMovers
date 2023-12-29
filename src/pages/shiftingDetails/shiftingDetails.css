@@ -1,0 +1,50 @@
+
+.about-us-heading {
+ text-align: center;
+}
+
+.about-us-section-1 {
+    background-color: white;
+}
+
+
+.about-us-section-2 {
+    background-color: rgb(248, 248, 248);
+}
+.about-us-para-heading{
+    font-weight: 500;
+    font-size: 1.125rem;
+    color: black;
+}
+
+.about-top-sd{
+    padding-top: 0rem;
+}
+
+.about-us-para-text{
+    text-align: justify;
+    margin: 2.5rem 0;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: #757575;
+}
+.individual-box {
+    display: flex;
+    flex-wrap: wrap; /* This allows elements to wrap as the viewport gets smaller */
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+  
+  .individual-item {
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    background-color: #F6F6F6;
+    border: 1px solid #dfdfdf;
+    border-radius: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+

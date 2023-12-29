@@ -145,10 +145,30 @@ export const makePaymentRequest = async (data) => {
   }
 };
 
+export const retryPayment = async (data) => {
+  const encData = authmiddleware.encryptData(data);
+  try {
+     const response = await instance.post('/retryPayment',{ encData });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export const makePaymentStatusRequest = async (data) => {
   const encData = authmiddleware.encryptData(data);
   try {
     const response = await instance.post('/checkPaymentStatus',{ encData });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const retryMakePaymentStatusRequest = async (data) => {
+  const encData = authmiddleware.encryptData(data);
+  try {
+    const response = await instance.post('/retryCheckPaymentStatus',{ encData });
     return response.data;
   } catch (error) {
     handleApiError(error);

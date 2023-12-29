@@ -7,6 +7,10 @@
 .extra-margin{
     margin: 0 -2.256rem;
 }
+.wrap-alert {
+    color: rgb(188, 70, 70);
+    font-weight: 600;
+}
 .requirements-section-1 {
     border-radius: 12px;
     background: #FFF;

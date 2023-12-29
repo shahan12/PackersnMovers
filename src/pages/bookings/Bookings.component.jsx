@@ -9,39 +9,61 @@ import orderID from "../../images/orderID.png";
 import tag from "../../images/tag.png";
 import Distance from "../../images/distance.svg";
 import Calemder from "../../images/calender.svg";
-import { getUserBookingFromBackend } from "../../API/apicalls";
+import { getUserBookingFromBackend, retryPayment } from "../../API/apicalls";
 import { performLogout } from "../../components/FillRequirements/Requirement.component";
 import authmiddleware from "../../authmiddleware";
 
-function Bookings({}) {
+function Bookings({ }) {
   const [activeTab, setActiveTab] = useState(0);
-  const [bookingDatas,setBookingDatas]=useState([]);
+  const [bookingDatas, setBookingDatas] = useState([]);
 
   let identifier = sessionStorage.getItem('identifier');
-  
-  const getBooking=async()=>{
-    if(identifier) {
-      
-      const bookingDataE=await getUserBookingFromBackend(identifier);
 
-      if(bookingDataE.type === 'serverError'){
-        alert("Please Try later!");
+  const retryPayStatus = async (order_id, payAmount) => {
+    
+    sessionStorage.setItem('reOrderID', order_id);
+    let paymentResponse=await retryPayment({payAmount, identifier, order_id}); //url
+    
+    if(paymentResponse.type === 'URLResponseError'){
+      alert("We are facing some server error in payment gateway! but your Order is completed, please try payments in your bookings again later to finalize your Order!");
+      window.open("/bookings", "_self");
+    } else if (paymentResponse.type === 'invalidToken') {
+      alert("Invalid Token!");
+      performLogout();
+    } else {
+      let { paymentURL, merID } = authmiddleware.decryptData(paymentResponse);
+      
+      sessionStorage.setItem('reMerTID', merID);
+      window.open(paymentURL, "_self");
+    }
+  }
+
+  const getBooking = async () => {
+    if (identifier) {
+
+      const bookingDataE = await getUserBookingFromBackend(identifier);
+
+      if (bookingDataE.type === 'serverError') {
+        alert("Please Try later, serverError!");
         window.open("/", "_self");
-      } else if (bookingDataE?.type === 'invalidToken') {
-        alert("Please Try later!");
+      } else if (bookingDataE?.type === 'empty') {
+        setBookingDatas([]);
+      }else if (bookingDataE?.type === 'invalidToken') {
+        alert("Please Try later, invalidToken!");
         performLogout();
-      } else {
-        const bookingData = authmiddleware.decryptData(bookingDataE);
+      } else if(bookingDataE.type === 'success'){
+        const bookingData = authmiddleware.decryptData(bookingDataE.ebooks);
         setBookingDatas(bookingData);
+        console.log("bookingData", bookingData, bookingData?.ebooks);
       }
     } else {
       performLogout();
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getBooking();
-  },[])
+  }, [])
 
 
   console.log(bookingDatas);
@@ -66,54 +88,73 @@ function Bookings({}) {
           </span>
         </div>
 
-
-        {bookingDatas.map((data, index) => (
-        <div className="bookings-data-container">
-            <div key={index} className="address">
-              <div className="bookings-from-container">
-                <span style={{ padding: '0.5rem 0', fontWeight: '700' }}>From</span>
-                <span>{data?.from_address}</span>
+        {bookingDatas.length > 0 ? (
+          bookingDatas.map((data, index) => (
+            <div className="bookings-data-container">
+              <div key={index} className="address">
+                <div className="bookings-from-container">
+                  <span style={{ padding: '0.5rem 0', fontWeight: '700' }}>From</span>
+                  <span>{data?.from_address}</span>
+                </div>
+                <div className="bookings-image-container">
+                  <img src="arrow-image-url" alt="arrow" />
+                </div>
+                <div className="bookings-from-container">
+                  <span style={{ padding: '0.5rem 0', fontWeight: '700' }}>To</span>
+                  <span>{data?.to_address}</span>
+                </div>
               </div>
-              <div className="bookings-image-container">
-                <img src="arrow-image-url" alt="arrow" />
+              <div className="more-details-section">
+                <div className="bookings-deatils-option">
+                  <img src={House} alt="house" />
+                  <span>{data?.house_type}</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={Box} alt="Box" />
+                  <span>{data?.additional_box} Cartons</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={Electic} alt="Box" />
+                  <span>{data?.total_items} Items</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={Distance} alt="Box" />
+                  <span>{data?.total_distance}</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={tag} alt="Box" />
+                  <span>₹{data?.final_amount}</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={Calemder} alt="Box" />
+                  <span>{new Date(data?.book_date).toDateString()} onwards {data?.book_slot_time}</span>
+                </div>
+                <div className="bookings-deatils-option">
+                  <img src={tag} alt="Box" />
+                  <span>{data.final_payment_code === "PAYMENT_SUCCESS" ? 'Payment Successful' : 'Payment Error Please Try Payment Again'}</span>
+                </div>
+                {/* Retry button conditionally rendered */}
+                {data.final_payment_code !== "PAYMENT_SUCCESS" && (
+                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, data.final_amount)}>
+                    Retry Payment
+                  </button>
+                )}
               </div>
-              <div className="bookings-from-container">
-                <span style={{ padding: '0.5rem 0', fontWeight: '700' }}>To</span>
-                <span>{data?.to_address}</span>
+              <div className="top-right-image-container">
+                <img src={orderID} alt="top-right-image" />
+                <span className="top-right-text" >Order ID: {data?.order_id}</span>
               </div>
             </div>
-            <div className="more-details-section">
-              <div className="bookings-deatils-option">
-                <img src={House} alt="house" />
-                <span>{data?.house_type}</span>
-              </div>
-              <div className="bookings-deatils-option">
-                <img src={Box} alt="Box" />
-                <span>{data?.additional_box} Cartons</span>
-              </div>
-              <div className="bookings-deatils-option">
-                <img src={Electic}  alt="Box" />
-                <span>{data?.total_items} Items</span>
-              </div>
-              <div className="bookings-deatils-option">
-                <img  src={Distance} alt="Box" />
-                <span>{data?.total_distance} km</span>
-              </div>
-              <div className="bookings-deatils-option">
-                <img  src={tag} alt="Box" />
-                <span>{data?.totalCost}</span>
-              </div>
-              <div className="bookings-deatils-option">
-                <img src={Calemder}  alt="Box" />
-                <span>{new Date(data?.book_date).toDateString()} onwards {data?.book_slot_time}</span>
-              </div>
-            </div>
-            <div className="top-right-image-container">
-              <img src={orderID} alt="top-right-image" />
-              <span className="top-right-text">Order ID: {data?.OrderID}</span>
-            </div>
+          ))
+        ) : (
+          <div className="null-container">
+            <p>No bookings available.</p>
           </div>
-          ))}
+        )}
+
+
+
+
       </div>
     </div>
   );

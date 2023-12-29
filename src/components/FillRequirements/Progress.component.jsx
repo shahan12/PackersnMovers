@@ -16,6 +16,8 @@ const Progress = ({ progress, setProgress }) => {
 
   const [loader, setLoader] = useState(false);
   const [totalCost, setTotalCost] = useState(useSelector((state) => state.TotalCostItems));
+  
+  const selectedItemsRedux = useSelector((state) => state.selectedItems);
   useEffect(() => {
     if (RequirementsRedux) {
     setTotalCost(totalCostRedux);
@@ -27,24 +29,23 @@ const Progress = ({ progress, setProgress }) => {
       setProgress("dateselection");
     }
   };
-
+  console.log("selectedItemsRedux", selectedItemsRedux);
   let identifier = sessionStorage.getItem('identifier');
   let orderSessionId = sessionStorage.getItem('orderSessionId');
   let token = sessionStorage.getItem('token');
 
   const fetchPaymentURL = async () => {
     // let fullPayment = Math.round(totalCost?.surgedTotalCost*0.1);
-    let fullPayment=1;
+    let fullPayment=totalCostRedux.surgedTotalCost;
     
     let savedOrderID = sessionStorage.getItem('orderID');
     let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID, orderSessionId}); //url
     
-    // sessionStorage.removeItem('orderSessionId');
     if(paymentResponse.type === 'URLResponseError'){
       alert("We are facing some server error in payment gateway! but your Order is completed, please try payments in your bookings again later to finalize your Order!");
       window.open("/bookings", "_self");
     } else if (paymentResponse.type === 'invalidToken') {
-      alert("Please Login Again!");
+      alert("Invalid Token!");
       performLogout();
     } else {
       let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);

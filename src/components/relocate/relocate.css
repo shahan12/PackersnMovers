@@ -5,7 +5,7 @@
     border: 1px solid rgba(209,213,219);
     background-image: url('../../images/purple_house.png');
     opacity: 0.9;
-    width: 28rem;
+    width: 24rem;
     background-size: cover; /* or background-size: cover; */
     background-repeat: no-repeat;
 }
@@ -13,7 +13,7 @@
     gap: 0.5rem;
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem;
+    padding: 0.25rem;
     border-radius: 0.625rem;
     background-color: #F1F1F1;
     margin-bottom: 1.5rem;
@@ -65,7 +65,7 @@
     margin-bottom: 1.5rem;
 }
 .relocate-input-box{
-    padding: 1rem 0.5rem;
+    padding: 0.75rem 0.5rem;
     width: 100%; 
     border-radius: 0.3rem;
     background-color: #FDFDFDE5;

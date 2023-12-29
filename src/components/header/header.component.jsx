@@ -16,11 +16,23 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [isNavExpanded, setIsNavExpanded] = useState(false)
 
   useEffect(() => {
-    if (window.location.pathname.includes("fill-details") > 0) {
+    const pathname = window.location.pathname;
+    
+    if (pathname.includes("fill-details") || pathname.includes("bookings") || pathname.includes("edit-profile")) {
       setShowFillHeader(true);
+    } else {
+      setShowFillHeader(false);
     }
-  }, [window.location.pathname]);
+  }, []);
 
+  const [continueBookingVisible, setContinueBookingVisible] = useState(false);
+
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    setContinueBookingVisible(!pathname.includes("fill-details"));
+  }, []);
+
+  
   const closeModal = () => {
     setModalOpen(false);
     setLoginModal(false);
@@ -30,7 +42,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     if (showPopUp) {
       setLoginModal(true);
     }
-  }, [showPopUp]);
+  }, [setLoginModal, showPopUp]);
 
   const hanleLogOut = () => {
     performLogout();
@@ -40,6 +52,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   };
   const handleBooking = () => {
     window.open("/bookings", "_self");
+  };
+  const handleFill = () => {
+    window.open("/fill-details", "_self");
   };
   const handleLogoToHome = () => {
     window.open("/", "_self");
@@ -97,24 +112,23 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               className="flex width-100 header-profile-img"
             ></img>
             {showMoreOption && (
-              <div className="header-more-option-dropdown"> 
-                <div
-                  className="header-option"
-                  onClick={handleProfile}
-                >
-                  Profile
-                </div>
-                <div className="header-option" onClick={handleBooking}>
-                  Booking
-                </div>
-                <div
-                  className="header-option"
-                  onClick={hanleLogOut}
-                >
-                  Log out
-                </div>
+            <div className="header-more-option-dropdown">
+              <div className="header-option" onClick={handleProfile}>
+                Profile
               </div>
-            )}
+              <div className="header-option" onClick={handleBooking}>
+                My Bookings
+              </div>
+              {continueBookingVisible && (
+                <div className="header-option" onClick={handleFill}>
+                  Continue Booking
+                </div>
+              )}
+        <div className="header-option" onClick={hanleLogOut}>
+          Log out
+        </div>
+      </div>
+    )}
           </div>
         </div>
       ) : (
@@ -136,6 +150,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
         }>
             <ul>
+            <li>
+                <div className="header-sign-in-btn hamburger" onClick={() => {
+                  setIsNavExpanded(false);
+                }}>
+                  <Link to="/" className="header-CTA-item" >
+                    Home
+                  </Link>
+                </div>
+              </li>
               <li>
           <div className="header-sign-in-btn hamburger" onClick={() => {
           setIsNavExpanded(false);

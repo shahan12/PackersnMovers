@@ -89,6 +89,14 @@ function EditProfile(props) {
             alt="profile-pic"
             className="edit-profile-img"
           ></img>
+          <img
+              src={Edit}
+              alt={"Edit-Icon"}
+              className="edit-icon"
+              onClick={() => {
+                setDisabled(!disabled);
+              }}
+          ></img>
           {/* <button
             className="edit-profile-upload-btn"
             onClick={() => setOpenModal(!openModal)}
@@ -105,14 +113,6 @@ function EditProfile(props) {
           )}
         </div>
 
-        <img
-            src={Edit}
-            alt={"Edit-Icon"}
-            className="edit-icon"
-            onClick={() => {
-              setDisabled(!disabled);
-            }}
-        ></img>
         
         
         <div className="container">
@@ -202,7 +202,7 @@ function EditProfile(props) {
       type="button"
       className="col-5 col-md-2 btn mx-1"
       onClick={()=> handleUpdataProfile()}
-      style={{ backgroundColor: "#ff7800", borderColor: "#ff7800", color: "#fff" }}
+      style={{ backgroundColor: "#ff7800", borderColor: "#ff7800", color: "#fff", width:"10rem" }}
     >
       Save Changes
     </button>

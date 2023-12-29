@@ -5,6 +5,7 @@
   }
   .retractable-table {
     border-collapse: collapse;
+    width: 95%;
   }
   
   .header-row,

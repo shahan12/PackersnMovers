@@ -2,9 +2,8 @@ import React, { useState, useRef,useEffect  } from "react";
 import "../relocate/relocate.css";
 import DropDown from "../dropDown/dropDown.component";
 import Data from "./data.json";
-import InputLanding from "../InputLanding/InputLanding.component";
-import RegisterModal from "../RegisterModal/RegisterModal.component";
-import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+
+import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useDispatch } from 'react-redux';
 import { updateAddress } from '../../redux/actions';
 
@@ -29,6 +28,10 @@ function Relocate({setLoginModal}) {
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+  
+  const searchOptions = {
+    componentRestrictions: { country: "IN" }, // "IN" is the country code for India
   };
 
   const handleSubmit = (e) => {
@@ -69,22 +72,24 @@ function Relocate({setLoginModal}) {
   });
 
   const handleFromPlaceChanged = () => {
-    if(!inputRefFrom?.current?.getPlaces()){
+    if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    const [place] = inputRefFrom?.current?.getPlaces();
-    if (place) {
-      setFromAddress(place.formatted_address);
-    }
+    console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
+    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 
   const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.getPlaces()) return;
-    const [place] = inputRefTo?.current?.getPlaces();
-    if (place) {
-      setToAddress(place.formatted_address);
+    if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+      return;
     }
+    console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
+    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
+
+
+
+
   const calculateDistance = () => {
     if (fromAddress && toAddress) {
       const service = new window.google.maps.DistanceMatrixService();
@@ -115,9 +120,7 @@ function Relocate({setLoginModal}) {
       );
     }
   }
-  const searchOptions = {
-    componentRestrictions: { locality: wCity },
-  };
+
   return (
     <article className="relocate-wrapper">
       <div className="flex relocate-tabs-container">
@@ -161,27 +164,31 @@ function Relocate({setLoginModal}) {
           <div className="relocate-search-locality">
             <p className="small-desc">Search From</p>
             <div className="relocate-input">
-                {isLoaded && (
-              <StandaloneSearchBox 
-              onLoad={ref => (inputRefFrom.current = ref)} 
-              onPlacesChanged={handleFromPlaceChanged} 
-              options={searchOptions}>
-                <input type="text" className="relocate-input-box"placeholder="From Address" />
-              </StandaloneSearchBox>
+              {isLoaded && (
+                <Autocomplete
+                onLoad={ref => (inputRefFrom.current = ref)}
+                onPlaceChanged={handleFromPlaceChanged}
+                options={searchOptions}
+              >
+                <input type="text" className="relocate-input-box" placeholder="From Address" />
+              </Autocomplete>
               )}
             </div>
             <div className="relocate-input">
-            <p className="small-desc">Search To</p>
-            {isLoaded && (
-                <StandaloneSearchBox 
-                onLoad={ref => (inputRefTo.current = ref)} 
-                onPlacesChanged={handleToPlaceChanged} 
+              <p className="small-desc">Search To</p>
+              {isLoaded && (
+                <Autocomplete
+                onLoad={ref => (inputRefTo.current = ref)}
+                onPlaceChanged={handleToPlaceChanged}
                 options={searchOptions}
-                >
-                  <input type="text" className="relocate-input-box" placeholder="To Address" />
-                </StandaloneSearchBox>
-              )}
+              >
+                <input type="text" className="relocate-input-box" placeholder="To Address" />
+              </Autocomplete>
+                )}
             </div>
+
+
+
           </div>
         </div>
       )}

@@ -1,8 +1,8 @@
 export const data1 = {
   para1:
-    "ShiftKart.Com Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
+    "ShiftKart Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
   para2:
-    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart.Com is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
+    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
   para3:
     "ShiftKart Packers And Movers in Bangalore offer an exceptional service. Our process is streamlined: When we receive your enquiry our sales expert contact you and if required we send our Field Relationship Manager to inspect your location for free of cost. Once the inspection is done, our sales expert give you the best quotation compared to the market. Post this we take a nominal booking charges to confirm your booking and we assign a dedicated shifting manager to handle your movement from scratch to the end.",
   para4:
@@ -20,7 +20,7 @@ export const data2 = [
       "Packers And Movers In HSR Layout | Packers And Movers In Marathalli | Packers And Movers In KR Puram | Packers And Movers In Halasuru | Packers And Movers In Indiranagar | Packers And Movers In Whitefield | Packers And Movers In Electronic City | Packers And Movers In Bellandur | Packers And Movers In Koramangala | Packers And Movers In JP Nagar | Packers And Movers In BTM Layout | Packers And Movers In Sarhapur Road | Packers And Movers In Bommnahalli | Packers And Movers In Kundalahalli | Packers And Movers In Sarjapur Road | Packers And Movers In Bannerghatta Road | Packers And Movers In Kengeri | Packers And Movers In Mahadevapura | Packers And Movers In Nagarbhavi | Packers And Movers In Hebbal. ",
   },
   {
-    head: "Shiftkart.Com Packers And Movers Branches:",
+    head: "ShiftKart Packers And Movers Branches:",
     Value:
       "Packers And Movers In Mumbai | Packers And Movers In Chennai | Packers And Movers In Pune | Packers And Movers In Mysore | Packers And Movers In Hyderabad | Packers And Movers In Coimbatore | Packers And Movers In Delhi | Packers And Movers In Delhi NCR",
   },

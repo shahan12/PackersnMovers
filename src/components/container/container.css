@@ -1,0 +1,36 @@
+/* BlackContainer.css */
+
+.black-container {
+    background-color: black;
+    margin-top: 7rem;
+    height: 15rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+  
+.title {
+    font-size: 4rem;
+    color: white;
+    text-align: center; /* Add this line to center the text */
+}
+  
+@media screen and (max-width: 1200px) {
+    .black-container {
+        height: 10rem;
+    }
+    .title {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .black-container {
+        height: 10rem;
+    }
+    .title {
+        font-size: 2rem;
+    }
+}

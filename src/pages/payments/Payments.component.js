@@ -20,8 +20,8 @@ function Payments(props) {
     if(savedOrderID && identifier && token && merTID && orderSessionId) {
       const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID, orderSessionId});
 
-      // sessionStorage.removeItem('merID');
-      // sessionStorage.removeItem('orderID');
+      sessionStorage.removeItem('merID');
+      sessionStorage.removeItem('orderID');
       if(paymentResponse?.type === 'success') {
         window.open("/bookings", "_self");
       } else if (paymentResponse?.type === 'invalidToken') {

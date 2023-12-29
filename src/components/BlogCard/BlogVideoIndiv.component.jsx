@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import thumbnail from "../../images/thumb1.png";
+// import thumbnail from "../../images/thumb1.png";
 import 'font-awesome/css/font-awesome.min.css';
 
 const BlogVideoIndiv = ({ title, video, className, thumb }) => {
@@ -18,7 +18,7 @@ const BlogVideoIndiv = ({ title, video, className, thumb }) => {
   return (
     <div className={`blog-video-indiv ${className}`}>
       <div className="thumbnail-container" >
-        <img src={thumbnail} alt={title} className="thumbnail" />
+      <img src={thumb} alt={title} className="thumbnail" width="100%" height="100%" />
         {!showVideo && (
           <div className="play-button" onClick={handlePlayClick}>
             <i className="fa fas fa-play"></i>
@@ -35,9 +35,10 @@ const BlogVideoIndiv = ({ title, video, className, thumb }) => {
             width="100%"
             height="100%"
             src={video}
-            frameborder="0"
-            allowfullscreen
+            frameBorder="0"
+            allowFullScreen
           ></iframe>
+
         </div>
       )}
     </div>

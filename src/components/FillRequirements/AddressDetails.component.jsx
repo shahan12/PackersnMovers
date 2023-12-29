@@ -5,16 +5,16 @@ import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
 import { useDispatch } from 'react-redux';
 import { updateTotalCost, updateRequirements } from '../../redux/actions';
-import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+import { Autocomplete, StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 
-function AddressDetails({progress, packageSel, cft, totalItemCount }) {
+function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
   let totalCostRedux = useSelector((state) => state.TotalCostItems);
-  const [basePrice, setBasePrice] = useState(useSelector((state)=> state.TotalCostItems.basePrice));
-  const [floorCharges, setFloorCharges] = useState(useSelector((state)=> state.TotalCostItems.floorCharges));
-  const [totalBox, setTotalBox] = useState(useSelector((state)=> state.TotalCostItems.totalBox));
-  const [totalBoxPrice, setTotalBoxPrice] = useState(useSelector((state)=> state.TotalCostItems.totalBoxPrice));
-  const [weekend, setWeekend] = useState(useSelector((state)=> state.TotalCostItems.isWeekend));
+  const [basePrice, setBasePrice] = useState(useSelector((state) => state.TotalCostItems.basePrice));
+  const [floorCharges, setFloorCharges] = useState(useSelector((state) => state.TotalCostItems.floorCharges));
+  const [totalBox, setTotalBox] = useState(useSelector((state) => state.TotalCostItems.totalBox));
+  const [totalBoxPrice, setTotalBoxPrice] = useState(useSelector((state) => state.TotalCostItems.totalBoxPrice));
+  const [weekend, setWeekend] = useState(useSelector((state) => state.TotalCostItems.isWeekend));
   const [totalCost, setTotalCost] = useState(0);
   const [totalCostBF, setTotalCostBF] = useState(0);
   const libraries = ['places'];
@@ -22,7 +22,9 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const inputRefTo = React.useRef();
   const dispatch = useDispatch();
   let AddOnsADDED = useSelector((state) => state.addOnsItems);
-  
+  const searchOptions = {
+    componentRestrictions: { country: "IN" }, // "IN" is the country code for India
+  };
   useEffect(() => {
     let calculatedTotalPrice = 0;
 
@@ -32,16 +34,16 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     }
     setAddonsPrice(calculatedTotalPrice);
   }, [AddOnsADDED]);
-  
+
 
   useEffect(() => {
     if (totalCostRedux) {
-      setTotalCostBF(totalCostRedux.totalCostBF); 
+      setTotalCostBF(totalCostRedux.totalCostBF);
       setBasePrice(totalCostRedux.basePrice);
-      setFloorCharges(totalCostRedux.floorCharges); 
-      setTotalBoxPrice(totalCostRedux.totalBoxPrice); 
-      setTotalBox(totalCostRedux.totalBox); 
-      setWeekend(totalCostRedux.isWeekend); 
+      setFloorCharges(totalCostRedux.floorCharges);
+      setTotalBoxPrice(totalCostRedux.totalBoxPrice);
+      setTotalBox(totalCostRedux.totalBox);
+      setWeekend(totalCostRedux.isWeekend);
     }
   }, [totalCostRedux]);
 
@@ -55,7 +57,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   const newTotalCost = addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0) + totalBoxPrice;
 
   useEffect(() => {
-    if(weekend) {
+    if (weekend) {
       setSurgePrice(Math.round((addonsPrice + totalCostBF + totalBoxPrice) * 0.2));
     } else {
       setSurgePrice(0);
@@ -82,7 +84,7 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
 
   console.log("totalcost ", totalCostRedux);
   useEffect(() => {
-    if(!disabled) {
+    if (!disabled) {
       calculateDistance();
     }
   }, [fromAddress, toAddress]);
@@ -92,23 +94,35 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
     libraries,
   });
 
+  // const handleFromPlaceChanged = () => {
+  //   if (!inputRefFrom?.current?.getPlaces()) {
+  //     return;
+  //   }
+  //   const [place] = inputRefFrom.current.getPlaces();
+  //   if (place) {
+  //     setFromAddress(place.formatted_address);
+  //   }
+  // };
+
+
+
   const handleFromPlaceChanged = () => {
-    if(!inputRefFrom?.current?.getPlaces()){
+    if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    const [place] = inputRefFrom.current.getPlaces();
-    if (place) {
-      setFromAddress(place.formatted_address);
-    }
+    console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
+    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 
   const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.getPlaces()) return;
-    const [place] = inputRefTo.current.getPlaces();
-    if (place) {
-      setToAddress(place.formatted_address);
+    if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+      return;
     }
+    console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
+    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
+
+
   const calculateDistance = () => {
     if (fromAddress && toAddress) {
       const service = new window.google.maps.DistanceMatrixService();
@@ -119,12 +133,12 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
           travelMode: 'DRIVING',
         },
         (response, status) => {
-          
+
           if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
             setDistance(response.rows[0].elements[0].distance.text);
-            sessionStorage.setItem('fromAddress',fromAddress);
-            sessionStorage.setItem('toAddress',toAddress);
-            sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);
+            sessionStorage.setItem('fromAddress', fromAddress);
+            sessionStorage.setItem('toAddress', toAddress);
+            sessionStorage.setItem('distance', response.rows[0].elements[0].distance.text);
             const requirementData = {
               'fromAddress': fromAddress,
               'toAddress': toAddress,
@@ -141,91 +155,93 @@ function AddressDetails({progress, packageSel, cft, totalItemCount }) {
   }
   return (
     <div className="requirements-section-2 flex">
-    {progress === 'progress' ? ('') : (
-      
-      <div className="requirements-your-details-wrapper">
-        <div className="border-bottom extra-margin">
-          <h2>Cost Of Moving</h2>
-        </div>
-        <div className="cost-details">
-            <div className="cost-details-child"> 
+      {progress === 'progress' ? ('') : (
+
+        <div className="requirements-your-details-wrapper">
+          <div className="border-bottom extra-margin">
+            <h2>Cost Of Moving</h2>
+          </div>
+          <div className="cost-details">
+            <div className="cost-details-child">
               <span>Base Price</span>
               <span>₹{basePrice}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Floor Charges</span>
               <span>₹{floorCharges}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Total Items Added</span>
               <span>{totalItemCount}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Additional Boxes (per Box ₹100)</span>
               <span>{totalBox}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>CFT</span>
               <span>{cft}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Add Ons</span>
               <span>₹{addonsPrice}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Weekend Surge</span>
               <span>₹{surgePrice}</span>
             </div>
-            <div className="cost-details-child"> 
+            <div className="cost-details-child">
               <span>Packaging</span>
               <span>₹{packageSel.price}</span>
             </div>
-            <div className="cost-details-child cost-line"> 
+            <div className="cost-details-child cost-line">
               <span>Total Cost: </span>
               <span className="highlightcost">₹{totalCost + surgePrice}</span>
             </div>
+          </div>
+        </div>
+      )}
+      <div className="requirements-your-details-wrapper" style={{ order: "-1" }}>
+        <div className="border-bottom extra-margin">
+          <h2>Your Details</h2>
+        </div>
+        <div className="flex space-between requirement-sub-header margin-bottom-10">
+          <span>Address</span>
+          {progress === 'requirement' && (
+            <img
+              src={Edit}
+              alt={"Edit-Icon"}
+              className="edit-icon"
+              onClick={() => {
+                setDisabled(!disabled);
+              }}
+            ></img>
+          )}
+        </div>
+        <div className="relocate-drop-down-container margin-bottom-10">
+          {isLoaded && (
+            <Autocomplete
+            onLoad={ref => (inputRefFrom.current = ref)}
+            onPlaceChanged={handleFromPlaceChanged}
+            options={searchOptions}
+          >
+              <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress ? fromAddress : 'From Location'} />
+            </Autocomplete>
+          )}
+        </div>
+        <div className="relocate-drop-down-container">
+          {isLoaded && (
+            <Autocomplete
+            onLoad={ref => (inputRefTo.current = ref)}
+            onPlaceChanged={handleToPlaceChanged}
+            options={searchOptions}
+          >
+              <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress ? toAddress : 'To Location'} />
+            </Autocomplete>
+          )}
         </div>
       </div>
-    )}
-    <div className="requirements-your-details-wrapper">
-      <div className="border-bottom extra-margin">
-        <h2>Your Details</h2>
-      </div>
-      <div className="flex space-between requirement-sub-header margin-bottom-10">
-        <span>Address</span>
-        {progress === 'requirement'  && (
-          <img
-            src={Edit}
-            alt={"Edit-Icon"}
-            className="edit-icon"
-            onClick={() => {
-              setDisabled(!disabled);
-            }}
-        ></img>
-        )}
-      </div>
-      <div className="relocate-drop-down-container margin-bottom-10">
-      {isLoaded && (
-          <StandaloneSearchBox 
-            onLoad={ref => (inputRefFrom.current = ref)} 
-            onPlacesChanged={handleFromPlaceChanged} 
-          >
-            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress ? fromAddress : 'From Location'}/>
-          </StandaloneSearchBox>
-        )}
-      </div>
-      <div className="relocate-drop-down-container">
-      {isLoaded && (
-          <StandaloneSearchBox 
-            onLoad={ref => (inputRefTo.current = ref)} 
-            onPlacesChanged={handleToPlaceChanged} 
-          >
-            <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress ? toAddress :  'To Location'} />
-          </StandaloneSearchBox>
-        )}
-      </div>
     </div>
-  </div>
   );
 }
 
