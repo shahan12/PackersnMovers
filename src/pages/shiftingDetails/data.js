@@ -11,6 +11,30 @@ export const data1 = {
     "We not only transport your belongings in high-quality packing materials we also use modern technologies to shift your belongings. Our insurance policy keeps you in peace of mind and your belongings safety. We always maintain our corporate standards which differentiates us from local packers and movers.",
   para6:
     "Customer satisfaction is our company’s motto. All our staff are exceptionally thrilled to serve you. From the time of booking to the time of delivery you are our first priority.",
+  para7:
+    "ShiftKart Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
+  para8:
+    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
+  para9:
+    "ShiftKart Packers And Movers in Bangalore offer an exceptional service. Our process is streamlined: When we receive your enquiry our sales expert contact you and if required we send our Field Relationship Manager to inspect your location for free of cost. Once the inspection is done, our sales expert give you the best quotation compared to the market. Post this we take a nominal booking charges to confirm your booking and we assign a dedicated shifting manager to handle your movement from scratch to the end.",
+  para10:
+    "The main reason for us to be affordable is we have our own vehicles and individual offices spread all major cities of India which brings down our cost of operation inturn making our services much affordable to you.",
+  para11:
+    "We not only transport your belongings in high-quality packing materials we also use modern technologies to shift your belongings. Our insurance policy keeps you in peace of mind and your belongings safety. We always maintain our corporate standards which differentiates us from local packers and movers.",
+  para12:
+    "Customer satisfaction is our company’s motto. All our staff are exceptionally thrilled to serve you. From the time of booking to the time of delivery you are our first priority.",
+  para13:
+    "ShiftKart Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
+  para14:
+    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
+  para15:
+    "ShiftKart Packers And Movers in Bangalore offer an exceptional service. Our process is streamlined: When we receive your enquiry our sales expert contact you and if required we send our Field Relationship Manager to inspect your location for free of cost. Once the inspection is done, our sales expert give you the best quotation compared to the market. Post this we take a nominal booking charges to confirm your booking and we assign a dedicated shifting manager to handle your movement from scratch to the end.",
+  para16:
+    "The main reason for us to be affordable is we have our own vehicles and individual offices spread all major cities of India which brings down our cost of operation inturn making our services much affordable to you.",
+  para17:
+    "We not only transport your belongings in high-quality packing materials we also use modern technologies to shift your belongings. Our insurance policy keeps you in peace of mind and your belongings safety. We always maintain our corporate standards which differentiates us from local packers and movers.",
+  para18:
+    "Customer satisfaction is our company’s motto. All our staff are exceptionally thrilled to serve you. From the time of booking to the time of delivery you are our first priority.",
 };
 
 export const data2 = [

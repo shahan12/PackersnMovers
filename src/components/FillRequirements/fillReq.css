@@ -156,3 +156,6 @@ h3{
     flex-direction: column;
     height: 5.5rem;
 }
+.arrowCount {
+ margin-top: 0.2rem;   
+}

@@ -173,9 +173,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               <div
                 className="header-sign-in-btn hamburger "
                 onClick={() => {
+                  sessionStorage.setItem('SpLog', true);
                   setLoginModal(true);
                   setIsNavExpanded(false);
-
                 }}
               >
                 Corporate
@@ -191,6 +191,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               <div
                 className="header-sign-in-btn hamburger"
                 onClick={() => {
+                  sessionStorage.setItem('SpLog', true);
                   setLoginModal(true);
                   setIsNavExpanded(false);
                 }}

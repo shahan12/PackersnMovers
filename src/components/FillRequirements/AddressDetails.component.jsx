@@ -6,6 +6,9 @@ import Data from "../relocate/data.json";
 import { useDispatch } from 'react-redux';
 import { updateTotalCost, updateRequirements } from '../../redux/actions';
 import { Autocomplete, StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InfoIcon from '@mui/icons-material/Info';
 
 function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
@@ -162,40 +165,105 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
             <h2>Cost Of Moving</h2>
           </div>
           <div className="cost-details">
-            <div className="cost-details-child">
+
+          <div className="cost-details-child">
+            <div className="cost-box">
               <span>Base Price</span>
-              <span>₹{basePrice}</span>
+              <Tooltip title="Base Price based on House Type" placement="right">
+                <IconButton>
+                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                </IconButton>
+              </Tooltip>
             </div>
-            <div className="cost-details-child">
+            <span>₹{basePrice}</span>
+          </div>
+
+          <div className="cost-details-child">
+            <div>
               <span>Floor Charges</span>
-              <span>₹{floorCharges}</span>
+              <Tooltip title="₹250 for Each Floor for buildings without Lift" placement="right">
+                <IconButton>
+                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                </IconButton>
+              </Tooltip>
             </div>
-            <div className="cost-details-child">
+            <span>₹{floorCharges}</span>
+          </div>
+
+          <div className="cost-details-child">
+            <div>
               <span>Total Items Added</span>
-              <span>{totalItemCount}</span>
+              <Tooltip title="Items selected in inventory" placement="right">
+                <IconButton>
+                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                </IconButton>
+              </Tooltip>
             </div>
-            <div className="cost-details-child">
+            <span>{totalItemCount}</span>
+          </div>
+
+          <div className="cost-details-child">
+            <div>
               <span>Additional Boxes (per Box ₹100)</span>
-              <span>{totalBox}</span>
+              <Tooltip title="4 Boxes are added for each family member Added" placement="right">
+                <IconButton>
+                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                </IconButton>
+              </Tooltip>
             </div>
-            <div className="cost-details-child">
+            <span>{totalBox}</span>
+          </div>
+
+          <div className="cost-details-child">
+            <div>
               <span>CFT</span>
-              <span>{cft}</span>
+              <Tooltip title="An estimate we use to calculate space needed for your Goods" placement="right">
+                <IconButton>
+                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                </IconButton>
+              </Tooltip>
             </div>
+            <span>{cft}</span>
+          </div>
+
             <div className="cost-details-child">
-              <span>Add Ons</span>
+              <div>
+                <span>Add Ons</span>
+              </div>
               <span>₹{addonsPrice}</span>
             </div>
+
+            {surgePrice !== 0 && (
+              <div className="cost-details-child">
+                <div>
+                  <span>Weekend Surge</span>
+                  <Tooltip title="20% extra for weekend movements" placement="right">
+                    <IconButton>
+                      <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+                <span>₹{surgePrice}</span>
+              </div>
+            )}
+
+
             <div className="cost-details-child">
-              <span>Weekend Surge</span>
-              <span>₹{surgePrice}</span>
-            </div>
-            <div className="cost-details-child">
-              <span>Packaging</span>
+              <div>
+                <span>Packaging</span>
+                <Tooltip title="You may choose Special packaging if you wish to add extra layer of protection" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
               <span>₹{packageSel.price}</span>
             </div>
+
             <div className="cost-details-child cost-line">
-              <span>Total Cost: </span>
+              <div>
+                <span>Total Cost: </span>
+              </div>
               <span className="highlightcost">₹{totalCost + surgePrice}</span>
             </div>
           </div>

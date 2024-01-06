@@ -31,7 +31,7 @@ const data = [
     local: "checkmark",
   },
   {
-    service: "Labour",
+    service: "Professional Packers",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },

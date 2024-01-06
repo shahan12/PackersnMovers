@@ -36,7 +36,8 @@ const Progress = ({ progress, setProgress }) => {
 
   const fetchPaymentURL = async () => {
     // let fullPayment = Math.round(totalCost?.surgedTotalCost*0.1);
-    let fullPayment=totalCostRedux.surgedTotalCost;
+    // let fullPayment=totalCostRedux.surgedTotalCost;
+    let fullPayment = "99";
     
     let savedOrderID = sessionStorage.getItem('orderID');
     let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID, orderSessionId}); //url
@@ -151,7 +152,7 @@ const Progress = ({ progress, setProgress }) => {
           ) : (
      */}
           <button className="cta-button" onClick={()=>{bookingConfirm() ; setLoader(true);}}>
-            Confirm Booking
+            Book Now @ ₹99
           </button>
         {/* )} */}
       </div>

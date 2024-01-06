@@ -164,3 +164,9 @@
 .nextbuttonMove {
     margin-top: 2rem;
 }
+
+.cost-box {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}

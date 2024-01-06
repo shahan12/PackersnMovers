@@ -23,12 +23,6 @@ function DateOption({ onSelect, selectedDayValue }) {
     "Saturday",
   ];
 
-  const timeRanges = [
-    { id: 1, label: "6-8 AM" },
-    { id: 2, label: "8-10 AM" },
-    { id: 3, label: "1-3 PM" },
-    { id: 4, label: "4-6 PM" },
-  ];
   const generateDays = () => {
     
     const today = new Date();
@@ -37,7 +31,6 @@ function DateOption({ onSelect, selectedDayValue }) {
     for (let i = 0; i < 30; i++) {
       const bookingDate = new Date(today);
       bookingDate.setDate(today.getDate() + i);
-      console.log("bookingDate", bookingDate);
       const dayOfWeek = weekdays[bookingDate.getDay()];
       
       const hours = bookingDate.getHours();
@@ -80,13 +73,12 @@ function DateOption({ onSelect, selectedDayValue }) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  console.log(generatedData)
 // ... (previous code)
 
 return (
   <div className="day-box">
     {generatedData.map((day, index) => {
-      const disableItem = index === 0 && day.bookingDate.getHours() >= 16; // Disable only for "Today" if hours are 4 PM or later
+      const disableItem = index === 0 && day.bookingDate.getHours() >= 12; // Disable only for "Today" if hours are 4 PM or later
       return (
         <div
           key={index}

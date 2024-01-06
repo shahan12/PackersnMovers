@@ -5,17 +5,22 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
   const [selectedRange, setSelectedRange] = useState(selectedTime);
   const [disabledRanges, setDisabledRanges] = useState([]);
 
+  console.log(selectedDayValue.date,"selectedDayValue in time");
   const timeRanges = [
     { id: 1, label: "6-8 AM", label2: "6-8" },
     { id: 2, label: "8-10 AM", label2: "8-10" },
     { id: 3, label: "1-3 PM", label2: "13-15" },
     { id: 4, label: "4-6 PM", label2: "16-18" },
   ];
-
+  const getCurrentDay = () => {
+    const today = new Date();
+    const day = today.getDate();
+    return day;
+  };
   useEffect(() => {
     const currentHour = new Date().getHours();
 
-    if (!selectedDayValue || selectedDayValue === getCurrentDay()) {
+    if (!selectedDayValue.date || selectedDayValue.date === getCurrentDay()) {
       const disabledRanges = timeRanges.filter((range) => {
         const endTime = parseInt(range.label2.split("-")[0]);
         const timeDifference = endTime - currentHour;
@@ -28,11 +33,7 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
     }
   }, [selectedDayValue]);
 
-  const getCurrentDay = () => {
-    const today = new Date();
-    const day = today.getDate();
-    return day;
-  };
+
 
   const handleRangeClick = (range) => {
     setSelectedRange(range);

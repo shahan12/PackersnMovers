@@ -54,7 +54,12 @@ const RegisterModal = ({ onClose, postData, flow }) => {
         else if(response?.type==='serverError') {
           alert("Server Error!");
           performLogout();
-        } 
+        } else if (response?.type==='success' && sessionStorage.getItem('SpLog')) {
+          console.log('success', response);
+          
+          alert("Thank you one of our agents will get back to You!");
+          performLogout();
+        }
         else if (response?.type==='success'){
           console.log('success', response);
           sessionStorage.setItem("orderSessionId", response.data);

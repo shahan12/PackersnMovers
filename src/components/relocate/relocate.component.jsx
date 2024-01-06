@@ -42,12 +42,16 @@ function Relocate({setLoginModal}) {
 
     }
       else if (activeTab === "Between City" && fromCity && toCity) {
+        
+        sessionStorage.setItem('SpLog', true);
       const requirementData = {
         'fromAddress': fromCity,
         'toAddress': toCity
       }
     } 
       else if (activeTab === "International" && fromCoun && toCoun) {
+        
+        sessionStorage.setItem('SpLog', true);
         const requirementData = {
           'fromAddress': fromCoun,
           'toAddress': toCoun

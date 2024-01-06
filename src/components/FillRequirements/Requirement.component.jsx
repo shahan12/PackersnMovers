@@ -276,15 +276,18 @@ function Requirement(props) {
             />
             <div className="familyNumber">
               <img src={upArrow} onClick={() => handleArrowClick('increment')}/>
-              <span className="arrowCount">{familyNumber}</span>
+              <div style={{display: "flex", flexDirection: "row", marginLeft:"2rem"}}>
+              
+                  <span className="arrowCount">{familyNumber}</span>
+                <Tooltip title="default Family is considered as 4 members and Bachelor is considered for 1 member, by adding an extra member in either case will cost 4 more box." 
+                placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }}/>
+                  </IconButton>
+                </Tooltip>
+              </div>
               <img src={downArray} onClick={() => handleArrowClick('decrement')}/>
             </div>
-            <Tooltip title="default Family is considered as 4 members and Bachelor is considered for 1 member, by adding an extra member in either case will cost 4 more box." 
-            placement="right">
-              <IconButton>
-                <InfoIcon fontSize="small" style={{ fontSize: 16 }}/>
-              </IconButton>
-            </Tooltip>
           </div>
         </div>
         <div className="house-type-wrapper">
