@@ -771,8 +771,8 @@ app.post(`/api/payment`, async (req, res) => {
         let { fullPayment: fullPayment, identifier: identifier, savedOrderID: savedOrderID, orderSessionId: orderSessionId } = authmiddleware.decryptIdentifier(req.body.encData);
         const mobileNumber = authmiddleware.decryptIdentifier(identifier);
         const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
-        const intialAmount = parseFloat(fullPayment) * 0.15 ;
-
+        // const intialAmount = parseFloat(fullPayment) * 0.15 ;
+        const intialAmount = parseFloat(fullPayment);
         console.log("Full payment: ", fullPayment, OrderID);
         const salt = {
             "keyIndex": process.env.SALT_KEY_INDEX,
@@ -821,7 +821,7 @@ app.post(`/api/payment`, async (req, res) => {
         if (isSuccess) {
             const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
 
-            q28 = "UPDATE payments SET transaction_id = '" + merchantTransaction + "', merchant_user = '" + merchantUser + "',total_amount = '" + totalAmt + "', paid_amount = '" + intialAmount + "', initial_payment_code = '" + code + "', initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
+            const q28 = "UPDATE payments SET transaction_id = '" + merchantTransaction + "', merchant_user = '" + merchantUser + "',total_amount = '" + totalAmt + "', paid_amount = '" + intialAmount + "', initial_payment_code = '" + code + "', initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
 
             con.query(q28, (error, result) => {
                 if (error) throw error;
@@ -895,7 +895,8 @@ app.post(`/api/retryPayment`, async (req, res) => {
         let { payAmount:payAmount , identifier:identifier , order_id:order_id } = authmiddleware.decryptIdentifier(req.body.encData);
         // const mobileNumber = authmiddleware.decryptIdentifier(identifier);
         const userMobile = authmiddleware.decryptIdentifier(identifier);
-        const intialAmount = parseFloat(payAmount) * 0.15 ;
+        // const intialAmount = parseFloat(payAmount) * 0.15 ;
+        const intialAmount = parseFloat(payAmount);
         const totalAmt = payAmount; 
         console.log("Retry Payment: ",intialAmount, payAmount, order_id);
         const salt = {
