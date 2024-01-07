@@ -792,9 +792,9 @@ app.post(`/api/payment`, async (req, res) => {
             "merchantTransactionId": merchantTransaction,
             "merchantUserId": merchantUser,
             "amount": (intialAmount * 100),
-            "redirectUrl": "https://shiftkart.co/payments",
+            "redirectUrl": "https://shiftkart.com/payments",
             "redirectMode": "REDIRECT",
-            "callbackUrl": "https://shiftkart.co/payments",
+            "callbackUrl": "https://shiftkart.com/payments",
             "mobileNumber": mobileNumber,
             "paymentInstrument": {
                 "type": "PAY_PAGE"
@@ -917,9 +917,9 @@ app.post(`/api/retryPayment`, async (req, res) => {
             "merchantTransactionId": merchantTransaction,
             "merchantUserId": merchantUser,
             "amount": (intialAmount * 100),
-            "redirectUrl": "https://shiftkart.co/retrypayment",
+            "redirectUrl": "https://shiftkart.com/retrypayments",
             "redirectMode": "REDIRECT",
-            "callbackUrl": "https://shiftkart.co/retrypayment",
+            "callbackUrl": "https://shiftkart.com/retrypayments",
             "mobileNumber": userMobile,
             "paymentInstrument": {
                 "type": "PAY_PAGE"
