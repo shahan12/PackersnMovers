@@ -37,3 +37,9 @@ export const updateSelectedItems = (items) => {
       payload: items,
     };
   };
+  export const updateVars = (items) => {
+    return {
+      type: 'UPDATE_Vars',
+      payload: items,
+    };
+  };

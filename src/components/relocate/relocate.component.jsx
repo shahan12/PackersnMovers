@@ -79,7 +79,7 @@ function Relocate({setLoginModal}) {
     if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
+    // console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
     setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 
@@ -87,7 +87,7 @@ function Relocate({setLoginModal}) {
     if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
+    // console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
     setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 

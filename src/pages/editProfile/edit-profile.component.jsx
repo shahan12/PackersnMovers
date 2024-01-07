@@ -22,7 +22,7 @@ function EditProfile(props) {
   let identifier = sessionStorage.getItem('identifier');
 
   const handleUpdataProfile=async()=>{
-    console.log(firstName,lastName,email,identifier);
+    // console.log(firstName,lastName,email,identifier);
     if(identifier) {
       try{
       const updateUserInfoResponse=await updateUserInfoToBackend({firstName,lastName,email,identifier});

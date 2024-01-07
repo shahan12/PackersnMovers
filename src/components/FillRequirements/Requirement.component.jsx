@@ -38,6 +38,7 @@ function Requirement(props) {
 
   const dispatch = useDispatch();
 
+  let varsRedux = useSelector((state) => state.VarsItems); 
   let RequirementsRedux = useSelector((state) => state.RequirementsItems);
   const [familyType, setfamilyType] = useState("");
   const [basePriceFromAPI, setBasePriceFromAPI] = useState(useSelector((state)=> state.TotalCostItems.basePrice) || 0);
@@ -80,7 +81,7 @@ function Requirement(props) {
     setModalOpen(true);
   };
 
-    
+  // console.log("vars",varsRedux);
   useEffect(() => {
     if (RequirementsRedux) {
       setfamilyType(RequirementsRedux.requirements.familyType || ""); 
@@ -169,7 +170,7 @@ function Requirement(props) {
         setFloorChargeFromAPI(floorChargeResponse);
         
         const totalBoxResponse = await sendTotalBoxRequestToBackend(API_Req_Data_JSON);
-        console.log("response", totalBoxResponse.code);
+        // console.log("response", totalBoxResponse.code);
 
          if (totalBoxResponse?.type === "invalidToken") {
           alert("Please Login Again!");
@@ -210,12 +211,12 @@ function Requirement(props) {
     dispatch(updateTotalCost(totalcostData));
 
     if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
-      console.log("in if");
+      // console.log("in if");
       setLoader(false);
       alert("We will schedule a free inspection and give you a best quotation. someone will get back to you!");
       window.open("/" , "_self"); 
     } else {
-      console.log("in else");
+      // console.log("in else");
       setLoader(false);
       setProgress("inventory");
     }

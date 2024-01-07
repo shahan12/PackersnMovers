@@ -5,7 +5,7 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
   const [selectedRange, setSelectedRange] = useState(selectedTime);
   const [disabledRanges, setDisabledRanges] = useState([]);
 
-  console.log(selectedDayValue.date,"selectedDayValue in time");
+  // console.log(selectedDayValue.date,"selectedDayValue in time");
   const timeRanges = [
     { id: 1, label: "6-8 AM", label2: "6-8" },
     { id: 2, label: "8-10 AM", label2: "8-10" },

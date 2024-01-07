@@ -96,13 +96,41 @@ const AddressItemsReducer = (state = address, action) => {
   }
 };
 
+const allvars = {
+    savedToken: '',
+    token: '',
+    identifier: '',
+    merID: '',
+    orderID: '',
+    reMerTID: '',
+    reOrderID: '',
+    orderSessionId: '',
+    distance: '',
+    fromAddress: '',
+    toAddress: ''
+};
+
+const VarsReducer = (state = allvars, action) => {
+  switch (action.type) {
+    case 'UPDATE_Vars':
+      return { ...state, 
+        allvars: {
+        ...state.allvars,
+        ...action.payload,
+      }, 
+    };
+    default:
+      return state;
+  }
+};
 const rootReducer = combineReducers({
   selectedItems: selectedItemsReducer,
   addOnsItems: addOnsItemsReducer,
   RequirementsItems: RequirementsItemsReducer,
   AddressItems: AddressItemsReducer,
   TotalCostItems: TotalCostItemsReducer,
-  DateTime: TotalDTReducer
+  DateTime: TotalDTReducer,
+  VarsItems: VarsReducer
   // more reducers 
 });
 

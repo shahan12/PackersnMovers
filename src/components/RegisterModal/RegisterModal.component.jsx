@@ -3,16 +3,14 @@ import "./Modal.css";
 import loginModalImg from "../../images/price-start.png";
 import loginModalImg1 from "../../images/movers11.jpg";
 import companyLogo from "../../images/SHIFTKART-LOGO.png";
-import { AppContext } from "../../context/context";
-import { saveData } from "../../network/saveData";
+import { useDispatch } from 'react-redux';
+import { updateVars } from '../../redux/actions';
 import OTPInput from "react18-input-otp";
 import {
   sendLoginRequestToBackend,
   sendOTPRequestToBackend,
   sendOTPVerifyRequestToBackend
 } from "../../API/apicalls";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { performLogout } from "../FillRequirements/Requirement.component";
 import { Link } from 'react-router-dom';
 
@@ -20,15 +18,13 @@ const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
   
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [xData, setXData] = useContext(AppContext);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [thankYou, setThankYou] = useState(false);
   const [otpPage, setOtpPage] = useState(false);
   const [OTP, setOTP] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
-  const [isUserRegisterd, setIsUserRegisterd] = useState(true);
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
     const numericValue = inputPhoneNumber.replace(/\D/g, "");
@@ -41,9 +37,9 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     try {
       const savedToken = sessionStorage.getItem('token');
       sessionStorage.setItem('loggedIn',savedToken);
-      console.log(savedToken, "savedToken");
+      // console.log(savedToken, "savedToken");
       const response = await sendLoginRequestToBackend(phoneNumber);
-      console.log(response, "handleLogin response");
+      // console.log(response, "handleLogin response");
       
       if(savedToken) {
 
@@ -55,14 +51,18 @@ const RegisterModal = ({ onClose, postData, flow }) => {
           alert("Server Error!");
           performLogout();
         } else if (response?.type==='success' && sessionStorage.getItem('SpLog')) {
-          console.log('success', response);
+          // console.log('success', response);
           
           alert("Thank you one of our agents will get back to You!");
           performLogout();
         }
         else if (response?.type==='success'){
-          console.log('success', response);
+          // console.log('success', response);
           sessionStorage.setItem("orderSessionId", response.data);
+          let update = {
+            "orderSessionId": response.data,
+          }
+          dispatch(updateVars(update));
           window.open("/fill-details", "_self");
         } else {
           performLogout();
@@ -71,7 +71,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
       }
       else {
-        console.log("Logging Out!");
+        // console.log("Logging Out!");
         performLogout();
       }
 
@@ -81,7 +81,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
   const handleOtpInput = (e) => {
-    // console.log(e);
+    // // console.log(e);
     setOTP(e);
     // setOTP(e.target.value);
   };
@@ -91,13 +91,17 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     e.preventDefault();
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
-      console.log("sendOTP",resp, resp.token );
+      // console.log("sendOTP",resp, resp.token );
       if (resp?.token) {
         sessionStorage.setItem('token', resp.token);
+        let update = {
+          "token": resp.token,
+        }
+        dispatch(updateVars(update));
         setOtpPage(true);
       } else if (resp.type === "failed") {
         alert("Server Error, Please Try later!");
-        console.log('Failed');
+        // console.log('Failed');
         performLogout();
       }
     } catch (error) {
@@ -108,10 +112,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
 
   const verifyOTP=async()=>{
-    console.log("otp typed : ", OTP);
+    // console.log("otp typed : ", OTP);
     const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
-    console.log("verifyOTP",resp );
-    console.log(resp);
+    // console.log("verifyOTP",resp );
+    // console.log(resp);
 
     if(resp?.type==='invalidToken') {
       alert("Token Invalid, please refresh your page and try again");
@@ -128,6 +132,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     else{
       const encData = authmiddleware.encryptData(phoneNumber);
       sessionStorage.setItem("identifier", encData);
+      let update = {
+        "identifier": encData,
+      }
+      dispatch(updateVars(update));
       handleLogin();
     }
   }

@@ -54,7 +54,7 @@ function Bookings({ }) {
       } else if(bookingDataE.type === 'success'){
         const bookingData = authmiddleware.decryptData(bookingDataE.ebooks);
         setBookingDatas(bookingData);
-        console.log("bookingData", bookingData, bookingData?.ebooks);
+        // console.log("bookingData", bookingData, bookingData?.ebooks);
       }
     } else {
       performLogout();
@@ -66,7 +66,7 @@ function Bookings({ }) {
   }, [])
 
 
-  console.log(bookingDatas);
+  // console.log(bookingDatas);
   return (
     <div className="bookings-wrapper">
       <h2>Bookings</h2>
@@ -135,7 +135,7 @@ function Bookings({ }) {
                 </div>
                 {/* Retry button conditionally rendered */}
                 {data.final_payment_code !== "PAYMENT_SUCCESS" && (
-                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, data.final_amount)}>
+                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, "99")}>
                     Retry Payment
                   </button>
                 )}

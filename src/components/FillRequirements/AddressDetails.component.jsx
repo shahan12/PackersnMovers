@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Edit from "../../images/location-edit.svg";
 import Data from "../relocate/data.json";
 import { useDispatch } from 'react-redux';
-import { updateTotalCost, updateRequirements } from '../../redux/actions';
+import { updateVars, updateTotalCost, updateRequirements } from '../../redux/actions';
 import { Autocomplete, StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -85,7 +85,7 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
   }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost, weekend]);
 
-  console.log("totalcost ", totalCostRedux);
+  // console.log("totalcost ", totalCostRedux);
   useEffect(() => {
     if (!disabled) {
       calculateDistance();
@@ -113,7 +113,7 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
     if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
+    // console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
     setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 
@@ -121,7 +121,7 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
     if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
       return;
     }
-    console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
+    // console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
     setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
   };
 

@@ -29,7 +29,7 @@ const Progress = ({ progress, setProgress }) => {
       setProgress("dateselection");
     }
   };
-  console.log("selectedItemsRedux", selectedItemsRedux);
+  // console.log("selectedItemsRedux", selectedItemsRedux);
   let identifier = sessionStorage.getItem('identifier');
   let orderSessionId = sessionStorage.getItem('orderSessionId');
   let token = sessionStorage.getItem('token');
@@ -60,7 +60,7 @@ const Progress = ({ progress, setProgress }) => {
     if(orderSessionId && identifier && token) {
       const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": identifier, "orderSessionId": orderSessionId};
       const response=await sendFinalItemsToBackend(API_DATA);
-      console.log("inventory response", response);
+      // console.log("inventory response", response);
       if (response.type === "invalidToken") {
         setLoader(false);
         alert("Please Login Again!");

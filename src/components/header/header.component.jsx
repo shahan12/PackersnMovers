@@ -119,7 +119,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               <div className="header-option" onClick={handleBooking}>
                 My Bookings
               </div>
-              {continueBookingVisible && (
+              {continueBookingVisible && sessionStorage.getItem('orderSessionId') &&(
                 <div className="header-option" onClick={handleFill}>
                   Continue Booking
                 </div>

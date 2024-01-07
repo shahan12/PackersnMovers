@@ -64,7 +64,16 @@ function App() {
         <Route
           exact
           path="/fill-details"
-          element={isAuthenticated ? (<Order isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)}
+          element={
+            isAuthenticated && sessionStorage.getItem('orderSessionId') ? (
+              <Order
+                isAuthenticated={isAuthenticated}
+                setIsAuthenticated={setIsAuthenticated}
+              />
+            ) : (
+              <Navigate to="/?login-redirect=true" replace />
+            )
+          }
         />
         <Route
           exact
@@ -77,11 +86,11 @@ function App() {
         <Route
           exact
           path="/payments"
-          element={isAuthenticated ? (<Payments isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          element={isAuthenticated && sessionStorage.getItem('merID') ? (<Payments isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
         <Route
           exact
           path="/retrypayments"
-          element={isAuthenticated ? (<RetryPayments isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
+          element={isAuthenticated && sessionStorage.getItem('reMerTID') ? (<RetryPayments isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />) : (<Navigate to="/?login-redirect=true" replace />)} />
       </Routes>
       
       <Footer />

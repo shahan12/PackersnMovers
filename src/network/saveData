@@ -13,11 +13,11 @@ export const saveData = (data) => {
     .then((res) => res.json())
     .then((data) => {
       // enter you logic when the fetch is successful
-      console.log(data);
+      // console.log(data);
       // setData({...payloadData,isSaved: true})
     })
     .catch((error) => {
       // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
+      // console.log(error);
     });
 };
