@@ -45,7 +45,7 @@ function Footer(props) {
       </div>
       <div className="footer-lower-section-container align-center space-between">
         <img src={logo} alt="Logo" className="footer-company-logo"></img>
-        <div className="footer-comapny-copywrite">&copy; &nbsp; ShiftKart</div>
+        <div className="footer-comapny-copywrite">&copy; &nbsp; EZY SHIFTKART TECHNOLOGY SOLUTIONS PRIVATE LIMITED</div>
         <div className="footer-company-socials-container align-center">
           <a href="https://www.fb.com" className="flex">
             <img src={fb} atl="social-img"></img>

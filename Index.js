@@ -965,14 +965,14 @@ app.post(`/api/retryPayment`, async (req, res) => {
 });
 
 app.post("/api/retryCheckPaymentStatus", async (req, res) => {
-    console.log('In check Paymnt');
+    console.log('In Recheck Paymnt Status');
     const token = req.headers.authorization.split(' ')[1];
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
 
         let { identifier: identifier, reMerTID:reMerTID, reOrderID: reOrderID } = authmiddleware.decryptIdentifier(req.body.encData);
-
-        const OrderID = authmiddleware.decryptIdentifier(reOrderID);
+        console.log("ReMerchID: ",reMerTID, "reOrderID: ",reOrderID);
+        // const OrderID = authmiddleware.decryptIdentifier(reOrderID);
         const mobileNumber = authmiddleware.decryptIdentifier(identifier, "/checkPaymentStatus");
 
         const finalXHeader = `${crypto.createHash('sha256').update(`/pg/v1/status/${process.env.MerchantID}/${reMerTID}${process.env.SALT_KEY}`).digest('hex')}###${process.env.SALT_KEY_INDEX}`;
@@ -992,7 +992,7 @@ app.post("/api/retryCheckPaymentStatus", async (req, res) => {
         let finalResponse = JSON.stringify(response.data.data, circularReplacer());
         if (isSuccess) {
 
-            var q24 = "UPDATE payments SET final_payment_code = '" + finalCode + "',  final_payment_response = '" + finalResponse + "', order_id = '"+ reOrderID +"', transaction_id ='"+ reMerTID +"' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
+            var q24 = "UPDATE payments SET final_payment_code = '" + finalCode + "',  final_payment_response = '" + finalResponse + "', order_id = '"+ reOrderID +"', transaction_id ='"+ reMerTID +"' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + reOrderID + "' ";
 
             con.query(q24, (error, result) => {
                 if (error)
@@ -1010,6 +1010,31 @@ app.post("/api/retryCheckPaymentStatus", async (req, res) => {
 
 });
 
+
+app.post('/api/saveUserEmail', (req,res)=>{
+    const token = req.headers.authorization.split(' ')[1];
+    let decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+        try{
+            let userEmail = authmiddleware.decryptIdentifier(req.body.encData);
+            var q30 = `INSERT INTO useremail(user_email) VALUES($1)`;
+            con.query(q30, [userEmail], (error,result)=>{
+                if(error)
+                    throw error;
+                res.status(200).json({ type: 'success', message: 'success' });
+            });
+        }
+        catch (error) {
+            console.error(error.message);
+            res.json({ type: 'serverError', message: 'Server Error' }).status(200);
+        }
+    }
+    else {
+        // Token verification failed
+        console.error('Invalid token verifyOTP');
+        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
+    }
+});
 
 app.listen(port, () => {
     console.log("Server running on", port);

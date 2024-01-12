@@ -1,0 +1,11 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Launch with Nodemon",
+    "runtimeExecutable": "nodemon",
+    "program": "${workspaceFolder}/app.js",  // Update with your entry file
+    "restart": true,
+    "console": "integratedTerminal",
+    "internalConsoleOptions": "neverOpen"
+  }
+  
