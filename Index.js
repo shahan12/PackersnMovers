@@ -456,6 +456,9 @@ app.post(`/api/myBooking`, (req, res) => {
                     inventorydata.final_amount,
                     inventorydata.additional_box,
                     inventorydata.order_id,
+                    inventorydata.total_cost,
+                    inventorydata.user_inventory,
+                    inventorydata.addons,
                     payments.transaction_id,
                     payments.final_payment_code,
                     payments.merchant_user
@@ -1012,9 +1015,6 @@ app.post("/api/retryCheckPaymentStatus", async (req, res) => {
 
 
 app.post('/api/saveUserEmail', (req,res)=>{
-    const token = req.headers.authorization.split(' ')[1];
-    let decoded = authmiddleware.verifyToken(token);
-    if (decoded) {
         try{
             let userEmail = authmiddleware.decryptIdentifier(req.body.encData);
             var q30 = `INSERT INTO useremail(user_email) VALUES($1)`;
@@ -1028,12 +1028,57 @@ app.post('/api/saveUserEmail', (req,res)=>{
             console.error(error.message);
             res.json({ type: 'serverError', message: 'Server Error' }).status(200);
         }
+});
+
+
+app.post('/api/sendSuccessBookingSMS', (req, res) => {
+    let { templateID } = process.env.templateId;
+    const mobileNumber = authmiddleware.decryptIdentifier(req.body.identifier);
+    const token = req.headers.authorization.split(' ')[1];
+    let decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+    try {
+        const options = {
+            method: 'POST',
+            url: `https://control.msg91.com/api/v5/flow/`,
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authkey: `${process.env.authKey}`
+            },
+            body:{
+                template_id: process.env.templateId,
+                short_url: 1,
+                recipients: mobileNumber
+            }
+        };
+        axios
+            .request(options)
+            .then(function (response) {
+                const responseData = {
+                    status: response.status,
+                    type: response.data.type,
+                    token: token
+                    // Add other relevant properties as needed
+                };
+                // console.log("Response data from send otp: ", responseData);
+                res.status(200).json(responseData);
+            })
+            .catch(function (error) {
+                res.status(200).json({ data: error, type: "failed" })
+                console.error(error);
+            });
     }
-    else {
-        // Token verification failed
-        console.error('Invalid token verifyOTP');
-        res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
+    catch (error) {
+        res.status(200).json({ response: "Internal Server Error", type: "failed" })
+        console.error(error.message);
     }
+}
+else {
+    // Token verification failed
+    console.error('Invalid token verifyOTP');
+    res.status(200).json({ type: 'invalidToken', message: 'Invalid token' });
+}
 });
 
 app.listen(port, () => {
