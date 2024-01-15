@@ -35,7 +35,6 @@ const Template = forwardRef(({ data, identifier }, ref) => {
     const renderAddonsDetails = () => {
         return (
           <div>
-            <span className='ST-head'>Addons Details:</span>
             {Object.keys(addonsData).map((addon) => (
               <div key={addon}>
                 {addon} x {addonsData[addon].count}

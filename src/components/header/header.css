@@ -39,7 +39,7 @@
     padding: 0.5rem 1rem;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     border-radius: 24px;
     background: var(--Primary, #550EC5);
     cursor: pointer;
@@ -63,11 +63,11 @@
     color: #248B04;
     font-size: 1rem;
     font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.header-item-phoneNumber-container span {
-    padding-left: 0.5rem;
-}
 
 .header-profile-picture-container {
     border-radius: 50%;

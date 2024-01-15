@@ -60,6 +60,12 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     window.open("/", "_self");
   };
 
+  
+  const phoneNumber = "+91 888 478 4888";
+
+  const handlePhoneIconClick = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
   return (
     <article
       className={`header-container space-between ${showfillHeader && "add-box-shadow"
@@ -92,7 +98,12 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         <div className="header-cta-container align-center space-between grey-600">
 
           <span className="header-item-phoneNumber-container">
-            <span className="header-user-wrapper">+91 888 4784 888</span>
+            <div onClick={handlePhoneIconClick} className="header-user-wrapper">
+          <img style={{marginTop:'0.2rem'}}
+              src={PhoneIcon}
+            />
+              <span>{phoneNumber}</span>
+            </div>
           </span>
           <div className="header-profile-picture-container">
             <img
@@ -135,9 +146,15 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         // Header outside
 
         <div className="header-cta-container align-center space-between grey-600">
-          <div className="header-user-wrapper">
-            888 4784 888
-          </div>
+
+          <span className="header-item-phoneNumber-container">
+                      <div onClick={handlePhoneIconClick} className="header-user-wrapper">
+                    <img style={{marginTop:'0.2rem'}}
+                        src={PhoneIcon}
+                      />
+              <span>{phoneNumber}</span>
+            </div>
+          </span>
           <button className="header-sign-in-btn"
             onClick={() => {
               setIsNavExpanded(!isNavExpanded);
