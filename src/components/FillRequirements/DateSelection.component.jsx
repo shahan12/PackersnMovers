@@ -64,7 +64,7 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
   return (
     <div className="requirements-section-1">
       <div className="border-bottom extra-margin">
-        <h2>Fill Requirments</h2>
+        <h2>Fill Requirements</h2>
       </div>
       <div className="date-type-wrapper">
         <h3>Choose Date</h3>

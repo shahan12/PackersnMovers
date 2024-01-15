@@ -110,19 +110,19 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
 
   const handleFromPlaceChanged = () => {
-    if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+    console.log("inputRefFrom", inputRefFrom.current);
+    if(!inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
       return;
     }
-    // console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
-    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
+    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
   };
 
   const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+    if(!inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
       return;
     }
     // console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
-    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
+    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
   };
 
 

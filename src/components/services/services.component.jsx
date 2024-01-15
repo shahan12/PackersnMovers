@@ -3,16 +3,12 @@ import "./services.css";
 import { Link } from "react-router-dom";
 
 function Services({ img, text }) {
-  const handleServiceClick = () => {
-    const serviceSlug = text.toLowerCase().replace(/\s+/g, '');
-    window.location.href = `/shifting-details#${serviceSlug}`;
-  };
 
   return (
-    <div className="services-wrapper center-div" onClick={handleServiceClick}>
+    <a className="services-wrapper center-div" href={`/shifting-details#${text.toLowerCase().replace(/\s+/g, '')}`}>
       <img src={img} className="services-img" alt="text"></img>
       <p>{text}</p>
-    </div>
+    </a>
   );
 }
 

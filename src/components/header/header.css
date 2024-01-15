@@ -45,6 +45,11 @@
     cursor: pointer;
     color: #FDFDFD;
     font-size: small;
+
+    a {
+        text-decoration: none;
+        color: white
+    }
 }
 
 .header-user-wrapper-btn {
@@ -95,7 +100,7 @@
 }
 
 .header-option:hover {
-    
+
     background-color: #eee;
 }
 

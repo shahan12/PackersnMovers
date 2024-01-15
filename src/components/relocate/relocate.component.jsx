@@ -18,54 +18,64 @@ function Relocate({setLoginModal}) {
   const [fromAddress, setFromAddress] = useState('');
   const [toAddress, setToAddress] = useState('');
   const [activeTab, setActiveTab] = useState("Local");
-  const [wCity, setWCity] = useState("Bengaluru");
-  const [fromCity, setFromCity] = useState(activeTab === "Between City" ? "Bengaluru" : "");
-  const [toCity, setToCity] = useState(activeTab === "Between City" ? "Bengaluru" : "");
-  const [fromCoun, setFromCoun] = useState(activeTab === "International" ? "India" : "");
-  const [toCoun, setToCoun] = useState(activeTab === "International" ? "India" : "");
-  const [postData, setPostData] = useState({});
+  const [fromCity, setFromCity] = useState(activeTab === "Between City" ? "Bangalore" : "Bangalore");
+  const [toCity, setToCity] = useState(activeTab === "Between City" ? "Bangalore" : "Bangalore");
+  const [fromCoun, setFromCoun] = useState(activeTab === "International" ? "India" : "India");
+  const [toCoun, setToCoun] = useState(activeTab === "International" ? "India" : "India");
   const [modalOpen, setModalOpen] = useState(false);
+  const [wCity, setWCity] = useState(Data.IndianCitiesCoordinates[0]);
 
+  const handleCitySelect = (selectedCity) => {
+    setWCity(selectedCity);
+  };
   const closeModal = () => {
     setModalOpen(false);
   };
-  
-  const searchOptions = {
-    componentRestrictions: { country: "IN" }, // "IN" is the country code for India
+  const defaultBounds = {
+    north: wCity.latitude + 0.3,
+    south: wCity.latitude - 0.3,
+    east: wCity.longitude + 0.3,
+    west: wCity.longitude - 0.3,
   };
+  const searchOptions = {
+    componentRestrictions: { country: "IN" }, 
+    bounds: defaultBounds,
+  };
+  console.log(activeTab);
 
   const handleSubmit = (e) => {
-
+    console.log("from", fromCity, toCity, activeTab);
     e.preventDefault();
 
     if(activeTab === "Local" && fromAddress && toAddress) {
 
+      if(sessionStorage.getItem('auth')==='false'){
+        setLoginModal(true);
+      }
+      else{
+        window.open("/fill-details", "_self");
+      }
+      setModalOpen(true);
     }
       else if (activeTab === "Between City" && fromCity && toCity) {
         
         sessionStorage.setItem('SpLog', true);
-      const requirementData = {
-        'fromAddress': fromCity,
-        'toAddress': toCity
-      }
+        setLoginModal(true);
+      // const requirementData = {
+      //   'fromAddress': fromCity,
+      //   'toAddress': toCity
+      // }
     } 
       else if (activeTab === "International" && fromCoun && toCoun) {
         
         sessionStorage.setItem('SpLog', true);
-        const requirementData = {
-          'fromAddress': fromCoun,
-          'toAddress': toCoun
-        }
+        setLoginModal(true);
+        // const requirementData = {
+        //   'fromAddress': fromCoun,
+        //   'toAddress': toCoun
+        // }
     }
-    if(sessionStorage.getItem('auth')==='false'){
-      setLoginModal(true);
-    }
-    else{
-      window.open("/fill-details", "_self");
-    }
-    setModalOpen(true);
   };
-
   useEffect(() => {
     calculateDistance();
   }, [fromAddress, toAddress]);
@@ -76,19 +86,19 @@ function Relocate({setLoginModal}) {
   });
 
   const handleFromPlaceChanged = () => {
-    if(!inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+    console.log("FROM", inputRefFrom?.current);
+    if(!inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
       return;
     }
-    // console.log("inputRefFrom", inputRefFrom.current.gm_accessors_.place.em.formattedPrediction);
-    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.em?.formattedPrediction);
+    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
   };
 
   const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction){
+    if(!inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
       return;
     }
-    // console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
-    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.em?.formattedPrediction);
+    console.log("TO", inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
+    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
   };
 
 
@@ -156,13 +166,15 @@ function Relocate({setLoginModal}) {
       {activeTab === "Local" && (
         <div className="relocate-select-city">
           <div className="relocate-input">
-            <p className="small-desc">Search From</p>
+            <p className="small-desc">Select City</p>
             <div className="relocate-drop-down-container">
-              <DropDown
-                value={wCity}
-                setValue={setWCity}
-                option={Data.IndianCitiesPinCode}
-              />
+            <DropDown
+              value={wCity.name}
+              setValue={setWCity}
+              option={Data.IndianCitiesCoordinates}
+              onSelect={handleCitySelect}
+            />
+
             </div>
           </div>
           <div className="relocate-search-locality">
@@ -196,6 +208,8 @@ function Relocate({setLoginModal}) {
           </div>
         </div>
       )}
+
+
       {activeTab === "Between City" && (
         <div className="relocate-select-city">
           
@@ -206,6 +220,7 @@ function Relocate({setLoginModal}) {
               value={fromCity}
               setValue={setFromCity}
               option={Data.IndianCitiesPinCode}
+              onSelect={handleCitySelect}
             />
           </div>
           </div>
@@ -215,6 +230,7 @@ function Relocate({setLoginModal}) {
               value={toCity}
               setValue={setToCity}
               option={Data.IndianCitiesPinCode}
+              onSelect={handleCitySelect}
             />
           </div>
         </div>
@@ -230,6 +246,7 @@ function Relocate({setLoginModal}) {
               value={fromCoun}
               setValue={setFromCoun}
               option={Data.International}
+              onSelect={handleCitySelect}
             />
           </div>
           </div>
@@ -239,6 +256,7 @@ function Relocate({setLoginModal}) {
               value={toCoun}
               setValue={setToCoun}
               option={Data.International}
+              onSelect={handleCitySelect}
             />
           </div>
         </div>

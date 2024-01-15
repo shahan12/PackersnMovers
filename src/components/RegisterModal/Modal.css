@@ -1,117 +1,124 @@
 .login-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .login-modal {
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;    display: flex;
-    width: 47rem;
-    position: relative;
-    z-index: 100;
-  }
-  
-  .login-modal-close {
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    opacity: 0.8;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-  
-  .login-modal-content {
-    display: flex;
-    align-items: center;
-    justify-content:space-around;
-    align-items: center;
-    flex-direction: row;
-  }
-  .login-modal-image {
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-items:flex-start;
-    flex-direction: column;
-    flex: 1;
-    width: 23rem;
-  }
-  .login-modal-form {
-    background-color: #601ECA;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex: 1;
-    height: 100%;
-    width: 24rem;
-  }
-  
-  .login-modal-company-logo{
-    display: flex;
-    width: 4.5rem;
-  }
-  .login-modal-form-image{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 8rem;
-    border-radius: 50%;
-    border: .5rem solid #F3F7FA;
-    border-radius: 50%;
-    border: '5rem solid transparent';
-    background-image: radial-gradient(circle, #550EC5, #F3F7FA);
-    margin: 4rem 0rem 2rem 0rem;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .login-modal-image img {
-    max-width: 22rem;
-    height: auto;
-    margin-bottom: 2rem;
-  }
-  .login-modal-image h4 {
-    text-align: left;
-    color: #212121;
-    font-size: 1.375rem;
-    font-weight: 600;
-  }
-  
-  .login-modal-form form {
-    display: flex;
-    flex-direction: column;
-    width: 19rem;
-    margin-bottom: 3rem;
-  }
-  .login-modal-form h2 {
-    margin-bottom: 1rem;
-    color: #BAB1E9;
-  }
-  
-  .login-modal-form h3 {
-    margin-bottom: 1rem;
-    color: #514b6f;
-  }
-  
+.login-modal {
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  display: flex;
+  width: 47rem;
+  position: relative;
+  z-index: 100;
+}
 
-  
-  .login-modal-form input {
-    padding: 0.75rem 0.75rem;
-    margin-bottom: 1rem;
-    border: 2px solid #ccc;
-    border-radius: 0.5rem;
-  }
-  
-  /* .login-modal-form button {
+.login-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  opacity: 0.8;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.login-modal-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+}
+
+.login-modal-image {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  flex: 1;
+  width: 23rem;
+}
+
+.login-modal-form {
+  background-color: #601ECA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  width: 24rem;
+}
+
+.login-modal-company-logo {
+  display: flex;
+  width: 4.5rem;
+}
+
+.login-modal-form-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  border: .5rem solid #F3F7FA;
+  border-radius: 50%;
+  border: '5rem solid transparent';
+  background-image: radial-gradient(circle, #550EC5, #F3F7FA);
+  margin: 4rem 0rem 2rem 0rem;
+}
+
+.login-modal-image img {
+  max-width: 22rem;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.login-modal-image h4 {
+  text-align: left;
+  color: #212121;
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.login-modal-form form {
+  display: flex;
+  flex-direction: column;
+  width: 19rem;
+  margin-bottom: 3rem;
+}
+
+.login-modal-form h2 {
+  margin-bottom: 1rem;
+  color: #BAB1E9;
+}
+
+.login-modal-form h3 {
+  margin-bottom: 1rem;
+  color: #514b6f;
+}
+
+
+
+.login-modal-form input {
+  padding: 0.75rem 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+/* .login-modal-form button {
     padding: 1rem;
     background-color: #cac4e7;
     color: white;
@@ -119,37 +126,40 @@
     cursor: pointer;
     align-items: center;
   } */
-  
-  /* .login-modal-form button:hover {
+
+/* .login-modal-form button:hover {
     background-color: #BAB1E9;
   } */
 
-  .continue-OTP-enter{
-    width: 60%; 
-    margin-bottom: 0.5rem;
-  }
+.continue-OTP-enter {
+  width: 60%;
+  margin-bottom: 0.5rem;
+}
 
-  .error-msg{
-    color: red;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-  
-  @media (max-width: 1300px) {
-    .login-modal-image {
+.error-msg {
+  color: red;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+@media (max-width: 1300px) {
+  .login-modal-image {
     display: none;
   }
+
   .login-modal {
 
     width: 24rem;
   }
-  }
-  @media (max-width: 800px) {
-    .login-modal {
-      width: 22rem;
-    }
-    .login-modal-form {
-      width: 22rem;
+}
 
-    }
+@media (max-width: 800px) {
+  .login-modal {
+    width: 22rem;
   }
+
+  .login-modal-form {
+    width: 22rem;
+
+  }
+}

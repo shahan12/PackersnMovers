@@ -37,7 +37,7 @@ const Progress = ({ progress, setProgress }) => {
   const fetchPaymentURL = async () => {
     // let fullPayment = Math.round(totalCost?.surgedTotalCost*0.1);
     // let fullPayment=totalCostRedux.surgedTotalCost;
-    let fullPayment = "99";
+    let fullPayment = "1";
     
     let savedOrderID = sessionStorage.getItem('orderID');
     let paymentResponse=await makePaymentRequest({fullPayment, identifier, savedOrderID, orderSessionId}); //url

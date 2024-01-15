@@ -19,8 +19,8 @@ function RetryPayments(props) {
     if(identifier && token && reMerTID) {
       const paymentResponse = await retryMakePaymentStatusRequest({identifier, reMerTID, reOrderID});
 
-      sessionStorage.removeItem('reMerTID');
-      sessionStorage.removeItem('reOrderID');
+      sessionStorage.removeItem("reMerTID");
+      sessionStorage.removeItem("reOrderID");
       if(paymentResponse?.type === 'success') {
         window.open("/bookings", "_self");
         

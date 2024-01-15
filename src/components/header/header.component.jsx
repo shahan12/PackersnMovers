@@ -17,7 +17,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
 
   useEffect(() => {
     const pathname = window.location.pathname;
-    
+
     if (pathname.includes("fill-details") || pathname.includes("bookings") || pathname.includes("edit-profile")) {
       setShowFillHeader(true);
     } else {
@@ -32,7 +32,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     setContinueBookingVisible(!pathname.includes("fill-details"));
   }, []);
 
-  
+
   const closeModal = () => {
     setModalOpen(false);
     setLoginModal(false);
@@ -72,7 +72,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
           flow={"login"}
         />
       )}
-      
+
       {/* the logo */}
 
       <div className="align-center">
@@ -87,10 +87,10 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
       {/* the logo */}
 
       {showfillHeader ? (
-        
+
         // Header inside
         <div className="header-cta-container align-center space-between grey-600">
-         
+
           <span className="header-item-phoneNumber-container">
             <span className="header-user-wrapper">+91 888 4784 888</span>
           </span>
@@ -112,45 +112,45 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               className="flex width-100 header-profile-img"
             ></img>
             {showMoreOption && (
-            <div className="header-more-option-dropdown">
-              <div className="header-option" onClick={handleProfile}>
-                Profile
-              </div>
-              <div className="header-option" onClick={handleBooking}>
-                My Bookings
-              </div>
-              {continueBookingVisible && sessionStorage.getItem('orderSessionId') &&(
-                <div className="header-option" onClick={handleFill}>
-                  Continue Booking
+              <div className="header-more-option-dropdown">
+                <div className="header-option" onClick={handleProfile}>
+                  Profile
                 </div>
-              )}
-        <div className="header-option" onClick={hanleLogOut}>
-          Log out
-        </div>
-      </div>
-    )}
+                <div className="header-option" onClick={handleBooking}>
+                  My Bookings
+                </div>
+                {continueBookingVisible && sessionStorage.getItem('orderSessionId') && (
+                  <div className="header-option" onClick={handleFill}>
+                    Continue Booking
+                  </div>
+                )}
+                <div className="header-option" onClick={hanleLogOut}>
+                  Log out
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
         // Header outside
 
         <div className="header-cta-container align-center space-between grey-600">
-            <div className="header-user-wrapper">
-              +91 888 4784 888
-            </div>
-            <button className="header-sign-in-btn"
-        onClick={() => {
-          setIsNavExpanded(!isNavExpanded);
-        }}><img
+          <div className="header-user-wrapper">
+            888 4784 888
+          </div>
+          <button className="header-sign-in-btn"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}><img
               src={hamMenu}
               alt="ham-menu"
               className="ham-icon"
             ></img></button>
-            <div className={
-          isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
-        }>
+          <div className={
+            isNavExpanded ? "navigation-menu expanded" : "navigation-menu"
+          }>
             <ul>
-            <li>
+              <li>
                 <div className="header-sign-in-btn hamburger" onClick={() => {
                   setIsNavExpanded(false);
                 }}>
@@ -160,69 +160,74 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                 </div>
               </li>
               <li>
-          <div className="header-sign-in-btn hamburger" onClick={() => {
-          setIsNavExpanded(false);
-        }}>
-            <Link to="/about-us" className="header-CTA-item" >
-              About Us
-            </Link>
+                <div className="header-sign-in-btn hamburger" onClick={() => {
+                  setIsNavExpanded(false);
+                }}>
+                  <Link to="/about-us" className="header-CTA-item" >
+                    About Us
+                  </Link>
+                </div>
+              </li>
+              <li>
+                {!isAuthenticated ? (
+                  <div
+                    className="header-sign-in-btn hamburger "
+                    onClick={() => {
+                      sessionStorage.setItem('SpLog', true);
+                      setLoginModal(true);
+                      setIsNavExpanded(false);
+                    }}
+                  >
+                    Corporate
+                  </div>
+                ) : (
+                  <div className="header-sign-in-btn hamburger">
+                    Corporate
+                  </div>
+                )}
+              </li>
+              <li>
+                {!isAuthenticated ? (
+                  <div
+                    className="header-sign-in-btn hamburger"
+                    onClick={() => {
+                      sessionStorage.setItem('SpLog', true);
+                      setLoginModal(true);
+                      setIsNavExpanded(false);
+                    }}
+                  >
+                    Commercial
+                  </div>
+                ) : (
+                  <div className="header-sign-in-btn hamburger">
+                    Commercial
+                  </div>
+                )}
+              </li>
+              <li>
+                <div className="header-sign-in-btn hamburger" onClick={handleBooking}>
+                  My Bookings
+                </div>
+              </li>
+              <li>
+                {!isAuthenticated ? (
+                  <div
+                    className="header-sign-in-btn hamburger logout-list"
+                    onClick={() => {
+                      setLoginModal(true);
+                      setIsNavExpanded(false);
+                    }}
+                  >
+                    Login
+                  </div>
+                ) : (
+                  <div className="header-sign-in-btn hamburger logout-list" onClick={hanleLogOut}>
+                    <span>Log Out</span>
+                  </div>
+                )}
+              </li>
+            </ul>
           </div>
-          </li>
-          <li>
-            {!isAuthenticated ? (
-              <div
-                className="header-sign-in-btn hamburger "
-                onClick={() => {
-                  sessionStorage.setItem('SpLog', true);
-                  setLoginModal(true);
-                  setIsNavExpanded(false);
-                }}
-              >
-                Corporate
-              </div>
-            ) : (
-              <div className="header-sign-in-btn hamburger">
-                Corporate
-              </div>
-            )}
-          </li>
-          <li>
-            {!isAuthenticated ? (
-              <div
-                className="header-sign-in-btn hamburger"
-                onClick={() => {
-                  sessionStorage.setItem('SpLog', true);
-                  setLoginModal(true);
-                  setIsNavExpanded(false);
-                }}
-              >
-                Commercial
-              </div>
-            ) : (
-              <div className="header-sign-in-btn hamburger">
-                Commercial
-              </div>
-            )}
-          </li>
-          <li>
-          {!isAuthenticated ? (
-            <div
-              className="header-sign-in-btn hamburger logout-list"
-              onClick={() => {
-                setLoginModal(true);
-                setIsNavExpanded(false);
-              }}
-            >
-              Login
-            </div>
-          ) : (
-            <div className="header-sign-in-btn hamburger logout-list" onClick={hanleLogOut}>
-              <span>Log Out</span>
-            </div>
-          )}
-          </li>
-          </ul>
-        </div>
         </div>
       )}
     </article>

@@ -6,42 +6,42 @@ import { useInView } from "react-intersection-observer";
 
 const data = [
   {
-    service: "Vehicle Assurance",
-    shiftkart: "checkmark",
-    local: "checkmark",
-  },
-  {
-    service: "Verified Professional Driver",
+    service: "Professional Sales Expert",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },
   {
-    service: "Regular Update",
+    service: "Dedicated Shifitng Manager",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },
   {
-    service: "Packaging & Unpackaging Of Household Goods",
-    shiftkart: "checkmark",
-    local: "checkmark",
-  },
-  {
-    service: "Dismantling & Re-Assemble Of Furniture",
-    shiftkart: "checkmark",
-    local: "checkmark",
-  },
-  {
-    service: "Professional Packers",
+    service: "Flexible Date And Slot",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },
   {
-    service: "Bubble / Foam Wrapping",
+    service: "Zero Cancellation Charges",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },
   {
-    service: "Damage Assurance",
+    service: "Company Owned Closed Container Vehicles",
+    shiftkart: "checkmark",
+    local: "uncheckmark",
+  },
+  {
+    service: "Trained And Skilled Packers",
+    shiftkart: "checkmark",
+    local: "uncheckmark",
+  },
+  {
+    service: "Customized ShiftKart Packaging Material",
+    shiftkart: "checkmark",
+    local: "uncheckmark",
+  },
+  {
+    service: "Regular Consignment Updates",
     shiftkart: "checkmark",
     local: "uncheckmark",
   },

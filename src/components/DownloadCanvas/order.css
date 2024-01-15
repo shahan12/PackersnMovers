@@ -1,0 +1,111 @@
+.retry-button {
+    padding: 0.25rem;
+    color: white;
+    background-color: #550EC5;
+    text-align: center;
+    justify-content: center;
+    border-radius: 0.2rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.template-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;overflow: auto;
+    break-inside: avoid;
+}
+.template-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.template-title h2 {
+    font-size: 15;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+}
+.ST {
+    font-size: 5;
+    font-weight: 400;
+    color: #550EC5;
+}
+.gap-10 {
+    height: 1rem;
+}
+
+.gap-5 {
+    height: 0.5rem;
+}
+
+.template-subt{
+    font-size: 12;
+    font-weight: 400;
+    display: flex;
+    justify-content: flex-start;
+}
+.gap-20 {
+    height: 2rem;
+}
+
+.ST-head {
+    font-size: 12;
+    font-weight: 700;
+}
+.ST-data-row {
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.ST-data-column {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.bold-braces {
+    font-weight: bold;
+}
+.template-child-con {
+    display: flex;
+    width: 100%;
+}
+
+.temp-child {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.temp-child2 {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+hr {
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+
+  
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #8a8a8a;
+}
+
+.bold-braces {
+    font-weight: bold;
+}

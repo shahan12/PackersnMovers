@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 const authmiddleware = require('../../authmiddleware');
 
 const RegisterModal = ({ onClose, postData, flow }) => {
-  
+
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
@@ -36,38 +36,43 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const handleLogin = async () => {
     try {
       const savedToken = sessionStorage.getItem('token');
-      sessionStorage.setItem('loggedIn',savedToken);
+      sessionStorage.setItem('loggedIn', savedToken);
       // console.log(savedToken, "savedToken");
       const response = await sendLoginRequestToBackend(phoneNumber);
       // console.log(response, "handleLogin response");
-      
-      if(savedToken) {
 
-        if(response?.type==='invalidToken') {
+      if (savedToken) {
+
+        if (response?.type === 'invalidToken') {
           alert("Token Invalid, please refresh your page and try again");
           performLogout();
         }
-        else if(response?.type==='serverError') {
+        else if (response?.type === 'serverError') {
           alert("Server Error!");
           performLogout();
-        } else if (response?.type==='success' && sessionStorage.getItem('SpLog')) {
+        } else if (response?.type === 'success' && sessionStorage.getItem('SpLog')) {
           // console.log('success', response);
-          
+
           alert("Thank you one of our agents will get back to You!");
           performLogout();
         }
-        else if (response?.type==='success'){
+        else if (response?.type === 'success') {
           // console.log('success', response);
           sessionStorage.setItem("orderSessionId", response.data);
           let update = {
             "orderSessionId": response.data,
           }
           dispatch(updateVars(update));
-          window.open("/fill-details", "_self");
+          if (window.location.search.includes("bookings-page") > 0) {
+            window.open("/bookings", "_self")
+          }
+          else {
+            window.open("/fill-details", "_self");
+          }
         } else {
           performLogout();
         }
-        
+
 
       }
       else {
@@ -111,25 +116,25 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
 
-  const verifyOTP=async()=>{
+  const verifyOTP = async () => {
     // console.log("otp typed : ", OTP);
-    const resp=await sendOTPVerifyRequestToBackend({OTP, phoneNumber});
+    const resp = await sendOTPVerifyRequestToBackend({ OTP, phoneNumber });
     // console.log("verifyOTP",resp );
     // console.log(resp);
 
-    if(resp?.type==='invalidToken') {
+    if (resp?.type === 'invalidToken') {
       alert("Token Invalid, please refresh your page and try again");
       performLogout();
     }
-    if(resp?.type==='serverError') {
+    if (resp?.type === 'serverError') {
       alert("Please refresh your page and try again!");
       performLogout();
     }
-    if(resp?.type==='error') {
+    if (resp?.type === 'error') {
       alert("Invalid OTP!");
       performLogout();
     }
-    else{
+    else {
       const encData = authmiddleware.encryptData(phoneNumber);
       sessionStorage.setItem("identifier", encData);
       let update = {
@@ -143,7 +148,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   return (
     <div className="login-modal-overlay">
       <div className="login-modal">
-        <button className="login-modal-close" onClick={onClose}   style={{ color: 'white' }}> 
+        <button className="login-modal-close" onClick={onClose} style={{ color: 'white' }}>
           &times;
         </button>
         <div className="login-modal-content">
@@ -154,7 +159,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
               className="login-modal-company-logo"
             ></img>
             {/* Replace with your image */}
-            <h4 style={{fontSize: '1.8rem'}}>Free Inspection Of Your Home Or Office</h4>
+            <h4 style={{ fontSize: '1.8rem' }}>Free Inspection Of Your Home Or Office</h4>
             <img src={loginModalImg} alt="Login" />
           </div>
           <div className="login-modal-form">
@@ -166,33 +171,32 @@ const RegisterModal = ({ onClose, postData, flow }) => {
               ></img>
             </div>
             <div>
-            {flow === "register" && <p className="small-desc" style={{color: '#FDFDFDC9'}}> Let us get in touch with you!</p>}
-            {flow === "login" && <p className="small-desc" style={{color: '#FDFDFDC9', marginBottom: '0.3rem'}}>Enter Number to Continue</p>}
-            {!thankYou && !otpPage && (
-              <form>
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  pattern="\d*"
-                  maxLength="10"
-                  value={phoneNumber}
-                  onChange={handlePhoneNumberChange}
-                  placeholder="Enter your phone number"
-                  inputMode="numeric"
-                />
-                <button
-                  type="submit"
-                  //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
-                  onClick={(e) => sendOTP(e)}
-                  disabled={!isValidPhoneNumber || !phoneNumber}
-                  className={`${
-                    !isValidPhoneNumber || !phoneNumber ? "disabled" : ""
-                  } cta-button`}
-                >
-                  Login
-                </button>
-              </form>
-            )}
+              {flow === "register" && <p className="small-desc" style={{ color: '#FDFDFDC9' }}> Let us get in touch with you!</p>}
+              {flow === "login" && <p className="small-desc" style={{ color: '#FDFDFDC9', marginBottom: '0.3rem' }}>Enter Number to Continue</p>}
+              {!thankYou && !otpPage && (
+                <form>
+                  <input
+                    type="text"
+                    id="phoneNumber"
+                    pattern="\d*"
+                    maxLength="10"
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                    placeholder="Enter your phone number"
+                    inputMode="numeric"
+                  />
+                  <button
+                    type="submit"
+                    //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
+                    onClick={(e) => sendOTP(e)}
+                    disabled={!isValidPhoneNumber || !phoneNumber}
+                    className={`${!isValidPhoneNumber || !phoneNumber ? "disabled" : ""
+                      } cta-button`}
+                  >
+                    Login
+                  </button>
+                </form>
+              )}
             </div>
             {thankYou && flow === "register" && (
               <h3>We will connect with you shortly!</h3>
@@ -215,11 +219,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     border: "1px solid #A2A6B8",
                   }}
                   containerStyle={{ gap: "0.375rem" }}
-                /> 
-                 <button
-                  className={`cta-button continue-OTP-enter ${
-                    OTP.length < 4 ? "disabled" : ""
-                  }`}
+                />
+                <button
+                  className={`cta-button continue-OTP-enter ${OTP.length < 4 ? "disabled" : ""
+                    }`}
                   disabled={OTP.length < 4}
                   onClick={verifyOTP}
                 >

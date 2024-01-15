@@ -52,6 +52,18 @@ export const sendOTPRequestToBackend = async (data) => {
     handleApiError(error);
   }
 };
+export const sendMail = async (data) => {
+  const encData = authmiddleware.encryptData(data);
+  try {
+    const response = await instance.post('/saveUserEmail', { encData });
+    if (response ) {
+      console.log(response);
+      return response.data;
+    }
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 
 export const sendOTPVerifyRequestToBackend = async (data) => {
   

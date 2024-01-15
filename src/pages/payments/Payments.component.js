@@ -20,9 +20,9 @@ function Payments(props) {
     if(savedOrderID && identifier && token && merTID && orderSessionId) {
       const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID, orderSessionId});
 
-      sessionStorage.removeItem('merID');
-      sessionStorage.removeItem('orderID');
-      sessionStorage.removeItem('orderSessionId');
+      sessionStorage.removeItem("merTID");
+      sessionStorage.removeItem("savedOrderID");
+      sessionStorage.removeItem("orderSessionId");
       if(paymentResponse?.type === 'success') {
         window.open("/bookings", "_self");
       } else if (paymentResponse?.type === 'invalidToken') {
@@ -44,7 +44,7 @@ function Payments(props) {
   return (
     <>
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="edit-profile-wrapper">
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}  className="container">
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent:"center" }}  className="container">
           <h2>Redirecting in a moment</h2>
           <img style={{width: '1.5rem', marginRight: '0.5rem'}} src={loaderIcon} alt="loader" />
         </div>

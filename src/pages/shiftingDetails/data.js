@@ -1,8 +1,8 @@
 export const data1 = {
   para1:
-    "ShiftKart Packers and Movers in Bangalore are India’s most affordable packers and movers with professionally trained staff and modernized equipment. We are your companions in elevating your home transition with our shifting services. Explore a seamless move as we ensure the safe relocation of your cherished belongings.",
+    "Home shifting is one of the most tedious and stressful tasks that we all have to do sometime in our life. Without proper planning, your overall shifting experience will be very hectic, and there are a lot of risks involved too. It's best to leave it to a professional and make your relocation smooth and stress-free.",
   para2:
-    "We have created uncountable memories with our shifting services all over India. ShiftKart Packers And Movers offer a impeccable service. ShiftKart is the best Packers And Movers in Bangalore. We are professional packers and movers with reputation and reliability.",
+    "ShiftKart Movers and Packers carry out shifting tasks in a professional manner using advanced techniques and modern equipment. They mostly deliver all kinds of services like local shifting, domestic moving, full moving service, partial shifting service, disassembling, packing, loading, shifting, unloading, unpacking, reassembling, etc. We perform any type of difficult task comfortably and safely without causing any damage or loss to your goods/property. We will minimize your physical and mental stress, as well as time and money.",
   para3:
     "ShiftKart Packers And Movers in Bangalore offer an exceptional service. Our process is streamlined: When we receive your enquiry our sales expert contact you and if required we send our Field Relationship Manager to inspect your location for free of cost. Once the inspection is done, our sales expert give you the best quotation compared to the market. Post this we take a nominal booking charges to confirm your booking and we assign a dedicated shifting manager to handle your movement from scratch to the end.",
   para4:

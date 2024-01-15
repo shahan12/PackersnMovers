@@ -143,19 +143,19 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
               />
               <div className="center-div process-row-one">
                 <NumberInc
-                  value={20}
+                  value={3}
                   text={"Lakh+"}
                   subtext={"Relocations Done"}
                   color={"#5c7ca4"}
                 />
                 <NumberInc
-                  value={20}
+                  value={2}
                   text={"K+"}
                   subtext={"Customers Served Monthly"}
                   color={"#4d9cbc"}
                 />
                 <NumberInc
-                  value={20}
+                  value={3}
                   text={"Lakh+"}
                   subtext={"Happy Faces"}
                   color={"#5ccc9c"}

@@ -121,6 +121,7 @@
     align-items:flex-start;
     flex-direction: column;
     justify-content: space-around;
+    margin: 0rem 1rem;
 }
 .bookings-from-container span {
     padding: 0;

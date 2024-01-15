@@ -12,6 +12,8 @@ import Calemder from "../../images/calender.svg";
 import { getUserBookingFromBackend, retryPayment } from "../../API/apicalls";
 import { performLogout } from "../../components/FillRequirements/Requirement.component";
 import authmiddleware from "../../authmiddleware";
+import DownloadOrder from "../../components/DownloadCanvas/downloadOrder";
+import Template from "../../components/DownloadCanvas/template";
 
 function Bookings({ }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -54,7 +56,7 @@ function Bookings({ }) {
       } else if(bookingDataE.type === 'success'){
         const bookingData = authmiddleware.decryptData(bookingDataE.ebooks);
         setBookingDatas(bookingData);
-        // console.log("bookingData", bookingData, bookingData?.ebooks);
+        console.log("bookingData", bookingData, bookingData?.ebooks);
       }
     } else {
       performLogout();
@@ -135,10 +137,11 @@ function Bookings({ }) {
                 </div>
                 {/* Retry button conditionally rendered */}
                 {data.final_payment_code !== "PAYMENT_SUCCESS" && (
-                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, "99")}>
+                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, "1")}>
                     Retry Payment
                   </button>
                 )}
+                  <DownloadOrder data={data}identifier={identifier} />
               </div>
               <div className="top-right-image-container">
                 <img src={orderID} alt="top-right-image" />
@@ -149,6 +152,7 @@ function Bookings({ }) {
         ) : (
           <div className="null-container">
             <p>No bookings available.</p>
+            
           </div>
         )}
 

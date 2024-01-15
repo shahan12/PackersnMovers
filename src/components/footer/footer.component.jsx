@@ -10,10 +10,36 @@ import insta from "../../images/insta.svg";
 import linkedin from "../../images/linkedin.svg";
 import youtube from "../../images/youtube.svg";
 
+import { sendMail } from '../../API/apicalls.js';
+
 function Footer(props) {
 
   const [path, setPath] = useState(window.location.pathname);
   const [hideFooter, setHideFooter] = useState(false);
+  const [email, setEmail] = useState('');
+
+  const handleSubscribeClick = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Invalid email address');
+      return;
+    }
+
+    // If email is valid, send request to API
+    try {
+      const apiResponse = await sendMail(email);
+      if(apiResponse) {
+        setEmail('');
+        alert("We will get in touch with you!");
+      }
+    } catch (error) {
+      alert("Something Went Wrong, try again later!");
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
   const handleLinkClick = () => {
     // Scroll to the top when a link is clicked
@@ -52,26 +78,28 @@ function Footer(props) {
         </ul>
       </div>
       </div>
-        <div className="center-div footer-subscriber">
-          <input
-            type="email"
-            id="user-email"
-            name="email"
-            placeholder="You email"
-            className="footer-input-box"
-          ></input>
-          <button className="footer-subsribe-CTA center-div">
-            <img
-              src={arrow}
-              alt="enter-btn"
-              className="footer-action-img"
-            ></img>
-          </button>
-        </div>
+      <div className="center-div footer-subscriber">
+      <input
+        type="email"
+        id="user-email"
+        name="email"
+        placeholder="Your email"
+        className="footer-input-box"
+        value={email}
+        onChange={handleEmailChange}
+      />
+      <button className="footer-subsribe-CTA center-div" onClick={handleSubscribeClick}>
+        <img
+          src={arrow}
+          alt="enter-btn"
+          className="footer-action-img"
+        />
+      </button>
+    </div>
       </div>
       <div className="footer-lower-section-container align-center space-between">
         <img src={logo} alt="Logo" className="footer-company-logo"></img>
-        <div className="footer-comapny-copywrite">&copy; &nbsp; ShiftKart</div>
+        <div className="footer-comapny-copywrite">&copy; &nbsp; EZY SHIFTKART TECHNOLOGY SOLUTIONS PRIVATE LIMITED</div>
         <div className="footer-company-socials-container align-center">
           <a href="https://www.facebook.com/shiftkart/" className="flex">
             <img src={fb} atl="social-img"></img>

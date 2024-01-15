@@ -7,7 +7,7 @@ function AboutUs({ isHomePage }) {
     <div className={`${isHomePage ? '' : 'about-top'}`}>
       <div className="row px-4 ">
       <div className="about-us-section-1">
-        <h2 className="about-us-heading">Best Packers and Movers in Bangalore</h2>
+        <h2 className="about-us-heading">ABOUT US</h2>
         <p className="about-us-para-text">{data1.para1}</p>
         <p className="about-us-para-text">{data1.para2}</p>
         <p className="about-us-para-text">{data1.para3}</p>

@@ -1,6 +1,5 @@
-
 .about-us-heading {
- text-align: center;
+    text-align: center;
 }
 
 .about-us-section-1 {
@@ -11,32 +10,35 @@
 .about-us-section-2 {
     background-color: rgb(248, 248, 248);
 }
-.about-us-para-heading{
+
+.about-us-para-heading {
     font-weight: 500;
     font-size: 1.125rem;
     color: black;
 }
 
-.about-top-sd{
+.about-top-sd {
     padding-top: 0rem;
 }
 
-.about-us-para-text{
+.about-us-para-text {
     text-align: justify;
     margin: 2.5rem 0;
     font-weight: 400;
     font-size: 1.125rem;
     color: #757575;
 }
+
 .individual-box {
     display: flex;
-    flex-wrap: wrap; /* This allows elements to wrap as the viewport gets smaller */
+    flex-wrap: wrap;
+    /* This allows elements to wrap as the viewport gets smaller */
     justify-content: flex-start;
     width: 100%;
     margin-bottom: 3rem;
 }
-  
-  .individual-item {
+
+.individual-item {
     padding: 0.25rem 0.5rem;
     display: flex;
     background-color: #F6F6F6;
@@ -48,3 +50,36 @@
     margin-bottom: 1rem;
 }
 
+.text-div {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+}
+
+.img-div {
+    display: flex;
+    flex: 0.5;
+    flex-direction: column;
+}
+
+.img-styles {
+    max-width: 22rem;
+    padding: 0 4rem;
+}
+
+@media only screen and (max-width: 768px) {
+    .container-flex {
+        flex-direction: column;
+    }
+
+    .img-div {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .about-us-section-2 {
+        .img-div {
+            padding-bottom: 2rem;
+        }
+    }
+}
