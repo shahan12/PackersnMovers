@@ -25,6 +25,7 @@ import CompareTable from "../../components/CompareTable/CompareTable.component";
 import { useInView } from "react-intersection-observer";
 import AboutUs from "../aboutUs/aboutUs.component";
 import data from "../../components/Faq/faq.json";
+import processTextimg from "../../images/process_text.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
@@ -142,24 +143,29 @@ function Home({ setShowPopUp, loginModal, setLoginModal }) {
                 alt="process-icon"
               />
               <div className="center-div process-row-one">
-                <NumberInc
-                  value={3}
+                {/* <NumberInc
+                  value={50}
                   text={"Lakh+"}
                   subtext={"Relocations Done"}
                   color={"#5c7ca4"}
                 />
                 <NumberInc
-                  value={2}
+                  value={90}
                   text={"K+"}
                   subtext={"Customers Served Monthly"}
                   color={"#4d9cbc"}
                 />
                 <NumberInc
-                  value={3}
+                  value={70}
                   text={"Lakh+"}
                   subtext={"Happy Faces"}
                   color={"#5ccc9c"}
-                />
+                /> */}
+                <img
+                className="process-img"
+                src={processTextimg}
+                alt="process-icon"
+              />
               </div>
               <img
                 className="process-img"

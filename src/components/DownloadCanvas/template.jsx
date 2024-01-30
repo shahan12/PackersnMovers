@@ -5,11 +5,12 @@ import authmiddleware from '../../authmiddleware';
 const Template = forwardRef(({ data, identifier }, ref) => {    
     
     const mobile = authmiddleware.decryptData(identifier);
-    const extractedDate = new Date(data.book_date).toLocaleDateString('en-GB');
+    const extractedDate = new Date(data?.book_date).toLocaleDateString('en-GB');
 
-    const inventoryData = data.user_inventory;
-    const addonsData = data.addons;
+    const inventoryData = data?.user_inventory;
+    const addonsData = data?.addons;
 
+    console.log("inventoryData", inventoryData);
     // Function to render inventory details
     const renderInventoryDetails = () => {
       return Object.keys(inventoryData).map((category) => (
@@ -57,11 +58,11 @@ const Template = forwardRef(({ data, identifier }, ref) => {
             <div className='template-data'>
                 <div className='ST-data-row'>
                     <span className='ST-data-1'>Mobile: <span className='bold-braces'>{mobile}</span></span>
-                    <span className='ST-data-1'>Order ID: <span className='bold-braces'>{data.order_id}</span></span>
+                    <span className='ST-data-1'>Order ID: <span className='bold-braces'>{data?.order_id}</span></span>
                 </div>
                 <div className='ST-data-row'>
                     <span className='ST-data-1'>Booking Date: <span className='bold-braces'>{extractedDate}</span></span>
-                    <span className='ST-data-1'>Time Slot Selected: <span className='bold-braces'>{data.book_slot_time}</span></span>
+                    <span className='ST-data-1'>Time Slot Selected: <span className='bold-braces'>{data?.book_slot_time}</span></span>
                 </div>
             </div>
             <div className='gap-20' />
@@ -69,9 +70,9 @@ const Template = forwardRef(({ data, identifier }, ref) => {
             <hr />
             <div className='template-data'>
                 <div className='ST-data-column'>
-                    <span className='ST-data-1'>To Address: <span className='bold-braces'>{data.to_address}</span></span>
-                    <span className='ST-data-1'>From Address: <span className='bold-braces'>{data.from_address}</span></span>
-                    <span className='ST-data-1'>Distance: <span className='bold-braces'>{data.total_distance}</span></span>
+                    <span className='ST-data-1'>To Address: <span className='bold-braces'>{data?.to_address}</span></span>
+                    <span className='ST-data-1'>From Address: <span className='bold-braces'>{data?.from_address}</span></span>
+                    <span className='ST-data-1'>Distance: <span className='bold-braces'>{data?.total_distance}</span></span>
                 </div>
             </div>
             
@@ -80,12 +81,12 @@ const Template = forwardRef(({ data, identifier }, ref) => {
             <hr />
             <div className='template-data'>
                 <div className='ST-data-row'>
-                    <span className='ST-data-1'>Transaction ID: <span className='bold-braces'>{data.transaction_id}</span></span>
-                    <span className='ST-data-1'>Payment Status: <span className='bold-braces'>{data.final_payment_code}</span></span>
+                    <span className='ST-data-1'>Transaction ID: <span className='bold-braces'>{data?.transaction_id}</span></span>
+                    <span className='ST-data-1'>Payment Status: <span className='bold-braces'>{data?.final_payment_code}</span></span>
                 </div>
                 <div className='ST-data-row'>
                     <span className='ST-data-1'>Booking Amount: <span className='bold-braces'>₹99</span></span>
-                    <span className='ST-data-1'>Total Amount: ₹<span className='bold-braces'>{data.final_amount}</span></span>
+                    <span className='ST-data-1'>Total Amount: ₹<span className='bold-braces'>{data?.final_amount}</span></span>
                 </div>
             </div>
 
@@ -94,11 +95,11 @@ const Template = forwardRef(({ data, identifier }, ref) => {
             <hr />
             <div className='template-data'>
                 <div className='ST-data-row'>
-                    <span className='ST-data-1'>House Type: <span className='bold-braces'>{data.house_type}</span></span>
-                    <span className='ST-data-1'>Total Inventory Items: <span className='bold-braces'>{data.total_items}</span></span>
+                    <span className='ST-data-1'>House Type: <span className='bold-braces'>{data?.house_type}</span></span>
+                    <span className='ST-data-1'>Total Inventory Items: <span className='bold-braces'>{data?.total_items}</span></span>
                 </div>
                 <div className='ST-data-column'>
-                    <span className='ST-data-1'>Additional Boxes: <span className='bold-braces'>{data.additional_box}</span></span>
+                    <span className='ST-data-1'>Additional Boxes: <span className='bold-braces'>{data?.additional_box}</span></span>
                 </div>
             </div>
 
@@ -113,49 +114,54 @@ const Template = forwardRef(({ data, identifier }, ref) => {
                     </tr>
                     <tr>
                         <td>basePrice</td>
-                        <td>₹{data.total_cost.basePrice}</td>
+                        <td>₹{data?.total_cost?.basePrice}</td>
                     </tr>
                     <tr>
                         <td>floorCharges</td>
-                        <td>₹{data.total_cost.floorCharges}</td>
+                        <td>₹{data?.total_cost?.floorCharges}</td>
                     </tr>
                     <tr>
                         <td>Add Ons Price</td>
-                        <td>₹{data.total_cost.addonsPrice}</td>
+                        <td>₹{data?.total_cost?.addonsPrice}</td>
                     </tr>
                     <tr>
                         <td>surgePrice</td>
-                        <td>₹{data.total_cost.surgePrice}</td>
+                        <td>₹{data?.total_cost?.surgePrice}</td>
                     </tr>
                     <tr>
                         <td>Special Packaging price</td>
-                        <td>₹{data.total_cost.packagingPrice}</td>
+                        <td>₹{data?.total_cost?.packagingPrice}</td>
                     </tr>
                     <tr>
                         <td>Total Cost</td>
-                        <td>₹{data.total_cost.surgedTotalCost}</td>
+                        <td>₹{data?.total_cost?.surgedTotalCost}</td>
                     </tr>
                 </table>
             </div>
 
             <hr />
 
-            <div className='template-child-con' >
-                <div className='temp-child'>
-                    <span className='ST-head'>Inventory Details:</span>
-                    <div className='template-data'>
-                        <div className='ST-data-row'>{renderInventoryDetails()}
+            {(inventoryData !== null || addonsData !== null) && (
+                <div className='template-child-con'>
+                    {inventoryData && (
+                        <div className='temp-child'>
+                            <span className='ST-head'>Inventory Details:</span>
+                            <div className='template-data'>
+                                <div className='ST-data-row'>{renderInventoryDetails()}</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className='temp-child2'>
-                    <span className='ST-head'>Add Ons Details:</span>
-                    <div className='template-data'>
-                        <div className='ST-data-row'>{renderAddonsDetails()}
+                    )}
+                    {addonsData && (
+                        <div className='temp-child2'>
+                            <span className='ST-head'>Add Ons Details:</span>
+                            <div className='template-data'>
+                                <div className='ST-data-row'>{renderAddonsDetails()}</div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
-            </div>
+            )}
+
 
 
         </div>

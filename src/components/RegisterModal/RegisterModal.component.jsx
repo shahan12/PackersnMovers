@@ -23,8 +23,10 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [thankYou, setThankYou] = useState(false);
   const [otpPage, setOtpPage] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [OTP, setOTP] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
+  
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
     const numericValue = inputPhoneNumber.replace(/\D/g, "");
@@ -94,6 +96,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
   const sendOTP = async (e) => {
     e.preventDefault();
+    setLoader(true);
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
       // console.log("sendOTP",resp, resp.token );
@@ -103,6 +106,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
           "token": resp.token,
         }
         dispatch(updateVars(update));
+        setLoader(false);
         setOtpPage(true);
       } else if (resp.type === "failed") {
         alert("Server Error, Please Try later!");
@@ -116,22 +120,24 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
 
-  const verifyOTP = async () => {
-    // console.log("otp typed : ", OTP);
+  const verifyOTP = async (e) => {
+    e.preventDefault();
+    setLoader(true);
     const resp = await sendOTPVerifyRequestToBackend({ OTP, phoneNumber });
-    // console.log("verifyOTP",resp );
-    // console.log(resp);
 
     if (resp?.type === 'invalidToken') {
       alert("Token Invalid, please refresh your page and try again");
+      setLoader(false);
       performLogout();
     }
     if (resp?.type === 'serverError') {
       alert("Please refresh your page and try again!");
+      setLoader(false);
       performLogout();
     }
     if (resp?.type === 'error') {
       alert("Invalid OTP!");
+      setLoader(false);
       performLogout();
     }
     else {
@@ -142,6 +148,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
       }
       dispatch(updateVars(update));
       handleLogin();
+      setLoader(false);
     }
   }
 
@@ -189,7 +196,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                     type="submit"
                     //onClick={(e) => handleSubmit(e, flow === "register" ? "register" : "login")}
                     onClick={(e) => sendOTP(e)}
-                    disabled={!isValidPhoneNumber || !phoneNumber}
+                    disabled={!isValidPhoneNumber || !phoneNumber || loader}
                     className={`${!isValidPhoneNumber || !phoneNumber ? "disabled" : ""
                       } cta-button`}
                   >
@@ -223,8 +230,8 @@ const RegisterModal = ({ onClose, postData, flow }) => {
                 <button
                   className={`cta-button continue-OTP-enter ${OTP.length < 4 ? "disabled" : ""
                     }`}
-                  disabled={OTP.length < 4}
-                  onClick={verifyOTP}
+                  disabled={OTP.length < 4 || loader}
+                  onClick={(e) => verifyOTP(e)}
                 >
                   Continue
                 </button>

@@ -41,10 +41,8 @@ function Relocate({setLoginModal}) {
     componentRestrictions: { country: "IN" }, 
     bounds: defaultBounds,
   };
-  console.log(activeTab);
 
   const handleSubmit = (e) => {
-    console.log("from", fromCity, toCity, activeTab);
     e.preventDefault();
 
     if(activeTab === "Local" && fromAddress && toAddress) {
@@ -87,22 +85,30 @@ function Relocate({setLoginModal}) {
 
   const handleFromPlaceChanged = () => {
     console.log("FROM", inputRefFrom?.current);
-    if(!inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
-      return;
-    }
-    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
-  };
+    const place = inputRefFrom?.current?.gm_accessors_?.place;
+    if (!place) return;
 
-  const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
-      return;
-    }
-    console.log("TO", inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
-    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
-  };
+    const firstPropertyKey = Object.keys(place)[0];
+    const formattedPrediction = place[firstPropertyKey]?.formattedPrediction;
+    if (!formattedPrediction) return;
 
+    setFromAddress(formattedPrediction);
+};
 
+console.log("fromAddress", fromAddress);
 
+const handleToPlaceChanged = () => {
+    const place = inputRefTo?.current?.gm_accessors_?.place;
+    if (!place) return;
+
+    const firstPropertyKey = Object.keys(place)[0];
+    const formattedPrediction = place[firstPropertyKey]?.formattedPrediction;
+    if (!formattedPrediction) return;
+
+    setToAddress(formattedPrediction);
+};
+
+console.log("setToAddress", toAddress);
 
   const calculateDistance = () => {
     if (fromAddress && toAddress) {

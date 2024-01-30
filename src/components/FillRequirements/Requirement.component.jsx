@@ -214,7 +214,8 @@ function Requirement(props) {
       // console.log("in if");
       setLoader(false);
       alert("We will schedule a free inspection and give you a best quotation. someone will get back to you!");
-      window.open("/" , "_self"); 
+      sessionStorage.removeItem("orderSessionId");
+      window.open("/bookings", "_self");
     } else {
       // console.log("in else");
       setLoader(false);

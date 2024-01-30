@@ -123,6 +123,8 @@ function Bookings({ }) {
                   <img src={Distance} alt="Box" />
                   <span>{data?.total_distance}</span>
                 </div>
+                {data?.booking_type === '' && (
+                  <>
                 <div className="bookings-deatils-option">
                   <img src={tag} alt="Box" />
                   <span>₹{data?.final_amount}</span>
@@ -131,20 +133,36 @@ function Bookings({ }) {
                   <img src={Calemder} alt="Box" />
                   <span>{new Date(data?.book_date).toDateString()} onwards {data?.book_slot_time}</span>
                 </div>
+                </>
+                )}
+                
                 <div className="bookings-deatils-option">
                   <img src={tag} alt="Box" />
-                  <span>{data.final_payment_code === "PAYMENT_SUCCESS" ? 'Payment Successful' : 'Payment Error Please Try Payment Again'}</span>
+                  <span>
+                    {data?.final_payment_code === "PAYMENT_SUCCESS" ? 'Payment Successful' : 
+                    (data?.final_payment_code === "PAYMENT_PENDING" || data?.final_payment_code === "PAYMENT_ERROR") ? 'Payment Failed' :
+                    data?.final_payment_code === null  && data?.initial_payment_code === "PAYMENT_INITIATED" ? 'Wait for 15 minutes, verifying Payment' : ''}
+                  </span>
                 </div>
                 {/* Retry button conditionally rendered */}
-                {data.final_payment_code !== "PAYMENT_SUCCESS" && (
-                  <button className="retry-button" onClick={() => retryPayStatus(data.order_id, "1")}>
+                {(
+                  (data?.final_payment_code === "PAYMENT_PENDING" || data?.final_payment_code === "PAYMENT_ERROR") &&
+                  data?.initial_payment_code === "PAYMENT_INITIATED"
+                ) && (
+                  <button className="retry-button" onClick={() => retryPayStatus(data?.order_id, "1")}>
                     Retry Payment
                   </button>
+                )}
+
+                {data?.booking_type && (
+                <div className="bookings-deatils-option">
+                  <span>We will get back to you soon!</span>
+                  </div>
                 )}
                   <DownloadOrder data={data}identifier={identifier} />
               </div>
               <div className="top-right-image-container">
-                <img src={orderID} alt="top-right-image" />
+                <img src={orderID} alt="topImage" />
                 <span className="top-right-text" >Order ID: {data?.order_id}</span>
               </div>
             </div>

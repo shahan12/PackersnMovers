@@ -77,7 +77,7 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
       "packagingPrice": packageSel.price,
       "totalCost": newTotalCost,
       "surgePrice": weekend ? Math.round((addonsPrice + totalCostBF + totalBoxPrice) * 0.2) : 0,
-      "surgedTotalCost": weekend ? Math.round((addonsPrice + totalCostBF + totalBoxPrice) * 1.2) : newTotalCost,
+      "surgedTotalCost": weekend ? Math.round(((addonsPrice + totalCostBF + totalBoxPrice) * 1.2) + packageSel.price) : newTotalCost,
     }
 
     setTotalCost(addonsPrice + totalCostBF + (packageSel.price ? packageSel.price : 0) + totalBoxPrice);
@@ -108,23 +108,30 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
   // };
 
 
-
   const handleFromPlaceChanged = () => {
-    console.log("inputRefFrom", inputRefFrom.current);
-    if(!inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
-      return;
-    }
-    setFromAddress(inputRefFrom?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
-  };
+    console.log("FROM", inputRefFrom?.current);
+    const place = inputRefFrom?.current?.gm_accessors_?.place;
+    if (!place) return;
 
-  const handleToPlaceChanged = () => {
-    if(!inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction){
-      return;
-    }
-    // console.log("inputRefFrom", inputRefTo.current.gm_accessors_.place.em.formattedPrediction);
-    setToAddress(inputRefTo?.current?.gm_accessors_?.place?.Wr?.formattedPrediction);
-  };
+    const firstPropertyKey = Object.keys(place)[0];
+    const formattedPrediction = place[firstPropertyKey]?.formattedPrediction;
+    if (!formattedPrediction) return;
 
+    setFromAddress(formattedPrediction);
+};
+
+console.log("fromAddress", fromAddress);
+
+const handleToPlaceChanged = () => {
+    const place = inputRefTo?.current?.gm_accessors_?.place;
+    if (!place) return;
+
+    const firstPropertyKey = Object.keys(place)[0];
+    const formattedPrediction = place[firstPropertyKey]?.formattedPrediction;
+    if (!formattedPrediction) return;
+
+    setToAddress(formattedPrediction);
+};
 
   const calculateDistance = () => {
     if (fromAddress && toAddress) {

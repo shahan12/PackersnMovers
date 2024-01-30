@@ -46,7 +46,7 @@ function BlogVideo(props) {
           title={blog.title}
           thumb={blog.thumbnail}
           video={blog.videolink}
-          className={index % 2 == 0 ? "" : "insideBlogCard2"}
+          className={index % 2 === 0 ? "" : "insideBlogCard2"}
         />
       </div>
       </div>

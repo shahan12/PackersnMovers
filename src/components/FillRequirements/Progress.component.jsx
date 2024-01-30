@@ -44,40 +44,44 @@ const Progress = ({ progress, setProgress }) => {
     
     if(paymentResponse.type === 'URLResponseError'){
       alert("We are facing some server error in payment gateway! but your Order is completed, please try payments in your bookings again later to finalize your Order!");
+      setLoader(false);
       window.open("/bookings", "_self");
     } else if (paymentResponse.type === 'invalidToken') {
       alert("Invalid Token!");
+      setLoader(false);
       performLogout();
     } else {
-      let { paymentURL: paymentURL, merID: merID } = authmiddleware.decryptData(paymentResponse);
+      let { paymentURL, merID } = authmiddleware.decryptData(paymentResponse);
       sessionStorage.setItem('merID', merID);
+      setLoader(false);
       window.open(paymentURL, "_self");
     }
   }
 
   const bookingConfirm = async () => {
-
+    setLoader(true);
     if(orderSessionId && identifier && token) {
       const API_DATA={"user_inventory": ITEMADDED, "addons": AddOnsADDED, "dataTime": DateTimeRedux, "totalCost": totalCostRedux,"mobile": identifier, "orderSessionId": orderSessionId};
       const response=await sendFinalItemsToBackend(API_DATA);
       // console.log("inventory response", response);
       if (response.type === "invalidToken") {
-        setLoader(false);
         alert("Please Login Again!");
+        setLoader(false);
         performLogout();
       } else if (response.type === "failed") {
-        setLoader(false);
         alert("Server Error, please try later!");
+        setLoader(false);
         performLogout();
       } else if (!response) {
+        setLoader(false);
         performLogout();
       } else {
-      setLoader(false);
       sessionStorage.setItem('orderID', response);
       fetchPaymentURL();
       }
     } else {
       alert("Please Login Again!");
+      setLoader(false);
       performLogout();
     }
   };
@@ -151,7 +155,7 @@ const Progress = ({ progress, setProgress }) => {
             <img style={{width: '1.25rem'}} src={loaderIcon} alt="loader" />
           ) : (
      */}
-          <button className="cta-button" onClick={()=>{bookingConfirm() ; setLoader(true);}}>
+          <button className="cta-button" disabled={loader} onClick={()=> bookingConfirm() }>
             Book Now @ ₹99
           </button>
         {/* )} */}

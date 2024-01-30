@@ -61,7 +61,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   };
 
   
-  const phoneNumber = "+91 888 478 4888";
+  const phoneNumber = "888 478 4888";
 
   const handlePhoneIconClick = () => {
     window.location.href = `tel:${phoneNumber}`;
