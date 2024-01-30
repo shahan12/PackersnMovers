@@ -96,6 +96,11 @@ app.get(`/api/stat`, (req, res) => {
 app.post(`/api/login`, (req, res) => {                                                          //// DONE
     const token = req.headers.authorization.split(' ')[1];
 
+    const currentTimeUTC = new Date();
+    const ISTOffset = 5.5 * 60 * 60 * 1000;
+    const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+    const currentTime = currentTimeIST.toISOString();
+
     const decoded = authmiddleware.verifyToken(token);
     if (decoded) {
         const mobileNumber = authmiddleware.decryptIdentifier(req.body.encData, "/login");
@@ -106,10 +111,9 @@ app.post(`/api/login`, (req, res) => {                                          
             con.query(q8, (error, result) => {
                 if (error) throw error;
                 const flag = result.rows.length;
-                console.log("Total length: ", flag);
                 if (result.rows.length <= 0) {
                     var q9 = "BEGIN;" +
-                        "INSERT INTO userInfo(user_mobile, order_session_id) VALUES ('" + mobileNumber + "', '" + orderSessionId + "');" +
+                        "INSERT INTO userInfo(user_mobile, order_session_id, time_of_update) VALUES ('" + mobileNumber + "', '" + orderSessionId + "', '" + currentTime + "');" +
                         "INSERT INTO inventoryData(user_mobile,order_session_id) VALUES ('" + mobileNumber + "',  '" + orderSessionId + "');" +
                         "INSERT INTO userprofile(user_mobile) VALUES ('" + mobileNumber + "');" +
                         "COMMIT;";
@@ -120,7 +124,7 @@ app.post(`/api/login`, (req, res) => {                                          
                 }
                 else {
                     var q12 = "BEGIN;" +
-                        "INSERT INTO userInfo(user_mobile, order_session_id) VALUES ('" + mobileNumber + "', '" + orderSessionId + "');" +
+                        "INSERT INTO userInfo(user_mobile, order_session_id, time_of_update) VALUES ('" + mobileNumber + "', '" + orderSessionId + "', '" + currentTime + "');" +
                         "INSERT INTO inventoryData(user_mobile,order_session_id) VALUES ('" + mobileNumber + "',  '" + orderSessionId + "');" +
                         "INSERT INTO userprofile(user_mobile) VALUES ('" + mobileNumber + "');" +
                         "COMMIT;";
@@ -171,8 +175,15 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
     const requiredValues = ["1 RK", "1 BHK", "2 BHK"];
     const valuesExist = requiredValues.every(value => houseTypes.includes(value));
     let additionalBox;
-    if (decoded) {
+    if (decoded && req.body.orderSessionId) {
         try {
+
+            
+            const currentTimeUTC = new Date();
+            const ISTOffset = 5.5 * 60 * 60 * 1000;
+            const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+            const currentTime = currentTimeIST.toISOString();
+
             var houseType = req.body.houseType.replace(' ', '').toLowerCase();
             var familyType = (req.body.familyType).toLowerCase();
             var members = parseInt(req.body.familyNumber);
@@ -198,9 +209,9 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
             const mobileNumber = authmiddleware.decryptIdentifier(identifier);
             const orderSessionId = req.body.orderSessionId;
 
-            var q13 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', from_floor = '" + fromFloorNum + "' " +
-                ", to_floor = '" + toFloorNum + "', from_lift = '" + fromLift + "', to_lift = '" + tolift + "', family_type = '" + familyType + "', house_type = '" + houseType + "' " +
-                ", total_distance= '" + totalDistance + "'  WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "' ";
+            const q13 = "UPDATE userInfo SET from_address = '" + fromAdd + "', to_address = '" + toAdd + "', from_floor = '" + fromFloorNum + "' " +
+    ", to_floor = '" + toFloorNum + "', from_lift = '" + fromLift + "', to_lift = '" + tolift + "', family_type = '" + familyType + "', house_type = '" + houseType + "' " +
+    ", total_distance= '" + totalDistance + "', time_of_update = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "' ";
 
             con.query(q13, (error, result) => {
                 if (error) throw error;
@@ -225,7 +236,6 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 });
             }
             else {
-                console.log("in else");
                 additionalBox = 0;
                 let orderID;
                 const prefix = 'SK';
@@ -233,17 +243,15 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 const currentDate1 = getCurrentDate(true);
                 const randomDigits = getRandNumber();
                 const last4Digits = getLast4Digitmobile(mobileNumber);
-                console.log(currentDate, 'date');
                 orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
 
-                console.log("User Order ID: ", orderID);
-                var q27 = "BEGIN ;" +
-                    "UPDATE userinfo SET order_id = '" + orderID + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "' ;" +
-                    "UPDATE inventorydata SET order_id = '" + orderID + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "'; " +
-                    "COMMIT ;";
+
+                var q27 = "BEGIN;" +
+                "UPDATE userinfo SET order_id = '" + orderID + "', time_of_update = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "';" +
+                "UPDATE inventorydata SET order_id = '" + orderID + "', booking_type = 'class2', time_of_booking = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "';" +
+                "COMMIT;";
                 con.query(q27, (error, result) => {
                     if (error) throw error;
-                    console.log("ADDITIONAL BOXES IF FOR OFFICE/VILLAS/ETC : ", additionalBox);
 
                     res.json(additionalBox).status(200);
                 });
@@ -270,8 +278,7 @@ app.put(`/api/basePrice`, (req, res) => {
         try {
             var totalDistance = parseFloat(req.body.distance.replace(/[^\d.]/g, ''));
 
-            var houseType = req.body.houseType.replace(' ', '').toLowerCase()
-            console.log("House Type: ", houseType, totalDistance);
+            var houseType = req.body.houseType.replace(' ', '').toLowerCase();
 
             if (houseType == "1rk") {
                 if (totalDistance <= 5) { basePrice = 2199; }
@@ -444,41 +451,39 @@ app.post(`/api/myBooking`, (req, res) => {
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
         const mobile = authmiddleware.decryptIdentifier(req.body.data);
-        console.log(mobile, 'mobile');
         try {
-            const q17 = ` SELECT userinfo.house_type, 
-                    userinfo.total_distance, 
-                    userinfo.from_address, 
-                    userinfo.to_address,
-                    inventorydata.book_date,
-                    inventorydata.book_slot_time,
-                    inventorydata.total_items,
-                    inventorydata.final_amount,
-                    inventorydata.additional_box,
-                    inventorydata.order_id,
-                    inventorydata.total_cost,
-                    inventorydata.user_inventory,
-                    inventorydata.addons,
-                    payments.transaction_id,
-                    payments.final_payment_code,
-                    payments.merchant_user
-             FROM userinfo
-             INNER JOIN payments ON userinfo.order_id = payments.order_id
-             INNER JOIN inventorydata ON payments.order_id = inventorydata.order_id
-             WHERE userinfo.user_mobile = $1
-             AND payments.order_id IS NOT NULL;
-              `;
-            console.log("User Mobile Number in myBooking API: ", mobile);
+            const q17 = `SELECT 
+                userinfo.house_type, 
+                userinfo.total_distance, 
+                userinfo.from_address, 
+                userinfo.to_address,
+                inventorydata.book_date,
+                inventorydata.book_slot_time,
+                inventorydata.total_items,
+                inventorydata.final_amount,
+                inventorydata.additional_box,
+                inventorydata.order_id,
+                inventorydata.total_cost,
+                inventorydata.booking_type,
+                inventorydata.user_inventory,
+                inventorydata.addons,
+                payments.transaction_id,
+                payments.final_payment_code,
+                payments.initial_payment_code,
+                payments.time_of_payment,
+                payments.merchant_user
+            FROM userinfo
+            LEFT JOIN payments ON userinfo.order_id = payments.order_id
+            INNER JOIN inventorydata ON userinfo.order_id = inventorydata.order_id
+            WHERE userinfo.user_mobile = $1
+            AND (payments.order_id IS NOT NULL OR inventorydata.order_id IS NOT NULL);`;
+console.log("User Mobile Number in myBooking API: ", mobile);
+
 
             con.query(q17, [mobile], (error, results) => {
                 if (error) throw error;
-                console.log("Booking data: ", results.rows);
                 if (results.rows.length >= 1) {
-                    console.log("Total no of rows: ", results.rows.length);
                     let books = results.rows;
-                    console.log("books var data: ", books);
-                    // books = books.slice(1);
-                    console.log("User Booking: " + books);
                     const ebooks = authmiddleware.encryptData(books);
                     const responseData = {
                         ebooks: ebooks,
@@ -517,7 +522,6 @@ app.post(`/api/selectedOrder`, (req, res) => {
                 if (error) throw error;
                 const inventoryAndPaymentResponse = results.rows;
 
-                console.log("Inventory Data and Payment Details: ", inventoryAndPaymentResponse);
                 res.send(inventoryAndPaymentResponse);
             });
         }
@@ -598,11 +602,18 @@ app.post(`/api/inventory`, (req, res) => {
             const encOrderID = authmiddleware.encryptData(orderID);
             let value = req.body.totalCost.totalBox;
             console.log(encOrderID, "new", orderSessionID,)
+
+            const currentTimeUTC = new Date();
+            const ISTOffset = 5.5 * 60 * 60 * 1000;
+            const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+            const currentTime = currentTimeIST.toISOString();
+
             if (isNaN(value) || value === undefined) {
                 value = 0;
             }
 
-            var q21 = "UPDATE inventoryData SET user_inventory = '" + user_inventory + "', book_date = '" + req.body.dataTime.selectedDay.bookingDate + "', total_cost = '" + totalCost + "', final_amount = '" + final_amount + "', book_slot_time = '" + req.body.dataTime.selectedTime.label + "', addons = '" + addons + "', order_id = '" + orderID + "', user_current_date = '" + currentDate + "', additional_box = '" + value + "', total_items = '" + req.body.totalCost.totalItemCount + "'  WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
+            var q21 = "UPDATE inventoryData SET user_inventory = '" + user_inventory + "', book_date = '" + req.body.dataTime.selectedDay.bookingDate + "', total_cost = '" + totalCost + "', final_amount = '" + final_amount + "', book_slot_time = '" + req.body.dataTime.selectedTime.label + "', addons = '" + addons + "', order_id = '" + orderID + "', user_current_date = '" + currentDate + "', additional_box = '" + value + "', total_items = '" + req.body.totalCost.totalItemCount + "', time_of_booking = '" + currentTime + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
+
 
             var q26 = "INSERT INTO payments (user_mobile, order_id) VALUES('" + mobile + "', '" + orderID + "')";
 
@@ -613,7 +624,6 @@ app.post(`/api/inventory`, (req, res) => {
                 } else {
                     con.query(q26, (error, result) => {
                         if (error) throw error;
-                        console.log(encOrderID, result.rows, "encOrderID");
                     })
 
                     var q22 = "UPDATE userinfo SET order_id = '" + orderID + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
@@ -622,8 +632,6 @@ app.post(`/api/inventory`, (req, res) => {
                         if (error) {
                             throw error;
                         } else {
-                            console.log(result.rows, "res");
-                            // Additional logic or response if needed
                             res.json(encOrderID).status(200);
                         }
                     });
@@ -670,7 +678,6 @@ app.post('/api/sendOTP', (req, res) => {
                     token: token
                     // Add other relevant properties as needed
                 };
-                // console.log("Response data from send otp: ", responseData);
                 res.status(200).json(responseData);
             })
             .catch(function (error) {
@@ -787,17 +794,18 @@ app.post(`/api/payment`, async (req, res) => {
         var minm4 = 1000; var maxm4 = 9999;
         let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
         let merchantPrefix = process.env.MerchantPrefix;
-        let merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
+        let MerchantPrefixUser = process.env.MerchantPrefixUser;
+        let merchantTransaction = merchantPrefix + mobileNumber + randomNumFour + randomNumSix;
         let merID = merchantTransaction;
-        let merchantUser = merchantPrefix + randomNumFour;
+        let merchantUser = MerchantPrefixUser + mobileNumber + randomNumFour + randomNumSix;
         const paymentData = {
             "merchantId": process.env.MerchantID,
             "merchantTransactionId": merchantTransaction,
             "merchantUserId": merchantUser,
             "amount": (intialAmount * 100),
-            "redirectUrl": "https://shiftkart.com/payments",
+            "redirectUrl": "https://shiftkart.co/payments",
             "redirectMode": "REDIRECT",
-            "callbackUrl": "https://shiftkart.com/payments",
+            "callbackUrl": "https://shiftkart.co/payments",
             "mobileNumber": mobileNumber,
             "paymentInstrument": {
                 "type": "PAY_PAGE"
@@ -820,11 +828,20 @@ app.post(`/api/payment`, async (req, res) => {
         xverify = "";
         let isSuccess = paymentres.data.success;
         let code = paymentres.data.code;
-        let totalAmt = paymentres.data.amount;
+        
+        const currentTimeUTC = new Date();
+        const ISTOffset = 5.5 * 60 * 60 * 1000;
+        const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+        const currentTime = currentTimeIST.toISOString();
+
+    
+        console.log("PAYMENT code", code, "isSuccess", isSuccess, "currentTime", currentTime);
+        
         if (isSuccess) {
             const paymentURL = paymentres.data.data.instrumentResponse.redirectInfo.url;
 
-            const q28 = "UPDATE payments SET transaction_id = '" + merchantTransaction + "', merchant_user = '" + merchantUser + "',total_amount = '" + totalAmt + "', paid_amount = '" + intialAmount + "', initial_payment_code = '" + code + "', initial_payment_response = '" + payRes + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
+            const q28 = "UPDATE payments SET transaction_id = '" + merchantTransaction + "', merchant_user = '" + merchantUser + "', total_amount = '" + '99' + "', paid_amount = '" + intialAmount + "', initial_payment_code = '" + code + "', initial_payment_response = '" + payRes + "', time_of_payment = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
+
 
             con.query(q28, (error, result) => {
                 if (error) throw error;
@@ -868,6 +885,7 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
         let isSuccess = true;
         let finalCode = response.data.code;
         let finalResponse = JSON.stringify(response.data.data, circularReplacer());
+        console.log("RETRY PAYMENT finalResponse", finalResponse, "finalCode", finalCode, "isSuccess", isSuccess);
         if (isSuccess) {
 
             var q24 = "UPDATE payments SET final_payment_code = '" + finalCode + "',  final_payment_response = '" + finalResponse + "' WHERE user_mobile = '" + mobileNumber + "' AND order_id = '" + OrderID + "' ";
@@ -912,17 +930,18 @@ app.post(`/api/retryPayment`, async (req, res) => {
         var minm4 = 1000; var maxm4 = 9999;
         let randomNumFour = Math.floor(Math.random() * (maxm4 - minm4 + 1)) + minm4;
         let merchantPrefix = process.env.MerchantPrefix;
-        let merchantTransaction = merchantPrefix + randomNumFour + randomNumSix;
+        let MerchantPrefixUser = process.env.MerchantPrefixUser;
+        let merchantTransaction = merchantPrefix + identifier + randomNumFour + randomNumSix;
         let merID = merchantTransaction;
-        let merchantUser = merchantPrefix + randomNumFour;
+        let merchantUser = MerchantPrefixUser + identifier + randomNumFour + randomNumSix;
         const paymentData = {
             "merchantId": process.env.MerchantID,
             "merchantTransactionId": merchantTransaction,
             "merchantUserId": merchantUser,
             "amount": (intialAmount * 100),
-            "redirectUrl": "https://shiftkart.com/retrypayments",
+            "redirectUrl": "https://shiftkart.co/retrypayments",
             "redirectMode": "REDIRECT",
-            "callbackUrl": "https://shiftkart.com/retrypayments",
+            "callbackUrl": "https://shiftkart.co/retrypayments",
             "mobileNumber": userMobile,
             "paymentInstrument": {
                 "type": "PAY_PAGE"
