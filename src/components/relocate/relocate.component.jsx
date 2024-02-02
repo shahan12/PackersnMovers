@@ -1,4 +1,4 @@
-import React, { useState, useRef,useEffect  } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../relocate/relocate.css";
 import DropDown from "../dropDown/dropDown.component";
 import Data from "./data.json";
@@ -7,8 +7,8 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 import { useDispatch } from 'react-redux';
 import { updateAddress } from '../../redux/actions';
 
-function Relocate({setLoginModal}) {
-  
+function Relocate({ setLoginModal }) {
+
   const dispatch = useDispatch();
   const libraries = ['places'];
   const inputRefFrom = React.useRef();
@@ -38,40 +38,40 @@ function Relocate({setLoginModal}) {
     west: wCity.longitude - 0.3,
   };
   const searchOptions = {
-    componentRestrictions: { country: "IN" }, 
+    componentRestrictions: { country: "IN" },
     bounds: defaultBounds,
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(activeTab === "Local" && fromAddress && toAddress) {
+    if (activeTab === "Local" && fromAddress && toAddress) {
 
-      if(sessionStorage.getItem('auth')==='false'){
+      if (sessionStorage.getItem('auth') === 'false') {
         setLoginModal(true);
       }
-      else{
+      else {
         window.open("/fill-details", "_self");
       }
       setModalOpen(true);
     }
-      else if (activeTab === "Between City" && fromCity && toCity) {
-        
-        sessionStorage.setItem('SpLog', true);
-        setLoginModal(true);
+    else if (activeTab === "Between City" && fromCity && toCity) {
+
+      sessionStorage.setItem('SpLog', true);
+      setLoginModal(true);
       // const requirementData = {
       //   'fromAddress': fromCity,
       //   'toAddress': toCity
       // }
-    } 
-      else if (activeTab === "International" && fromCoun && toCoun) {
-        
-        sessionStorage.setItem('SpLog', true);
-        setLoginModal(true);
-        // const requirementData = {
-        //   'fromAddress': fromCoun,
-        //   'toAddress': toCoun
-        // }
+    }
+    else if (activeTab === "International" && fromCoun && toCoun) {
+
+      sessionStorage.setItem('SpLog', true);
+      setLoginModal(true);
+      // const requirementData = {
+      //   'fromAddress': fromCoun,
+      //   'toAddress': toCoun
+      // }
     }
   };
   useEffect(() => {
@@ -84,7 +84,6 @@ function Relocate({setLoginModal}) {
   });
 
   const handleFromPlaceChanged = () => {
-    console.log("FROM", inputRefFrom?.current);
     const place = inputRefFrom?.current?.gm_accessors_?.place;
     if (!place) return;
 
@@ -93,11 +92,10 @@ function Relocate({setLoginModal}) {
     if (!formattedPrediction) return;
 
     setFromAddress(formattedPrediction);
-};
+  };
 
-console.log("fromAddress", fromAddress);
 
-const handleToPlaceChanged = () => {
+  const handleToPlaceChanged = () => {
     const place = inputRefTo?.current?.gm_accessors_?.place;
     if (!place) return;
 
@@ -106,9 +104,7 @@ const handleToPlaceChanged = () => {
     if (!formattedPrediction) return;
 
     setToAddress(formattedPrediction);
-};
-
-console.log("setToAddress", toAddress);
+  };
 
   const calculateDistance = () => {
     if (fromAddress && toAddress) {
@@ -120,12 +116,12 @@ console.log("setToAddress", toAddress);
           travelMode: 'DRIVING',
         },
         (response, status) => {
-          
+
           if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
             setDistance(response.rows[0].elements[0].distance.text);
-            sessionStorage.setItem('fromAddress',fromAddress);
-            sessionStorage.setItem('toAddress',toAddress);
-            sessionStorage.setItem('distance',response.rows[0].elements[0].distance.text);
+            sessionStorage.setItem('fromAddress', fromAddress);
+            sessionStorage.setItem('toAddress', toAddress);
+            sessionStorage.setItem('distance', response.rows[0].elements[0].distance.text);
             const requirementData = {
               'fromAddress': fromAddress,
               'toAddress': toAddress,
@@ -146,25 +142,22 @@ console.log("setToAddress", toAddress);
       <div className="flex relocate-tabs-container">
         <button
           onClick={() => setActiveTab("Local")}
-          className={`relocate-tab ${
-            activeTab === "Local" ? "active" : ""
-          }`}
+          className={`relocate-tab ${activeTab === "Local" ? "active" : ""
+            }`}
         >
           Local
         </button>
         <button
           onClick={() => setActiveTab("Between City")}
-          className={`relocate-tab ${
-            activeTab === "Between City" ? "active" : ""
-          }`}
+          className={`relocate-tab ${activeTab === "Between City" ? "active" : ""
+            }`}
         >
           Between City
         </button>
         <button
           onClick={() => setActiveTab("International")}
-          className={`relocate-tab ${
-            activeTab === "International" ? "active" : ""
-          }`}
+          className={`relocate-tab ${activeTab === "International" ? "active" : ""
+            }`}
         >
           International
         </button>
@@ -174,12 +167,12 @@ console.log("setToAddress", toAddress);
           <div className="relocate-input">
             <p className="small-desc">Select City</p>
             <div className="relocate-drop-down-container">
-            <DropDown
-              value={wCity.name}
-              setValue={setWCity}
-              option={Data.IndianCitiesCoordinates}
-              onSelect={handleCitySelect}
-            />
+              <DropDown
+                value={wCity.name}
+                setValue={setWCity}
+                option={Data.IndianCitiesCoordinates}
+                onSelect={handleCitySelect}
+              />
 
             </div>
           </div>
@@ -188,25 +181,25 @@ console.log("setToAddress", toAddress);
             <div className="relocate-input">
               {isLoaded && (
                 <Autocomplete
-                onLoad={ref => (inputRefFrom.current = ref)}
-                onPlaceChanged={handleFromPlaceChanged}
-                options={searchOptions}
-              >
-                <input type="text" className="relocate-input-box" placeholder="From Address" />
-              </Autocomplete>
+                  onLoad={ref => (inputRefFrom.current = ref)}
+                  onPlaceChanged={handleFromPlaceChanged}
+                  options={searchOptions}
+                >
+                  <input type="text" className="relocate-input-box" placeholder="From Address" />
+                </Autocomplete>
               )}
             </div>
             <div className="relocate-input">
               <p className="small-desc">Search To</p>
               {isLoaded && (
                 <Autocomplete
-                onLoad={ref => (inputRefTo.current = ref)}
-                onPlaceChanged={handleToPlaceChanged}
-                options={searchOptions}
-              >
-                <input type="text" className="relocate-input-box" placeholder="To Address" />
-              </Autocomplete>
-                )}
+                  onLoad={ref => (inputRefTo.current = ref)}
+                  onPlaceChanged={handleToPlaceChanged}
+                  options={searchOptions}
+                >
+                  <input type="text" className="relocate-input-box" placeholder="To Address" />
+                </Autocomplete>
+              )}
             </div>
 
 
@@ -218,17 +211,17 @@ console.log("setToAddress", toAddress);
 
       {activeTab === "Between City" && (
         <div className="relocate-select-city">
-          
+
           <div className="relocate-input">
-          <p className="small-desc">Which city you want to move from?</p>
-          <div className="relocate-drop-down-container margin-bottom-40">
-            <DropDown
-              value={fromCity}
-              setValue={setFromCity}
-              option={Data.IndianCitiesPinCode}
-              onSelect={handleCitySelect}
-            />
-          </div>
+            <p className="small-desc">Which city you want to move from?</p>
+            <div className="relocate-drop-down-container margin-bottom-40">
+              <DropDown
+                value={fromCity}
+                setValue={setFromCity}
+                option={Data.IndianCitiesPinCode}
+                onSelect={handleCitySelect}
+              />
+            </div>
           </div>
           <p className="small-desc">Destination city</p>
           <div className="relocate-drop-down-container">
@@ -243,18 +236,18 @@ console.log("setToAddress", toAddress);
       )}
       {activeTab === "International" && (
         <div className="relocate-select-city">
-          
-          <div className="relocate-input">
-          <p className="small-desc">Source?</p>
 
-          <div className="relocate-drop-down-container margin-bottom-40">
-            <DropDown
-              value={fromCoun}
-              setValue={setFromCoun}
-              option={Data.International}
-              onSelect={handleCitySelect}
-            />
-          </div>
+          <div className="relocate-input">
+            <p className="small-desc">Source?</p>
+
+            <div className="relocate-drop-down-container margin-bottom-40">
+              <DropDown
+                value={fromCoun}
+                setValue={setFromCoun}
+                option={Data.International}
+                onSelect={handleCitySelect}
+              />
+            </div>
           </div>
           <p className="small-desc">Destination Country</p>
           <div className="relocate-drop-down-container">

@@ -1,6 +1,6 @@
-
 .retry-button {
-    padding: 0 1rem 0 1rem;
+    margin: 1rem;
+    padding: .5rem 1rem;
     color: white;
     background-color: #550EC5;
     text-align: center;
@@ -12,9 +12,11 @@
 .template-container {
     display: flex;
     flex-direction: column;
-    padding: 1rem;overflow: auto;
+    padding: 1rem;
+    overflow: auto;
     break-inside: avoid;
 }
+
 .template-title {
     display: flex;
     justify-content: center;
@@ -28,11 +30,13 @@
     margin: 0;
     padding: 0;
 }
+
 .ST {
     font-size: 5;
     font-weight: 400;
     color: #550EC5;
 }
+
 .gap-10 {
     height: 1rem;
 }
@@ -41,12 +45,13 @@
     height: 0.5rem;
 }
 
-.template-subt{
+.template-subt {
     font-size: 12;
     font-weight: 400;
     display: flex;
     justify-content: flex-start;
 }
+
 .gap-20 {
     height: 2rem;
 }
@@ -55,24 +60,29 @@
     font-size: 12;
     font-weight: 700;
 }
+
 .ST-data-row {
-    
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+
 .ST-data-column {
-    
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
+
 .bold-braces {
     font-weight: bold;
 }
+
 .template-child-con {
     display: flex;
     width: 100%;
+    margin-top: 2rem;
 }
 
 .temp-child {
@@ -86,20 +96,22 @@
     display: flex;
     flex-direction: column;
 }
+
 hr {
     border: 1px solid #ccc;
     width: 100%;
-  }
+}
 
-  
 
-  table {
+
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-th, td {
-    padding: 8px;
+th,
+td {
+    padding: 4px;
     text-align: left;
 }
 

@@ -5,7 +5,6 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
   const [selectedRange, setSelectedRange] = useState(selectedTime);
   const [disabledRanges, setDisabledRanges] = useState([]);
 
-  // console.log(selectedDayValue.date,"selectedDayValue in time");
   const timeRanges = [
     { id: 1, label: "6-8 AM", label2: "6-8" },
     { id: 2, label: "8-10 AM", label2: "8-10" },
@@ -53,10 +52,9 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
         {[timeRanges[0], timeRanges[1]].map((range) => (
           <div
             key={range.id}
-            className={`time-range ${
-              (selectedRange && selectedRange.id === range.id ? "selected" : "") +
+            className={`time-range ${(selectedRange && selectedRange.id === range.id ? "selected" : "") +
               (isRangeDisabled(range) ? " disabled" : "")
-            }`}
+              }`}
             onClick={() => handleRangeClick(range)}
           >
             {range.label}
@@ -67,10 +65,9 @@ const TimeSelect = ({ onSelect, selectedTime, selectedDayValue }) => {
         {secondRow.map((range) => (
           <div
             key={range.id}
-            className={`time-range ${
-              (selectedRange && selectedRange.id === range.id ? "selected" : "") +
+            className={`time-range ${(selectedRange && selectedRange.id === range.id ? "selected" : "") +
               (isRangeDisabled(range) ? " disabled" : "")
-            }`}
+              }`}
             onClick={() => handleRangeClick(range)}
           >
             {range.label}

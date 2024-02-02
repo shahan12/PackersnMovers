@@ -26,7 +26,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   const [loader, setLoader] = useState(false);
   const [OTP, setOTP] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
-  
+
   const handlePhoneNumberChange = (event) => {
     const inputPhoneNumber = event.target.value;
     const numericValue = inputPhoneNumber.replace(/\D/g, "");
@@ -39,9 +39,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     try {
       const savedToken = sessionStorage.getItem('token');
       sessionStorage.setItem('loggedIn', savedToken);
-      // console.log(savedToken, "savedToken");
       const response = await sendLoginRequestToBackend(phoneNumber);
-      // console.log(response, "handleLogin response");
 
       if (savedToken) {
 
@@ -53,13 +51,11 @@ const RegisterModal = ({ onClose, postData, flow }) => {
           alert("Server Error!");
           performLogout();
         } else if (response?.type === 'success' && sessionStorage.getItem('SpLog')) {
-          // console.log('success', response);
 
           alert("Thank you one of our agents will get back to You!");
           performLogout();
         }
         else if (response?.type === 'success') {
-          // console.log('success', response);
           sessionStorage.setItem("orderSessionId", response.data);
           let update = {
             "orderSessionId": response.data,
@@ -78,7 +74,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
 
       }
       else {
-        // console.log("Logging Out!");
         performLogout();
       }
 
@@ -88,9 +83,7 @@ const RegisterModal = ({ onClose, postData, flow }) => {
   };
 
   const handleOtpInput = (e) => {
-    // // console.log(e);
     setOTP(e);
-    // setOTP(e.target.value);
   };
 
 
@@ -99,7 +92,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     setLoader(true);
     try {
       const resp = await sendOTPRequestToBackend(phoneNumber);
-      // console.log("sendOTP",resp, resp.token );
       if (resp?.token) {
         sessionStorage.setItem('token', resp.token);
         let update = {
@@ -110,7 +102,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
         setOtpPage(true);
       } else if (resp.type === "failed") {
         alert("Server Error, Please Try later!");
-        // console.log('Failed');
         performLogout();
       }
     } catch (error) {
@@ -138,7 +129,6 @@ const RegisterModal = ({ onClose, postData, flow }) => {
     if (resp?.type === 'error') {
       alert("Invalid OTP!");
       setLoader(false);
-      performLogout();
     }
     else {
       const encData = authmiddleware.encryptData(phoneNumber);

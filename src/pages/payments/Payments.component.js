@@ -15,7 +15,6 @@ function Payments(props) {
     let token = sessionStorage.getItem('token');
 
     let orderSessionId = sessionStorage.getItem('orderSessionId');
-    // console.log("payment page ");
     
     if(savedOrderID && identifier && token && merTID && orderSessionId) {
       const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID, orderSessionId});

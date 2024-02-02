@@ -8,6 +8,7 @@ import ProfilePic from "../../images/defaultPic.svg";
 import DownArrow from "../../images/downarrow.png";
 import hamMenu from "../../images/hamburger icon.svg";
 import { performLogout } from "../FillRequirements/Requirement.component";
+import OutsideClickHandler from "react-outside-click-handler";
 
 function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
@@ -60,7 +61,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     window.open("/", "_self");
   };
 
-  
+
   const phoneNumber = "888 478 4888";
 
   const handlePhoneIconClick = () => {
@@ -99,9 +100,9 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
 
           <span className="header-item-phoneNumber-container">
             <div onClick={handlePhoneIconClick} className="header-user-wrapper">
-          <img style={{marginTop:'0.2rem'}}
-              src={PhoneIcon}
-            />
+              <img style={{ marginTop: '0.2rem' }}
+                src={PhoneIcon}
+              />
               <span>{phoneNumber}</span>
             </div>
           </span>
@@ -123,22 +124,24 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
               className="flex width-100 header-profile-img"
             ></img>
             {showMoreOption && (
-              <div className="header-more-option-dropdown">
-                <div className="header-option" onClick={handleProfile}>
-                  Profile
-                </div>
-                <div className="header-option" onClick={handleBooking}>
-                  My Bookings
-                </div>
-                {continueBookingVisible && sessionStorage.getItem('orderSessionId') && (
-                  <div className="header-option" onClick={handleFill}>
-                    Continue Booking
+              <OutsideClickHandler onOutsideClick={() => setShowMoreOption(false)}>
+                <div className="header-more-option-dropdown">
+                  <div className="header-option" onClick={handleProfile}>
+                    Profile
                   </div>
-                )}
-                <div className="header-option" onClick={hanleLogOut}>
-                  Log out
+                  <div className="header-option" onClick={handleBooking}>
+                    My Bookings
+                  </div>
+                  {continueBookingVisible && sessionStorage.getItem('orderSessionId') && (
+                    <div className="header-option" onClick={handleFill}>
+                      Continue Booking
+                    </div>
+                  )}
+                  <div className="header-option" onClick={hanleLogOut}>
+                    Log out
+                  </div>
                 </div>
-              </div>
+              </OutsideClickHandler>
             )}
           </div>
         </div>
@@ -148,10 +151,8 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
         <div className="header-cta-container align-center space-between grey-600">
 
           <span className="header-item-phoneNumber-container">
-                      <div onClick={handlePhoneIconClick} className="header-user-wrapper">
-                    <img style={{marginTop:'0.2rem'}}
-                        src={PhoneIcon}
-                      />
+            <div onClick={handlePhoneIconClick} className="header-user-wrapper">
+              <img style={{ marginTop: '0.2rem' }} src={PhoneIcon} />
               <span>{phoneNumber}</span>
             </div>
           </span>

@@ -85,7 +85,6 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
   }, [totalCostBF, addonsPrice, packageSel, cft, newTotalCost, weekend]);
 
-  // console.log("totalcost ", totalCostRedux);
   useEffect(() => {
     if (!disabled) {
       calculateDistance();
@@ -109,7 +108,6 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
 
 
   const handleFromPlaceChanged = () => {
-    console.log("FROM", inputRefFrom?.current);
     const place = inputRefFrom?.current?.gm_accessors_?.place;
     if (!place) return;
 
@@ -118,11 +116,10 @@ function AddressDetails({ progress, packageSel, cft, totalItemCount }) {
     if (!formattedPrediction) return;
 
     setFromAddress(formattedPrediction);
-};
+  };
 
-console.log("fromAddress", fromAddress);
 
-const handleToPlaceChanged = () => {
+  const handleToPlaceChanged = () => {
     const place = inputRefTo?.current?.gm_accessors_?.place;
     if (!place) return;
 
@@ -131,7 +128,7 @@ const handleToPlaceChanged = () => {
     if (!formattedPrediction) return;
 
     setToAddress(formattedPrediction);
-};
+  };
 
   const calculateDistance = () => {
     if (fromAddress && toAddress) {
@@ -173,65 +170,65 @@ const handleToPlaceChanged = () => {
           </div>
           <div className="cost-details">
 
-          <div className="cost-details-child">
-            <div className="cost-box">
-              <span>Base Price</span>
-              <Tooltip title="Base Price based on House Type" placement="right">
-                <IconButton>
-                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
-                </IconButton>
-              </Tooltip>
+            <div className="cost-details-child">
+              <div className="cost-box">
+                <span>Base Price</span>
+                <Tooltip title="Base Price based on House Type" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <span>₹{basePrice}</span>
             </div>
-            <span>₹{basePrice}</span>
-          </div>
 
-          <div className="cost-details-child">
-            <div>
-              <span>Floor Charges</span>
-              <Tooltip title="₹250 for Each Floor for buildings without Lift" placement="right">
-                <IconButton>
-                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
-                </IconButton>
-              </Tooltip>
+            <div className="cost-details-child">
+              <div>
+                <span>Floor Charges</span>
+                <Tooltip title="₹250 for Each Floor for buildings without Lift" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <span>₹{floorCharges}</span>
             </div>
-            <span>₹{floorCharges}</span>
-          </div>
 
-          <div className="cost-details-child">
-            <div>
-              <span>Total Items Added</span>
-              <Tooltip title="Items selected in inventory" placement="right">
-                <IconButton>
-                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
-                </IconButton>
-              </Tooltip>
+            <div className="cost-details-child">
+              <div>
+                <span>Total Items Added</span>
+                <Tooltip title="Items selected in inventory" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <span>{totalItemCount}</span>
             </div>
-            <span>{totalItemCount}</span>
-          </div>
 
-          <div className="cost-details-child">
-            <div>
-              <span>Additional Boxes (per Box ₹100)</span>
-              <Tooltip title="4 Boxes are added for each family member Added" placement="right">
-                <IconButton>
-                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
-                </IconButton>
-              </Tooltip>
+            <div className="cost-details-child">
+              <div>
+                <span>Additional Boxes (per Box ₹100)</span>
+                <Tooltip title="4 Boxes are added for each family member Added" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <span>{totalBox}</span>
             </div>
-            <span>{totalBox}</span>
-          </div>
 
-          <div className="cost-details-child">
-            <div>
-              <span>CFT</span>
-              <Tooltip title="An estimate we use to calculate space needed for your Goods" placement="right">
-                <IconButton>
-                  <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
-                </IconButton>
-              </Tooltip>
+            <div className="cost-details-child">
+              <div>
+                <span>CFT</span>
+                <Tooltip title="An estimate we use to calculate space needed for your Goods" placement="right">
+                  <IconButton>
+                    <InfoIcon fontSize="small" style={{ fontSize: 16 }} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <span>{cft}</span>
             </div>
-            <span>{cft}</span>
-          </div>
 
             <div className="cost-details-child">
               <div>
@@ -296,10 +293,10 @@ const handleToPlaceChanged = () => {
         <div className="relocate-drop-down-container margin-bottom-10">
           {isLoaded && (
             <Autocomplete
-            onLoad={ref => (inputRefFrom.current = ref)}
-            onPlaceChanged={handleFromPlaceChanged}
-            options={searchOptions}
-          >
+              onLoad={ref => (inputRefFrom.current = ref)}
+              onPlaceChanged={handleFromPlaceChanged}
+              options={searchOptions}
+            >
               <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={fromAddress ? fromAddress : 'From Location'} />
             </Autocomplete>
           )}
@@ -307,10 +304,10 @@ const handleToPlaceChanged = () => {
         <div className="relocate-drop-down-container">
           {isLoaded && (
             <Autocomplete
-            onLoad={ref => (inputRefTo.current = ref)}
-            onPlaceChanged={handleToPlaceChanged}
-            options={searchOptions}
-          >
+              onLoad={ref => (inputRefTo.current = ref)}
+              onPlaceChanged={handleToPlaceChanged}
+              options={searchOptions}
+            >
               <input type="text" className="form-control" disabled={disabled || progress !== 'requirement'} placeholder={toAddress ? toAddress : 'To Location'} />
             </Autocomplete>
           )}

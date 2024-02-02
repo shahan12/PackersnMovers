@@ -12,29 +12,32 @@ import authmiddleware from "../../authmiddleware";
 function EditProfile(props) {
   const [profileImg, setProfileImg] = useState(DefaultImg);
   const [openModal, setOpenModal] = useState(false);
-  const [phoneNumber,setPhoneNumber]=useState(sessionStorage.getItem('phoneNumber'));
+  const [phoneNumber, setPhoneNumber] = useState(sessionStorage.getItem('phoneNumber'));
   const [disabled, setDisabled] = useState(true);
-  const [firstName,setFirstName]=useState("");
-  const [lastName,setlastName]=useState("");
-  const [email,setEmail]=useState("");
-  
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [email, setEmail] = useState("");
+
 
   let identifier = sessionStorage.getItem('identifier');
 
-  const handleUpdataProfile=async()=>{
-    // console.log(firstName,lastName,email,identifier);
-    if(identifier) {
-      try{
-      const updateUserInfoResponse=await updateUserInfoToBackend({firstName,lastName,email,identifier});
-      if (updateUserInfoResponse === 'updated') {
-        alert("Profile updated Successfully");
-      } else {
-        alert("Something went wrong, please try later!");
-        performLogout();
+  const handleNavigateToHome = () => {
+    window.open("/", "_self")
+  }
+
+  const handleUpdataProfile = async () => {
+    if (identifier) {
+      try {
+        const updateUserInfoResponse = await updateUserInfoToBackend({ firstName, lastName, email, identifier });
+        if (updateUserInfoResponse === 'updated') {
+          alert("Profile updated Successfully");
+          window.open("/", "_self")
+        } else {
+          alert("Something went wrong, please try later!");
+        }
+        setDisabled(!disabled)
       }
-      setDisabled(!disabled)
-      }
-      catch(err){
+      catch (err) {
         window.alert("User Data save error. Please re-try");
       }
 
@@ -46,8 +49,8 @@ function EditProfile(props) {
   const getUserInfo = async () => {
     try {
       const userInfoResponse = await getUserInfoFromBackend(identifier);
-  
-      if(userInfoResponse?.type === 'serverError') {
+
+      if (userInfoResponse?.type === 'serverError') {
         alert("Please Try later!");
       } else if (userInfoResponse?.type === 'invalidToken') {
         alert("Please Try later!");
@@ -66,11 +69,11 @@ function EditProfile(props) {
       window.alert("User Data fetch error. Please re-try");
     }
   };
-  
+
   useEffect(() => {
-    
-    if(identifier) {
-    getUserInfo();
+
+    if (identifier) {
+      getUserInfo();
     }
     else {
       performLogout();
@@ -90,12 +93,12 @@ function EditProfile(props) {
             className="edit-profile-img"
           ></img>
           <img
-              src={Edit}
-              alt={"Edit-Icon"}
-              className="edit-icon"
-              onClick={() => {
-                setDisabled(!disabled);
-              }}
+            src={Edit}
+            alt={"Edit-Icon"}
+            className="edit-icon"
+            onClick={() => {
+              setDisabled(!disabled);
+            }}
           ></img>
           {/* <button
             className="edit-profile-upload-btn"
@@ -113,104 +116,105 @@ function EditProfile(props) {
           )}
         </div>
 
-        
-        
+
+
         <div className="container">
-        <form className="form-group">
-          <div className="row">
-            <div className="col-12 col-md-6 mr-3 mx-auto">
-              <label htmlFor="fname" className="label form-label">
-                First name
-              </label>{" "}
-              <br></br>
-              <input
-                type="text"
-                id="fname"
-                name="fname"
-                disabled={disabled}
-                value={firstName}
-                onChange={(e)=> setFirstName(e.target.value)}
-                className="form-control"
-              />{" "}
-              <br></br>
+          <form className="form-group">
+            <div className="row">
+              <div className="col-12 col-md-6 mr-3 mx-auto">
+                <label htmlFor="fname" className="label form-label">
+                  First name
+                </label>{" "}
+                <br></br>
+                <input
+                  type="text"
+                  id="fname"
+                  name="fname"
+                  disabled={disabled}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="form-control"
+                />{" "}
+                <br></br>
+              </div>
+              <div className="col-12 col-md-6">
+                <label htmlFor="lname" className="label form-label">
+                  Last name
+                </label>{" "}
+                <br></br>
+                <input
+                  type="text"
+                  id="lname"
+                  name="lname"
+                  disabled={disabled}
+                  value={lastName}
+                  onChange={(e) => setlastName(e.target.value)}
+                  className="form-control"
+                />{" "}
+                <br></br>
+              </div>
             </div>
-            <div className="col-12 col-md-6">
-              <label htmlFor="lname" className="label form-label">
-                Last name
-              </label>{" "}
-              <br></br>
-              <input
-                type="text"
-                id="lname"
-                name="lname"
-                disabled={disabled}
-                value={lastName}
-                onChange={(e)=> setlastName(e.target.value)}
-                className="form-control"
-              />{" "}
-              <br></br>
+            <div className="row">
+              <div className="col-12 col-md-6">
+                <label htmlFor="fname" className="label form-label">
+                  Email
+                </label>{" "}
+                <br></br>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  disabled={disabled}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
+                />{" "}
+                <br></br>
+              </div>
+              <div className="col-12 col-md-6">
+                <label htmlFor="fname" className="label form-label">
+                  Mobile No.
+                </label>{" "}
+                <br></br>
+                <input
+                  type="number"
+                  id="fname"
+                  name="fname"
+                  value={phoneNumber}
+                  disabled
+                  className="form-control"
+                />{" "}
+                <br></br>
+              </div>
             </div>
-          </div>
-          <div className="row">
-          <div className="col-12 col-md-6">
-              <label htmlFor="fname" className="label form-label">
-                Email
-              </label>{" "}
-              <br></br>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                disabled={disabled}
-                value={email}
-                onChange={(e)=> setEmail(e.target.value)}
-                className="form-control"
-              />{" "}
-              <br></br>
+
+
+            <div className="row mt-4">
             </div>
-            <div className="col-12 col-md-6">
-              <label htmlFor="fname" className="label form-label">
-                Mobile No.
-              </label>{" "}
-              <br></br>
-              <input
-                type="number"
-                id="fname"
-                name="fname"
-                value={phoneNumber}
-                disabled
-                className="form-control"
-              />{" "}
-              <br></br>
-            </div>
-          </div>
-          
-          
-          <div className="row mt-4">
-</div>        
           </form>
+        </div>
+        <div className="container">
+          <div className="d-flex justify-content-end mb-4">
+            <button
+              type="button"
+              className="col-5 col-md-2 btn btn-secondary mx-1"
+              onClick={() => handleNavigateToHome()}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="col-5 col-md-2 btn mx-1"
+              onClick={() => handleUpdataProfile()}
+              style={{ backgroundColor: "#ff7800", borderColor: "#ff7800", color: "#fff", width: "10rem" }}
+            >
+              Save Changes
+            </button>
+            {/* <button type="button" onClick={()=> getUserInfo()}>Get Data</button> */}
           </div>
-          <div className="container">
-  <div className="d-flex justify-content-end mb-4">
-    <button
-      type="button"
-      className="col-5 col-md-2 btn btn-secondary mx-1"
-    >
-      Cancel
-    </button>
-    <button
-      type="button"
-      className="col-5 col-md-2 btn mx-1"
-      onClick={()=> handleUpdataProfile()}
-      style={{ backgroundColor: "#ff7800", borderColor: "#ff7800", color: "#fff", width:"10rem" }}
-    >
-      Save Changes
-    </button>
-    {/* <button type="button" onClick={()=> getUserInfo()}>Get Data</button> */}
-  </div>
-</div>
-        
-        
+        </div>
+
+
       </div>
     </>
   );

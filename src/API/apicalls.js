@@ -57,7 +57,6 @@ export const sendMail = async (data) => {
   try {
     const response = await instance.post('/saveUserEmail', { encData });
     if (response ) {
-      console.log(response);
       return response.data;
     }
   } catch (error) {
@@ -80,7 +79,6 @@ export const sendLoginRequestToBackend = async (data) => {
   const encData = authmiddleware.encryptData(data);
   try {
       const response = await instance.post('/login', { encData });
-      // console.log(response, response.data,"handleLogin response");
       return response.data;
   } catch (error) {
     handleApiError(error);
@@ -91,7 +89,6 @@ export const sendBasePriceRequestToBackend = async (data) => {
   
   try {
     const response = await instance.put('/basePrice', data);
-    // console.log(response , 'base proce API');
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -101,7 +98,6 @@ export const sendBasePriceRequestToBackend = async (data) => {
 export const sendTotalBoxRequestToBackend = async (data) => {
   try {
     const response = await instance.put('/totalNoBoxes', data);
-    // console.log(response , 'total box');
     return response.data;
   } catch (error) {
     handleApiError(error);

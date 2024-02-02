@@ -30,8 +30,7 @@
 
 .header-CTA-item {
     text-decoration: none;
-    color: #363636;
-    font-weight: 600;
+    color: inherit;
 }
 
 .header-user-wrapper {

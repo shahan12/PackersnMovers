@@ -14,8 +14,6 @@ function RetryPayments(props) {
     let reOrderID = sessionStorage.getItem('reOrderID');
     let token = sessionStorage.getItem('token');
 
-    // console.log("payment page ");
-    
     if(identifier && token && reMerTID) {
       const paymentResponse = await retryMakePaymentStatusRequest({identifier, reMerTID, reOrderID});
 

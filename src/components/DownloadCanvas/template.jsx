@@ -2,52 +2,52 @@ import React, { forwardRef } from 'react';
 import "./order.css";
 import authmiddleware from '../../authmiddleware';
 
-const Template = forwardRef(({ data, identifier }, ref) => {    
-    
+const Template = forwardRef(({ data, identifier }, ref) => {
+
     const mobile = authmiddleware.decryptData(identifier);
     const extractedDate = new Date(data?.book_date).toLocaleDateString('en-GB');
+    const extractedDateBooking = new Date(data?.time_of_booking).toLocaleDateString('en-GB');
 
     const inventoryData = data?.user_inventory;
     const addonsData = data?.addons;
 
-    console.log("inventoryData", inventoryData);
     // Function to render inventory details
     const renderInventoryDetails = () => {
-      return Object.keys(inventoryData).map((category) => (
-        <>
-            <div key={category}>
-            {category}:
-            {Object.keys(inventoryData[category]).map((item) => (
-                <div key={item}>
-                {item}: 
-                        {Object.keys(inventoryData[category][item]).map((item2) => (
-                        <div key={item2}>
-                            {item2} x count of {inventoryData[category][item][item2].count}
+        return Object.keys(inventoryData).map((category) => (
+            <>
+                <div key={category}>
+                    {category}:
+                    {Object.keys(inventoryData[category]).map((item) => (
+                        <div key={item}>
+                            {item}:
+                            {Object.keys(inventoryData[category][item]).map((item2) => (
+                                <div key={item2}>
+                                    {item2} x count of {inventoryData[category][item][item2].count}
+                                </div>
+                            ))}
+                            {inventoryData[category][item].count}
                         </div>
                     ))}
-                {inventoryData[category][item].count}
                 </div>
-            ))}
-            </div>
-            <div className='.gap-5' />
-        </>
-      ));
+                <div className='.gap-5' />
+            </>
+        ));
     };
     const renderAddonsDetails = () => {
         return (
-          <div>
-            {Object.keys(addonsData).map((addon) => (
-              <div key={addon}>
-                {addon} x {addonsData[addon].count}
-              </div>
-            ))}
-          </div>
+            <div>
+                {Object.keys(addonsData).map((addon) => (
+                    <div key={addon}>
+                        {addon} x {addonsData[addon].count}
+                    </div>
+                ))}
+            </div>
         );
-      };
-    
+    };
+
     return (
         <div ref={ref} className='template-container'>
-            <div className='gap-5' />
+            <div className='gap-0' />
             <div className='template-title'>
                 <h2>SHIFTKART PACKERS AND MOVERS</h2>
                 <span className='ST'>© EZY SHIFTKART TECHNOLOGY SOLUTIONS PRIVATE LIMITED</span>
@@ -61,8 +61,14 @@ const Template = forwardRef(({ data, identifier }, ref) => {
                     <span className='ST-data-1'>Order ID: <span className='bold-braces'>{data?.order_id}</span></span>
                 </div>
                 <div className='ST-data-row'>
-                    <span className='ST-data-1'>Booking Date: <span className='bold-braces'>{extractedDate}</span></span>
+                    <span className='ST-data-1'>Date Booked On: <span className='bold-braces'>{extractedDateBooking}</span></span>
                     <span className='ST-data-1'>Time Slot Selected: <span className='bold-braces'>{data?.book_slot_time}</span></span>
+                </div>
+                <div className='ST-data-row'>
+                    {data?.book_date && (
+                        <span className='ST-data-1'>Moving Date: <span className='bold-braces'>{extractedDate}</span></span>
+                    )}
+                    <span className='ST-data-1'>Distance: <span className='bold-braces'>{data?.total_distance}</span></span>
                 </div>
             </div>
             <div className='gap-20' />
@@ -75,7 +81,7 @@ const Template = forwardRef(({ data, identifier }, ref) => {
                     <span className='ST-data-1'>Distance: <span className='bold-braces'>{data?.total_distance}</span></span>
                 </div>
             </div>
-            
+
             <div className='gap-20' />
             <span className='ST-head'>Payment Details:</span>
             <hr />
@@ -139,9 +145,11 @@ const Template = forwardRef(({ data, identifier }, ref) => {
                 </table>
             </div>
 
-            <hr />
+            {(data?.user_inventory || data?.addons) && (
+                <hr />
+            )}
 
-            {(inventoryData !== null || addonsData !== null) && (
+            {((inventoryData && inventoryData !== null) || (addonsData && addonsData !== null)) && (
                 <div className='template-child-con'>
                     {inventoryData && (
                         <div className='temp-child'>

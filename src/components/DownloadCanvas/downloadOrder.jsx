@@ -17,8 +17,8 @@ const DownloadOrder = ({ data, identifier }) => {
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       };
-      
-      html2pdf(input, pdfOptions);
+
+      // html2pdf(input, pdfOptions);
     }
   };
 
@@ -26,7 +26,7 @@ const DownloadOrder = ({ data, identifier }) => {
     <>
       <button className='retry-button' onClick={downloadPDF}>Download PDF</button>
       <div style={{ display: 'none' }}>
-        <Template ref={pdfRef} data={data} identifier={identifier}/>
+        <Template ref={pdfRef} data={data} identifier={identifier} />
       </div>
     </>
   );

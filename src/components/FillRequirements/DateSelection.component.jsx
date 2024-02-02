@@ -6,6 +6,7 @@ import TimeSelect from '../OptionsSelect/TimeSelect.component';
 import PackageSelect from '../OptionsSelect/PackageSelect.component';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateDateTime, updateTotalCost } from '../../redux/actions';
+import alerticon from "../../images/alerticon.png";
 
 import "./calendar.css";
 
@@ -66,6 +67,11 @@ const Dateselection = ({setProgress, packageSel, setPackageSel}) => {
       <div className="border-bottom extra-margin">
         <h2>Fill Requirements</h2>
       </div>
+      {(!selectedDay || !selectedTime) &&
+        <div className='wrapalert'>
+          <img src={alerticon} /><span className="wrap-alert">Please fill Date and Time Slot!</span>
+        </div>
+      }
       <div className="date-type-wrapper">
         <h3>Choose Date</h3>
         <DateOption selectedDayValue={selectedDay} onSelect={handleDaySelect} />
