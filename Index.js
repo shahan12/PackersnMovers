@@ -455,8 +455,8 @@ app.post(`/api/myBooking`, (req, res) => {
             const q17 = `SELECT 
                 userinfo.house_type, 
                 userinfo.total_distance, 
-                userinfo.from_address, 
-                userinfo.to_address,
+                userinfo.from_address,
+                userinfo.to_address,userinfo.time_of_update,
                 inventorydata.book_date,
                 inventorydata.book_slot_time,
                 inventorydata.total_items,
@@ -466,6 +466,7 @@ app.post(`/api/myBooking`, (req, res) => {
                 inventorydata.total_cost,
                 inventorydata.booking_type,
                 inventorydata.user_inventory,
+                inventorydata.time_of_booking,
                 inventorydata.addons,
                 payments.transaction_id,
                 payments.final_payment_code,
