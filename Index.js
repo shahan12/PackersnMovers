@@ -93,6 +93,7 @@ app.get(`/api/stat`, (req, res) => {
         console.error(error.message);
     }
 });
+
 app.post(`/api/login`, (req, res) => {                                                          //// DONE
     const token = req.headers.authorization.split(' ')[1];
 
@@ -107,42 +108,37 @@ app.post(`/api/login`, (req, res) => {                                          
         const orderSessionId = getOrderSessionID(mobileNumber);
         console.log(" login ", mobileNumber, orderSessionId);
         try {
-            var q8 = "SELECT user_mobile FROM userinfo WHERE user_mobile = '" + mobileNumber + "'";
+            var q8 = "SELECT user_mobile FROM userprofile WHERE user_mobile = '" + mobileNumber + "'";
             con.query(q8, (error, result) => {
                 if (error) throw error;
-                const flag = result.rows.length;
+        
                 if (result.rows.length <= 0) {
+                    // Insert into userinfo, inventoryData, and userprofile
                     var q9 = "BEGIN;" +
                         "INSERT INTO userInfo(user_mobile, order_session_id, time_of_update) VALUES ('" + mobileNumber + "', '" + orderSessionId + "', '" + currentTime + "');" +
                         "INSERT INTO inventoryData(user_mobile,order_session_id) VALUES ('" + mobileNumber + "',  '" + orderSessionId + "');" +
                         "INSERT INTO userprofile(user_mobile) VALUES ('" + mobileNumber + "');" +
                         "COMMIT;";
+        
                     con.query(q9, (error, result) => {
                         if (error) throw error;
-                        mobileNo = mobileNumber;
+                        res.json({ type: 'success', message: 'Login Successful...', data: orderSessionId }).status(200);
                     });
-                }
-                else {
+                } else {
+                    // User profile already exists, only insert into userinfo and inventoryData
                     var q12 = "BEGIN;" +
                         "INSERT INTO userInfo(user_mobile, order_session_id, time_of_update) VALUES ('" + mobileNumber + "', '" + orderSessionId + "', '" + currentTime + "');" +
                         "INSERT INTO inventoryData(user_mobile,order_session_id) VALUES ('" + mobileNumber + "',  '" + orderSessionId + "');" +
-                        "INSERT INTO userprofile(user_mobile) VALUES ('" + mobileNumber + "');" +
                         "COMMIT;";
+        
                     con.query(q12, (error, result) => {
                         if (error) throw error;
-                        mobileNo = mobileNumber;
-
-                        // const token = jwt.sign({mobile: result.rows[0].user_mobile}, secreKey, {expiresIn: '1h'});
-                        // console.log("JWT Token: ",token);
-                        // res.json({token});
+                        res.json({ type: 'success', message: 'Login Successful...', data: orderSessionId }).status(200);
                     });
                 }
-
-                res.json({ type: 'success', message: 'Login Sucessfull...', data: orderSessionId }).status(200);
-
-
             });
-        }
+        } 
+        
         catch (error) {
             console.error(error.message);
             res.json({ type: 'serverError', message: 'Server Error' }).status(200);
@@ -153,6 +149,43 @@ app.post(`/api/login`, (req, res) => {                                          
         res.json({ type: 'invalidToken', message: 'Invalid token' }).status(200);
     }
 });
+
+
+app.post(`/api/rebook`, (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+
+    const currentTimeUTC = new Date();
+    const ISTOffset = 5.5 * 60 * 60 * 1000;
+    const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+    const currentTime = currentTimeIST.toISOString();
+
+    const decoded = authmiddleware.verifyToken(token);
+    if (decoded) {
+        const mobile = authmiddleware.decryptIdentifier(req.body.data);
+        const orderSessionId = getOrderSessionID(mobile);
+        console.log(" login ", mobile, orderSessionId);
+        
+        try {
+            // Only insert into userinfo and inventoryData
+            var q12 = "BEGIN;" +
+                "INSERT INTO userInfo(user_mobile, order_session_id, time_of_update) VALUES ('" + mobile + "', '" + orderSessionId + "', '" + currentTime + "');" +
+                "INSERT INTO inventoryData(user_mobile,order_session_id) VALUES ('" + mobile + "',  '" + orderSessionId + "');" +
+                "COMMIT;";
+
+            con.query(q12, (error, result) => {
+                if (error) throw error;
+                res.json({ type: 'success', message: 'generated new session ID', data: orderSessionId }).status(200);
+            });
+        } catch (error) {
+            console.error(error.message);
+            res.json({ type: 'serverError', message: 'Server Error' }).status(500);
+        }
+    } else {
+        // Token verification failed
+        res.json({ type: 'invalidToken', message: 'Invalid token' }).status(401);
+    }
+});
+
 
 app.get(`/api/logout`, (req, res) => {
     try {
@@ -243,7 +276,7 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 const currentDate1 = getCurrentDate(true);
                 const randomDigits = getRandNumber();
                 const last4Digits = getLast4Digitmobile(mobileNumber);
-                orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
+                orderID = `${prefix}${currentDate}-${last4Digits}${randomDigits}`;
 
 
                 var q27 = "BEGIN;" +
@@ -598,7 +631,7 @@ app.post(`/api/inventory`, (req, res) => {
             const phone = mobile;
             const last4Digits = getLast4Digitmobile(phone);
 
-            orderID = `${prefix}${currentDate}-${randomDigits}${last4Digits}`;
+            orderID = `${prefix}${currentDate}-${last4Digits}${randomDigits}`;
 
             const encOrderID = authmiddleware.encryptData(orderID);
             let value = req.body.totalCost.totalBox;
