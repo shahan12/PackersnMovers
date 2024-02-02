@@ -9,6 +9,9 @@ import DownArrow from "../../images/downarrow.png";
 import hamMenu from "../../images/hamburger icon.svg";
 import { performLogout } from "../FillRequirements/Requirement.component";
 import OutsideClickHandler from "react-outside-click-handler";
+import {
+  sendSessionIDrequestToBackend,
+} from "../../API/apicalls";
 
 function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const [showfillHeader, setShowFillHeader] = useState(false);
@@ -57,6 +60,35 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
   const handleFill = () => {
     window.open("/fill-details", "_self");
   };
+  const getSessionID = async () => { 
+    
+    const savedToken = sessionStorage.getItem('token');
+    const identifier = sessionStorage.getItem('identifier');
+    const response = await sendSessionIDrequestToBackend(identifier);
+
+    if (savedToken) {
+
+      if (response?.type === 'invalidToken') {
+        alert("Token Invalid, please refresh your page and try again");
+        performLogout();
+      }
+      else if (response?.type === 'serverError') {
+        alert("Server Error!");
+        performLogout();
+      } 
+      else if (response?.type === 'success') {
+        sessionStorage.setItem("orderSessionId", response.data);
+        window.open("/fill-details", "_self");
+      } else {
+        performLogout();
+      }
+    }
+    else {
+      alert("Token Invalid, please refresh your page and try again");
+      performLogout();
+    }
+  };
+  
   const handleLogoToHome = () => {
     window.open("/", "_self");
   };
@@ -129,6 +161,11 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
                   <div className="header-option" onClick={handleProfile}>
                     Profile
                   </div>
+                  {continueBookingVisible && !sessionStorage.getItem('orderSessionId') && (
+                    <div className="header-option" onClick={getSessionID}>
+                      New Booking!
+                    </div>
+                  )}
                   <div className="header-option" onClick={handleBooking}>
                     My Bookings
                   </div>

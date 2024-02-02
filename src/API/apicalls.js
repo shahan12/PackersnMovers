@@ -85,6 +85,15 @@ export const sendLoginRequestToBackend = async (data) => {
   }
 };
 
+export const sendSessionIDrequestToBackend = async (data) => {
+  try {
+      const response = await instance.post('/rebook', {data : data});
+      return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 export const sendBasePriceRequestToBackend = async (data) => {
   
   try {

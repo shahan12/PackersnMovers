@@ -11,7 +11,7 @@ import alerticon from "../../images/alerticon.png";
 import MultiDropDown from "../muiDropDown/dropDown.component";
 import upArrow from '../../images/uparrow.png';
 import downArray from '../../images/downarrow.png';
-import { sendBasePriceRequestToBackend, sendTotalBoxRequestToBackend } from '../../API/apicalls';
+import { sendBasePriceRequestToBackend, sendTotalBoxRequestToBackend, sendSessionIDrequestToBackend } from '../../API/apicalls';
 import { useDispatch } from 'react-redux';
 import { updateRequirements, updateTotalCost } from '../../redux/actions';
 import { useSelector } from 'react-redux';
@@ -145,9 +145,40 @@ function Requirement(props) {
 
     return true;
   }
+  const getSessionID = async () => { 
+    
+    const savedToken = sessionStorage.getItem('token');
+    const response = await sendSessionIDrequestToBackend(savedIdentifier);
+
+    if (savedToken) {
+
+      if (response?.type === 'invalidToken') {
+        alert("Token Invalid, please refresh your page and try again");
+        performLogout();
+      }
+      else if (response?.type === 'serverError') {
+        alert("Server Error!");
+        performLogout();
+      } 
+      else if (response?.type === 'success') {
+        sessionStorage.setItem("orderSessionId", response.data);
+        window.open("/fill-details", "_self");
+      } else {
+        performLogout();
+      }
+    }
+    else {
+      alert("Token Invalid, please refresh your page and try again");
+      performLogout();
+    }
+  };
+
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
+      if(!orderSessionId) {
+        getSessionID();
+      }
       if (orderSessionId && savedIdentifier && token) {
         const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
         if (basePriceResponse?.type === "invalidToken") {

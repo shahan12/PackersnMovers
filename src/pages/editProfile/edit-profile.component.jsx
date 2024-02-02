@@ -31,7 +31,7 @@ function EditProfile(props) {
         const updateUserInfoResponse = await updateUserInfoToBackend({ firstName, lastName, email, identifier });
         if (updateUserInfoResponse === 'updated') {
           alert("Profile updated Successfully");
-          window.open("/", "_self")
+          window.open("/bookings", "_self");
         } else {
           alert("Something went wrong, please try later!");
         }
