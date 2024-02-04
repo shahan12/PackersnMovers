@@ -101,6 +101,7 @@ function Requirement(props) {
   const savedIdentifier = sessionStorage.getItem('identifier');
   const token = sessionStorage.getItem('token');
   const orderSessionId = sessionStorage.getItem('orderSessionId');
+
   const FlatrequireMents = async () => {
     const newRequirementData = {           // for just saving in redux state
       "familyType": familyType,
@@ -145,40 +146,11 @@ function Requirement(props) {
 
     return true;
   }
-  const getSessionID = async () => { 
-    
-    const savedToken = sessionStorage.getItem('token');
-    const response = await sendSessionIDrequestToBackend(savedIdentifier);
-
-    if (savedToken) {
-
-      if (response?.type === 'invalidToken') {
-        alert("Token Invalid, please refresh your page and try again");
-        performLogout();
-      }
-      else if (response?.type === 'serverError') {
-        alert("Server Error!");
-        performLogout();
-      } 
-      else if (response?.type === 'success') {
-        sessionStorage.setItem("orderSessionId", response.data);
-        window.open("/fill-details", "_self");
-      } else {
-        performLogout();
-      }
-    }
-    else {
-      alert("Token Invalid, please refresh your page and try again");
-      performLogout();
-    }
-  };
 
   const sendRequestReq = async (API_Req_Data) => {
     const API_Req_Data_JSON = JSON.stringify(API_Req_Data);
     try {
-      if(!orderSessionId) {
-        getSessionID();
-      }
+      
       if (orderSessionId && savedIdentifier && token) {
         const basePriceResponse = await sendBasePriceRequestToBackend(API_Req_Data_JSON);
         if (basePriceResponse?.type === "invalidToken") {
@@ -205,7 +177,7 @@ function Requirement(props) {
           alert("Please Login Again!");
           performLogout();
         } else if (totalBoxResponse?.type === "serverError") {
-          alert("Server Error, please try later!");
+          alert("Server Error in response, please try later!");
           performLogout();
         } else {
           setBasePriceFromAPI(totalBoxResponse);
@@ -242,7 +214,7 @@ function Requirement(props) {
     if (houseTypes.indexOf(houseType) >= houseTypes.indexOf("3BHK")) {
       setLoader(false);
       alert("We will schedule a free inspection and give you a best quotation. someone will get back to you!");
-      sessionStorage.removeItem("orderSessionId");
+      sessionStorage.setItem('orderSessionId', '');
       window.open("/bookings", "_self");
     } else {
       setLoader(false);

@@ -14,14 +14,12 @@ function Payments(props) {
     let merTID = sessionStorage.getItem('merID');
     let token = sessionStorage.getItem('token');
 
-    let orderSessionId = sessionStorage.getItem('orderSessionId');
     
-    if(savedOrderID && identifier && token && merTID && orderSessionId) {
-      const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID, orderSessionId});
+    if(savedOrderID && identifier && token && merTID) {
+      const paymentResponse = await makePaymentStatusRequest({savedOrderID, identifier, merTID});
 
       sessionStorage.removeItem("merTID");
       sessionStorage.removeItem("savedOrderID");
-      sessionStorage.removeItem("orderSessionId");
       if(paymentResponse?.type === 'success') {
         window.open("/bookings", "_self");
       } else if (paymentResponse?.type === 'invalidToken') {

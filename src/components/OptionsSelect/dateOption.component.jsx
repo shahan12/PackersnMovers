@@ -27,7 +27,7 @@ function DateOption({ onSelect, selectedDayValue }) {
     
     const today = new Date();
     const days = [];
-
+    console.log(today);
     for (let i = 0; i < 30; i++) {
       const bookingDate = new Date(today);
       bookingDate.setDate(today.getDate() + i);

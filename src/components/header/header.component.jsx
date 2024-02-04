@@ -61,7 +61,7 @@ function Header({ showPopUp, isAuthenticated, loginModal, setLoginModal }) {
     window.open("/fill-details", "_self");
   };
   const getSessionID = async () => { 
-    
+    console.log("HEREEE");
     const savedToken = sessionStorage.getItem('token');
     const identifier = sessionStorage.getItem('identifier');
     const response = await sendSessionIDrequestToBackend(identifier);

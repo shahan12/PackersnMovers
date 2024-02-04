@@ -57,16 +57,31 @@ function Bookings({ }) {
     const datee = new Date();
     const today = new Date(datee.getFullYear(), datee.getMonth(), datee.getDate());
     const todayPlusThreeDays = new Date(today);
+    const todayMinusThreeDays = new Date(today);
     todayPlusThreeDays.setDate(todayPlusThreeDays.getDate() + 3);
+    todayMinusThreeDays.setDate(todayMinusThreeDays.getDate() - 3);
 
+      bookingData.sort((a, b) => {
+        const today = new Date();
+        
+        const dateA = a.book_date ? new Date(a.book_date) : a.time_of_booking ? new Date(a.time_of_booking) : today;
+        const dateB = b.book_date ? new Date(b.book_date) : b.time_of_booking ? new Date(b.time_of_booking) : today;
+        
+        return dateB - dateA;
+    });
+    
+
+    console.log(bookingData);
     let prevData = [];
     let currData = [];
     let nextData = [];
 
     prevData = bookingData?.filter((item) => {
+
+      
       if (item?.booking_type === null && new Date(item?.book_date) < today) {
         return item;
-      } else if (item?.booking_type === "class2" && new Date(item?.book_date) < today) {
+      } else if (item?.booking_type === "class2" && new Date(item?.time_of_booking) > todayPlusThreeDays) {
         return item;
       }
     });
@@ -75,22 +90,18 @@ function Bookings({ }) {
       if (
         item?.booking_type === null &&
         new Date(item?.book_date) >= today &&
-        new Date(item?.book_date) < todayPlusThreeDays
+        new Date(item?.book_date) <= todayPlusThreeDays
       ) {
         return item;
       } else if (
         item?.booking_type === "class2" &&
-        new Date(item?.time_of_update) >= today &&
-        new Date(item?.time_of_update) < todayPlusThreeDays
-      ) {
+        new Date(item?.time_of_booking) >= todayMinusThreeDays) {
         return item;
       }
     });
 
     nextData = bookingData?.filter((item) => {
-      if (item?.booking_type === null && new Date(item?.book_date) >= todayPlusThreeDays) {
-        return item;
-      } else if (item?.booking_type === "class2" && new Date(item?.time_of_update) >= todayPlusThreeDays) {
+      if (item?.booking_type === null && new Date(item?.book_date) > todayPlusThreeDays) {
         return item;
       }
     });
