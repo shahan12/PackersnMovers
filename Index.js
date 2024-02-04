@@ -73,7 +73,7 @@ function circularReplacer() {
 function getOrderSessionID(mobileNumber) {
     var randNum = getRandNumber();
     var last4Digits = getLast4Digitmobile(mobileNumber);
-    var orderSessionID = randNum + last4Digits;
+    var orderSessionID = last4Digits +  randNum;
     return orderSessionID
 }
 
@@ -208,14 +208,16 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
     const requiredValues = ["1 RK", "1 BHK", "2 BHK"];
     const valuesExist = requiredValues.every(value => houseTypes.includes(value));
     let additionalBox;
+    
+    const currentTimeUTC = new Date();
+    const ISTOffset = 5.5 * 60 * 60 * 1000;
+    const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
+    const currentTime = currentTimeIST.toISOString();
+
     if (decoded && req.body.orderSessionId) {
         try {
 
             
-            const currentTimeUTC = new Date();
-            const ISTOffset = 5.5 * 60 * 60 * 1000;
-            const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
-            const currentTime = currentTimeIST.toISOString();
 
             var houseType = req.body.houseType.replace(' ', '').toLowerCase();
             var familyType = (req.body.familyType).toLowerCase();
@@ -272,16 +274,21 @@ app.put(`/api/totalNoBoxes`, (req, res) => {
                 additionalBox = 0;
                 let orderID;
                 const prefix = 'SK';
-                const currentDate = getCurrentDate()
-                const currentDate1 = getCurrentDate(true);
+                const currentDate = getCurrentDate();
                 const randomDigits = getRandNumber();
                 const last4Digits = getLast4Digitmobile(mobileNumber);
                 orderID = `${prefix}${currentDate}-${last4Digits}${randomDigits}`;
 
+                const midnightIST = new Date(currentTimeIST);
+                midnightIST.setUTCHours(0);
+                midnightIST.setUTCMinutes(0);
+                midnightIST.setUTCSeconds(0);
+
+                const bookingDateWithoutTime = midnightIST.toISOString();
 
                 var q27 = "BEGIN;" +
                 "UPDATE userinfo SET order_id = '" + orderID + "', time_of_update = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "';" +
-                "UPDATE inventorydata SET order_id = '" + orderID + "', booking_type = 'class2', time_of_booking = '" + currentTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "';" +
+                "UPDATE inventorydata SET order_id = '" + orderID + "', booking_type = 'class2', time_of_booking = '" + bookingDateWithoutTime + "' WHERE user_mobile = '" + mobileNumber + "' AND order_session_id = '" + orderSessionId + "';" +
                 "COMMIT;";
                 con.query(q27, (error, result) => {
                     if (error) throw error;
@@ -641,12 +648,14 @@ app.post(`/api/inventory`, (req, res) => {
             const ISTOffset = 5.5 * 60 * 60 * 1000;
             const currentTimeIST = new Date(currentTimeUTC.getTime() + ISTOffset);
             const currentTime = currentTimeIST.toISOString();
+            const selectedBookingDate = new Date(req.body.dataTime.selectedDay.bookingDate);
+            const bookingDateWithoutTime = new Date(selectedBookingDate.getFullYear(), selectedBookingDate.getMonth(), selectedBookingDate.getDate());
 
             if (isNaN(value) || value === undefined) {
                 value = 0;
             }
 
-            var q21 = "UPDATE inventoryData SET user_inventory = '" + user_inventory + "', book_date = '" + req.body.dataTime.selectedDay.bookingDate + "', total_cost = '" + totalCost + "', final_amount = '" + final_amount + "', book_slot_time = '" + req.body.dataTime.selectedTime.label + "', addons = '" + addons + "', order_id = '" + orderID + "', user_current_date = '" + currentDate + "', additional_box = '" + value + "', total_items = '" + req.body.totalCost.totalItemCount + "', time_of_booking = '" + currentTime + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
+            var q21 = "UPDATE inventoryData SET user_inventory = '" + user_inventory + "', book_date = '" + bookingDateWithoutTime + "', total_cost = '" + totalCost + "', final_amount = '" + final_amount + "', book_slot_time = '" + req.body.dataTime.selectedTime.label + "', addons = '" + addons + "', order_id = '" + orderID + "', user_current_date = '" + currentDate + "', additional_box = '" + value + "', total_items = '" + req.body.totalCost.totalItemCount + "', time_of_booking = '" + currentTime + "' WHERE user_mobile = '" + mobile + "' AND order_session_id = '" + orderSessionID + "'";
 
 
             var q26 = "INSERT INTO payments (user_mobile, order_id) VALUES('" + mobile + "', '" + orderID + "')";
@@ -899,7 +908,7 @@ app.post("/api/checkPaymentStatus", async (req, res) => {
     let decoded = authmiddleware.verifyToken(token);
     if (decoded) {
 
-        let { savedOrderID: savedOrderID, identifier: identifier, merTID: merTID, orderSessionId: orderSessionId } = authmiddleware.decryptIdentifier(req.body.encData);
+        let { savedOrderID: savedOrderID, identifier: identifier, merTID: merTID} = authmiddleware.decryptIdentifier(req.body.encData);
 
         const OrderID = authmiddleware.decryptIdentifier(savedOrderID);
         const mobileNumber = authmiddleware.decryptIdentifier(identifier, "/checkPaymentStatus");
